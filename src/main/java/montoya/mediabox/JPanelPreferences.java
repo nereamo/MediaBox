@@ -52,6 +52,17 @@ public class JPanelPreferences extends javax.swing.JPanel {
         locationField.setText("");
     }
     
+    //Metodo para guardar los valores introducidos en preferences
+    public void savePreferences() {
+        mainFrame.setTempPath(getTempPath());
+        mainFrame.setYtDlpLocation(getYtDlpLocation());
+        mainFrame.setCreateM3u(isCreateM3u());
+        mainFrame.setMaxSpeed(getMaxSpeed());
+
+        JOptionPane.showMessageDialog(this, "Preferences saved!", "Saved", JOptionPane.INFORMATION_MESSAGE);
+        mainFrame.showMainPanel();
+    }
+    
     //Permite indicar que velocidad de descarga queremos hasta un max de 100MB/s
     public void mbSpeedSpinner(){
         SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0.0, 0.0, 100.0,0.5);
@@ -134,6 +145,11 @@ public class JPanelPreferences extends javax.swing.JPanel {
 
         saveButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         saveButton.setText("Save");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
         add(saveButton);
         saveButton.setBounds(60, 470, 80, 23);
 
@@ -194,7 +210,6 @@ public class JPanelPreferences extends javax.swing.JPanel {
     //Metodo que busca el archivo yt-dlp.exe mediante el uso de ProcessBuilder
     private void locationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_locationButtonActionPerformed
         try {
-
             ProcessBuilder pb = new ProcessBuilder("where", "yt-dlp.exe");
             Process p = pb.start();
 
@@ -207,7 +222,6 @@ public class JPanelPreferences extends javax.swing.JPanel {
             }
 
             int exitCode = p.waitFor();
-
             if (exitCode == 0) {
                 
                 String path = sb.toString().trim();
@@ -233,6 +247,11 @@ public class JPanelPreferences extends javax.swing.JPanel {
         this.createM3u = m3uCheck.isSelected();
         System.out.println("Crear archivo m3u: " + this.createM3u); //Mensage por consola
     }//GEN-LAST:event_m3uCheckActionPerformed
+
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+        savePreferences();
+        //clearTextFields();
+    }//GEN-LAST:event_saveButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
