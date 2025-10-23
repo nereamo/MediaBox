@@ -24,25 +24,25 @@ public class JPanelPreferences extends javax.swing.JPanel {
         mbSpeedSpinner();
     }
     
-//    public String getYtDlpLocation() {
-//        return locationField.getText();
-//    }
-//
-//    public String getTempPath() {
-//        return pathField.getText();
-//    }
-//
-//    public boolean isCreateM3u() {
-//        return createM3u;
-//    }
-//
-//    public double getMaxSpeed() {
-//        Object value = speedSpinner.getValue();
-//        if (value instanceof Number) {
-//            return ((Number) value).doubleValue();
-//        }
-//        return 0.0;
-//    }
+    public String getYtDlpLocation() {
+        return locationField.getText();
+    }
+
+    public String getTempPath() {
+        return pathField.getText();
+    }
+
+    public boolean isCreateM3u() {
+        return createM3u;
+    }
+
+    public double getMaxSpeed() {
+        Object value = speedSpinner.getValue();
+        if (value instanceof Number) {
+            return ((Number) value).doubleValue();
+        }
+        return 0.0;
+    }
     
     //metodo para limpiar las entradas
     public void clearTextFields(){
