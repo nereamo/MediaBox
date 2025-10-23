@@ -3,6 +3,7 @@ package montoya.mediabox;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.SpinnerNumberModel;
 
 /**
  *
@@ -16,13 +17,20 @@ public class JPanelPreferences extends javax.swing.JPanel {
     public JPanelPreferences(MainFrame mainFrame) {
         initComponents();
         this.mainFrame = mainFrame; 
+        mbSpeedSpinner();
     }
     
+    //metodo para limpiar las entradas
     public void clearTextFields(){
         pathField.setText("");
         m3uCheck.setSelected(false);
         speedSpinner.setValue(0);
         locationField.setText("");
+    }
+    
+    public void mbSpeedSpinner(){
+        SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0.0, 0.0, 100.0,0.5);
+        speedSpinner.setModel(spinnerModel);
     }
     
     @SuppressWarnings("unchecked")
@@ -130,6 +138,7 @@ public class JPanelPreferences extends javax.swing.JPanel {
         cancelButton.setBounds(440, 310, 80, 23);
     }// </editor-fold>//GEN-END:initComponents
 
+    //Boton para cancelar los cambios
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         if(JOptionPane.showConfirmDialog(null, "Changes will not be saved. Do you want to continue?", "Cancel", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
             clearTextFields();
@@ -149,6 +158,7 @@ public class JPanelPreferences extends javax.swing.JPanel {
         } 
     }//GEN-LAST:event_tempButtonActionPerformed
 
+    //Permite seleccionar archivos
     private void locationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_locationButtonActionPerformed
         JFileChooser fileYt = new JFileChooser();
         fileYt.setFileSelectionMode(JFileChooser.FILES_ONLY);
