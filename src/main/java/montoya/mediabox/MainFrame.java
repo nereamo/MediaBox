@@ -54,6 +54,8 @@ public class MainFrame extends JFrame {
         mainPanel.setVisible(false);
         panelPreferences.setVisible(true);
     }
+    
+    
    
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

@@ -2,6 +2,7 @@ package montoya.mediabox;
 
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -10,10 +11,18 @@ import javax.swing.JFileChooser;
 public class JPanelPreferences extends javax.swing.JPanel {
     
     private MainFrame mainFrame;
+    private boolean createM3u = false;
    
     public JPanelPreferences(MainFrame mainFrame) {
         initComponents();
         this.mainFrame = mainFrame; 
+    }
+    
+    public void clearTextFields(){
+        pathField.setText("");
+        m3uCheck.setSelected(false);
+        speedSpinner.setValue(0);
+        locationField.setText("");
     }
     
     @SuppressWarnings("unchecked")
@@ -27,12 +36,12 @@ public class JPanelPreferences extends javax.swing.JPanel {
         m3uCheck = new javax.swing.JCheckBox();
         speedLabel = new javax.swing.JLabel();
         speedSpinner = new javax.swing.JSpinner();
+        mbLabel = new javax.swing.JLabel();
         locationLabel = new javax.swing.JLabel();
         locationField = new javax.swing.JTextField();
         locationButton = new javax.swing.JButton();
         saveButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(900, 700));
         setPreferredSize(new java.awt.Dimension(900, 700));
@@ -64,6 +73,11 @@ public class JPanelPreferences extends javax.swing.JPanel {
 
         m3uCheck.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         m3uCheck.setText("Create");
+        m3uCheck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m3uCheckActionPerformed(evt);
+            }
+        });
         add(m3uCheck);
         m3uCheck.setBounds(320, 130, 80, 21);
 
@@ -75,6 +89,11 @@ public class JPanelPreferences extends javax.swing.JPanel {
         speedSpinner.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(speedSpinner);
         speedSpinner.setBounds(320, 180, 100, 23);
+
+        mbLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        mbLabel.setText("MB/s");
+        add(mbLabel);
+        mbLabel.setBounds(430, 180, 90, 20);
 
         locationLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         locationLabel.setText("Location yt-dlp:");
@@ -109,15 +128,13 @@ public class JPanelPreferences extends javax.swing.JPanel {
         });
         add(cancelButton);
         cancelButton.setBounds(440, 310, 80, 23);
-
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel1.setText("MB/s");
-        add(jLabel1);
-        jLabel1.setBounds(430, 180, 90, 20);
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        mainFrame.showMainPanel();
+        if(JOptionPane.showConfirmDialog(null, "Changes will not be saved. Do you want to continue?", "Cancel", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+            clearTextFields();
+            mainFrame.showMainPanel();
+        }
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     //Abre la ruta (directorio) donde se guardara los archivos temp
@@ -133,20 +150,31 @@ public class JPanelPreferences extends javax.swing.JPanel {
     }//GEN-LAST:event_tempButtonActionPerformed
 
     private void locationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_locationButtonActionPerformed
-        JFileChooser selectFile = new JFileChooser();
+        JFileChooser fileYt = new JFileChooser();
+        fileYt.setFileSelectionMode(JFileChooser.FILES_ONLY);
         
-        selectFile.showOpenDialog(this);
+        int result = fileYt.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFolder = fileYt.getSelectedFile();
+            locationField.setText(selectedFolder.getAbsolutePath());
+        } 
     }//GEN-LAST:event_locationButtonActionPerformed
+
+    //CheckBox para indicar si queremos crear el archivo .m3u
+    private void m3uCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m3uCheckActionPerformed
+        this.createM3u = m3uCheck.isSelected();
+        System.out.println("Crear archivo m3u: " + this.createM3u); //Mensage por consola
+    }//GEN-LAST:event_m3uCheckActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JButton locationButton;
     private javax.swing.JTextField locationField;
     private javax.swing.JLabel locationLabel;
     private javax.swing.JCheckBox m3uCheck;
     private javax.swing.JLabel m3uLabel;
+    private javax.swing.JLabel mbLabel;
     private javax.swing.JTextField pathField;
     private javax.swing.JLabel pathLabel;
     private javax.swing.JButton saveButton;
