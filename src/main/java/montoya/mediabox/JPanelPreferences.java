@@ -3,6 +3,7 @@ package montoya.mediabox;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 /**
@@ -28,18 +29,19 @@ public class JPanelPreferences extends javax.swing.JPanel {
         locationField.setText("");
     }
     
+    //Permite indicar que velocidad de descarga queremos hasta un max de 100MB/s
     public void mbSpeedSpinner(){
         SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0.0, 0.0, 100.0,0.5);
         speedSpinner.setModel(spinnerModel);
+        
+        JSpinner.NumberEditor numberFormat = new JSpinner.NumberEditor(speedSpinner, "0.0");
+        speedSpinner.setEditor(numberFormat);
     }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pathField = new javax.swing.JTextField();
-        pathLabel = new javax.swing.JLabel();
-        tempButton = new javax.swing.JButton();
         m3uLabel = new javax.swing.JLabel();
         m3uCheck = new javax.swing.JCheckBox();
         speedLabel = new javax.swing.JLabel();
@@ -50,34 +52,19 @@ public class JPanelPreferences extends javax.swing.JPanel {
         locationButton = new javax.swing.JButton();
         saveButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
+        pathField = new javax.swing.JTextField();
+        tempButton = new javax.swing.JButton();
+        pathLabel = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
-        setMinimumSize(new java.awt.Dimension(900, 700));
-        setPreferredSize(new java.awt.Dimension(900, 700));
+        setMinimumSize(new java.awt.Dimension(900, 670));
+        setPreferredSize(new java.awt.Dimension(900, 670));
         setLayout(null);
-
-        pathField.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        add(pathField);
-        pathField.setBounds(320, 80, 240, 23);
-
-        pathLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        pathLabel.setText("Temp Path:");
-        add(pathLabel);
-        pathLabel.setBounds(190, 80, 90, 20);
-
-        tempButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        tempButton.setText("Browse");
-        tempButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tempButtonActionPerformed(evt);
-            }
-        });
-        add(tempButton);
-        tempButton.setBounds(590, 80, 90, 24);
 
         m3uLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         m3uLabel.setText("File .m3u: ");
         add(m3uLabel);
-        m3uLabel.setBounds(200, 130, 70, 20);
+        m3uLabel.setBounds(60, 160, 70, 20);
 
         m3uCheck.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         m3uCheck.setText("Create");
@@ -87,30 +74,30 @@ public class JPanelPreferences extends javax.swing.JPanel {
             }
         });
         add(m3uCheck);
-        m3uCheck.setBounds(320, 130, 80, 21);
+        m3uCheck.setBounds(60, 180, 80, 21);
 
         speedLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         speedLabel.setText("Speed: ");
         add(speedLabel);
-        speedLabel.setBounds(220, 180, 50, 20);
+        speedLabel.setBounds(60, 240, 50, 20);
 
         speedSpinner.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(speedSpinner);
-        speedSpinner.setBounds(320, 180, 100, 23);
+        speedSpinner.setBounds(60, 270, 100, 23);
 
         mbLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mbLabel.setText("MB/s");
         add(mbLabel);
-        mbLabel.setBounds(430, 180, 90, 20);
+        mbLabel.setBounds(170, 270, 50, 20);
 
         locationLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         locationLabel.setText("Location yt-dlp:");
         add(locationLabel);
-        locationLabel.setBounds(170, 230, 110, 20);
+        locationLabel.setBounds(60, 320, 110, 20);
 
         locationField.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(locationField);
-        locationField.setBounds(320, 230, 240, 23);
+        locationField.setBounds(160, 350, 240, 23);
 
         locationButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         locationButton.setText("Browse");
@@ -120,12 +107,12 @@ public class JPanelPreferences extends javax.swing.JPanel {
             }
         });
         add(locationButton);
-        locationButton.setBounds(590, 230, 90, 24);
+        locationButton.setBounds(60, 350, 90, 24);
 
         saveButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         saveButton.setText("Save");
         add(saveButton);
-        saveButton.setBounds(320, 310, 80, 23);
+        saveButton.setBounds(60, 470, 80, 23);
 
         cancelButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         cancelButton.setText("Cancel");
@@ -135,7 +122,30 @@ public class JPanelPreferences extends javax.swing.JPanel {
             }
         });
         add(cancelButton);
-        cancelButton.setBounds(440, 310, 80, 23);
+        cancelButton.setBounds(150, 470, 80, 23);
+
+        pathField.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        add(pathField);
+        pathField.setBounds(150, 90, 240, 23);
+
+        tempButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        tempButton.setText("Browse");
+        tempButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tempButtonActionPerformed(evt);
+            }
+        });
+        add(tempButton);
+        tempButton.setBounds(50, 90, 90, 24);
+
+        pathLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        pathLabel.setText("Temp Path:");
+        add(pathLabel);
+        pathLabel.setBounds(50, 60, 90, 20);
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/largelogoSmall3.png"))); // NOI18N
+        add(jLabel1);
+        jLabel1.setBounds(700, 570, 180, 50);
     }// </editor-fold>//GEN-END:initComponents
 
     //Boton para cancelar los cambios
@@ -179,6 +189,7 @@ public class JPanelPreferences extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JButton locationButton;
     private javax.swing.JTextField locationField;
     private javax.swing.JLabel locationLabel;

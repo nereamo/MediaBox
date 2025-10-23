@@ -60,6 +60,7 @@ public class MainFrame extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         mainPanel = new javax.swing.JPanel();
         urlLabel = new javax.swing.JLabel();
         urlField = new javax.swing.JTextField();
@@ -73,6 +74,7 @@ public class MainFrame extends JFrame {
         downloadButton = new javax.swing.JButton();
         openVideoButton = new javax.swing.JButton();
         jRadioButton1 = new javax.swing.JRadioButton();
+        jLabel1 = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         itemExit = new javax.swing.JMenuItem();
@@ -88,17 +90,17 @@ public class MainFrame extends JFrame {
 
         mainPanel.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
         mainPanel.setMinimumSize(new java.awt.Dimension(900, 700));
-        mainPanel.setPreferredSize(new java.awt.Dimension(900, 700));
+        mainPanel.setPreferredSize(new java.awt.Dimension(900, 670));
         mainPanel.setLayout(null);
 
         urlLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         urlLabel.setText("URL:");
         mainPanel.add(urlLabel);
-        urlLabel.setBounds(270, 80, 37, 20);
+        urlLabel.setBounds(60, 60, 37, 20);
 
         urlField.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mainPanel.add(urlField);
-        urlField.setBounds(320, 80, 280, 23);
+        urlField.setBounds(160, 90, 280, 23);
 
         pasteButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         pasteButton.setText("Paste");
@@ -108,16 +110,16 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(pasteButton);
-        pasteButton.setBounds(630, 80, 90, 24);
+        pasteButton.setBounds(60, 90, 90, 24);
 
         folderLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         folderLabel.setText("Folder:");
         mainPanel.add(folderLabel);
-        folderLabel.setBounds(260, 150, 50, 20);
+        folderLabel.setBounds(60, 160, 50, 20);
 
         folderField.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mainPanel.add(folderField);
-        folderField.setBounds(320, 150, 280, 23);
+        folderField.setBounds(160, 190, 280, 23);
 
         browseButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         browseButton.setText("Browse");
@@ -127,12 +129,12 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(browseButton);
-        browseButton.setBounds(630, 150, 90, 24);
+        browseButton.setBounds(60, 190, 90, 24);
 
         formatLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         formatLabel.setText("Format: ");
         mainPanel.add(formatLabel);
-        formatLabel.setBounds(260, 220, 53, 17);
+        formatLabel.setBounds(60, 260, 53, 17);
 
         mp4Radio.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mp4Radio.setText("MP4");
@@ -142,27 +144,31 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(mp4Radio);
-        mp4Radio.setBounds(340, 220, 60, 22);
+        mp4Radio.setBounds(60, 290, 60, 22);
 
         mp3Radio.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mp3Radio.setText("MP3");
         mainPanel.add(mp3Radio);
-        mp3Radio.setBounds(420, 220, 70, 22);
+        mp3Radio.setBounds(150, 290, 70, 22);
 
         downloadButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         downloadButton.setText("Download");
         mainPanel.add(downloadButton);
-        downloadButton.setBounds(280, 290, 140, 24);
+        downloadButton.setBounds(70, 410, 140, 24);
 
         openVideoButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         openVideoButton.setText("Open Last Video");
         mainPanel.add(openVideoButton);
-        openVideoButton.setBounds(470, 290, 150, 24);
+        openVideoButton.setBounds(240, 410, 150, 24);
 
         jRadioButton1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jRadioButton1.setText("FLV");
         mainPanel.add(jRadioButton1);
-        jRadioButton1.setBounds(500, 220, 70, 22);
+        jRadioButton1.setBounds(240, 290, 70, 22);
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/largelogoSmall3.png"))); // NOI18N
+        mainPanel.add(jLabel1);
+        jLabel1.setBounds(700, 570, 180, 50);
 
         getContentPane().add(mainPanel);
         mainPanel.setBounds(0, 0, 900, 670);
@@ -254,7 +260,7 @@ public class MainFrame extends JFrame {
 
     //Boton que permite salir de la aplicación
     private void itemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemExitActionPerformed
-        if(JOptionPane.showConfirmDialog(null, "¿Desea cerrar la aplicación?", "Salir", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+        if(JOptionPane.showConfirmDialog(null, "Do you want to exit the application?", "Exit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
             System.exit(0);
         }
     }//GEN-LAST:event_itemExitActionPerformed
@@ -315,6 +321,7 @@ public class MainFrame extends JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton browseButton;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton downloadButton;
     private javax.swing.JTextField folderField;
     private javax.swing.JLabel folderLabel;
@@ -322,6 +329,7 @@ public class MainFrame extends JFrame {
     private javax.swing.JMenuItem itemAbout;
     private javax.swing.JMenuItem itemExit;
     private javax.swing.JMenuItem itemPreferences;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
