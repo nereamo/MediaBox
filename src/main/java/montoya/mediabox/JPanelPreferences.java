@@ -1,6 +1,9 @@
 package montoya.mediabox;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
@@ -20,6 +23,26 @@ public class JPanelPreferences extends javax.swing.JPanel {
         this.mainFrame = mainFrame; 
         mbSpeedSpinner();
     }
+    
+//    public String getYtDlpLocation() {
+//        return locationField.getText();
+//    }
+//
+//    public String getTempPath() {
+//        return pathField.getText();
+//    }
+//
+//    public boolean isCreateM3u() {
+//        return createM3u;
+//    }
+//
+//    public double getMaxSpeed() {
+//        Object value = speedSpinner.getValue();
+//        if (value instanceof Number) {
+//            return ((Number) value).doubleValue();
+//        }
+//        return 0.0;
+//    }
     
     //metodo para limpiar las entradas
     public void clearTextFields(){
@@ -55,7 +78,7 @@ public class JPanelPreferences extends javax.swing.JPanel {
         pathField = new javax.swing.JTextField();
         tempButton = new javax.swing.JButton();
         pathLabel = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        logoLabel = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(900, 670));
         setPreferredSize(new java.awt.Dimension(900, 670));
@@ -74,7 +97,7 @@ public class JPanelPreferences extends javax.swing.JPanel {
             }
         });
         add(m3uCheck);
-        m3uCheck.setBounds(60, 180, 80, 21);
+        m3uCheck.setBounds(60, 190, 80, 21);
 
         speedLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         speedLabel.setText("Speed: ");
@@ -143,9 +166,9 @@ public class JPanelPreferences extends javax.swing.JPanel {
         add(pathLabel);
         pathLabel.setBounds(50, 60, 90, 20);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/largelogoSmall3.png"))); // NOI18N
-        add(jLabel1);
-        jLabel1.setBounds(700, 570, 180, 50);
+        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/largelogoSmall3.png"))); // NOI18N
+        add(logoLabel);
+        logoLabel.setBounds(700, 570, 180, 50);
     }// </editor-fold>//GEN-END:initComponents
 
     //Boton para cancelar los cambios
@@ -168,16 +191,41 @@ public class JPanelPreferences extends javax.swing.JPanel {
         } 
     }//GEN-LAST:event_tempButtonActionPerformed
 
-    //Permite seleccionar archivos
+    //Metodo que busca el archivo yt-dlp.exe mediante el uso de ProcessBuilder
     private void locationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_locationButtonActionPerformed
-        JFileChooser fileYt = new JFileChooser();
-        fileYt.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        
-        int result = fileYt.showOpenDialog(this);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFolder = fileYt.getSelectedFile();
-            locationField.setText(selectedFolder.getAbsolutePath());
-        } 
+        try {
+
+            ProcessBuilder pb = new ProcessBuilder("where", "yt-dlp.exe");
+            Process p = pb.start();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line;
+            StringBuilder sb = new StringBuilder();
+
+            while ((line = br.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+
+            int exitCode = p.waitFor();
+
+            if (exitCode == 0) {
+                
+                String path = sb.toString().trim();
+                String firstPath = path.split("\n")[0];
+
+                locationField.setText(firstPath);
+                JOptionPane.showMessageDialog(this,"Ruta de yt-dlp.exe encontrada.","Encontrado",JOptionPane.INFORMATION_MESSAGE);
+
+            } else {
+                locationField.setText("");
+                JOptionPane.showMessageDialog(this,"No se pudo encontrar 'yt-dlp.exe'", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (IOException ex) {
+            System.getLogger(JPanelPreferences.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        } catch (InterruptedException ex) {
+            System.getLogger(JPanelPreferences.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
     }//GEN-LAST:event_locationButtonActionPerformed
 
     //CheckBox para indicar si queremos crear el archivo .m3u
@@ -189,10 +237,10 @@ public class JPanelPreferences extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JButton locationButton;
     private javax.swing.JTextField locationField;
     private javax.swing.JLabel locationLabel;
+    private javax.swing.JLabel logoLabel;
     private javax.swing.JCheckBox m3uCheck;
     private javax.swing.JLabel m3uLabel;
     private javax.swing.JLabel mbLabel;

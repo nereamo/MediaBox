@@ -40,7 +40,6 @@ public class MainFrame extends JFrame {
         panelPreferences.setBounds(0, 0, 900, 700);
         panelPreferences.setVisible(false);
         getContentPane().add(panelPreferences);
-   
     }
     
     //Metodo que permite mostrar el JPanel principal del JFrame
@@ -54,13 +53,10 @@ public class MainFrame extends JFrame {
         mainPanel.setVisible(false);
         panelPreferences.setVisible(true);
     }
-    
-    
    
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
         mainPanel = new javax.swing.JPanel();
         urlLabel = new javax.swing.JLabel();
         urlField = new javax.swing.JTextField();
@@ -74,7 +70,7 @@ public class MainFrame extends JFrame {
         downloadButton = new javax.swing.JButton();
         openVideoButton = new javax.swing.JButton();
         jRadioButton1 = new javax.swing.JRadioButton();
-        jLabel1 = new javax.swing.JLabel();
+        logoLabel = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         itemExit = new javax.swing.JMenuItem();
@@ -138,11 +134,6 @@ public class MainFrame extends JFrame {
 
         mp4Radio.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mp4Radio.setText("MP4");
-        mp4Radio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mp4RadioActionPerformed(evt);
-            }
-        });
         mainPanel.add(mp4Radio);
         mp4Radio.setBounds(60, 290, 60, 22);
 
@@ -166,9 +157,9 @@ public class MainFrame extends JFrame {
         mainPanel.add(jRadioButton1);
         jRadioButton1.setBounds(240, 290, 70, 22);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/largelogoSmall3.png"))); // NOI18N
-        mainPanel.add(jLabel1);
-        jLabel1.setBounds(700, 570, 180, 50);
+        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/largelogoSmall3.png"))); // NOI18N
+        mainPanel.add(logoLabel);
+        logoLabel.setBounds(700, 570, 180, 50);
 
         getContentPane().add(mainPanel);
         mainPanel.setBounds(0, 0, 900, 670);
@@ -265,10 +256,6 @@ public class MainFrame extends JFrame {
         }
     }//GEN-LAST:event_itemExitActionPerformed
 
-    private void mp4RadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mp4RadioActionPerformed
-        
-    }//GEN-LAST:event_mp4RadioActionPerformed
-
     //Abre la ruta (directorio) donde se guardara el archivo descargado
     private void browseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonActionPerformed
        JFileChooser directory = new JFileChooser();
@@ -321,7 +308,6 @@ public class MainFrame extends JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton browseButton;
-    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton downloadButton;
     private javax.swing.JTextField folderField;
     private javax.swing.JLabel folderLabel;
@@ -329,8 +315,8 @@ public class MainFrame extends JFrame {
     private javax.swing.JMenuItem itemAbout;
     private javax.swing.JMenuItem itemExit;
     private javax.swing.JMenuItem itemPreferences;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JLabel logoLabel;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu menuEdit;
