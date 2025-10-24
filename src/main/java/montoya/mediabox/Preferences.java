@@ -27,18 +27,18 @@ public class Preferences extends javax.swing.JPanel {
     
     //Limpiar entradas
     public void clearTextFields(){
-        pathField.setText("");
-        m3uCheck.setSelected(false);
-        speedSpinner.setValue(0);
-        locationField.setText("");
+        txtPathTemp.setText("");
+        chkCreate.setSelected(false);
+        spnSpeed.setValue(0);
+        txtYtDlp.setText("");
     }
     
     //Guardar valores de preferences
     public void savePreferences() {
-        downloader.setTempPath(pathField.getText().trim());
-        downloader.setYtDlpLocation(locationField.getText().trim());
-        downloader.setCreateM3u(m3uCheck.isSelected());
-        downloader.setMaxSpeed(((Number) speedSpinner.getValue()).doubleValue());
+        downloader.setTempPath(txtPathTemp.getText().trim());
+        downloader.setYtDlpLocation(txtYtDlp.getText().trim());
+        downloader.setCreateM3u(chkCreate.isSelected());
+        downloader.setMaxSpeed(((Number) spnSpeed.getValue()).doubleValue());
 
         JOptionPane.showMessageDialog(this, "Preferences saved!", "Saved", JOptionPane.INFORMATION_MESSAGE);
         mainFrame.showMainPanel();
@@ -48,116 +48,116 @@ public class Preferences extends javax.swing.JPanel {
     //Velocidad de descarga hasta un max de 100MB/s
     public void mbSpeedSpinner(){
         SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0.0, 0.0, 100.0,10.0);
-        speedSpinner.setModel(spinnerModel);
+        spnSpeed.setModel(spinnerModel);
         
-        JSpinner.NumberEditor numberFormat = new JSpinner.NumberEditor(speedSpinner, "0.0");
-        speedSpinner.setEditor(numberFormat);
+        JSpinner.NumberEditor numberFormat = new JSpinner.NumberEditor(spnSpeed, "0.0");
+        spnSpeed.setEditor(numberFormat);
     }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        m3uLabel = new javax.swing.JLabel();
-        m3uCheck = new javax.swing.JCheckBox();
-        speedLabel = new javax.swing.JLabel();
-        speedSpinner = new javax.swing.JSpinner();
-        mbLabel = new javax.swing.JLabel();
-        locationLabel = new javax.swing.JLabel();
-        locationField = new javax.swing.JTextField();
-        locationButton = new javax.swing.JButton();
-        saveButton = new javax.swing.JButton();
-        cancelButton = new javax.swing.JButton();
-        pathField = new javax.swing.JTextField();
-        tempButton = new javax.swing.JButton();
-        pathLabel = new javax.swing.JLabel();
+        lblM3u = new javax.swing.JLabel();
+        chkCreate = new javax.swing.JCheckBox();
+        lblSpeed = new javax.swing.JLabel();
+        spnSpeed = new javax.swing.JSpinner();
+        lblMbs = new javax.swing.JLabel();
+        lblYtDlp = new javax.swing.JLabel();
+        txtYtDlp = new javax.swing.JTextField();
+        btnYtDlp = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
+        txtPathTemp = new javax.swing.JTextField();
+        btnBrowseTemp = new javax.swing.JButton();
+        lblPath = new javax.swing.JLabel();
         logoLabel = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(900, 670));
         setPreferredSize(new java.awt.Dimension(900, 670));
         setLayout(null);
 
-        m3uLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        m3uLabel.setText("File .m3u: ");
-        add(m3uLabel);
-        m3uLabel.setBounds(60, 160, 70, 20);
+        lblM3u.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblM3u.setText("File .m3u: ");
+        add(lblM3u);
+        lblM3u.setBounds(60, 160, 70, 20);
 
-        m3uCheck.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        m3uCheck.setText("Create");
-        add(m3uCheck);
-        m3uCheck.setBounds(60, 190, 80, 21);
+        chkCreate.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        chkCreate.setText("Create");
+        add(chkCreate);
+        chkCreate.setBounds(60, 190, 80, 21);
 
-        speedLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        speedLabel.setText("Speed: ");
-        add(speedLabel);
-        speedLabel.setBounds(60, 240, 50, 20);
+        lblSpeed.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblSpeed.setText("Speed: ");
+        add(lblSpeed);
+        lblSpeed.setBounds(60, 240, 50, 20);
 
-        speedSpinner.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        add(speedSpinner);
-        speedSpinner.setBounds(60, 270, 100, 23);
+        spnSpeed.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        add(spnSpeed);
+        spnSpeed.setBounds(60, 270, 100, 23);
 
-        mbLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        mbLabel.setText("MB/s");
-        add(mbLabel);
-        mbLabel.setBounds(170, 270, 50, 20);
+        lblMbs.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblMbs.setText("MB/s");
+        add(lblMbs);
+        lblMbs.setBounds(170, 270, 50, 20);
 
-        locationLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        locationLabel.setText("Location yt-dlp:");
-        add(locationLabel);
-        locationLabel.setBounds(60, 320, 110, 20);
+        lblYtDlp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblYtDlp.setText("Location yt-dlp:");
+        add(lblYtDlp);
+        lblYtDlp.setBounds(60, 320, 110, 20);
 
-        locationField.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        add(locationField);
-        locationField.setBounds(160, 350, 240, 23);
+        txtYtDlp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        add(txtYtDlp);
+        txtYtDlp.setBounds(160, 350, 240, 23);
 
-        locationButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        locationButton.setText("Browse");
-        locationButton.addActionListener(new java.awt.event.ActionListener() {
+        btnYtDlp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnYtDlp.setText("Browse");
+        btnYtDlp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                locationButtonActionPerformed(evt);
+                btnYtDlpActionPerformed(evt);
             }
         });
-        add(locationButton);
-        locationButton.setBounds(60, 350, 90, 24);
+        add(btnYtDlp);
+        btnYtDlp.setBounds(60, 350, 90, 24);
 
-        saveButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        saveButton.setText("Save");
-        saveButton.addActionListener(new java.awt.event.ActionListener() {
+        btnSave.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnSave.setText("Save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveButtonActionPerformed(evt);
+                btnSaveActionPerformed(evt);
             }
         });
-        add(saveButton);
-        saveButton.setBounds(60, 470, 80, 23);
+        add(btnSave);
+        btnSave.setBounds(60, 470, 80, 23);
 
-        cancelButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        cancelButton.setText("Cancel");
-        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+        btnCancel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelButtonActionPerformed(evt);
+                btnCancelActionPerformed(evt);
             }
         });
-        add(cancelButton);
-        cancelButton.setBounds(150, 470, 80, 23);
+        add(btnCancel);
+        btnCancel.setBounds(150, 470, 80, 23);
 
-        pathField.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        add(pathField);
-        pathField.setBounds(150, 90, 240, 23);
+        txtPathTemp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        add(txtPathTemp);
+        txtPathTemp.setBounds(150, 90, 240, 23);
 
-        tempButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        tempButton.setText("Browse");
-        tempButton.addActionListener(new java.awt.event.ActionListener() {
+        btnBrowseTemp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnBrowseTemp.setText("Browse");
+        btnBrowseTemp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tempButtonActionPerformed(evt);
+                btnBrowseTempActionPerformed(evt);
             }
         });
-        add(tempButton);
-        tempButton.setBounds(50, 90, 90, 24);
+        add(btnBrowseTemp);
+        btnBrowseTemp.setBounds(50, 90, 90, 24);
 
-        pathLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        pathLabel.setText("Temp Path:");
-        add(pathLabel);
-        pathLabel.setBounds(50, 60, 90, 20);
+        lblPath.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblPath.setText("Temp Path:");
+        add(lblPath);
+        lblPath.setBounds(50, 60, 90, 20);
 
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/largelogoSmall3.png"))); // NOI18N
         add(logoLabel);
@@ -165,27 +165,27 @@ public class Preferences extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     //Cancelar preferencias
-    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         if(JOptionPane.showConfirmDialog(null, "Changes will not be saved. Do you want to continue?", "Cancel", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
             clearTextFields();
             mainFrame.showMainPanel();
         }
-    }//GEN-LAST:event_cancelButtonActionPerformed
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     //Directorio para archivos temporales
-    private void tempButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tempButtonActionPerformed
+    private void btnBrowseTempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseTempActionPerformed
         JFileChooser directory = new JFileChooser();
         directory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         
         int result = directory.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFolder = directory.getSelectedFile();
-            pathField.setText(selectedFolder.getAbsolutePath());
+            txtPathTemp.setText(selectedFolder.getAbsolutePath());
         } 
-    }//GEN-LAST:event_tempButtonActionPerformed
+    }//GEN-LAST:event_btnBrowseTempActionPerformed
 
     //Buscar archivo yt-dlp.exe
-    private void locationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_locationButtonActionPerformed
+    private void btnYtDlpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnYtDlpActionPerformed
         try {
             ProcessBuilder pb = new ProcessBuilder("where", "yt-dlp.exe");
             Process p = pb.start();
@@ -203,12 +203,12 @@ public class Preferences extends javax.swing.JPanel {
                 String path = sb.toString().trim();
                 String firstPath = path.split("\n")[0];
 
-                locationField.setText(firstPath);
-                JOptionPane.showMessageDialog(this,"Ruta de yt-dlp.exe encontrada.","Encontrado",JOptionPane.INFORMATION_MESSAGE);
+                txtYtDlp.setText(firstPath);
+                JOptionPane.showMessageDialog(this,"Path to yt-dlp.exe found.", "Found",JOptionPane.INFORMATION_MESSAGE);
 
             } else {
-                locationField.setText("");
-                JOptionPane.showMessageDialog(this,"No se pudo encontrar 'yt-dlp.exe'", "Error", JOptionPane.ERROR_MESSAGE);
+                txtYtDlp.setText("");
+                JOptionPane.showMessageDialog(this,"yt-dlp.exe not found.", "Not Found", JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (IOException ex) {
@@ -216,28 +216,29 @@ public class Preferences extends javax.swing.JPanel {
         } catch (InterruptedException ex) {
             System.getLogger(Preferences.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
-    }//GEN-LAST:event_locationButtonActionPerformed
+    }//GEN-LAST:event_btnYtDlpActionPerformed
 
-    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+    //Boton save llama a metodos save y clear
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         savePreferences();
         clearTextFields();
-    }//GEN-LAST:event_saveButtonActionPerformed
+    }//GEN-LAST:event_btnSaveActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton cancelButton;
-    private javax.swing.JButton locationButton;
-    private javax.swing.JTextField locationField;
-    private javax.swing.JLabel locationLabel;
+    private javax.swing.JButton btnBrowseTemp;
+    private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnYtDlp;
+    private javax.swing.JCheckBox chkCreate;
+    private javax.swing.JLabel lblM3u;
+    private javax.swing.JLabel lblMbs;
+    private javax.swing.JLabel lblPath;
+    private javax.swing.JLabel lblSpeed;
+    private javax.swing.JLabel lblYtDlp;
     private javax.swing.JLabel logoLabel;
-    private javax.swing.JCheckBox m3uCheck;
-    private javax.swing.JLabel m3uLabel;
-    private javax.swing.JLabel mbLabel;
-    private javax.swing.JTextField pathField;
-    private javax.swing.JLabel pathLabel;
-    private javax.swing.JButton saveButton;
-    private javax.swing.JLabel speedLabel;
-    private javax.swing.JSpinner speedSpinner;
-    private javax.swing.JButton tempButton;
+    private javax.swing.JSpinner spnSpeed;
+    private javax.swing.JTextField txtPathTemp;
+    private javax.swing.JTextField txtYtDlp;
     // End of variables declaration//GEN-END:variables
 }

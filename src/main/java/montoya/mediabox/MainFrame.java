@@ -24,10 +24,10 @@ public class MainFrame extends JFrame {
         preferencesPanel();
         
         ButtonGroup bg = new ButtonGroup();
-        bg.add(mp4Radio);
-        bg.add(mp3Radio);
+        bg.add(radioMp4);
+        bg.add(radioMp3);
         
-        mp4Radio.setSelected(true);
+        radioMp4.setSelected(true);
     }
     
     //Propiedades de JFrame
@@ -66,28 +66,28 @@ public class MainFrame extends JFrame {
     private void initComponents() {
 
         mainPanel = new javax.swing.JPanel();
-        urlLabel = new javax.swing.JLabel();
-        urlField = new javax.swing.JTextField();
-        pasteButton = new javax.swing.JButton();
-        clearButton = new javax.swing.JButton();
-        folderLabel = new javax.swing.JLabel();
-        folderField = new javax.swing.JTextField();
-        browseButton = new javax.swing.JButton();
-        formatLabel = new javax.swing.JLabel();
-        mp4Radio = new javax.swing.JRadioButton();
-        mp3Radio = new javax.swing.JRadioButton();
-        downloadButton = new javax.swing.JButton();
-        openVideoButton = new javax.swing.JButton();
+        lblUrl = new javax.swing.JLabel();
+        txtUrl = new javax.swing.JTextField();
+        btnPaste = new javax.swing.JButton();
+        btnClear = new javax.swing.JButton();
+        lblFolder = new javax.swing.JLabel();
+        txtFolder = new javax.swing.JTextField();
+        btnBrowse = new javax.swing.JButton();
+        lblFormat = new javax.swing.JLabel();
+        radioMp4 = new javax.swing.JRadioButton();
+        radioMp3 = new javax.swing.JRadioButton();
+        btnDownload = new javax.swing.JButton();
+        btnOpenLast = new javax.swing.JButton();
         logoLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        infoDownloadArea = new javax.swing.JTextArea();
+        areaInfo = new javax.swing.JTextArea();
         menuBar = new javax.swing.JMenuBar();
-        menuFile = new javax.swing.JMenu();
-        itemExit = new javax.swing.JMenuItem();
-        menuEdit = new javax.swing.JMenu();
-        itemPreferences = new javax.swing.JMenuItem();
-        menuHelp = new javax.swing.JMenu();
-        itemAbout = new javax.swing.JMenuItem();
+        mnuFile = new javax.swing.JMenu();
+        mnuExit = new javax.swing.JMenuItem();
+        mnuEdit = new javax.swing.JMenu();
+        mnuPreferences = new javax.swing.JMenuItem();
+        mnuHelp = new javax.swing.JMenu();
+        mnuAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("mainFrame"); // NOI18N
@@ -99,92 +99,92 @@ public class MainFrame extends JFrame {
         mainPanel.setPreferredSize(new java.awt.Dimension(900, 670));
         mainPanel.setLayout(null);
 
-        urlLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        urlLabel.setText("URL:");
-        mainPanel.add(urlLabel);
-        urlLabel.setBounds(60, 60, 37, 20);
+        lblUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblUrl.setText("URL:");
+        mainPanel.add(lblUrl);
+        lblUrl.setBounds(60, 60, 37, 20);
 
-        urlField.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        mainPanel.add(urlField);
-        urlField.setBounds(160, 90, 280, 23);
+        txtUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        mainPanel.add(txtUrl);
+        txtUrl.setBounds(160, 90, 280, 23);
 
-        pasteButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        pasteButton.setText("Paste");
-        pasteButton.addActionListener(new java.awt.event.ActionListener() {
+        btnPaste.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnPaste.setText("Paste");
+        btnPaste.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pasteButtonActionPerformed(evt);
+                btnPasteActionPerformed(evt);
             }
         });
-        mainPanel.add(pasteButton);
-        pasteButton.setBounds(60, 90, 90, 24);
+        mainPanel.add(btnPaste);
+        btnPaste.setBounds(60, 90, 90, 24);
 
-        clearButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        clearButton.setText("Clear");
-        clearButton.addActionListener(new java.awt.event.ActionListener() {
+        btnClear.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnClear.setText("Clear");
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                clearButtonActionPerformed(evt);
+                btnClearActionPerformed(evt);
             }
         });
-        mainPanel.add(clearButton);
-        clearButton.setBounds(450, 90, 100, 24);
+        mainPanel.add(btnClear);
+        btnClear.setBounds(450, 90, 100, 24);
 
-        folderLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        folderLabel.setText("Folder:");
-        mainPanel.add(folderLabel);
-        folderLabel.setBounds(60, 160, 50, 20);
+        lblFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblFolder.setText("Folder:");
+        mainPanel.add(lblFolder);
+        lblFolder.setBounds(60, 160, 50, 20);
 
-        folderField.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        mainPanel.add(folderField);
-        folderField.setBounds(160, 190, 280, 23);
+        txtFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        mainPanel.add(txtFolder);
+        txtFolder.setBounds(160, 190, 280, 23);
 
-        browseButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        browseButton.setText("Browse");
-        browseButton.addActionListener(new java.awt.event.ActionListener() {
+        btnBrowse.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnBrowse.setText("Browse");
+        btnBrowse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                browseButtonActionPerformed(evt);
+                btnBrowseActionPerformed(evt);
             }
         });
-        mainPanel.add(browseButton);
-        browseButton.setBounds(60, 190, 90, 24);
+        mainPanel.add(btnBrowse);
+        btnBrowse.setBounds(60, 190, 90, 24);
 
-        formatLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        formatLabel.setText("Format: ");
-        mainPanel.add(formatLabel);
-        formatLabel.setBounds(60, 260, 53, 17);
+        lblFormat.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblFormat.setText("Format: ");
+        mainPanel.add(lblFormat);
+        lblFormat.setBounds(60, 260, 53, 17);
 
-        mp4Radio.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        mp4Radio.setText("MP4");
-        mainPanel.add(mp4Radio);
-        mp4Radio.setBounds(60, 290, 60, 22);
+        radioMp4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        radioMp4.setText("MP4");
+        mainPanel.add(radioMp4);
+        radioMp4.setBounds(60, 290, 60, 22);
 
-        mp3Radio.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        mp3Radio.setText("MP3");
-        mainPanel.add(mp3Radio);
-        mp3Radio.setBounds(150, 290, 70, 22);
+        radioMp3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        radioMp3.setText("MP3");
+        mainPanel.add(radioMp3);
+        radioMp3.setBounds(150, 290, 70, 22);
 
-        downloadButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        downloadButton.setText("Download");
-        downloadButton.addActionListener(new java.awt.event.ActionListener() {
+        btnDownload.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnDownload.setText("Download");
+        btnDownload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                downloadButtonActionPerformed(evt);
+                btnDownloadActionPerformed(evt);
             }
         });
-        mainPanel.add(downloadButton);
-        downloadButton.setBounds(60, 390, 140, 24);
+        mainPanel.add(btnDownload);
+        btnDownload.setBounds(60, 390, 140, 24);
 
-        openVideoButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        openVideoButton.setText("Open Last Video");
-        mainPanel.add(openVideoButton);
-        openVideoButton.setBounds(220, 390, 150, 24);
+        btnOpenLast.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnOpenLast.setText("Open Last Video");
+        mainPanel.add(btnOpenLast);
+        btnOpenLast.setBounds(220, 390, 150, 24);
 
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/largelogoSmall3.png"))); // NOI18N
         mainPanel.add(logoLabel);
         logoLabel.setBounds(700, 570, 180, 50);
 
-        infoDownloadArea.setColumns(20);
-        infoDownloadArea.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        infoDownloadArea.setRows(5);
-        jScrollPane1.setViewportView(infoDownloadArea);
+        areaInfo.setColumns(20);
+        areaInfo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        areaInfo.setRows(5);
+        jScrollPane1.setViewportView(areaInfo);
 
         mainPanel.add(jScrollPane1);
         jScrollPane1.setBounds(60, 440, 380, 170);
@@ -198,68 +198,68 @@ public class MainFrame extends JFrame {
         menuBar.setMinimumSize(new java.awt.Dimension(70, 35));
         menuBar.setPreferredSize(new java.awt.Dimension(70, 35));
 
-        menuFile.setBackground(new java.awt.Color(255, 102, 0));
-        menuFile.setBorder(null);
-        menuFile.setForeground(new java.awt.Color(255, 255, 255));
-        menuFile.setText("File");
-        menuFile.setToolTipText("File");
-        menuFile.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        menuFile.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        menuFile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        menuFile.setPreferredSize(new java.awt.Dimension(40, 40));
+        mnuFile.setBackground(new java.awt.Color(255, 102, 0));
+        mnuFile.setBorder(null);
+        mnuFile.setForeground(new java.awt.Color(255, 255, 255));
+        mnuFile.setText("File");
+        mnuFile.setToolTipText("File");
+        mnuFile.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        mnuFile.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        mnuFile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        mnuFile.setPreferredSize(new java.awt.Dimension(40, 40));
 
-        itemExit.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        itemExit.setText("Exit");
-        itemExit.setToolTipText("Exit");
-        itemExit.addActionListener(new java.awt.event.ActionListener() {
+        mnuExit.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        mnuExit.setText("Exit");
+        mnuExit.setToolTipText("Exit");
+        mnuExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemExitActionPerformed(evt);
+                mnuExitActionPerformed(evt);
             }
         });
-        menuFile.add(itemExit);
+        mnuFile.add(mnuExit);
 
-        menuBar.add(menuFile);
+        menuBar.add(mnuFile);
 
-        menuEdit.setBorder(null);
-        menuEdit.setForeground(new java.awt.Color(255, 255, 255));
-        menuEdit.setText("Edit");
-        menuEdit.setToolTipText("Edit");
-        menuEdit.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        menuEdit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        menuEdit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        menuEdit.setMinimumSize(new java.awt.Dimension(40, 40));
-        menuEdit.setPreferredSize(new java.awt.Dimension(40, 40));
+        mnuEdit.setBorder(null);
+        mnuEdit.setForeground(new java.awt.Color(255, 255, 255));
+        mnuEdit.setText("Edit");
+        mnuEdit.setToolTipText("Edit");
+        mnuEdit.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        mnuEdit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        mnuEdit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        mnuEdit.setMinimumSize(new java.awt.Dimension(40, 40));
+        mnuEdit.setPreferredSize(new java.awt.Dimension(40, 40));
 
-        itemPreferences.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        itemPreferences.setText("Preferences");
-        itemPreferences.addActionListener(new java.awt.event.ActionListener() {
+        mnuPreferences.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        mnuPreferences.setText("Preferences");
+        mnuPreferences.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemPreferencesActionPerformed(evt);
+                mnuPreferencesActionPerformed(evt);
             }
         });
-        menuEdit.add(itemPreferences);
+        mnuEdit.add(mnuPreferences);
 
-        menuBar.add(menuEdit);
+        menuBar.add(mnuEdit);
 
-        menuHelp.setBorder(null);
-        menuHelp.setForeground(new java.awt.Color(255, 255, 255));
-        menuHelp.setText("Help");
-        menuHelp.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        menuHelp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        menuHelp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        menuHelp.setMinimumSize(new java.awt.Dimension(40, 40));
-        menuHelp.setPreferredSize(new java.awt.Dimension(40, 40));
+        mnuHelp.setBorder(null);
+        mnuHelp.setForeground(new java.awt.Color(255, 255, 255));
+        mnuHelp.setText("Help");
+        mnuHelp.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        mnuHelp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        mnuHelp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        mnuHelp.setMinimumSize(new java.awt.Dimension(40, 40));
+        mnuHelp.setPreferredSize(new java.awt.Dimension(40, 40));
 
-        itemAbout.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        itemAbout.setText("About");
-        itemAbout.addActionListener(new java.awt.event.ActionListener() {
+        mnuAbout.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        mnuAbout.setText("About");
+        mnuAbout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemAboutActionPerformed(evt);
+                mnuAboutActionPerformed(evt);
             }
         });
-        menuHelp.add(itemAbout);
+        mnuHelp.add(mnuAbout);
 
-        menuBar.add(menuHelp);
+        menuBar.add(mnuHelp);
 
         setJMenuBar(menuBar);
 
@@ -267,67 +267,67 @@ public class MainFrame extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     //Preferences
-    private void itemPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemPreferencesActionPerformed
+    private void mnuPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPreferencesActionPerformed
         showPreferencesPanel();
-    }//GEN-LAST:event_itemPreferencesActionPerformed
+    }//GEN-LAST:event_mnuPreferencesActionPerformed
 
     //About
-    private void itemAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAboutActionPerformed
+    private void mnuAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAboutActionPerformed
         JDialogAbout dialogAbout = new JDialogAbout(this,true);
         dialogAbout.setVisible(true);
-    }//GEN-LAST:event_itemAboutActionPerformed
+    }//GEN-LAST:event_mnuAboutActionPerformed
 
     //Exit
-    private void itemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemExitActionPerformed
+    private void mnuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExitActionPerformed
         if(JOptionPane.showConfirmDialog(null, "Do you want to exit the application?", "Exit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
             System.exit(0);
         }
-    }//GEN-LAST:event_itemExitActionPerformed
+    }//GEN-LAST:event_mnuExitActionPerformed
 
     //Directorio para guardar archivo descargado
-    private void browseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonActionPerformed
+    private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
        JFileChooser directory = new JFileChooser();
         directory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         
         int result = directory.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFolder = directory.getSelectedFile();
-            folderField.setText(selectedFolder.getAbsolutePath());
+            txtFolder.setText(selectedFolder.getAbsolutePath());
         } 
-    }//GEN-LAST:event_browseButtonActionPerformed
+    }//GEN-LAST:event_btnBrowseActionPerformed
 
     //Copia del portapapeles a JTextField "urlField"
-    private void pasteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pasteButtonActionPerformed
+    private void btnPasteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPasteActionPerformed
         Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
         DataFlavor df = DataFlavor.stringFlavor;
         if(cb.isDataFlavorAvailable(df)){
             try {
                 String clipboardContent = (String) cb.getData(df);
-                urlField.setText(clipboardContent);
+                txtUrl.setText(clipboardContent);
             } catch (UnsupportedFlavorException ex) {
                 System.getLogger(MainFrame.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             } catch (IOException ex) {
                 System.getLogger(MainFrame.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
         }
-    }//GEN-LAST:event_pasteButtonActionPerformed
+    }//GEN-LAST:event_btnPasteActionPerformed
 
     //Ejecuta la descarga
-    private void downloadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadButtonActionPerformed
-        String url = urlField.getText().trim();
-        String folder = folderField.getText().trim();
-        String format = mp3Radio.isSelected() ? "mp3" : "mp4";
+    private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
+        String url = txtUrl.getText().trim();
+        String folder = txtFolder.getText().trim();
+        String format = radioMp3.isSelected() ? "mp3" : "mp4";
 
         downloader.setTempPath(folder);
-        infoDownloadArea.setText("");
+        areaInfo.setText("");
 
-        new Thread(() -> downloader.download(url, folder, format, infoDownloadArea)).start();
-    }//GEN-LAST:event_downloadButtonActionPerformed
+        new Thread(() -> downloader.download(url, folder, format, areaInfo)).start();
+    }//GEN-LAST:event_btnDownloadActionPerformed
 
     //Borra contenido de JTextField "urlField"
-    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
-        urlField.setText("");
-    }//GEN-LAST:event_clearButtonActionPerformed
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        txtUrl.setText("");
+    }//GEN-LAST:event_btnClearActionPerformed
 
     public static void main(String args[]) {
         /* Set the Metal look and feel */
@@ -352,28 +352,28 @@ public class MainFrame extends JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton browseButton;
-    private javax.swing.JButton clearButton;
-    private javax.swing.JButton downloadButton;
-    private javax.swing.JTextField folderField;
-    private javax.swing.JLabel folderLabel;
-    private javax.swing.JLabel formatLabel;
-    private javax.swing.JTextArea infoDownloadArea;
-    private javax.swing.JMenuItem itemAbout;
-    private javax.swing.JMenuItem itemExit;
-    private javax.swing.JMenuItem itemPreferences;
+    private javax.swing.JTextArea areaInfo;
+    private javax.swing.JButton btnBrowse;
+    private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnDownload;
+    private javax.swing.JButton btnOpenLast;
+    private javax.swing.JButton btnPaste;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblFolder;
+    private javax.swing.JLabel lblFormat;
+    private javax.swing.JLabel lblUrl;
     private javax.swing.JLabel logoLabel;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenu menuEdit;
-    private javax.swing.JMenu menuFile;
-    private javax.swing.JMenu menuHelp;
-    private javax.swing.JRadioButton mp3Radio;
-    private javax.swing.JRadioButton mp4Radio;
-    private javax.swing.JButton openVideoButton;
-    private javax.swing.JButton pasteButton;
-    private javax.swing.JTextField urlField;
-    private javax.swing.JLabel urlLabel;
+    private javax.swing.JMenuItem mnuAbout;
+    private javax.swing.JMenu mnuEdit;
+    private javax.swing.JMenuItem mnuExit;
+    private javax.swing.JMenu mnuFile;
+    private javax.swing.JMenu mnuHelp;
+    private javax.swing.JMenuItem mnuPreferences;
+    private javax.swing.JRadioButton radioMp3;
+    private javax.swing.JRadioButton radioMp4;
+    private javax.swing.JTextField txtFolder;
+    private javax.swing.JTextField txtUrl;
     // End of variables declaration//GEN-END:variables
 }

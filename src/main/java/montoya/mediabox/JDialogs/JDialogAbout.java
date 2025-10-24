@@ -15,52 +15,59 @@ public class JDialogAbout extends JDialog {
     public JDialogAbout(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setSize(400,300);
+        setSize(400,350);
         setLocationRelativeTo(this);
         setTitle("About");
         
         //Texto mostrado en About
-        String aboutText = "<html><h2>Nerea Montoya</h2>" +
-                           "<p>Course: 2025/2026</p>" +
-                           "<p>Module:  Interface Development</p>" +
-                           "<h2>MediaBox</h2>"+
-                           "<p>Application for downloading videos.</p>" +
-                           "<h3>Resources:</h3>" +
-                           "<ul><li>yt-dlp</li>" +
-                           "<li>ffmpeg</li>" +
-                           "<li>Images (icon)</li>" +
-                           "</ul></html>";
+        String aboutText =  """
+                            <html>
+                                <h2>Nerea Montoya</h2>
+                                <p>Course: 2025/2026</p> 
+                                <p>Module: Interface Development</p>
+                
+                                <h2>MediaBox</h2>
+                                <p>Application for downloading videos.</p>
+                           
+                                <h2>Resources:</h2> 
+                                <ul>
+                                    <li>yt-dlp</li>
+                                    <li>ffmpeg</li> 
+                                    <li>ffplay.exe</li> 
+                                    <li>ffprobe.exe</li> 
+                                </ul>
+                            </html>""";
         
-        textLabel.setText(aboutText);
-        textLabel.setVerticalAlignment(JLabel.TOP);
+        lblAbout.setText(aboutText);
+        lblAbout.setVerticalAlignment(JLabel.TOP);
     }
     
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        aboutPanel = new javax.swing.JPanel();
-        textLabel = new javax.swing.JLabel();
+        pnlAbout = new javax.swing.JPanel();
+        lblAbout = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        aboutPanel.setBackground(new java.awt.Color(255, 153, 51));
-        aboutPanel.setMinimumSize(new java.awt.Dimension(400, 300));
-        aboutPanel.setLayout(null);
+        pnlAbout.setBackground(new java.awt.Color(255, 153, 51));
+        pnlAbout.setMinimumSize(new java.awt.Dimension(400, 350));
+        pnlAbout.setLayout(null);
 
-        textLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        textLabel.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        aboutPanel.add(textLabel);
-        textLabel.setBounds(10, 10, 380, 270);
+        lblAbout.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblAbout.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        pnlAbout.add(lblAbout);
+        lblAbout.setBounds(10, 10, 380, 270);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(aboutPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(pnlAbout, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(aboutPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(pnlAbout, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -101,7 +108,7 @@ public class JDialogAbout extends JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel aboutPanel;
-    private javax.swing.JLabel textLabel;
+    private javax.swing.JLabel lblAbout;
+    private javax.swing.JPanel pnlAbout;
     // End of variables declaration//GEN-END:variables
 }
