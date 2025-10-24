@@ -13,38 +13,19 @@ import javax.swing.SpinnerNumberModel;
  *
  * @author Nerea
  */
-public class JPanelPreferences extends javax.swing.JPanel {
+public class Preferences extends javax.swing.JPanel {
     
     private MainFrame mainFrame;
-    private boolean createM3u = false;
+    private final Downloader downloader;
    
-    public JPanelPreferences(MainFrame mainFrame) {
+    public Preferences(MainFrame mainFrame, Downloader downloader) {
         initComponents();
         this.mainFrame = mainFrame; 
+        this.downloader = downloader;
         mbSpeedSpinner();
     }
     
-    public String getYtDlpLocation() {
-        return locationField.getText();
-    }
-
-    public String getTempPath() {
-        return pathField.getText();
-    }
-
-    public boolean isCreateM3u() {
-        return createM3u;
-    }
-
-    public double getMaxSpeed() {
-        Object value = speedSpinner.getValue();
-        if (value instanceof Number) {
-            return ((Number) value).doubleValue();
-        }
-        return 0.0;
-    }
-    
-    //metodo para limpiar las entradas
+    //Limpiar entradas
     public void clearTextFields(){
         pathField.setText("");
         m3uCheck.setSelected(false);
@@ -52,20 +33,21 @@ public class JPanelPreferences extends javax.swing.JPanel {
         locationField.setText("");
     }
     
-    //Metodo para guardar los valores introducidos en preferences
+    //Guardar valores de preferences
     public void savePreferences() {
-        mainFrame.setTempPath(getTempPath());
-        mainFrame.setYtDlpLocation(getYtDlpLocation());
-        mainFrame.setCreateM3u(isCreateM3u());
-        mainFrame.setMaxSpeed(getMaxSpeed());
+        downloader.setTempPath(pathField.getText().trim());
+        downloader.setYtDlpLocation(locationField.getText().trim());
+        downloader.setCreateM3u(m3uCheck.isSelected());
+        downloader.setMaxSpeed(((Number) speedSpinner.getValue()).doubleValue());
 
         JOptionPane.showMessageDialog(this, "Preferences saved!", "Saved", JOptionPane.INFORMATION_MESSAGE);
         mainFrame.showMainPanel();
     }
     
-    //Permite indicar que velocidad de descarga queremos hasta un max de 100MB/s
+    
+    //Velocidad de descarga hasta un max de 100MB/s
     public void mbSpeedSpinner(){
-        SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0.0, 0.0, 100.0,0.5);
+        SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0.0, 0.0, 100.0,10.0);
         speedSpinner.setModel(spinnerModel);
         
         JSpinner.NumberEditor numberFormat = new JSpinner.NumberEditor(speedSpinner, "0.0");
@@ -102,11 +84,6 @@ public class JPanelPreferences extends javax.swing.JPanel {
 
         m3uCheck.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         m3uCheck.setText("Create");
-        m3uCheck.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m3uCheckActionPerformed(evt);
-            }
-        });
         add(m3uCheck);
         m3uCheck.setBounds(60, 190, 80, 21);
 
@@ -187,7 +164,7 @@ public class JPanelPreferences extends javax.swing.JPanel {
         logoLabel.setBounds(700, 570, 180, 50);
     }// </editor-fold>//GEN-END:initComponents
 
-    //Boton para cancelar los cambios
+    //Cancelar preferencias
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         if(JOptionPane.showConfirmDialog(null, "Changes will not be saved. Do you want to continue?", "Cancel", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
             clearTextFields();
@@ -195,7 +172,7 @@ public class JPanelPreferences extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_cancelButtonActionPerformed
 
-    //Abre la ruta (directorio) donde se guardara los archivos temp
+    //Directorio para archivos temporales
     private void tempButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tempButtonActionPerformed
         JFileChooser directory = new JFileChooser();
         directory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -207,7 +184,7 @@ public class JPanelPreferences extends javax.swing.JPanel {
         } 
     }//GEN-LAST:event_tempButtonActionPerformed
 
-    //Metodo que busca el archivo yt-dlp.exe mediante el uso de ProcessBuilder
+    //Buscar archivo yt-dlp.exe
     private void locationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_locationButtonActionPerformed
         try {
             ProcessBuilder pb = new ProcessBuilder("where", "yt-dlp.exe");
@@ -221,8 +198,7 @@ public class JPanelPreferences extends javax.swing.JPanel {
                 sb.append(line).append("\n");
             }
 
-            int exitCode = p.waitFor();
-            if (exitCode == 0) {
+            if (p.waitFor() == 0) {
                 
                 String path = sb.toString().trim();
                 String firstPath = path.split("\n")[0];
@@ -236,21 +212,15 @@ public class JPanelPreferences extends javax.swing.JPanel {
             }
 
         } catch (IOException ex) {
-            System.getLogger(JPanelPreferences.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            System.getLogger(Preferences.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         } catch (InterruptedException ex) {
-            System.getLogger(JPanelPreferences.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            System.getLogger(Preferences.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
     }//GEN-LAST:event_locationButtonActionPerformed
 
-    //CheckBox para indicar si queremos crear el archivo .m3u
-    private void m3uCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m3uCheckActionPerformed
-        this.createM3u = m3uCheck.isSelected();
-        System.out.println("Crear archivo m3u: " + this.createM3u); //Mensage por consola
-    }//GEN-LAST:event_m3uCheckActionPerformed
-
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         savePreferences();
-        //clearTextFields();
+        clearTextFields();
     }//GEN-LAST:event_saveButtonActionPerformed
 
 

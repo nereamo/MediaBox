@@ -14,52 +14,23 @@ import javax.swing.*;
 public class MainFrame extends JFrame {
     
     private static final Logger logger = Logger.getLogger(MainFrame.class.getName());
-    private JPanelPreferences panelPreferences;
-    private String tempPath;
-    private String ytDlpLocation;
-    private boolean createM3u;
-    private double maxSpeed;
-    
+    private Downloader downloader;
+    private Preferences preferences;
    
     public MainFrame() {
         initComponents();
+        downloader = new Downloader();
         framePanel();
         preferencesPanel();
+        
+        ButtonGroup bg = new ButtonGroup();
+        bg.add(mp4Radio);
+        bg.add(mp3Radio);
+        
+        mp4Radio.setSelected(true);
     }
     
-    public String getTempPath() {
-        return tempPath;
-    }
-
-    public void setTempPath(String tempPath) {
-        this.tempPath = tempPath;
-    }
-
-    public String getYtDlpLocation() {
-        return ytDlpLocation;
-    }
-
-    public void setYtDlpLocation(String ytDlpLocation) {
-        this.ytDlpLocation = ytDlpLocation;
-    }
-
-    public boolean isCreateM3u() {
-        return createM3u;
-    }
-
-    public void setCreateM3u(boolean createM3u) {
-        this.createM3u = createM3u;
-    }
-
-    public double getMaxSpeed() {
-        return maxSpeed;
-    }
-
-    public void setMaxSpeed(double maxSpeed) {
-        this.maxSpeed = maxSpeed;
-    }
-    
-    //Método que contiene las propiedades de JFrame
+    //Propiedades de JFrame
     private void framePanel(){
         setTitle("MediaBox");
         setResizable(false);
@@ -71,24 +42,24 @@ public class MainFrame extends JFrame {
         getContentPane().add(mainPanel);
     }
     
-    //Método que contiene las propiedades de JPanel Preferences
+    //Propiedades de JPanel Preferences
     private void preferencesPanel(){
-        panelPreferences = new JPanelPreferences(this);
-        panelPreferences.setBounds(0, 0, 900, 700);
-        panelPreferences.setVisible(false);
-        getContentPane().add(panelPreferences);
+        preferences = new Preferences(this, downloader);
+        preferences.setBounds(0, 0, 900, 700);
+        preferences.setVisible(false);
+        getContentPane().add(preferences);
     }
     
-    //Metodo que permite mostrar el JPanel principal del JFrame
+    //Mostrar el JPanel principal del JFrame
     public void showMainPanel() {
-        panelPreferences.setVisible(false);
+        preferences.setVisible(false);
         mainPanel.setVisible(true);
     }
     
-    //Metodo quepermite mostrar el JPanel Preferences 
+    //Mostrar el JPanel Preferences 
     public void showPreferencesPanel() {
         mainPanel.setVisible(false);
-        panelPreferences.setVisible(true);
+        preferences.setVisible(true);
     }
    
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -98,18 +69,18 @@ public class MainFrame extends JFrame {
         urlLabel = new javax.swing.JLabel();
         urlField = new javax.swing.JTextField();
         pasteButton = new javax.swing.JButton();
+        clearButton = new javax.swing.JButton();
         folderLabel = new javax.swing.JLabel();
         folderField = new javax.swing.JTextField();
         browseButton = new javax.swing.JButton();
         formatLabel = new javax.swing.JLabel();
         mp4Radio = new javax.swing.JRadioButton();
         mp3Radio = new javax.swing.JRadioButton();
-        flvButton = new javax.swing.JRadioButton();
         downloadButton = new javax.swing.JButton();
         openVideoButton = new javax.swing.JButton();
         logoLabel = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        infoDownloadArea = new javax.swing.JTextArea();
         menuBar = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         itemExit = new javax.swing.JMenuItem();
@@ -147,6 +118,16 @@ public class MainFrame extends JFrame {
         mainPanel.add(pasteButton);
         pasteButton.setBounds(60, 90, 90, 24);
 
+        clearButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        clearButton.setText("Clear");
+        clearButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearButtonActionPerformed(evt);
+            }
+        });
+        mainPanel.add(clearButton);
+        clearButton.setBounds(450, 90, 100, 24);
+
         folderLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         folderLabel.setText("Folder:");
         mainPanel.add(folderLabel);
@@ -181,11 +162,6 @@ public class MainFrame extends JFrame {
         mainPanel.add(mp3Radio);
         mp3Radio.setBounds(150, 290, 70, 22);
 
-        flvButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        flvButton.setText("FLV");
-        mainPanel.add(flvButton);
-        flvButton.setBounds(240, 290, 70, 22);
-
         downloadButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         downloadButton.setText("Download");
         downloadButton.addActionListener(new java.awt.event.ActionListener() {
@@ -194,26 +170,24 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(downloadButton);
-        downloadButton.setBounds(70, 410, 140, 24);
+        downloadButton.setBounds(60, 390, 140, 24);
 
         openVideoButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         openVideoButton.setText("Open Last Video");
         mainPanel.add(openVideoButton);
-        openVideoButton.setBounds(380, 410, 150, 24);
+        openVideoButton.setBounds(220, 390, 150, 24);
 
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/largelogoSmall3.png"))); // NOI18N
         mainPanel.add(logoLabel);
         logoLabel.setBounds(700, 570, 180, 50);
 
-        jButton1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jButton1.setText("Cancel");
-        mainPanel.add(jButton1);
-        jButton1.setBounds(230, 410, 140, 24);
+        infoDownloadArea.setColumns(20);
+        infoDownloadArea.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        infoDownloadArea.setRows(5);
+        jScrollPane1.setViewportView(infoDownloadArea);
 
-        jButton2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jButton2.setText("Delete");
-        mainPanel.add(jButton2);
-        jButton2.setBounds(450, 90, 72, 24);
+        mainPanel.add(jScrollPane1);
+        jScrollPane1.setBounds(60, 440, 380, 170);
 
         getContentPane().add(mainPanel);
         mainPanel.setBounds(0, 0, 900, 670);
@@ -292,25 +266,25 @@ public class MainFrame extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    //Boton Preferences
+    //Preferences
     private void itemPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemPreferencesActionPerformed
         showPreferencesPanel();
     }//GEN-LAST:event_itemPreferencesActionPerformed
 
-    //Boton que abre el JDialog About
+    //About
     private void itemAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAboutActionPerformed
         JDialogAbout dialogAbout = new JDialogAbout(this,true);
         dialogAbout.setVisible(true);
     }//GEN-LAST:event_itemAboutActionPerformed
 
-    //Boton que permite salir de la aplicación
+    //Exit
     private void itemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemExitActionPerformed
         if(JOptionPane.showConfirmDialog(null, "Do you want to exit the application?", "Exit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
             System.exit(0);
         }
     }//GEN-LAST:event_itemExitActionPerformed
 
-    //Abre la ruta (directorio) donde se guardara el archivo descargado
+    //Directorio para guardar archivo descargado
     private void browseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonActionPerformed
        JFileChooser directory = new JFileChooser();
         directory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -322,13 +296,13 @@ public class MainFrame extends JFrame {
         } 
     }//GEN-LAST:event_browseButtonActionPerformed
 
-    //Botón "Paste" que permite copiar del portapapeles a JTextField urlField
+    //Copia del portapapeles a JTextField "urlField"
     private void pasteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pasteButtonActionPerformed
-        Clipboard systemClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        DataFlavor dataFlavor = DataFlavor.stringFlavor;
-        if(systemClipboard.isDataFlavorAvailable(dataFlavor)){
+        Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
+        DataFlavor df = DataFlavor.stringFlavor;
+        if(cb.isDataFlavorAvailable(df)){
             try {
-                String clipboardContent = (String) systemClipboard.getData(dataFlavor);
+                String clipboardContent = (String) cb.getData(df);
                 urlField.setText(clipboardContent);
             } catch (UnsupportedFlavorException ex) {
                 System.getLogger(MainFrame.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
@@ -338,90 +312,22 @@ public class MainFrame extends JFrame {
         }
     }//GEN-LAST:event_pasteButtonActionPerformed
 
+    //Ejecuta la descarga
     private void downloadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadButtonActionPerformed
         String url = urlField.getText().trim();
-    String folder = folderField.getText().trim();
+        String folder = folderField.getText().trim();
+        String format = mp3Radio.isSelected() ? "mp3" : "mp4";
 
-    if (url.isEmpty() || folder.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Please enter a URL and select a folder.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+        downloader.setTempPath(folder);
+        infoDownloadArea.setText("");
 
-    // Determinar formato
-    String format;
-    if (mp3Radio.isSelected()) {
-        format = "mp3";
-    } else if (flvButton.isSelected()) {
-        format = "flv";
-    } else {
-        format = "mp4";
-    }
-
-    // Verificar ubicación de yt-dlp
-    if (ytDlpLocation == null || ytDlpLocation.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Please configure the yt-dlp location in Preferences.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    // Construir ProcessBuilder
-    ProcessBuilder pb;
-    if ("mp3".equals(format)) {
-        pb = new ProcessBuilder(
-                ytDlpLocation,
-                "-x", "--audio-format", "mp3",
-                "--add-header", "User-Agent: Mozilla/5.0",
-                "-o", folder + File.separator + "%(title)s.%(ext)s",
-                url
-        );
-    } else if ("flv".equals(format)) {
-        pb = new ProcessBuilder(
-                ytDlpLocation,
-                "-f", "flv/best",
-                "--add-header", "User-Agent: Mozilla/5.0",
-                "-o", folder + File.separator + "%(title)s.%(ext)s",
-                url
-        );
-    } else {
-        pb = new ProcessBuilder(
-                ytDlpLocation,
-                "-f", "bestvideo+bestaudio/best",
-                "--add-header", "User-Agent: Mozilla/5.0",
-                "-o", folder + File.separator + "%(title)s.%(ext)s",
-                url
-        );
-    }
-
-    pb.redirectErrorStream(true);
-
-    try {
-        Process process = pb.start();
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            System.out.println(line); // salida en consola
-        }
-
-        int exitCode = process.waitFor();
-
-        if (exitCode == 0) {
-            JOptionPane.showMessageDialog(this, "Download completed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this, "An error occurred during the download. Exit code: " + exitCode, "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
-        reader.close();
-        process.destroy();
-
-    } catch (IOException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error executing yt-dlp:\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (InterruptedException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Download interrupted.", "Error", JOptionPane.ERROR_MESSAGE);
-        Thread.currentThread().interrupt();
-    }
+        new Thread(() -> downloader.download(url, folder, format, infoDownloadArea)).start();
     }//GEN-LAST:event_downloadButtonActionPerformed
+
+    //Borra contenido de JTextField "urlField"
+    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+        urlField.setText("");
+    }//GEN-LAST:event_clearButtonActionPerformed
 
     public static void main(String args[]) {
         /* Set the Metal look and feel */
@@ -447,16 +353,16 @@ public class MainFrame extends JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton browseButton;
+    private javax.swing.JButton clearButton;
     private javax.swing.JButton downloadButton;
-    private javax.swing.JRadioButton flvButton;
     private javax.swing.JTextField folderField;
     private javax.swing.JLabel folderLabel;
     private javax.swing.JLabel formatLabel;
+    private javax.swing.JTextArea infoDownloadArea;
     private javax.swing.JMenuItem itemAbout;
     private javax.swing.JMenuItem itemExit;
     private javax.swing.JMenuItem itemPreferences;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel logoLabel;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
