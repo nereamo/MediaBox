@@ -61,7 +61,6 @@ public class MainFrame extends JFrame {
         mainPanel.setVisible(false);
         preferences.setVisible(true);
     }
-   
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -102,11 +101,11 @@ public class MainFrame extends JFrame {
         lblUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblUrl.setText("URL:");
         mainPanel.add(lblUrl);
-        lblUrl.setBounds(60, 60, 37, 20);
+        lblUrl.setBounds(60, 50, 37, 20);
 
         txtUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mainPanel.add(txtUrl);
-        txtUrl.setBounds(160, 90, 280, 23);
+        txtUrl.setBounds(160, 80, 280, 23);
 
         btnPaste.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnPaste.setText("Paste");
@@ -116,7 +115,7 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnPaste);
-        btnPaste.setBounds(60, 90, 90, 24);
+        btnPaste.setBounds(60, 80, 90, 24);
 
         btnClear.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnClear.setText("Clear");
@@ -126,16 +125,16 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnClear);
-        btnClear.setBounds(450, 90, 100, 24);
+        btnClear.setBounds(450, 80, 100, 24);
 
         lblFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblFolder.setText("Folder:");
         mainPanel.add(lblFolder);
-        lblFolder.setBounds(60, 160, 50, 20);
+        lblFolder.setBounds(60, 150, 50, 20);
 
         txtFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mainPanel.add(txtFolder);
-        txtFolder.setBounds(160, 190, 280, 23);
+        txtFolder.setBounds(160, 180, 280, 23);
 
         btnBrowse.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnBrowse.setText("Browse");
@@ -145,22 +144,22 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnBrowse);
-        btnBrowse.setBounds(60, 190, 90, 24);
+        btnBrowse.setBounds(60, 180, 90, 24);
 
         lblFormat.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblFormat.setText("Format: ");
         mainPanel.add(lblFormat);
-        lblFormat.setBounds(60, 260, 53, 17);
+        lblFormat.setBounds(60, 240, 53, 17);
 
         radioMp4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         radioMp4.setText("MP4");
         mainPanel.add(radioMp4);
-        radioMp4.setBounds(60, 290, 60, 22);
+        radioMp4.setBounds(60, 270, 60, 22);
 
         radioMp3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         radioMp3.setText("MP3");
         mainPanel.add(radioMp3);
-        radioMp3.setBounds(150, 290, 70, 22);
+        radioMp3.setBounds(140, 270, 70, 22);
 
         btnDownload.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnDownload.setText("Download");
@@ -170,12 +169,17 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnDownload);
-        btnDownload.setBounds(60, 390, 140, 24);
+        btnDownload.setBounds(60, 360, 140, 24);
 
         btnOpenLast.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnOpenLast.setText("Open Last Video");
+        btnOpenLast.setText("Open Last");
+        btnOpenLast.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenLastActionPerformed(evt);
+            }
+        });
         mainPanel.add(btnOpenLast);
-        btnOpenLast.setBounds(220, 390, 150, 24);
+        btnOpenLast.setBounds(220, 360, 140, 24);
 
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/largelogoSmall3.png"))); // NOI18N
         mainPanel.add(logoLabel);
@@ -187,7 +191,7 @@ public class MainFrame extends JFrame {
         jScrollPane1.setViewportView(areaInfo);
 
         mainPanel.add(jScrollPane1);
-        jScrollPane1.setBounds(60, 440, 380, 170);
+        jScrollPane1.setBounds(60, 410, 380, 170);
 
         getContentPane().add(mainPanel);
         mainPanel.setBounds(0, 0, 900, 670);
@@ -320,14 +324,38 @@ public class MainFrame extends JFrame {
 
         downloader.setTempPath(folder);
         areaInfo.setText("");
+        
+        Thread th = new Thread(){
+            @Override
+            public void run(){
+                downloader.download(url, folder, format, areaInfo);
+            }
+        };
+        th.start();
 
-        new Thread(() -> downloader.download(url, folder, format, areaInfo)).start();
+        //new Thread(() -> downloader.download(url, folder, format, areaInfo)).start(); --> Expresion lambda
     }//GEN-LAST:event_btnDownloadActionPerformed
 
     //Borra contenido de JTextField "urlField"
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         txtUrl.setText("");
     }//GEN-LAST:event_btnClearActionPerformed
+
+    //Abre el ultimo archivo descargado
+    private void btnOpenLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenLastActionPerformed
+
+        File lastFile = downloader.getLastDownloadedFile();
+        if (lastFile != null && lastFile.exists()) {
+            try {
+                Desktop.getDesktop().open(lastFile);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Could not open file:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No downloaded file found.", "Info", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnOpenLastActionPerformed
 
     public static void main(String args[]) {
         /* Set the Metal look and feel */

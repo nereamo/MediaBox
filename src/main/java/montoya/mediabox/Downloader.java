@@ -54,6 +54,12 @@ public class Downloader {
         this.maxSpeed = maxSpeed;
     }
     
+    private File lastDownloadedFile;
+
+    public File getLastDownloadedFile() {
+        return lastDownloadedFile;
+    }
+    
     //Verificacion de campos completados
     public void download(String url, String folder, String format, JTextArea outputArea) {
         if (url.isEmpty() || folder.isEmpty()) {
@@ -69,14 +75,14 @@ public class Downloader {
         ProcessBuilder pb = buildCommand(url, folder, format);
 
         try {
-            executeDownload(pb, outputArea);
+            executeDownload(pb, folder, outputArea);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error during download:\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
-    //Instrucciones para la descarga
+    //Instrucciones de descarga
     private ProcessBuilder buildCommand(String url,String folder, String format) {
         ProcessBuilder pb;
         if ("mp3".equals(format)) {
@@ -90,7 +96,7 @@ public class Downloader {
                     "-f", "mp4","-o", folder + File.separator + "%(title)s.%(ext)s",url);
         }
 
-        //Playlist .m3u
+        //Playlist json .m3u
         if (createM3u) {
             pb.command().add("--write-info-json");
         }
@@ -106,7 +112,7 @@ public class Downloader {
     }
     
     //Ejecuta proceso yt-dlp
-    private void executeDownload(ProcessBuilder pb, JTextArea outputArea) throws IOException, InterruptedException {
+    private void executeDownload(ProcessBuilder pb, String folder, JTextArea outputArea) throws IOException, InterruptedException {
         Process p = pb.start();
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream(), "UTF-8"))) {
@@ -114,16 +120,33 @@ public class Downloader {
             while ((line = br.readLine()) != null) {
                 System.out.println(line);
                 String finalLine = line;
-            SwingUtilities.invokeLater(() -> outputArea.append(finalLine + "\n"));
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        outputArea.append(finalLine + "\n");
+                    }
+                });
+                //SwingUtilities.invokeLater(() -> outputArea.append(finalLine + "\n")); --> Lambda
             }
         }
 
         if (p.waitFor() == 0) {
+            File dir = new File(folder);
+            File[] files = dir.listFiles();
+
+            if (files != null && files.length > 0) {
+                File latest = files[0];
+                for (File f : files) {
+                    if (f.lastModified() > latest.lastModified()) {
+                        latest = f;
+                    }
+                }
+                lastDownloadedFile = latest;
+            }
             JOptionPane.showMessageDialog(null, "Download completed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(null, "An error occurred during the download.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-
         p.destroy();
     }
 }
