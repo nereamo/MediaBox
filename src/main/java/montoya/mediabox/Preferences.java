@@ -205,11 +205,11 @@ public class Preferences extends javax.swing.JPanel {
                 String firstPath = path.split("\n")[0];
 
                 txtYtDlp.setText(firstPath);
-                JOptionPane.showMessageDialog(this,"Path to yt-dlp.exe found.", "Found",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this,"yt-dlp.exe found!", "Found",JOptionPane.INFORMATION_MESSAGE);
 
             } else {
                 txtYtDlp.setText("");
-                JOptionPane.showMessageDialog(this,"yt-dlp.exe not found.", "Not Found", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,"yt-dlp.exe not found!", "Not Found", JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (IOException ex) {

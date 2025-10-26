@@ -8,6 +8,8 @@ import javax.swing.*;
  *
  * @author Nerea
  */
+
+//SwingWorker ejecuta tareas en segundo plano impidiendo que no se bloquee la GUI
 public class DownloadWorker extends SwingWorker<Void, String>{
     
     private final ProcessBuilder pb;
@@ -27,6 +29,7 @@ public class DownloadWorker extends SwingWorker<Void, String>{
         return lastDownloadedFile;
     }
 
+    //Metodo principal para ejecucion en segundo plano
     @Override
     protected Void doInBackground() throws Exception {
         Process p = pb.start();
@@ -65,6 +68,7 @@ public class DownloadWorker extends SwingWorker<Void, String>{
         return null;
     }
 
+    //Opcional --> Ejecuta thread, recibe datos de publish() y mustra txt en JTestArea
     @Override
     protected void process(List<String> chunks) {
         for (String line : chunks) {
@@ -72,6 +76,7 @@ public class DownloadWorker extends SwingWorker<Void, String>{
         }
     }
 
+    //Metodo llamado cuando doInBackground termina
     @Override
     protected void done() {
         progressBar.setIndeterminate(false);
@@ -80,6 +85,7 @@ public class DownloadWorker extends SwingWorker<Void, String>{
         JOptionPane.showMessageDialog(null, "Download completed!", "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    //Extrae el % de la descarga
     private int extractPercentage(String line) {
         try {
             int start = line.indexOf("[download]") + 10;

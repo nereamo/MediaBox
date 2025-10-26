@@ -1,6 +1,6 @@
 package montoya.mediabox.download;
 
-import montoya.mediabox.download.DownloadWorker;
+//import montoya.mediabox.download.DownloadWorker;
 import java.io.File;
 import javax.swing.*;
 
