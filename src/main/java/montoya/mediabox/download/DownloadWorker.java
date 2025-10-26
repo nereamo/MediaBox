@@ -9,7 +9,10 @@ import javax.swing.*;
  * @author Nerea
  */
 
-//SwingWorker ejecuta tareas en segundo plano impidiendo que no se bloquee la GUI
+//SwingWorker ejecuta tareas en segundo plano impidiendo que no se bloquee la GUI. 
+
+//Esta clase se ha hecho con ayuda de Copilot para poder entender como funcionaSwingWorker y que metodos utilizar.
+
 public class DownloadWorker extends SwingWorker<Void, String>{
     
     private final ProcessBuilder pb;
