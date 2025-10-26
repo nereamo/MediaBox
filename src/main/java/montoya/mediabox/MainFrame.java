@@ -61,6 +61,17 @@ public class MainFrame extends JFrame {
         mainPanel.setVisible(false);
         preferences.setVisible(true);
     }
+    
+    public void updateProgress(int value) {
+        //SwingUtilities.invokeLater(() -> barProgress.setValue(value)); --> lambda
+        
+        SwingUtilities.invokeLater(new Runnable(){
+            @Override
+            public void run(){
+                barProgress.setValue(value);
+            }
+        });
+    }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -80,6 +91,7 @@ public class MainFrame extends JFrame {
         logoLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         areaInfo = new javax.swing.JTextArea();
+        barProgress = new javax.swing.JProgressBar();
         menuBar = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mnuExit = new javax.swing.JMenuItem();
@@ -101,11 +113,11 @@ public class MainFrame extends JFrame {
         lblUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblUrl.setText("URL:");
         mainPanel.add(lblUrl);
-        lblUrl.setBounds(60, 50, 37, 20);
+        lblUrl.setBounds(60, 30, 37, 20);
 
         txtUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mainPanel.add(txtUrl);
-        txtUrl.setBounds(160, 80, 280, 23);
+        txtUrl.setBounds(160, 60, 280, 23);
 
         btnPaste.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnPaste.setText("Paste");
@@ -115,7 +127,7 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnPaste);
-        btnPaste.setBounds(60, 80, 90, 24);
+        btnPaste.setBounds(60, 60, 90, 24);
 
         btnClear.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnClear.setText("Clear");
@@ -125,16 +137,16 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnClear);
-        btnClear.setBounds(450, 80, 100, 24);
+        btnClear.setBounds(450, 60, 100, 24);
 
         lblFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblFolder.setText("Folder:");
         mainPanel.add(lblFolder);
-        lblFolder.setBounds(60, 150, 50, 20);
+        lblFolder.setBounds(60, 120, 50, 20);
 
         txtFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mainPanel.add(txtFolder);
-        txtFolder.setBounds(160, 180, 280, 23);
+        txtFolder.setBounds(160, 150, 280, 23);
 
         btnBrowse.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnBrowse.setText("Browse");
@@ -144,22 +156,22 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnBrowse);
-        btnBrowse.setBounds(60, 180, 90, 24);
+        btnBrowse.setBounds(60, 150, 90, 24);
 
         lblFormat.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblFormat.setText("Format: ");
         mainPanel.add(lblFormat);
-        lblFormat.setBounds(60, 240, 53, 17);
+        lblFormat.setBounds(60, 210, 53, 17);
 
         radioMp4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         radioMp4.setText("MP4");
         mainPanel.add(radioMp4);
-        radioMp4.setBounds(60, 270, 60, 22);
+        radioMp4.setBounds(60, 240, 60, 22);
 
         radioMp3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         radioMp3.setText("MP3");
         mainPanel.add(radioMp3);
-        radioMp3.setBounds(140, 270, 70, 22);
+        radioMp3.setBounds(130, 240, 70, 22);
 
         btnDownload.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnDownload.setText("Download");
@@ -169,7 +181,7 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnDownload);
-        btnDownload.setBounds(60, 360, 140, 24);
+        btnDownload.setBounds(60, 320, 120, 24);
 
         btnOpenLast.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnOpenLast.setText("Open Last");
@@ -179,7 +191,7 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnOpenLast);
-        btnOpenLast.setBounds(220, 360, 140, 24);
+        btnOpenLast.setBounds(200, 320, 120, 24);
 
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/largelogoSmall3.png"))); // NOI18N
         mainPanel.add(logoLabel);
@@ -192,6 +204,12 @@ public class MainFrame extends JFrame {
 
         mainPanel.add(jScrollPane1);
         jScrollPane1.setBounds(60, 410, 380, 170);
+
+        barProgress.setBackground(new java.awt.Color(204, 204, 204));
+        barProgress.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        barProgress.setForeground(new java.awt.Color(255, 255, 255));
+        mainPanel.add(barProgress);
+        barProgress.setBounds(60, 370, 380, 20);
 
         getContentPane().add(mainPanel);
         mainPanel.setBounds(0, 0, 900, 670);
@@ -318,6 +336,8 @@ public class MainFrame extends JFrame {
 
     //Ejecuta la descarga
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
+        //new Thread(() -> downloader.download(url, folder, format, areaInfo, barProgress)).start(); --> Expresion lambda
+        
         String url = txtUrl.getText().trim();
         String folder = txtFolder.getText().trim();
         String format = radioMp3.isSelected() ? "mp3" : "mp4";
@@ -328,12 +348,10 @@ public class MainFrame extends JFrame {
         Thread th = new Thread(){
             @Override
             public void run(){
-                downloader.download(url, folder, format, areaInfo);
+                downloader.download(url, folder, format, areaInfo, barProgress);
             }
         };
         th.start();
-
-        //new Thread(() -> downloader.download(url, folder, format, areaInfo)).start(); --> Expresion lambda
     }//GEN-LAST:event_btnDownloadActionPerformed
 
     //Borra contenido de JTextField "urlField"
@@ -354,7 +372,6 @@ public class MainFrame extends JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "No downloaded file found.", "Info", JOptionPane.INFORMATION_MESSAGE);
         }
-
     }//GEN-LAST:event_btnOpenLastActionPerformed
 
     public static void main(String args[]) {
@@ -381,6 +398,7 @@ public class MainFrame extends JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea areaInfo;
+    private javax.swing.JProgressBar barProgress;
     private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnDownload;
