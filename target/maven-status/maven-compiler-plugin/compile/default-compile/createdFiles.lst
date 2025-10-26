@@ -1,5 +1,5 @@
+montoya\mediabox\download\Downloader$1.class
 montoya\mediabox\MainFrame$10.class
-montoya\mediabox\Downloader$2.class
 montoya\mediabox\MainFrame$8.class
 montoya\mediabox\Preferences$4.class
 montoya\mediabox\Preferences$2.class
@@ -10,13 +10,13 @@ montoya\mediabox\JDialogs\JDialogAbout$1.class
 montoya\mediabox\Preferences$1.class
 montoya\mediabox\MainFrame$2.class
 montoya\mediabox\MainFrame.class
-montoya\mediabox\Downloader$1.class
 montoya\mediabox\MainFrame$9.class
 montoya\mediabox\MainFrame$7.class
 montoya\mediabox\Preferences$3.class
 montoya\mediabox\JDialogs\JDialogAbout.class
 montoya\mediabox\Preferences.class
+montoya\mediabox\download\Downloader.class
+montoya\mediabox\download\DownloadWorker.class
 montoya\mediabox\MainFrame$6.class
 montoya\mediabox\MainFrame$4.class
-montoya\mediabox\Downloader.class
 montoya\mediabox\MainFrame$1.class

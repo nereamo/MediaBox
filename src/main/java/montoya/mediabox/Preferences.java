@@ -1,5 +1,6 @@
 package montoya.mediabox;
 
+import montoya.mediabox.download.Downloader;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;

@@ -1,5 +1,6 @@
 package montoya.mediabox;
 
+import montoya.mediabox.download.Downloader;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.io.*;
@@ -207,7 +208,7 @@ public class MainFrame extends JFrame {
 
         barProgress.setBackground(new java.awt.Color(204, 204, 204));
         barProgress.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        barProgress.setForeground(new java.awt.Color(255, 255, 255));
+        barProgress.setForeground(new java.awt.Color(255, 153, 51));
         mainPanel.add(barProgress);
         barProgress.setBounds(60, 370, 380, 20);
 
