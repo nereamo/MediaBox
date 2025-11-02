@@ -1,12 +1,17 @@
 package montoya.mediabox;
 
 import montoya.mediabox.download.Downloader;
-import java.awt.*;
+import java.awt.Desktop;
+import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.awt.datatransfer.*;
 import java.io.*;
 import montoya.mediabox.JDialogs.JDialogAbout;
 import java.util.logging.Logger;
 import javax.swing.*;
+import montoya.mediabox.info.FileInformation;
+import montoya.mediabox.info.FileTableModel;
+import java.util.*;
 
 /**
  *
@@ -17,10 +22,13 @@ public class MainFrame extends JFrame {
     private static final Logger logger = Logger.getLogger(MainFrame.class.getName());
     private Downloader downloader;
     private Preferences preferences;
+    List<FileInformation> fileList = new ArrayList<>();
+    private FileTableModel model;
+
    
     public MainFrame() {
         initComponents();
-        downloader = new Downloader();
+        downloader = new Downloader(this);
         framePanel();
         preferencesPanel();
         
@@ -29,24 +37,30 @@ public class MainFrame extends JFrame {
         bg.add(radioMp3);
         
         radioMp4.setSelected(true);
+        
+        
+        fileList = cargarDescargas();
+        model = new FileTableModel(fileList); // Usa el atributo de clase
+        tblInfo.setModel(model); 
+
     }
     
     //Propiedades de JFrame
     private void framePanel(){
         setTitle("MediaBox");
         setResizable(false);
-        setSize(900,700);
+        setSize(1000,700);
         setLocationRelativeTo(this);
         setLayout(null);
         
-        mainPanel.setSize(900,700);
+        mainPanel.setSize(1000,700);
         getContentPane().add(mainPanel);
     }
     
     //Propiedades de JPanel Preferences
     private void preferencesPanel(){
         preferences = new Preferences(this, downloader);
-        preferences.setBounds(0, 0, 900, 700);
+        preferences.setBounds(0, 0, 1000, 700);
         preferences.setVisible(false);
         getContentPane().add(preferences);
     }
@@ -63,6 +77,7 @@ public class MainFrame extends JFrame {
         preferences.setVisible(true);
     }
     
+    //Actualiza el progreso
     public void updateProgress(int value) {
         //SwingUtilities.invokeLater(() -> barProgress.setValue(value)); --> lambda
         
@@ -73,9 +88,30 @@ public class MainFrame extends JFrame {
             }
         });
     }
+  
+    //Guarda las descargas en un archivo .dat(binario)
+    public void guardarDescargas(List<FileInformation> lista) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("downloads.dat"))) {
+            out.writeObject(lista);
+        } catch (IOException e) {
+            System.err.println("Error saving downloads: " + e.getMessage());
+        }
+    }
+
+    //Recupera los datos del archivo .dat y los muestra en la tabla
+    private List<FileInformation> cargarDescargas() {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("downloads.dat"))) {
+            return (List<FileInformation>) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            return new ArrayList<>(); // Si no existe el archivo, empieza vacío
+        }
+    }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
         mainPanel = new javax.swing.JPanel();
         lblUrl = new javax.swing.JLabel();
         txtUrl = new javax.swing.JTextField();
@@ -93,6 +129,11 @@ public class MainFrame extends JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         areaInfo = new javax.swing.JTextArea();
         barProgress = new javax.swing.JProgressBar();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        lstDownloads = new javax.swing.JList<>();
+        cbxFilter = new javax.swing.JComboBox<>();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblInfo = new javax.swing.JTable();
         menuBar = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mnuExit = new javax.swing.JMenuItem();
@@ -101,14 +142,20 @@ public class MainFrame extends JFrame {
         mnuHelp = new javax.swing.JMenu();
         mnuAbout = new javax.swing.JMenuItem();
 
+        jMenu1.setText("File");
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("mainFrame"); // NOI18N
         setResizable(false);
         getContentPane().setLayout(null);
 
         mainPanel.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
-        mainPanel.setMinimumSize(new java.awt.Dimension(900, 700));
-        mainPanel.setPreferredSize(new java.awt.Dimension(900, 670));
+        mainPanel.setMinimumSize(new java.awt.Dimension(1000, 700));
+        mainPanel.setPreferredSize(new java.awt.Dimension(1000, 670));
         mainPanel.setLayout(null);
 
         lblUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -118,7 +165,7 @@ public class MainFrame extends JFrame {
 
         txtUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mainPanel.add(txtUrl);
-        txtUrl.setBounds(160, 60, 280, 23);
+        txtUrl.setBounds(160, 60, 250, 23);
 
         btnPaste.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnPaste.setText("Paste");
@@ -138,7 +185,7 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnClear);
-        btnClear.setBounds(450, 60, 100, 24);
+        btnClear.setBounds(420, 60, 100, 24);
 
         lblFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblFolder.setText("Folder:");
@@ -147,7 +194,7 @@ public class MainFrame extends JFrame {
 
         txtFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mainPanel.add(txtFolder);
-        txtFolder.setBounds(160, 150, 280, 23);
+        txtFolder.setBounds(160, 150, 250, 23);
 
         btnBrowse.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnBrowse.setText("Browse");
@@ -196,7 +243,7 @@ public class MainFrame extends JFrame {
 
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/largelogoSmall3.png"))); // NOI18N
         mainPanel.add(logoLabel);
-        logoLabel.setBounds(700, 570, 180, 50);
+        logoLabel.setBounds(800, 570, 180, 50);
 
         areaInfo.setColumns(20);
         areaInfo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -204,16 +251,51 @@ public class MainFrame extends JFrame {
         jScrollPane1.setViewportView(areaInfo);
 
         mainPanel.add(jScrollPane1);
-        jScrollPane1.setBounds(60, 410, 380, 170);
+        jScrollPane1.setBounds(60, 410, 340, 170);
 
         barProgress.setBackground(new java.awt.Color(204, 204, 204));
         barProgress.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         barProgress.setForeground(new java.awt.Color(255, 153, 51));
         mainPanel.add(barProgress);
-        barProgress.setBounds(60, 370, 380, 20);
+        barProgress.setBounds(60, 370, 340, 20);
+
+        jScrollPane2.setViewportView(lstDownloads);
+
+        mainPanel.add(jScrollPane2);
+        jScrollPane2.setBounds(520, 330, 410, 200);
+
+        cbxFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        cbxFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Filter" }));
+        mainPanel.add(cbxFilter);
+        cbxFilter.setBounds(650, 60, 230, 23);
+
+        tblInfo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        tblInfo.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Name", "Size", "Type", "Date"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Long.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(tblInfo);
+
+        mainPanel.add(jScrollPane3);
+        jScrollPane3.setBounds(520, 110, 410, 200);
 
         getContentPane().add(mainPanel);
-        mainPanel.setBounds(0, 0, 900, 670);
+        mainPanel.setBounds(0, 0, 1000, 670);
 
         menuBar.setBackground(new java.awt.Color(255, 102, 0));
         menuBar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 102, 0)));
@@ -349,7 +431,7 @@ public class MainFrame extends JFrame {
         Thread th = new Thread(){
             @Override
             public void run(){
-                downloader.download(url, folder, format, areaInfo, barProgress);
+                downloader.download(url, folder, format, areaInfo, barProgress, model);
             }
         };
         th.start();
@@ -405,11 +487,18 @@ public class MainFrame extends JFrame {
     private javax.swing.JButton btnDownload;
     private javax.swing.JButton btnOpenLast;
     private javax.swing.JButton btnPaste;
+    private javax.swing.JComboBox<String> cbxFilter;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblFolder;
     private javax.swing.JLabel lblFormat;
     private javax.swing.JLabel lblUrl;
     private javax.swing.JLabel logoLabel;
+    private javax.swing.JList<String> lstDownloads;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem mnuAbout;
@@ -420,6 +509,7 @@ public class MainFrame extends JFrame {
     private javax.swing.JMenuItem mnuPreferences;
     private javax.swing.JRadioButton radioMp3;
     private javax.swing.JRadioButton radioMp4;
+    private javax.swing.JTable tblInfo;
     private javax.swing.JTextField txtFolder;
     private javax.swing.JTextField txtUrl;
     // End of variables declaration//GEN-END:variables

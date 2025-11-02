@@ -3,6 +3,8 @@ package montoya.mediabox.download;
 //import montoya.mediabox.download.DownloadWorker;
 import java.io.File;
 import javax.swing.*;
+import montoya.mediabox.MainFrame;
+import montoya.mediabox.info.FileTableModel;
 
 /**
  *
@@ -15,6 +17,7 @@ public class Downloader {
     private boolean createM3u;
     private double maxSpeed;
     private DownloadWorker dw;
+    private MainFrame mainFrame;
 
     public Downloader() {}
 
@@ -58,8 +61,12 @@ public class Downloader {
         return null;
     }
 
+    public Downloader(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
+    }
+
     //Verificacion de campos completados
-    public void download(String url, String folder, String format, JTextArea outputArea, JProgressBar progressBar) {
+    public void download(String url, String folder, String format, JTextArea outputArea, JProgressBar progressBar, FileTableModel model) {
         if (url.isEmpty() || folder.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter a URL and select a folder.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -75,7 +82,7 @@ public class Downloader {
         progressBar.setVisible(true);
         progressBar.setIndeterminate(true);
 
-        dw = new DownloadWorker(pb, folder, outputArea, progressBar);
+        dw = new DownloadWorker(pb, folder, outputArea, progressBar, model, mainFrame);
         DownloadWorker task = dw;
 
         task.addPropertyChangeListener(evt -> {

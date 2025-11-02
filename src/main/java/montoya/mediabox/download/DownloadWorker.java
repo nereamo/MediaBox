@@ -1,8 +1,14 @@
 package montoya.mediabox.download;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.swing.*;
+import montoya.mediabox.MainFrame;
+import montoya.mediabox.info.FileInformation;
+import montoya.mediabox.info.FileTableModel;
 
 /**
  *
@@ -20,13 +26,18 @@ public class DownloadWorker extends SwingWorker<Void, String>{
     private final JTextArea outputArea;
     private final JProgressBar progressBar;
     private File lastDownloadedFile;
+    private final FileTableModel model;
+    private final MainFrame mainFrame;
     
-    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar) {
+    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel model, MainFrame mainFrame) {
         this.pb = pb;
         this.folder = folder;
         this.outputArea = outputArea;
         this.progressBar = progressBar;
+        this.model = model;
+        this.mainFrame = mainFrame;
     }
+    
     
     public File getLastDownloadedFile() {
         return lastDownloadedFile;
@@ -57,13 +68,23 @@ public class DownloadWorker extends SwingWorker<Void, String>{
             File[] files = dir.listFiles();
 
             if (files != null && files.length > 0) {
-                File latest = files[0];
+                File latest = files[0]; //Archivo mas reciente
                 for (File f : files) {
                     if (f.lastModified() > latest.lastModified()) {
                         latest = f;
                     }
                 }
+                //Para la tabla
                 lastDownloadedFile = latest;
+                FileInformation info = fileInfo(lastDownloadedFile); //Crea objeto FileInfo con los datos
+                //SwingUtilities.invokeLater(() -> model.addFile(info)); // --> lambda
+                SwingUtilities.invokeLater(new Runnable() { //Añade el objeto a la tabla
+                    @Override
+                    public void run() {
+                        model.addFile(info);
+                    }
+                });
+                mainFrame.guardarDescargas(model.getFileList()); //Guarda la lista de descargas en downloads.dat
             }
         }
 
@@ -101,5 +122,20 @@ public class DownloadWorker extends SwingWorker<Void, String>{
             System.err.println("Error extracting percentage: " + e.getMessage());
         }
         return -1;
+    }
+    
+    //Extrae la informacion de la descarga para mostrarla en JTable
+    private FileInformation fileInfo(File file) {
+        String name = file.getName();
+        long size = file.length();
+        String type = "unknown";
+        try {
+            type = Files.probeContentType(file.toPath());
+        } catch (IOException e) {
+            System.err.println("Error extracting MIME type: " + e.getMessage());
+        }
+        String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(file.lastModified()));
+
+        return new FileInformation(name, size, type, date);
     }
 }
