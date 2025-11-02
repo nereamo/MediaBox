@@ -24,7 +24,6 @@ public class MainFrame extends JFrame {
     private Preferences preferences;
     List<FileInformation> fileList = new ArrayList<>();
     private FileTableModel model;
-
    
     public MainFrame() {
         initComponents();
@@ -42,25 +41,31 @@ public class MainFrame extends JFrame {
         fileList = cargarDescargas();
         model = new FileTableModel(fileList); // Usa el atributo de clase
         tblInfo.setModel(model); 
-
+        
+        //Carga los archivos en la lista
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+        for (FileInformation info : fileList) {
+            listModel.addElement(info.name);
+        }
+        lstDownloads.setModel(listModel);
     }
     
     //Propiedades de JFrame
     private void framePanel(){
         setTitle("MediaBox");
         setResizable(false);
-        setSize(1000,700);
+        setSize(1100,700);
         setLocationRelativeTo(this);
         setLayout(null);
         
-        mainPanel.setSize(1000,700);
+        mainPanel.setSize(1100,700);
         getContentPane().add(mainPanel);
     }
     
     //Propiedades de JPanel Preferences
     private void preferencesPanel(){
         preferences = new Preferences(this, downloader);
-        preferences.setBounds(0, 0, 1000, 700);
+        preferences.setBounds(0, 0, 1100, 700);
         preferences.setVisible(false);
         getContentPane().add(preferences);
     }
@@ -154,8 +159,8 @@ public class MainFrame extends JFrame {
         getContentPane().setLayout(null);
 
         mainPanel.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
-        mainPanel.setMinimumSize(new java.awt.Dimension(1000, 700));
-        mainPanel.setPreferredSize(new java.awt.Dimension(1000, 670));
+        mainPanel.setMinimumSize(new java.awt.Dimension(1100, 700));
+        mainPanel.setPreferredSize(new java.awt.Dimension(1100, 670));
         mainPanel.setLayout(null);
 
         lblUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -243,7 +248,7 @@ public class MainFrame extends JFrame {
 
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/largelogoSmall3.png"))); // NOI18N
         mainPanel.add(logoLabel);
-        logoLabel.setBounds(800, 570, 180, 50);
+        logoLabel.setBounds(900, 570, 180, 50);
 
         areaInfo.setColumns(20);
         areaInfo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -262,12 +267,12 @@ public class MainFrame extends JFrame {
         jScrollPane2.setViewportView(lstDownloads);
 
         mainPanel.add(jScrollPane2);
-        jScrollPane2.setBounds(520, 330, 410, 200);
+        jScrollPane2.setBounds(620, 350, 410, 190);
 
         cbxFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         cbxFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Filter" }));
         mainPanel.add(cbxFilter);
-        cbxFilter.setBounds(650, 60, 230, 23);
+        cbxFilter.setBounds(720, 60, 230, 23);
 
         tblInfo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tblInfo.setModel(new javax.swing.table.DefaultTableModel(
@@ -292,10 +297,10 @@ public class MainFrame extends JFrame {
         jScrollPane3.setViewportView(tblInfo);
 
         mainPanel.add(jScrollPane3);
-        jScrollPane3.setBounds(520, 110, 410, 200);
+        jScrollPane3.setBounds(620, 120, 410, 200);
 
         getContentPane().add(mainPanel);
-        mainPanel.setBounds(0, 0, 1000, 670);
+        mainPanel.setBounds(0, 0, 1100, 670);
 
         menuBar.setBackground(new java.awt.Color(255, 102, 0));
         menuBar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 102, 0)));
@@ -431,7 +436,7 @@ public class MainFrame extends JFrame {
         Thread th = new Thread(){
             @Override
             public void run(){
-                downloader.download(url, folder, format, areaInfo, barProgress, model);
+                downloader.download(url, folder, format, areaInfo, barProgress, model, lstDownloads);
             }
         };
         th.start();

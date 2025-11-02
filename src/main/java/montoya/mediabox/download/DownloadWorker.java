@@ -28,14 +28,16 @@ public class DownloadWorker extends SwingWorker<Void, String>{
     private File lastDownloadedFile;
     private final FileTableModel model;
     private final MainFrame mainFrame;
+    private final JList<String> lstDownloads;
     
-    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel model, MainFrame mainFrame) {
+    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel model, MainFrame mainFrame, JList<String> lstDownloads) {
         this.pb = pb;
         this.folder = folder;
         this.outputArea = outputArea;
         this.progressBar = progressBar;
         this.model = model;
         this.mainFrame = mainFrame;
+        this.lstDownloads = lstDownloads;
     }
     
     
@@ -82,6 +84,8 @@ public class DownloadWorker extends SwingWorker<Void, String>{
                     @Override
                     public void run() {
                         model.addFile(info);
+                        DefaultListModel<String> listModel = (DefaultListModel<String>) lstDownloads.getModel();
+                        listModel.addElement(info.name);
                     }
                 });
                 mainFrame.guardarDescargas(model.getFileList()); //Guarda la lista de descargas en downloads.dat

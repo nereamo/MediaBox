@@ -66,7 +66,7 @@ public class Downloader {
     }
 
     //Verificacion de campos completados
-    public void download(String url, String folder, String format, JTextArea outputArea, JProgressBar progressBar, FileTableModel model) {
+    public void download(String url, String folder, String format, JTextArea outputArea, JProgressBar progressBar, FileTableModel model, JList<String> lstDownloads) {
         if (url.isEmpty() || folder.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter a URL and select a folder.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -82,7 +82,7 @@ public class Downloader {
         progressBar.setVisible(true);
         progressBar.setIndeterminate(true);
 
-        dw = new DownloadWorker(pb, folder, outputArea, progressBar, model, mainFrame);
+        dw = new DownloadWorker(pb, folder, outputArea, progressBar, model, mainFrame, lstDownloads);
         DownloadWorker task = dw;
 
         task.addPropertyChangeListener(evt -> {
