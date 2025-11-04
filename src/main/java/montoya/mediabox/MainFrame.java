@@ -6,6 +6,8 @@ import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.awt.datatransfer.*;
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import montoya.mediabox.JDialogs.JDialogAbout;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -96,7 +98,9 @@ public class MainFrame extends JFrame {
   
     //Guarda las descargas en un archivo .dat(binario)
     public void guardarDescargas(List<FileInformation> lista) {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("downloads.dat"))) {
+        String carpeta = System.getProperty("user.home") + "/Archivos MediaBox";
+        Path rutaJson = Paths.get(carpeta, "downloads.json");
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(rutaJson.toFile()))) {
             out.writeObject(lista);
         } catch (IOException e) {
             System.err.println("Error saving downloads: " + e.getMessage());
@@ -105,7 +109,9 @@ public class MainFrame extends JFrame {
 
     //Recupera los datos del archivo .dat y los muestra en la tabla
     private List<FileInformation> cargarDescargas() {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("downloads.dat"))) {
+        String carpeta = System.getProperty("user.home") + "/Archivos MediaBox";
+        Path rutaJson = Paths.get(carpeta, "downloads.json");
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(rutaJson.toFile()))) {
             return (List<FileInformation>) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
             return new ArrayList<>(); // Si no existe el archivo, empieza vacío
@@ -134,11 +140,12 @@ public class MainFrame extends JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         areaInfo = new javax.swing.JTextArea();
         barProgress = new javax.swing.JProgressBar();
+        cbxFilter = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         lstDownloads = new javax.swing.JList<>();
-        cbxFilter = new javax.swing.JComboBox<>();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblInfo = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mnuExit = new javax.swing.JMenuItem();
@@ -166,11 +173,11 @@ public class MainFrame extends JFrame {
         lblUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblUrl.setText("URL:");
         mainPanel.add(lblUrl);
-        lblUrl.setBounds(60, 30, 37, 20);
+        lblUrl.setBounds(50, 20, 37, 20);
 
         txtUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mainPanel.add(txtUrl);
-        txtUrl.setBounds(160, 60, 250, 23);
+        txtUrl.setBounds(150, 50, 250, 23);
 
         btnPaste.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnPaste.setText("Paste");
@@ -180,7 +187,7 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnPaste);
-        btnPaste.setBounds(60, 60, 90, 24);
+        btnPaste.setBounds(50, 50, 90, 24);
 
         btnClear.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnClear.setText("Clear");
@@ -190,16 +197,16 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnClear);
-        btnClear.setBounds(420, 60, 100, 24);
+        btnClear.setBounds(410, 50, 100, 24);
 
         lblFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblFolder.setText("Folder:");
         mainPanel.add(lblFolder);
-        lblFolder.setBounds(60, 120, 50, 20);
+        lblFolder.setBounds(50, 110, 50, 20);
 
         txtFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mainPanel.add(txtFolder);
-        txtFolder.setBounds(160, 150, 250, 23);
+        txtFolder.setBounds(150, 140, 250, 23);
 
         btnBrowse.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnBrowse.setText("Browse");
@@ -209,22 +216,22 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnBrowse);
-        btnBrowse.setBounds(60, 150, 90, 24);
+        btnBrowse.setBounds(50, 140, 90, 24);
 
         lblFormat.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblFormat.setText("Format: ");
         mainPanel.add(lblFormat);
-        lblFormat.setBounds(60, 210, 53, 17);
+        lblFormat.setBounds(50, 200, 53, 17);
 
         radioMp4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        radioMp4.setText("MP4");
+        radioMp4.setText("MP4 (Video)");
         mainPanel.add(radioMp4);
-        radioMp4.setBounds(60, 240, 60, 22);
+        radioMp4.setBounds(50, 230, 110, 22);
 
         radioMp3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        radioMp3.setText("MP3");
+        radioMp3.setText("MP3 (Audio)");
         mainPanel.add(radioMp3);
-        radioMp3.setBounds(130, 240, 70, 22);
+        radioMp3.setBounds(180, 230, 110, 22);
 
         btnDownload.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnDownload.setText("Download");
@@ -234,7 +241,7 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnDownload);
-        btnDownload.setBounds(60, 320, 120, 24);
+        btnDownload.setBounds(50, 300, 120, 24);
 
         btnOpenLast.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnOpenLast.setText("Open Last");
@@ -244,7 +251,7 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnOpenLast);
-        btnOpenLast.setBounds(200, 320, 120, 24);
+        btnOpenLast.setBounds(190, 300, 120, 24);
 
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/largelogoSmall3.png"))); // NOI18N
         mainPanel.add(logoLabel);
@@ -256,23 +263,24 @@ public class MainFrame extends JFrame {
         jScrollPane1.setViewportView(areaInfo);
 
         mainPanel.add(jScrollPane1);
-        jScrollPane1.setBounds(60, 410, 340, 170);
+        jScrollPane1.setBounds(50, 390, 340, 170);
 
         barProgress.setBackground(new java.awt.Color(204, 204, 204));
         barProgress.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         barProgress.setForeground(new java.awt.Color(255, 153, 51));
         mainPanel.add(barProgress);
-        barProgress.setBounds(60, 370, 340, 20);
-
-        jScrollPane2.setViewportView(lstDownloads);
-
-        mainPanel.add(jScrollPane2);
-        jScrollPane2.setBounds(620, 350, 410, 190);
+        barProgress.setBounds(50, 360, 340, 20);
 
         cbxFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         cbxFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Filter" }));
         mainPanel.add(cbxFilter);
-        cbxFilter.setBounds(720, 60, 230, 23);
+        cbxFilter.setBounds(820, 280, 230, 23);
+
+        lstDownloads.setPreferredSize(new java.awt.Dimension(40, 60));
+        jScrollPane2.setViewportView(lstDownloads);
+
+        mainPanel.add(jScrollPane2);
+        jScrollPane2.setBounds(550, 320, 140, 240);
 
         tblInfo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tblInfo.setModel(new javax.swing.table.DefaultTableModel(
@@ -297,7 +305,12 @@ public class MainFrame extends JFrame {
         jScrollPane3.setViewportView(tblInfo);
 
         mainPanel.add(jScrollPane3);
-        jScrollPane3.setBounds(620, 120, 410, 200);
+        jScrollPane3.setBounds(690, 320, 360, 240);
+
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel1.setText("Directories");
+        mainPanel.add(jLabel1);
+        jLabel1.setBounds(550, 290, 70, 17);
 
         getContentPane().add(mainPanel);
         mainPanel.setBounds(0, 0, 1100, 670);
@@ -493,6 +506,7 @@ public class MainFrame extends JFrame {
     private javax.swing.JButton btnOpenLast;
     private javax.swing.JButton btnPaste;
     private javax.swing.JComboBox<String> cbxFilter;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;

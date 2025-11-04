@@ -3,6 +3,8 @@ package montoya.mediabox.download;
 import java.io.*;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import javax.swing.*;
@@ -138,8 +140,9 @@ public class DownloadWorker extends SwingWorker<Void, String>{
         } catch (IOException e) {
             System.err.println("Error extracting MIME type: " + e.getMessage());
         }
-        String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(file.lastModified()));
 
+        String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(file.lastModified()));
+        
         return new FileInformation(name, size, type, date);
     }
 }

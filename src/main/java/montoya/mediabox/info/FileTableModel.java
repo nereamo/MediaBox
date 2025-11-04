@@ -11,7 +11,7 @@ import javax.swing.table.AbstractTableModel;
 //Class que define como se muestran los datos
 public class FileTableModel extends AbstractTableModel {
 
-    private final String[] column = {"Name", "Size (MB)", "Type", "Date Downloaded"};
+    private final String[] column = {"Name", "Size (MB)", "Type", "Date"};
     private final List<FileInformation> fileList;
 
     public FileTableModel(List<FileInformation> files) { //Recibe lista del archivo .dat
