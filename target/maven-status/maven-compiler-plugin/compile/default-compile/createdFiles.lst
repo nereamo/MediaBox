@@ -15,7 +15,6 @@ montoya\mediabox\download\DownloadWorker$1.class
 montoya\mediabox\MainFrame$2.class
 montoya\mediabox\controller\MainViewController.class
 montoya\mediabox\MainFrame.class
-montoya\mediabox\dialogs\JDialogAbout$1.class
 montoya\mediabox\MainFrame$9.class
 montoya\mediabox\controller\MainViewController$1.class
 montoya\mediabox\MainFrame$7.class
@@ -24,5 +23,4 @@ montoya\mediabox\Preferences.class
 montoya\mediabox\download\DownloadWorker.class
 montoya\mediabox\MainFrame$6.class
 montoya\mediabox\MainFrame$4.class
-montoya\mediabox\dialogs\JDialogAbout$1$1.class
 montoya\mediabox\MainFrame$1.class
