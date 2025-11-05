@@ -3,23 +3,23 @@ package montoya.mediabox.download;
 //import montoya.mediabox.download.DownloadWorker;
 import java.io.File;
 import javax.swing.*;
-import montoya.mediabox.MainFrame;
-import montoya.mediabox.info.FileTableModel;
+import montoya.mediabox.fileInformation.FileProperties;
+import montoya.mediabox.fileInformation.FileTableModel;
 
 /**
- *
+ * Contiene los parametros necesarios para la configuracion de la descarga.
  * @author Nerea
  */
-public class Downloader {
+public class DownloadManager {
 
     private String tempPath;
     private String ytDlpLocation;
     private boolean createM3u;
     private double maxSpeed;
     private DownloadWorker dw;
-    private MainFrame mainFrame;
+    private FileProperties fProp;
 
-    public Downloader() {}
+    public DownloadManager() {}
 
     //Getters y Setters
     public String getTempPath() {
@@ -61,8 +61,8 @@ public class Downloader {
         return null;
     }
 
-    public Downloader(MainFrame mainFrame) {
-        this.mainFrame = mainFrame;
+    public DownloadManager(FileProperties fProp) {
+        this.fProp = fProp;
     }
 
     //Verificacion de campos completados
@@ -82,7 +82,7 @@ public class Downloader {
         progressBar.setVisible(true);
         progressBar.setIndeterminate(true);
 
-        dw = new DownloadWorker(pb, folder, outputArea, progressBar, model, mainFrame, lstDownloads);
+        dw = new DownloadWorker(pb, folder, outputArea, progressBar, model, fProp, lstDownloads);
         DownloadWorker task = dw;
 
         task.addPropertyChangeListener(evt -> {

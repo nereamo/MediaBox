@@ -3,23 +3,19 @@ package montoya.mediabox.download;
 import java.io.*;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import javax.swing.*;
-import montoya.mediabox.MainFrame;
-import montoya.mediabox.info.FileInformation;
-import montoya.mediabox.info.FileTableModel;
+import montoya.mediabox.fileInformation.FileInformation;
+import montoya.mediabox.fileInformation.FileProperties;
+import montoya.mediabox.fileInformation.FileTableModel;
 
 /**
- *
+ * Clase creada con ayuda de Copilot para entender como funciona SwingWorker y que metodos utilizar.
+ * SwingWorker ejecuta tareas en segundo plano impidiendo que no se bloquee la GUI.
+ * Contiene metodos para descaragar archivos en segundo plano
  * @author Nerea
  */
-
-//SwingWorker ejecuta tareas en segundo plano impidiendo que no se bloquee la GUI. 
-
-//Esta clase se ha hecho con ayuda de Copilot para poder entender como funcionaSwingWorker y que metodos utilizar.
 
 public class DownloadWorker extends SwingWorker<Void, String>{
     
@@ -29,16 +25,16 @@ public class DownloadWorker extends SwingWorker<Void, String>{
     private final JProgressBar progressBar;
     private File lastDownloadedFile;
     private final FileTableModel model;
-    private final MainFrame mainFrame;
     private final JList<String> lstDownloads;
+    private final FileProperties fProp;
     
-    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel model, MainFrame mainFrame, JList<String> lstDownloads) {
+    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel model, FileProperties fProp, JList<String> lstDownloads) {
         this.pb = pb;
         this.folder = folder;
         this.outputArea = outputArea;
         this.progressBar = progressBar;
         this.model = model;
-        this.mainFrame = mainFrame;
+        this.fProp = fProp;
         this.lstDownloads = lstDownloads;
     }
     
@@ -90,7 +86,7 @@ public class DownloadWorker extends SwingWorker<Void, String>{
                         listModel.addElement(info.name);
                     }
                 });
-                mainFrame.guardarDescargas(model.getFileList()); //Guarda la lista de descargas en downloads.dat
+                fProp.guardarDescargas(model.getFileList()); //Guarda la lista de descargas en downloads.json
             }
         }
 

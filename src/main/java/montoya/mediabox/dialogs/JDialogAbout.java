@@ -1,11 +1,11 @@
-package montoya.mediabox.JDialogs;
+package montoya.mediabox.dialogs;
 
 import java.awt.*;
 import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
- *
+ * Contiene la información de alumno, curso y los recursos para la tarea
  * @author Nerea
  */
 public class JDialogAbout extends JDialog {

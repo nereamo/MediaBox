@@ -1,14 +1,13 @@
-package montoya.mediabox.info;
+package montoya.mediabox.fileInformation;
 
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 /**
- *
+ * Difinir como mostrar los datos en la tabla de JFrame
  * @author Nerea
  */
 
-//Class que define como se muestran los datos
 public class FileTableModel extends AbstractTableModel {
 
     private final String[] column = {"Name", "Size (MB)", "Type", "Date"};

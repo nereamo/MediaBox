@@ -1,37 +1,45 @@
 package montoya.mediabox;
 
-import montoya.mediabox.download.Downloader;
+import montoya.mediabox.download.DownloadManager;
 import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.awt.datatransfer.*;
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import montoya.mediabox.JDialogs.JDialogAbout;
+import montoya.mediabox.dialogs.JDialogAbout;
 import java.util.logging.Logger;
 import javax.swing.*;
-import montoya.mediabox.info.FileInformation;
-import montoya.mediabox.info.FileTableModel;
+import montoya.mediabox.fileInformation.FileInformation;
+import montoya.mediabox.fileInformation.FileTableModel;
 import java.util.*;
+import montoya.mediabox.fileInformation.FileProperties;
+import montoya.mediabox.controller.MainViewController;
 
 /**
- *
+ * Class principal
  * @author Nerea
  */
 public class MainFrame extends JFrame {
     
     private static final Logger logger = Logger.getLogger(MainFrame.class.getName());
-    private Downloader downloader;
+    private DownloadManager downloader;
     private Preferences preferences;
     List<FileInformation> fileList = new ArrayList<>();
     private FileTableModel model;
+    private FileProperties fProp;
+    private MainViewController aProp;
    
     public MainFrame() {
         initComponents();
-        downloader = new Downloader(this);
-        framePanel();
-        preferencesPanel();
+        fProp = new FileProperties();
+        downloader = new DownloadManager(fProp);
+        preferences = new Preferences(this, downloader);
+        aProp = new MainViewController(this, mainPanel, preferences, barProgress);
+        
+        preferences.setAppProperties(aProp);
+        
+        aProp.configFrame();
+        aProp.configPreferencesPanel();
         
         ButtonGroup bg = new ButtonGroup();
         bg.add(radioMp4);
@@ -39,84 +47,15 @@ public class MainFrame extends JFrame {
         
         radioMp4.setSelected(true);
         
-        
-        fileList = cargarDescargas();
-        model = new FileTableModel(fileList); // Usa el atributo de clase
+        fileList = fProp.cargarDescargas();
+        model = new FileTableModel(fileList); 
         tblInfo.setModel(model); 
         
         //Carga los archivos en la lista
         DefaultListModel<String> listModel = new DefaultListModel<>();
-        for (FileInformation info : fileList) {
-            listModel.addElement(info.name);
-        }
         lstDownloads.setModel(listModel);
     }
     
-    //Propiedades de JFrame
-    private void framePanel(){
-        setTitle("MediaBox");
-        setResizable(false);
-        setSize(1100,700);
-        setLocationRelativeTo(this);
-        setLayout(null);
-        
-        mainPanel.setSize(1100,700);
-        getContentPane().add(mainPanel);
-    }
-    
-    //Propiedades de JPanel Preferences
-    private void preferencesPanel(){
-        preferences = new Preferences(this, downloader);
-        preferences.setBounds(0, 0, 1100, 700);
-        preferences.setVisible(false);
-        getContentPane().add(preferences);
-    }
-    
-    //Mostrar el JPanel principal del JFrame
-    public void showMainPanel() {
-        preferences.setVisible(false);
-        mainPanel.setVisible(true);
-    }
-    
-    //Mostrar el JPanel Preferences 
-    public void showPreferencesPanel() {
-        mainPanel.setVisible(false);
-        preferences.setVisible(true);
-    }
-    
-    //Actualiza el progreso
-    public void updateProgress(int value) {
-        //SwingUtilities.invokeLater(() -> barProgress.setValue(value)); --> lambda
-        
-        SwingUtilities.invokeLater(new Runnable(){
-            @Override
-            public void run(){
-                barProgress.setValue(value);
-            }
-        });
-    }
-  
-    //Guarda las descargas en un archivo .dat(binario)
-    public void guardarDescargas(List<FileInformation> lista) {
-        String carpeta = System.getProperty("user.home") + "/Archivos MediaBox";
-        Path rutaJson = Paths.get(carpeta, "downloads.json");
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(rutaJson.toFile()))) {
-            out.writeObject(lista);
-        } catch (IOException e) {
-            System.err.println("Error saving downloads: " + e.getMessage());
-        }
-    }
-
-    //Recupera los datos del archivo .dat y los muestra en la tabla
-    private List<FileInformation> cargarDescargas() {
-        String carpeta = System.getProperty("user.home") + "/Archivos MediaBox";
-        Path rutaJson = Paths.get(carpeta, "downloads.json");
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(rutaJson.toFile()))) {
-            return (List<FileInformation>) in.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            return new ArrayList<>(); // Si no existe el archivo, empieza vacío
-        }
-    }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -391,7 +330,7 @@ public class MainFrame extends JFrame {
 
     //Preferences
     private void mnuPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPreferencesActionPerformed
-        showPreferencesPanel();
+        aProp.showPreferencesPanel();
     }//GEN-LAST:event_mnuPreferencesActionPerformed
 
     //About
@@ -415,7 +354,14 @@ public class MainFrame extends JFrame {
         int result = directory.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFolder = directory.getSelectedFile();
+            String folderPath = selectedFolder.getAbsolutePath();
             txtFolder.setText(selectedFolder.getAbsolutePath());
+            
+            // Añadir el directorio a la JList si no está ya
+        DefaultListModel<String> listModel = (DefaultListModel<String>) lstDownloads.getModel();
+        if (!listModel.contains(folderPath)) {
+            listModel.addElement(folderPath);
+        }
         } 
     }//GEN-LAST:event_btnBrowseActionPerformed
 

@@ -1,6 +1,6 @@
 package montoya.mediabox;
 
-import montoya.mediabox.download.Downloader;
+import montoya.mediabox.download.DownloadManager;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -9,21 +9,27 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import montoya.mediabox.controller.MainViewController;
 
 /**
- *
+ * Contiene las propiedades y metodos de JPanel Preferences
  * @author Nerea
  */
 public class Preferences extends javax.swing.JPanel {
     
     private MainFrame mainFrame;
-    private final Downloader downloader;
+    private MainViewController aProp;
+    private final DownloadManager downloader;
    
-    public Preferences(MainFrame mainFrame, Downloader downloader) {
+    public Preferences(MainFrame mainFrame, DownloadManager downloader) {
         initComponents();
         this.mainFrame = mainFrame; 
         this.downloader = downloader;
         mbSpeedSpinner();
+    }
+    
+    public void setAppProperties(MainViewController aProp) {
+        this.aProp = aProp;
     }
     
     //Limpiar entradas
@@ -42,7 +48,7 @@ public class Preferences extends javax.swing.JPanel {
         downloader.setMaxSpeed(((Number) spnSpeed.getValue()).doubleValue());
 
         JOptionPane.showMessageDialog(this, "Preferences saved!", "Saved", JOptionPane.INFORMATION_MESSAGE);
-        mainFrame.showMainPanel();
+        aProp.showMainFramePanel();
     }
     
     
@@ -169,7 +175,7 @@ public class Preferences extends javax.swing.JPanel {
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         if(JOptionPane.showConfirmDialog(null, "Changes will not be saved. Do you want to continue?", "Cancel", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
             clearTextFields();
-            mainFrame.showMainPanel();
+            aProp.showMainFramePanel();
         }
     }//GEN-LAST:event_btnCancelActionPerformed
 
