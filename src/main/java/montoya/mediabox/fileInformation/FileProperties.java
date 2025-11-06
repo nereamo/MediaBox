@@ -1,44 +1,45 @@
 package montoya.mediabox.fileInformation;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
- * Contiene los metodos necesarios para la creación y recuperación del archivo donde almacenar la información de las descargas
+ * Metodos necesarios para la creación, guardado y recuperación del archivo .json que almacena informacion de las descargas
+ *
  * @author Nerea
  */
 public class FileProperties {
-    
+
     private static final String FOLDER_NAME = System.getProperty("user.home") + "/Archivos MediaBox";
     private static final Path JSON_PATH = Paths.get(FOLDER_NAME, "downloads.json");
-    
-    //Guarda las descargas en un archivo .json
-    public void guardarDescargas(List<FileInformation> lista) {
+
+    //Crea carpeta y almacena fichero .json con información de la descarga
+    public void guardarDatos(DirectoryInformation data) {
         try {
             Files.createDirectories(Paths.get(FOLDER_NAME));
-
             try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(JSON_PATH.toFile()))) {
-                out.writeObject(lista);
+                out.writeObject(data);
             }
         } catch (IOException e) {
-            System.err.println("Error saving downloads: " + e.getMessage());
+            System.err.println("Error al guardar datos de descarga: " + e.getMessage());
         }
     }
 
-    //Recupera los datos del archivo .json y los muestra en la tabla
-    public static List<FileInformation> cargarDescargas() {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(JSON_PATH.toFile()))) {
-            return (List<FileInformation>) in.readObject();
+    //Lee archivo .json y develve la información de la descarga y su directorio
+    public DirectoryInformation cargarDatos() {
+        try {
+            Files.createDirectories(Paths.get(FOLDER_NAME));
+            if (!Files.exists(JSON_PATH)) {
+                return new DirectoryInformation(new ArrayList<>(), new HashSet<>());
+            }
+            try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(JSON_PATH.toFile()))) {
+                return (DirectoryInformation) in.readObject();
+            }
         } catch (IOException | ClassNotFoundException e) {
-            return new ArrayList<>(); // Si no existe el archivo, empieza vacío
+            return new DirectoryInformation(new ArrayList<>(), new HashSet<>());
         }
     }
 }

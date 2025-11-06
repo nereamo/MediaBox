@@ -1,10 +1,11 @@
 montoya\mediabox\MainFrame$10.class
-montoya\mediabox\dialogs\JDialogAbout.class
+montoya\mediabox\dialogs\DialogAbout.class
 montoya\mediabox\MainFrame$8.class
 montoya\mediabox\fileInformation\FileInformation.class
 montoya\mediabox\fileInformation\FileProperties.class
 montoya\mediabox\fileInformation\FileTableModel.class
 montoya\mediabox\Preferences$4.class
+montoya\mediabox\fileInformation\DirectoryInformation.class
 montoya\mediabox\Preferences$2.class
 montoya\mediabox\MainFrame$3.class
 montoya\mediabox\MainFrame$5.class
@@ -23,4 +24,5 @@ montoya\mediabox\Preferences.class
 montoya\mediabox\download\DownloadWorker.class
 montoya\mediabox\MainFrame$6.class
 montoya\mediabox\MainFrame$4.class
+montoya\mediabox\fileInformation\FolderItem.class
 montoya\mediabox\MainFrame$1.class

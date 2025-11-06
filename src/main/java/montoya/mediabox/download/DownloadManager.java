@@ -1,13 +1,15 @@
 package montoya.mediabox.download;
 
-//import montoya.mediabox.download.DownloadWorker;
 import java.io.File;
+import java.util.Set;
 import javax.swing.*;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
 
 /**
  * Contiene los parametros necesarios para la configuracion de la descarga.
+ * Se usa junto con {@link DownloadWorker}.
+ *
  * @author Nerea
  */
 public class DownloadManager {
@@ -19,7 +21,8 @@ public class DownloadManager {
     private DownloadWorker dw;
     private FileProperties fProp;
 
-    public DownloadManager() {}
+    public DownloadManager() {
+    }
 
     //Getters y Setters
     public String getTempPath() {
@@ -54,6 +57,7 @@ public class DownloadManager {
         this.maxSpeed = maxSpeed;
     }
 
+    //Devuelve el ultimo archivo descargado
     public File getLastDownloadedFile() {
         if (dw != null) {
             return dw.getLastDownloadedFile();
@@ -65,8 +69,8 @@ public class DownloadManager {
         this.fProp = fProp;
     }
 
-    //Verificacion de campos completados
-    public void download(String url, String folder, String format, JTextArea outputArea, JProgressBar progressBar, FileTableModel model, JList<String> lstDownloads) {
+    //Verifica si los campos de preferences se han completado
+    public void download(String url, String folder, String format, JTextArea outputArea, JProgressBar progressBar, FileTableModel model, JList<String> lstDownloads, Set<String> directoriosDescarga) {
         if (url.isEmpty() || folder.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter a URL and select a folder.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -82,7 +86,7 @@ public class DownloadManager {
         progressBar.setVisible(true);
         progressBar.setIndeterminate(true);
 
-        dw = new DownloadWorker(pb, folder, outputArea, progressBar, model, fProp, lstDownloads);
+        dw = new DownloadWorker(pb, folder, outputArea, progressBar, model, fProp, lstDownloads, directoriosDescarga);
         DownloadWorker task = dw;
 
         task.addPropertyChangeListener(evt -> {
@@ -95,7 +99,7 @@ public class DownloadManager {
         task.execute();
     }
 
-    //Instrucciones de descarga
+    //Instrucciones de descarga dependiendo del formato seleccioando
     private ProcessBuilder buildCommand(String url, String folder, String format) {
         ProcessBuilder pb;
         if ("mp3".equals(format)) {
@@ -109,7 +113,7 @@ public class DownloadManager {
                     "-f", "mp4", "-o", folder + File.separator + "%(title)s.%(ext)s", url);
         }
 
-        //Playlist json .m3u
+        //Archivo .m3u
         if (createM3u) {
             pb.command().add("--write-info-json");
         }
@@ -124,7 +128,7 @@ public class DownloadManager {
         return pb;
     }
 
-    //Actualiza la barra de progresso
+    //Actualiza visualmente la barra de progresso
     private void updateProgressBar(JProgressBar progressBar, int percent) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -141,5 +145,4 @@ public class DownloadManager {
 //            progressBar.setString("Downloading... " + percent + "%");
 //        });
     }
-
 }

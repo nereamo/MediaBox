@@ -1,66 +1,60 @@
 package montoya.mediabox;
 
-import montoya.mediabox.download.DownloadManager;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
+import java.io.*;
+import javax.swing.*;
 import montoya.mediabox.controller.MainViewController;
+import montoya.mediabox.download.DownloadManager;
 
 /**
  * Contiene las propiedades y metodos de JPanel Preferences
+ *
  * @author Nerea
  */
 public class Preferences extends javax.swing.JPanel {
-    
+
     private MainFrame mainFrame;
-    private MainViewController aProp;
-    private final DownloadManager downloader;
-   
-    public Preferences(MainFrame mainFrame, DownloadManager downloader) {
+    private MainViewController mvc;
+    private final DownloadManager download;
+
+    public Preferences(MainFrame mainFrame, DownloadManager download) {
         initComponents();
-        this.mainFrame = mainFrame; 
-        this.downloader = downloader;
+        this.mainFrame = mainFrame;
+        this.download = download;
         mbSpeedSpinner();
     }
-    
-    public void setAppProperties(MainViewController aProp) {
-        this.aProp = aProp;
+
+    public void setMainController(MainViewController mvc) {
+        this.mvc = mvc;
     }
-    
-    //Limpiar entradas
-    public void clearTextFields(){
+
+    //Limpiar entradas de JTextFields
+    public void clearTextFields() {
         txtPathTemp.setText("");
         chkCreate.setSelected(false);
         spnSpeed.setValue(0);
         txtYtDlp.setText("");
     }
-    
-    //Guardar valores de preferences
+
+    //Guarda los valores de preferences
     public void savePreferences() {
-        downloader.setTempPath(txtPathTemp.getText().trim());
-        downloader.setYtDlpLocation(txtYtDlp.getText().trim());
-        downloader.setCreateM3u(chkCreate.isSelected());
-        downloader.setMaxSpeed(((Number) spnSpeed.getValue()).doubleValue());
+        download.setTempPath(txtPathTemp.getText().trim());
+        download.setYtDlpLocation(txtYtDlp.getText().trim());
+        download.setCreateM3u(chkCreate.isSelected());
+        download.setMaxSpeed(((Number) spnSpeed.getValue()).doubleValue());
 
         JOptionPane.showMessageDialog(this, "Preferences saved!", "Saved", JOptionPane.INFORMATION_MESSAGE);
-        aProp.showMainFramePanel();
+        mvc.showMainFramePanel();
     }
-    
-    
+
     //Velocidad de descarga hasta un max de 100MB/s
-    public void mbSpeedSpinner(){
-        SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0.0, 0.0, 100.0,10.0);
+    public void mbSpeedSpinner() {
+        SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0.0, 0.0, 100.0, 10.0);
         spnSpeed.setModel(spinnerModel);
-        
+
         JSpinner.NumberEditor numberFormat = new JSpinner.NumberEditor(spnSpeed, "0.0");
         spnSpeed.setEditor(numberFormat);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -173,9 +167,9 @@ public class Preferences extends javax.swing.JPanel {
 
     //Cancelar preferencias
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        if(JOptionPane.showConfirmDialog(null, "Changes will not be saved. Do you want to continue?", "Cancel", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+        if (JOptionPane.showConfirmDialog(null, "Changes will not be saved. Do you want to continue?", "Cancel", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             clearTextFields();
-            aProp.showMainFramePanel();
+            mvc.showMainFramePanel();
         }
     }//GEN-LAST:event_btnCancelActionPerformed
 
@@ -183,12 +177,12 @@ public class Preferences extends javax.swing.JPanel {
     private void btnBrowseTempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseTempActionPerformed
         JFileChooser directory = new JFileChooser();
         directory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        
+
         int result = directory.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFolder = directory.getSelectedFile();
             txtPathTemp.setText(selectedFolder.getAbsolutePath());
-        } 
+        }
     }//GEN-LAST:event_btnBrowseTempActionPerformed
 
     //Buscar archivo yt-dlp.exe
@@ -206,16 +200,16 @@ public class Preferences extends javax.swing.JPanel {
             }
 
             if (p.waitFor() == 0) {
-                
+
                 String path = sb.toString().trim();
                 String firstPath = path.split("\n")[0];
 
                 txtYtDlp.setText(firstPath);
-                JOptionPane.showMessageDialog(this,"yt-dlp.exe found!", "Found",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "yt-dlp.exe found!", "Found", JOptionPane.INFORMATION_MESSAGE);
 
             } else {
                 txtYtDlp.setText("");
-                JOptionPane.showMessageDialog(this,"yt-dlp.exe not found!", "Not Found", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "yt-dlp.exe not found!", "Not Found", JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (IOException ex) {

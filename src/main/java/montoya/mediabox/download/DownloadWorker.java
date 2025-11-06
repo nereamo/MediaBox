@@ -5,40 +5,42 @@ import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import javax.swing.*;
+import montoya.mediabox.fileInformation.DirectoryInformation;
 import montoya.mediabox.fileInformation.FileInformation;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
 
 /**
- * Clase creada con ayuda de Copilot para entender como funciona SwingWorker y que metodos utilizar.
- * SwingWorker ejecuta tareas en segundo plano impidiendo que no se bloquee la GUI.
- * Contiene metodos para descaragar archivos en segundo plano
+ * Clase creada con ayuda de Copilot para entender como funciona SwingWorker y que metodos utilizar. SwingWorker ejecuta tareas en segundo plano impidiendo que no se bloquee la GUI. Contiene metodos para descaragar archivos en segundo plano
+ *
  * @author Nerea
  */
+public class DownloadWorker extends SwingWorker<Void, String> {
 
-public class DownloadWorker extends SwingWorker<Void, String>{
-    
     private final ProcessBuilder pb;
     private final String folder;
     private final JTextArea outputArea;
     private final JProgressBar progressBar;
     private File lastDownloadedFile;
-    private final FileTableModel model;
-    private final JList<String> lstDownloads;
-    private final FileProperties fProp;
-    
-    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel model, FileProperties fProp, JList<String> lstDownloads) {
+    private final FileTableModel tblModel;
+    private JList<String> lstDownloads;
+    private final FileProperties fp;
+    private final Set<String> directoriosDescarga;
+
+    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, FileProperties fp, JList<String> lstDownloads, Set<String> directoriosDescarga) {
         this.pb = pb;
         this.folder = folder;
         this.outputArea = outputArea;
         this.progressBar = progressBar;
-        this.model = model;
-        this.fProp = fProp;
+        this.tblModel = tblModel;
+        this.fp = fp;
         this.lstDownloads = lstDownloads;
+        this.directoriosDescarga = directoriosDescarga;
     }
-    
-    
+
+    //Devuelve ultimo archivo descargado
     public File getLastDownloadedFile() {
         return lastDownloadedFile;
     }
@@ -52,9 +54,9 @@ public class DownloadWorker extends SwingWorker<Void, String>{
             String line;
             while ((line = br.readLine()) != null) {
                 System.out.println(line);
-                publish(line);
+                publish(line); //Lineas mostradas en JTextArea con info de descarga
 
-                if (line.contains("[download]") && line.contains("%")) {
+                if (line.contains("[download]") && line.contains("%")) { //Si la linea contiene % actualiza JProgressBar
                     int percent = extractPercentage(line);
                     if (percent >= 0 && percent <= 100) {
                         setProgress(percent);
@@ -74,6 +76,7 @@ public class DownloadWorker extends SwingWorker<Void, String>{
                         latest = f;
                     }
                 }
+                
                 //Para la tabla
                 lastDownloadedFile = latest;
                 FileInformation info = fileInfo(lastDownloadedFile); //Crea objeto FileInfo con los datos
@@ -81,12 +84,10 @@ public class DownloadWorker extends SwingWorker<Void, String>{
                 SwingUtilities.invokeLater(new Runnable() { //Añade el objeto a la tabla
                     @Override
                     public void run() {
-                        model.addFile(info);
-                        DefaultListModel<String> listModel = (DefaultListModel<String>) lstDownloads.getModel();
-                        listModel.addElement(info.name);
+                        tblModel.addFile(info);
                     }
                 });
-                fProp.guardarDescargas(model.getFileList()); //Guarda la lista de descargas en downloads.json
+                fp.guardarDatos(new DirectoryInformation(tblModel.getFileList(), directoriosDescarga)); //Guarda el archivo .json
             }
         }
 
@@ -94,7 +95,7 @@ public class DownloadWorker extends SwingWorker<Void, String>{
         return null;
     }
 
-    //Opcional --> Ejecuta thread, recibe datos de publish() y mustra txt en JTestArea
+    //Recibe el texto enviado de publish y lo muestra en JTextArea
     @Override
     protected void process(List<String> chunks) {
         for (String line : chunks) {
@@ -102,7 +103,7 @@ public class DownloadWorker extends SwingWorker<Void, String>{
         }
     }
 
-    //Metodo llamado cuando doInBackground termina
+    //Se ejecuta cuando doInBackground ha terminado, muestra mensaje de finalización
     @Override
     protected void done() {
         progressBar.setIndeterminate(false);
@@ -111,7 +112,7 @@ public class DownloadWorker extends SwingWorker<Void, String>{
         JOptionPane.showMessageDialog(null, "Download completed!", "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    //Extrae el % de la descarga
+    //Extrae el % de cada linea de la descarga
     private int extractPercentage(String line) {
         try {
             int start = line.indexOf("[download]") + 10;
@@ -125,8 +126,8 @@ public class DownloadWorker extends SwingWorker<Void, String>{
         }
         return -1;
     }
-    
-    //Extrae la informacion de la descarga para mostrarla en JTable
+
+    //Crea un objeto FileInformation con los datos de la descarga
     private FileInformation fileInfo(File file) {
         String name = file.getName();
         long size = file.length();
@@ -138,7 +139,7 @@ public class DownloadWorker extends SwingWorker<Void, String>{
         }
 
         String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(file.lastModified()));
-        
-        return new FileInformation(name, size, type, date);
+        String folderPath = file.getParent();
+        return new FileInformation(name, size, type, date, folderPath);
     }
 }

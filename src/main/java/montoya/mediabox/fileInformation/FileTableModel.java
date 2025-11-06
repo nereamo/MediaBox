@@ -4,10 +4,10 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 /**
- * Difinir como mostrar los datos en la tabla de JFrame
+ * Difine que datos mostrar en la tabla de JFrame
+ *
  * @author Nerea
  */
-
 public class FileTableModel extends AbstractTableModel {
 
     private final String[] column = {"Name", "Size (MB)", "Type", "Date"};

@@ -1,61 +1,91 @@
 package montoya.mediabox;
 
-import montoya.mediabox.download.DownloadManager;
+import java.io.*;
+import java.util.*;
+import javax.swing.*;
+import java.awt.datatransfer.*;
 import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
-import java.awt.datatransfer.*;
-import java.io.*;
-import montoya.mediabox.dialogs.JDialogAbout;
 import java.util.logging.Logger;
-import javax.swing.*;
+import montoya.mediabox.download.DownloadManager;
+import montoya.mediabox.dialogs.DialogAbout;
+import montoya.mediabox.controller.MainViewController;
 import montoya.mediabox.fileInformation.FileInformation;
 import montoya.mediabox.fileInformation.FileTableModel;
-import java.util.*;
 import montoya.mediabox.fileInformation.FileProperties;
-import montoya.mediabox.controller.MainViewController;
+import montoya.mediabox.fileInformation.DirectoryInformation;
+import montoya.mediabox.fileInformation.FolderItem;
 
 /**
  * Class principal
+ *
  * @author Nerea
  */
 public class MainFrame extends JFrame {
-    
+
     private static final Logger logger = Logger.getLogger(MainFrame.class.getName());
     private DownloadManager downloader;
     private Preferences preferences;
     List<FileInformation> fileList = new ArrayList<>();
+    private final Set<String> directoriosDescarga = new HashSet<>();
     private FileTableModel model;
-    private FileProperties fProp;
-    private MainViewController aProp;
-   
+    private FileProperties fp;
+    private MainViewController mvc;
+
     public MainFrame() {
         initComponents();
-        fProp = new FileProperties();
-        downloader = new DownloadManager(fProp);
+        fp = new FileProperties();
+        downloader = new DownloadManager(fp);
         preferences = new Preferences(this, downloader);
-        aProp = new MainViewController(this, mainPanel, preferences, barProgress);
-        
-        preferences.setAppProperties(aProp);
-        
-        aProp.configFrame();
-        aProp.configPreferencesPanel();
-        
-        ButtonGroup bg = new ButtonGroup();
-        bg.add(radioMp4);
-        bg.add(radioMp3);
-        
-        radioMp4.setSelected(true);
-        
-        fileList = fProp.cargarDescargas();
-        model = new FileTableModel(fileList); 
-        tblInfo.setModel(model); 
-        
-        //Carga los archivos en la lista
-        DefaultListModel<String> listModel = new DefaultListModel<>();
+        mvc = new MainViewController(this, mainPanel, preferences, radioMp4, radioMp3, barProgress);
+
+        preferences.setMainController(mvc);
+
+        //Métodos de clase MainViewController
+        mvc.configFrame();
+        mvc.configPreferencesPanel();
+        mvc.configRadioButtons();
+
+        DirectoryInformation data = fp.cargarDatos();
+        fileList = data.downloads;
+        directoriosDescarga.addAll(data.downloadFolders);
+
+        //AbstractTableMode
+        model = new FileTableModel(fileList);
+        tblInfo.setModel(model);
+
+        //Lista de objeto 'descarga'
+        DefaultListModel listModel = new DefaultListModel(); // sin <FolderItem>
+        for (String folder : directoriosDescarga) {
+            listModel.addElement(new FolderItem(folder)); // guardamos FolderItem igual
+        }
         lstDownloads.setModel(listModel);
+
+        lstDownloads.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                Object selected = lstDownloads.getSelectedValue();
+                if (selected instanceof FolderItem) {
+                    FolderItem folder = (FolderItem) selected;
+                    mvc.mostrarDescargasPorDirectorio(folder.getFullPath(), fileList, tblInfo);
+                }
+            }
+        });
+
     }
-    
+
+//    private void mostrarDescargasPorDirectorio(String folderPath) {
+//        List<FileInformation> filtrados = new ArrayList<>();
+//
+//        for (FileInformation info : fileList) {
+//            if (info.folderPath.equals(folderPath)) {
+//                filtrados.add(info);
+//            }
+//        }
+//
+//        tblInfo.setModel(new FileTableModel(filtrados));
+//    }
+
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -215,6 +245,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(cbxFilter);
         cbxFilter.setBounds(820, 280, 230, 23);
 
+        lstDownloads.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lstDownloads.setPreferredSize(new java.awt.Dimension(40, 60));
         jScrollPane2.setViewportView(lstDownloads);
 
@@ -330,46 +361,49 @@ public class MainFrame extends JFrame {
 
     //Preferences
     private void mnuPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPreferencesActionPerformed
-        aProp.showPreferencesPanel();
+        mvc.showPreferencesPanel();
     }//GEN-LAST:event_mnuPreferencesActionPerformed
 
     //About
     private void mnuAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAboutActionPerformed
-        JDialogAbout dialogAbout = new JDialogAbout(this,true);
+        DialogAbout dialogAbout = new DialogAbout(this, true);
         dialogAbout.setVisible(true);
     }//GEN-LAST:event_mnuAboutActionPerformed
 
     //Exit
     private void mnuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExitActionPerformed
-        if(JOptionPane.showConfirmDialog(null, "Do you want to exit the application?", "Exit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+        if (JOptionPane.showConfirmDialog(null, "Do you want to exit the application?", "Exit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
     }//GEN-LAST:event_mnuExitActionPerformed
 
     //Directorio para guardar archivo descargado
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
-       JFileChooser directory = new JFileChooser();
+        JFileChooser directory = new JFileChooser();
         directory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        
+
         int result = directory.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFolder = directory.getSelectedFile();
-            String folderPath = selectedFolder.getAbsolutePath();
-            txtFolder.setText(selectedFolder.getAbsolutePath());
-            
-            // Añadir el directorio a la JList si no está ya
-        DefaultListModel<String> listModel = (DefaultListModel<String>) lstDownloads.getModel();
-        if (!listModel.contains(folderPath)) {
-            listModel.addElement(folderPath);
+
+            if (selectedFolder != null && selectedFolder.isDirectory()) {
+                String folderPath = selectedFolder.getAbsolutePath();
+                txtFolder.setText(selectedFolder.getAbsolutePath());
+
+                // Añadir el directorio a la JList si no está ya
+                if (directoriosDescarga.add(folderPath)) {
+                    DefaultListModel listModel = (DefaultListModel) lstDownloads.getModel();
+                    listModel.addElement(new FolderItem(folderPath));
+                }
+            }
         }
-        } 
     }//GEN-LAST:event_btnBrowseActionPerformed
 
     //Copia del portapapeles a JTextField "urlField"
     private void btnPasteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPasteActionPerformed
         Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
         DataFlavor df = DataFlavor.stringFlavor;
-        if(cb.isDataFlavorAvailable(df)){
+        if (cb.isDataFlavorAvailable(df)) {
             try {
                 String clipboardContent = (String) cb.getData(df);
                 txtUrl.setText(clipboardContent);
@@ -384,18 +418,24 @@ public class MainFrame extends JFrame {
     //Ejecuta la descarga
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
         //new Thread(() -> downloader.download(url, folder, format, areaInfo, barProgress)).start(); --> Expresion lambda
-        
+
         String url = txtUrl.getText().trim();
         String folder = txtFolder.getText().trim();
         String format = radioMp3.isSelected() ? "mp3" : "mp4";
 
         downloader.setTempPath(folder);
         areaInfo.setText("");
-        
-        Thread th = new Thread(){
+
+        Thread th = new Thread() {
             @Override
-            public void run(){
-                downloader.download(url, folder, format, areaInfo, barProgress, model, lstDownloads);
+            public void run() {
+                downloader.download(url, folder, format, areaInfo, barProgress, model, lstDownloads, directoriosDescarga);
+
+                if (directoriosDescarga.add(folder)) {
+                    DefaultListModel listModel = (DefaultListModel) lstDownloads.getModel();
+                    listModel.addElement(new FolderItem(folder));
+                }
+                fp.guardarDatos(new DirectoryInformation(fileList, directoriosDescarga));
             }
         };
         th.start();
