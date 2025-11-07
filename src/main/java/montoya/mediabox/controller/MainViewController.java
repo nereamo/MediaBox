@@ -2,9 +2,9 @@ package montoya.mediabox.controller;
 
 import java.io.File;
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.ArrayList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import montoya.mediabox.MainFrame;
@@ -103,12 +103,12 @@ public class MainViewController {
     }
 
     //Configuracion de JList, al seleccionar un directorio muestra las descargas.
-    public void configDownloadList(JList<?> lstDownloads, List<FileInformation> fileList, JTable tblInfo) {
-        lstDownloads.addListSelectionListener(new ListSelectionListener() {
+    public void configDownloadList(JList<?> listDirectories, List<FileInformation> fileList, JTable tblInfo) {
+        listDirectories.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
-                    Object selected = lstDownloads.getSelectedValue();
+                    Object selected = listDirectories.getSelectedValue();
                     if (selected instanceof FolderItem folder) {
                         mostrarDescargasPorDirectorio(folder.getFullPath(), fileList, tblInfo);
                     }
@@ -118,27 +118,27 @@ public class MainViewController {
     }
 
     //Borra la descarga tanto física como de la interfaz y actualiza los directorios mostrados
-    public void deleteDownload(FileInformation info, List<FileInformation> fileList, Set<String> directoriosDescarga, FileProperties fp) {
+    public void deleteDownload(FileInformation fileInfo, List<FileInformation> fileList, Set<String> directoriosDescarga, FileProperties fp) {
 
         //Borra descarga fisica
-        File f = new File(info.folderPath, info.name); 
+        File f = new File(fileInfo.folderPath, fileInfo.name); 
         if (f.exists()) {
             f.delete();
         }
 
-        fileList.remove(info);
+        fileList.remove(fileInfo);
 
         //Si la carpeta esta vacia, la quita de JList lstDownload
         boolean emptyFolder = true; 
         for (FileInformation fi : fileList) {
-            if (fi.folderPath.equals(info.folderPath)) {
+            if (fi.folderPath.equals(fileInfo.folderPath)) {
                 emptyFolder = false;
                 break;
             }
         }
 
         if (emptyFolder) {
-            directoriosDescarga.remove(info.folderPath);
+            directoriosDescarga.remove(fileInfo.folderPath);
         }
 
         fp.guardarDatos(new DirectoryInformation(fileList, directoriosDescarga));

@@ -1,12 +1,12 @@
 package montoya.mediabox.download;
 
 import java.io.*;
+import javax.swing.*;
+import java.util.Set;
+import java.util.List;
+import java.util.Date;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import javax.swing.*;
 import montoya.mediabox.fileInformation.DirectoryInformation;
 import montoya.mediabox.fileInformation.FileInformation;
 import montoya.mediabox.fileInformation.FileProperties;
@@ -24,26 +24,26 @@ public class DownloadWorker extends SwingWorker<Void, String> {
     private final String folder;
     private final JTextArea outputArea;
     private final JProgressBar progressBar;
-    private File lastDownloadedFile;
+    private File lastDownloadFile;
     private final FileTableModel tblModel;
-    private JList<FolderItem> lstDownloads;
+    private JList<FolderItem> listDirectories;
     private final FileProperties fp;
-    private final Set<String> directoriosDescarga;
+    private final Set<String> downloadDirectories;
 
-    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, FileProperties fp, JList<FolderItem> lstDownloads, Set<String> directoriosDescarga) {
+    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, FileProperties fp, JList<FolderItem> listDirectories, Set<String> dowloadDirectories) {
         this.pb = pb;
         this.folder = folder;
         this.outputArea = outputArea;
         this.progressBar = progressBar;
         this.tblModel = tblModel;
         this.fp = fp;
-        this.lstDownloads = lstDownloads;
-        this.directoriosDescarga = directoriosDescarga;
+        this.listDirectories = listDirectories;
+        this.downloadDirectories = dowloadDirectories;
     }
 
     //Devuelve ultimo archivo descargado
     public File getLastDownloadedFile() {
-        return lastDownloadedFile;
+        return lastDownloadFile;
     }
 
     //Metodo principal para ejecucion en segundo plano
@@ -79,8 +79,8 @@ public class DownloadWorker extends SwingWorker<Void, String> {
                 }
                 
                 //Para la tabla
-                lastDownloadedFile = latest;
-                FileInformation info = fileInfo(lastDownloadedFile); //Crea objeto FileInfo con los datos
+                lastDownloadFile = latest;
+                FileInformation info = fileInfo(lastDownloadFile); //Crea objeto FileInfo con los datos
                 //SwingUtilities.invokeLater(() -> model.addFile(info)); // --> lambda
                 SwingUtilities.invokeLater(new Runnable() { //Añade el objeto a la tabla
                     @Override
@@ -88,7 +88,7 @@ public class DownloadWorker extends SwingWorker<Void, String> {
                         tblModel.addFile(info);
                     }
                 });
-                fp.guardarDatos(new DirectoryInformation(tblModel.getFileList(), directoriosDescarga)); //Guarda el archivo .json
+                fp.guardarDatos(new DirectoryInformation(tblModel.getFileList(), downloadDirectories)); //Guarda el archivo .json
             }
         }
 

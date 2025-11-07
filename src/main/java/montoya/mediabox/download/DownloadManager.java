@@ -20,7 +20,7 @@ public class DownloadManager {
     private boolean createM3u;
     private double maxSpeed;
     private DownloadWorker dw;
-    private FileProperties fProp;
+    private FileProperties fp;
 
     public DownloadManager() {
     }
@@ -66,12 +66,12 @@ public class DownloadManager {
         return null;
     }
 
-    public DownloadManager(FileProperties fProp) {
-        this.fProp = fProp;
+    public DownloadManager(FileProperties fp) {
+        this.fp = fp;
     }
 
     //Verifica si los campos de preferences se han completado
-    public void download(String url, String folder, String format, JTextArea outputArea, JProgressBar progressBar, FileTableModel model, JList<FolderItem> lstDownloads, Set<String> directoriosDescarga) {
+    public void download(String url, String folder, String format, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, JList<FolderItem> listDirectories, Set<String> downloadDirectories) {
         if (url.isEmpty() || folder.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter a URL and select a folder.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -87,7 +87,7 @@ public class DownloadManager {
         progressBar.setVisible(true);
         progressBar.setIndeterminate(true);
 
-        dw = new DownloadWorker(pb, folder, outputArea, progressBar, model, fProp, lstDownloads, directoriosDescarga);
+        dw = new DownloadWorker(pb, folder, outputArea, progressBar, tblModel, fp, listDirectories, downloadDirectories);
         DownloadWorker task = dw;
 
         task.addPropertyChangeListener(evt -> {

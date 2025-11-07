@@ -28,8 +28,8 @@ public class MainFrame extends JFrame {
     private DownloadManager downloader;
     private Preferences preferences;
     List<FileInformation> fileList = new ArrayList<>();
-    private final Set<String> directoriosDescarga = new HashSet<>();
-    private FileTableModel model;
+    private final Set<String> downloadDirectories = new HashSet<>();
+    private FileTableModel tblModel;
     private FileProperties fp;
     private MainViewController mvc;
 
@@ -50,21 +50,21 @@ public class MainFrame extends JFrame {
         //Carga datos guardados en archivo .json
         DirectoryInformation data = fp.cargarDatos();
         fileList = data.downloads;
-        directoriosDescarga.addAll(data.downloadFolders);
+        downloadDirectories.addAll(data.downloadFolders);
 
         //AbstractTableMode
-        model = new FileTableModel(fileList);
-        tblInfo.setModel(model);
+        tblModel = new FileTableModel(fileList);
+        tblInfo.setModel(tblModel);
 
         //Lista de objeto 'descarga'
         DefaultListModel listModel = new DefaultListModel();
-        for (String folder : directoriosDescarga) {
+        for (String folder : downloadDirectories) {
             listModel.addElement(new FolderItem(folder));
         }
-        lstDownloads.setModel(listModel);
+        listDirectories.setModel(listModel);
         
         //Muestra las descargas pertenecientes a un directorio
-        mvc.configDownloadList(lstDownloads, fileList, tblInfo);
+        mvc.configDownloadList(listDirectories, fileList, tblInfo);
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -92,7 +92,7 @@ public class MainFrame extends JFrame {
         barProgress = new javax.swing.JProgressBar();
         cbxFilter = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
-        lstDownloads = new javax.swing.JList<>();
+        listDirectories = new javax.swing.JList<>();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblInfo = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
@@ -227,9 +227,9 @@ public class MainFrame extends JFrame {
         mainPanel.add(cbxFilter);
         cbxFilter.setBounds(790, 230, 230, 23);
 
-        lstDownloads.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lstDownloads.setPreferredSize(new java.awt.Dimension(40, 60));
-        jScrollPane2.setViewportView(lstDownloads);
+        listDirectories.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        listDirectories.setPreferredSize(new java.awt.Dimension(40, 60));
+        jScrollPane2.setViewportView(listDirectories);
 
         mainPanel.add(jScrollPane2);
         jScrollPane2.setBounds(560, 280, 120, 240);
@@ -383,8 +383,8 @@ public class MainFrame extends JFrame {
                 txtFolder.setText(selectedFolder.getAbsolutePath());
 
                 // Añadir el directorio a la JList si no está ya
-                if (directoriosDescarga.add(folderPath)) {
-                    DefaultListModel listModel = (DefaultListModel) lstDownloads.getModel();
+                if (downloadDirectories.add(folderPath)) {
+                    DefaultListModel listModel = (DefaultListModel) listDirectories.getModel();
                     listModel.addElement(new FolderItem(folderPath));
                 }
             }
@@ -421,13 +421,13 @@ public class MainFrame extends JFrame {
         Thread th = new Thread() {
             @Override
             public void run() {
-                downloader.download(url, folder, format, areaInfo, barProgress, model, lstDownloads, directoriosDescarga);
+                downloader.download(url, folder, format, areaInfo, barProgress, tblModel, listDirectories, downloadDirectories);
 
-                if (directoriosDescarga.add(folder)) {
-                    DefaultListModel listModel = (DefaultListModel) lstDownloads.getModel();
+                if (downloadDirectories.add(folder)) {
+                    DefaultListModel listModel = (DefaultListModel) listDirectories.getModel();
                     listModel.addElement(new FolderItem(folder));
                 }
-                fp.guardarDatos(new DirectoryInformation(fileList, directoriosDescarga));
+                fp.guardarDatos(new DirectoryInformation(fileList, downloadDirectories));
             }
         };
         th.start();
@@ -460,17 +460,17 @@ public class MainFrame extends JFrame {
             return;
         }
 
-        FileInformation info = model.getFileAt(row);
+        FileInformation info = tblModel.getFileAt(row);
 
         int confirm = JOptionPane.showConfirmDialog(this,"Do you want to delete this file? - " + info.name,"Delete",JOptionPane.YES_NO_OPTION);
 
         if (confirm == JOptionPane.YES_OPTION) {
 
             //Borra archivo fisico y de interfaz
-            mvc.deleteDownload(info, fileList, directoriosDescarga, fp);
+            mvc.deleteDownload(info, fileList, downloadDirectories, fp);
 
             //Actualiza tabla
-            Object selected = lstDownloads.getSelectedValue();
+            Object selected = listDirectories.getSelectedValue();
             if (selected instanceof FolderItem folder) {
                 mvc.mostrarDescargasPorDirectorio(folder.getFullPath(), fileList, tblInfo);
             } else {
@@ -479,12 +479,12 @@ public class MainFrame extends JFrame {
 
             //Refresca directorios de lista
             DefaultListModel<FolderItem> newModel = new DefaultListModel<>();
-            for (String folderPath : directoriosDescarga) {
+            for (String folderPath : downloadDirectories) {
                 newModel.addElement(new FolderItem(folderPath));
             }
-            lstDownloads.setModel(newModel);
+            listDirectories.setModel(newModel);
 
-            fp.guardarDatos(new DirectoryInformation(fileList, directoriosDescarga));
+            fp.guardarDatos(new DirectoryInformation(fileList, downloadDirectories));
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
@@ -530,8 +530,8 @@ public class MainFrame extends JFrame {
     private javax.swing.JLabel lblFolder;
     private javax.swing.JLabel lblFormat;
     private javax.swing.JLabel lblUrl;
+    private javax.swing.JList<FolderItem> listDirectories;
     private javax.swing.JLabel logoLabel;
-    private javax.swing.JList<FolderItem> lstDownloads;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem mnuAbout;

@@ -14,12 +14,12 @@ public class Preferences extends javax.swing.JPanel {
 
     private MainFrame mainFrame;
     private MainViewController mvc;
-    private final DownloadManager download;
+    private final DownloadManager dm;
 
-    public Preferences(MainFrame mainFrame, DownloadManager download) {
+    public Preferences(MainFrame mainFrame, DownloadManager dm) {
         initComponents();
         this.mainFrame = mainFrame;
-        this.download = download;
+        this.dm = dm;
         mbSpeedSpinner();
     }
 
@@ -37,10 +37,10 @@ public class Preferences extends javax.swing.JPanel {
 
     //Guarda los valores de preferences
     public void savePreferences() {
-        download.setTempPath(txtPathTemp.getText().trim());
-        download.setYtDlpLocation(txtYtDlp.getText().trim());
-        download.setCreateM3u(chkCreate.isSelected());
-        download.setMaxSpeed(((Number) spnSpeed.getValue()).doubleValue());
+        dm.setTempPath(txtPathTemp.getText().trim());
+        dm.setYtDlpLocation(txtYtDlp.getText().trim());
+        dm.setCreateM3u(chkCreate.isSelected());
+        dm.setMaxSpeed(((Number) spnSpeed.getValue()).doubleValue());
 
         JOptionPane.showMessageDialog(this, "Preferences saved!", "Saved", JOptionPane.INFORMATION_MESSAGE);
         mvc.showMainFramePanel();

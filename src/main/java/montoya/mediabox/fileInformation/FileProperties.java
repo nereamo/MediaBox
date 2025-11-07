@@ -1,10 +1,10 @@
 package montoya.mediabox.fileInformation;
 
 import java.io.*;
+import java.util.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
 
 /**
  * Metodos necesarios para la creación, guardado y recuperación del archivo .json que almacena informacion de las descargas
@@ -24,7 +24,7 @@ public class FileProperties {
                 out.writeObject(data);
             }
         } catch (IOException e) {
-            System.err.println("Error al guardar datos de descarga: " + e.getMessage());
+            System.err.println("Error saving download data: " + e.getMessage());
         }
     }
 

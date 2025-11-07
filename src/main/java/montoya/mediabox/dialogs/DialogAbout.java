@@ -1,8 +1,8 @@
 package montoya.mediabox.dialogs;
 
 import java.awt.*;
-import java.util.logging.Logger;
 import javax.swing.*;
+import java.util.logging.Logger;
 
 /**
  * Contiene la información de alumno, curso y los recursos para la tarea
