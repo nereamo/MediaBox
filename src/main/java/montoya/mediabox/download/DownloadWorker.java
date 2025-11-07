@@ -11,6 +11,7 @@ import montoya.mediabox.fileInformation.DirectoryInformation;
 import montoya.mediabox.fileInformation.FileInformation;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
+import montoya.mediabox.fileInformation.FolderItem;
 
 /**
  * Clase creada con ayuda de Copilot para entender como funciona SwingWorker y que metodos utilizar. SwingWorker ejecuta tareas en segundo plano impidiendo que no se bloquee la GUI. Contiene metodos para descaragar archivos en segundo plano
@@ -25,11 +26,11 @@ public class DownloadWorker extends SwingWorker<Void, String> {
     private final JProgressBar progressBar;
     private File lastDownloadedFile;
     private final FileTableModel tblModel;
-    private JList<String> lstDownloads;
+    private JList<FolderItem> lstDownloads;
     private final FileProperties fp;
     private final Set<String> directoriosDescarga;
 
-    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, FileProperties fp, JList<String> lstDownloads, Set<String> directoriosDescarga) {
+    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, FileProperties fp, JList<FolderItem> lstDownloads, Set<String> directoriosDescarga) {
         this.pb = pb;
         this.folder = folder;
         this.outputArea = outputArea;

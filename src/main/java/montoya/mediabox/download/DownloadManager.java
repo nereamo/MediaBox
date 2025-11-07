@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.swing.*;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
+import montoya.mediabox.fileInformation.FolderItem;
 
 /**
  * Contiene los parametros necesarios para la configuracion de la descarga.
@@ -70,7 +71,7 @@ public class DownloadManager {
     }
 
     //Verifica si los campos de preferences se han completado
-    public void download(String url, String folder, String format, JTextArea outputArea, JProgressBar progressBar, FileTableModel model, JList<String> lstDownloads, Set<String> directoriosDescarga) {
+    public void download(String url, String folder, String format, JTextArea outputArea, JProgressBar progressBar, FileTableModel model, JList<FolderItem> lstDownloads, Set<String> directoriosDescarga) {
         if (url.isEmpty() || folder.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter a URL and select a folder.", "Error", JOptionPane.ERROR_MESSAGE);
             return;

@@ -47,6 +47,7 @@ public class MainFrame extends JFrame {
         mvc.configPreferencesPanel();
         mvc.configRadioButtons();
 
+        //Carga datos guardados en archivo .json
         DirectoryInformation data = fp.cargarDatos();
         fileList = data.downloads;
         directoriosDescarga.addAll(data.downloadFolders);
@@ -56,35 +57,15 @@ public class MainFrame extends JFrame {
         tblInfo.setModel(model);
 
         //Lista de objeto 'descarga'
-        DefaultListModel listModel = new DefaultListModel(); // sin <FolderItem>
+        DefaultListModel listModel = new DefaultListModel();
         for (String folder : directoriosDescarga) {
-            listModel.addElement(new FolderItem(folder)); // guardamos FolderItem igual
+            listModel.addElement(new FolderItem(folder));
         }
         lstDownloads.setModel(listModel);
-
-        lstDownloads.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                Object selected = lstDownloads.getSelectedValue();
-                if (selected instanceof FolderItem) {
-                    FolderItem folder = (FolderItem) selected;
-                    mvc.mostrarDescargasPorDirectorio(folder.getFullPath(), fileList, tblInfo);
-                }
-            }
-        });
-
+        
+        //Muestra las descargas pertenecientes a un directorio
+        mvc.configDownloadList(lstDownloads, fileList, tblInfo);
     }
-
-//    private void mostrarDescargasPorDirectorio(String folderPath) {
-//        List<FileInformation> filtrados = new ArrayList<>();
-//
-//        for (FileInformation info : fileList) {
-//            if (info.folderPath.equals(folderPath)) {
-//                filtrados.add(info);
-//            }
-//        }
-//
-//        tblInfo.setModel(new FileTableModel(filtrados));
-//    }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -115,6 +96,7 @@ public class MainFrame extends JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         tblInfo = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
+        btnDelete = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mnuExit = new javax.swing.JMenuItem();
@@ -135,8 +117,8 @@ public class MainFrame extends JFrame {
         getContentPane().setLayout(null);
 
         mainPanel.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
-        mainPanel.setMinimumSize(new java.awt.Dimension(1100, 700));
-        mainPanel.setPreferredSize(new java.awt.Dimension(1100, 670));
+        mainPanel.setMinimumSize(new java.awt.Dimension(1200, 700));
+        mainPanel.setPreferredSize(new java.awt.Dimension(1200, 670));
         mainPanel.setLayout(null);
 
         lblUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -146,7 +128,7 @@ public class MainFrame extends JFrame {
 
         txtUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mainPanel.add(txtUrl);
-        txtUrl.setBounds(150, 50, 250, 23);
+        txtUrl.setBounds(150, 50, 330, 23);
 
         btnPaste.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnPaste.setText("Paste");
@@ -166,16 +148,16 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnClear);
-        btnClear.setBounds(410, 50, 100, 24);
+        btnClear.setBounds(490, 50, 100, 24);
 
         lblFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblFolder.setText("Folder:");
         mainPanel.add(lblFolder);
-        lblFolder.setBounds(50, 110, 50, 20);
+        lblFolder.setBounds(700, 20, 50, 20);
 
         txtFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mainPanel.add(txtFolder);
-        txtFolder.setBounds(150, 140, 250, 23);
+        txtFolder.setBounds(800, 50, 330, 23);
 
         btnBrowse.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnBrowse.setText("Browse");
@@ -185,22 +167,22 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnBrowse);
-        btnBrowse.setBounds(50, 140, 90, 24);
+        btnBrowse.setBounds(700, 50, 90, 24);
 
         lblFormat.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblFormat.setText("Format: ");
         mainPanel.add(lblFormat);
-        lblFormat.setBounds(50, 200, 53, 17);
+        lblFormat.setBounds(50, 110, 53, 17);
 
         radioMp4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         radioMp4.setText("MP4 (Video)");
         mainPanel.add(radioMp4);
-        radioMp4.setBounds(50, 230, 110, 22);
+        radioMp4.setBounds(50, 140, 110, 22);
 
         radioMp3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         radioMp3.setText("MP3 (Audio)");
         mainPanel.add(radioMp3);
-        radioMp3.setBounds(180, 230, 110, 22);
+        radioMp3.setBounds(180, 140, 110, 22);
 
         btnDownload.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnDownload.setText("Download");
@@ -210,7 +192,7 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnDownload);
-        btnDownload.setBounds(50, 300, 120, 24);
+        btnDownload.setBounds(50, 280, 120, 24);
 
         btnOpenLast.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnOpenLast.setText("Open Last");
@@ -220,11 +202,11 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnOpenLast);
-        btnOpenLast.setBounds(190, 300, 120, 24);
+        btnOpenLast.setBounds(180, 280, 120, 24);
 
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/largelogoSmall3.png"))); // NOI18N
         mainPanel.add(logoLabel);
-        logoLabel.setBounds(900, 570, 180, 50);
+        logoLabel.setBounds(1000, 570, 180, 50);
 
         areaInfo.setColumns(20);
         areaInfo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -232,25 +214,25 @@ public class MainFrame extends JFrame {
         jScrollPane1.setViewportView(areaInfo);
 
         mainPanel.add(jScrollPane1);
-        jScrollPane1.setBounds(50, 390, 340, 170);
+        jScrollPane1.setBounds(50, 350, 340, 170);
 
         barProgress.setBackground(new java.awt.Color(204, 204, 204));
         barProgress.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         barProgress.setForeground(new java.awt.Color(255, 153, 51));
         mainPanel.add(barProgress);
-        barProgress.setBounds(50, 360, 340, 20);
+        barProgress.setBounds(50, 320, 340, 20);
 
         cbxFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         cbxFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Filter" }));
         mainPanel.add(cbxFilter);
-        cbxFilter.setBounds(820, 280, 230, 23);
+        cbxFilter.setBounds(790, 230, 230, 23);
 
         lstDownloads.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lstDownloads.setPreferredSize(new java.awt.Dimension(40, 60));
         jScrollPane2.setViewportView(lstDownloads);
 
         mainPanel.add(jScrollPane2);
-        jScrollPane2.setBounds(550, 320, 140, 240);
+        jScrollPane2.setBounds(560, 280, 120, 240);
 
         tblInfo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tblInfo.setModel(new javax.swing.table.DefaultTableModel(
@@ -275,15 +257,25 @@ public class MainFrame extends JFrame {
         jScrollPane3.setViewportView(tblInfo);
 
         mainPanel.add(jScrollPane3);
-        jScrollPane3.setBounds(690, 320, 360, 240);
+        jScrollPane3.setBounds(680, 280, 450, 240);
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel1.setText("Directories");
         mainPanel.add(jLabel1);
-        jLabel1.setBounds(550, 290, 70, 17);
+        jLabel1.setBounds(560, 250, 70, 17);
+
+        btnDelete.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+        mainPanel.add(btnDelete);
+        btnDelete.setBounds(1040, 230, 90, 24);
 
         getContentPane().add(mainPanel);
-        mainPanel.setBounds(0, 0, 1100, 670);
+        mainPanel.setBounds(0, 0, 1200, 670);
 
         menuBar.setBackground(new java.awt.Color(255, 102, 0));
         menuBar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 102, 0)));
@@ -461,6 +453,41 @@ public class MainFrame extends JFrame {
         }
     }//GEN-LAST:event_btnOpenLastActionPerformed
 
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        int row = tblInfo.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Select a file to delete.");
+            return;
+        }
+
+        FileInformation info = model.getFileAt(row);
+
+        int confirm = JOptionPane.showConfirmDialog(this,"Do you want to delete this file? - " + info.name,"Delete",JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+
+            //Borra archivo fisico y de interfaz
+            mvc.deleteDownload(info, fileList, directoriosDescarga, fp);
+
+            //Actualiza tabla
+            Object selected = lstDownloads.getSelectedValue();
+            if (selected instanceof FolderItem folder) {
+                mvc.mostrarDescargasPorDirectorio(folder.getFullPath(), fileList, tblInfo);
+            } else {
+                tblInfo.setModel(new FileTableModel(fileList));
+            }
+
+            //Refresca directorios de lista
+            DefaultListModel<FolderItem> newModel = new DefaultListModel<>();
+            for (String folderPath : directoriosDescarga) {
+                newModel.addElement(new FolderItem(folderPath));
+            }
+            lstDownloads.setModel(newModel);
+
+            fp.guardarDatos(new DirectoryInformation(fileList, directoriosDescarga));
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
     public static void main(String args[]) {
         /* Set the Metal look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -488,6 +515,7 @@ public class MainFrame extends JFrame {
     private javax.swing.JProgressBar barProgress;
     private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnDownload;
     private javax.swing.JButton btnOpenLast;
     private javax.swing.JButton btnPaste;
@@ -503,7 +531,7 @@ public class MainFrame extends JFrame {
     private javax.swing.JLabel lblFormat;
     private javax.swing.JLabel lblUrl;
     private javax.swing.JLabel logoLabel;
-    private javax.swing.JList<String> lstDownloads;
+    private javax.swing.JList<FolderItem> lstDownloads;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem mnuAbout;

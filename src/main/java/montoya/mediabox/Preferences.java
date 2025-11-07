@@ -81,26 +81,26 @@ public class Preferences extends javax.swing.JPanel {
         lblM3u.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblM3u.setText("File .m3u: ");
         add(lblM3u);
-        lblM3u.setBounds(60, 160, 70, 20);
+        lblM3u.setBounds(90, 170, 66, 20);
 
         chkCreate.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         chkCreate.setText("Create");
         add(chkCreate);
-        chkCreate.setBounds(60, 190, 80, 21);
+        chkCreate.setBounds(180, 170, 80, 21);
 
         lblSpeed.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblSpeed.setText("Speed: ");
         add(lblSpeed);
-        lblSpeed.setBounds(60, 240, 50, 20);
+        lblSpeed.setBounds(100, 240, 50, 20);
 
         spnSpeed.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(spnSpeed);
-        spnSpeed.setBounds(60, 270, 100, 23);
+        spnSpeed.setBounds(180, 240, 100, 23);
 
         lblMbs.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblMbs.setText("MB/s");
         add(lblMbs);
-        lblMbs.setBounds(170, 270, 50, 20);
+        lblMbs.setBounds(290, 240, 50, 20);
 
         lblYtDlp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblYtDlp.setText("Location yt-dlp:");
@@ -109,7 +109,7 @@ public class Preferences extends javax.swing.JPanel {
 
         txtYtDlp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(txtYtDlp);
-        txtYtDlp.setBounds(160, 350, 240, 23);
+        txtYtDlp.setBounds(280, 320, 330, 23);
 
         btnYtDlp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnYtDlp.setText("Browse");
@@ -119,7 +119,7 @@ public class Preferences extends javax.swing.JPanel {
             }
         });
         add(btnYtDlp);
-        btnYtDlp.setBounds(60, 350, 90, 24);
+        btnYtDlp.setBounds(180, 320, 90, 24);
 
         btnSave.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnSave.setText("Save");
@@ -129,7 +129,7 @@ public class Preferences extends javax.swing.JPanel {
             }
         });
         add(btnSave);
-        btnSave.setBounds(60, 470, 80, 23);
+        btnSave.setBounds(290, 450, 80, 23);
 
         btnCancel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnCancel.setText("Cancel");
@@ -139,11 +139,11 @@ public class Preferences extends javax.swing.JPanel {
             }
         });
         add(btnCancel);
-        btnCancel.setBounds(150, 470, 80, 23);
+        btnCancel.setBounds(390, 450, 80, 23);
 
         txtPathTemp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(txtPathTemp);
-        txtPathTemp.setBounds(150, 90, 240, 23);
+        txtPathTemp.setBounds(280, 90, 330, 23);
 
         btnBrowseTemp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnBrowseTemp.setText("Browse");
@@ -153,12 +153,12 @@ public class Preferences extends javax.swing.JPanel {
             }
         });
         add(btnBrowseTemp);
-        btnBrowseTemp.setBounds(50, 90, 90, 24);
+        btnBrowseTemp.setBounds(180, 90, 90, 24);
 
         lblPath.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblPath.setText("Temp Path:");
         add(lblPath);
-        lblPath.setBounds(50, 60, 90, 20);
+        lblPath.setBounds(80, 90, 80, 20);
 
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/largelogoSmall3.png"))); // NOI18N
         add(logoLabel);
@@ -222,7 +222,6 @@ public class Preferences extends javax.swing.JPanel {
     //Boton save llama a metodos save y clear
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         savePreferences();
-        clearTextFields();
     }//GEN-LAST:event_btnSaveActionPerformed
 
 
