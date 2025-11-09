@@ -30,15 +30,26 @@ Implementació de Threads.
         · Logica para obtener la ubicacion de yt-dlp.exe de forma automática.
 
 
-#Funcionalidades extra:
-
-Pegar desde Clipboard.
+# Funcionalidades extra:
+ Pegar desde Clipboard.
 
     - Permite copiar la url del portapepeles utilizando el botón "Paste" de la interfaz principal.
 
 Barra de progreso:
 
     - Muestra el progreso de descarga en un JProgressBar
+
+
+# Problemas encontrados:
+## Descarga en formato Webm:
+
+:red_circle: Problema
+
+    - Al descargar en formato Webm y despues descargar el mismo archivo pero en formato audio, se sobreescribia el archivo con extensión Webm.
+
+:white_check_mark: Solucion
+
+    - Cambiar el nombre añadiendo _audio al descargar en audio: "%(title)s_audio.%(ext)s"
         
     
 
