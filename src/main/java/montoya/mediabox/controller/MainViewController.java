@@ -25,16 +25,12 @@ public class MainViewController {
     private final MainFrame frame;
     private final JPanel mainPanel;
     private final Preferences preferences;
-    private final JRadioButton radioMp4;
-    private final JRadioButton radioMp3;
     private final JProgressBar barProgress;
 
-    public MainViewController(MainFrame frame, JPanel mainPanel, Preferences preferences, JRadioButton radioMp4, JRadioButton radioMp3, JProgressBar barProgress) {
+    public MainViewController(MainFrame frame, JPanel mainPanel, Preferences preferences, JProgressBar barProgress) {
         this.frame = frame;
         this.mainPanel = mainPanel;
         this.preferences = preferences;
-        this.radioMp4 = radioMp4;
-        this.radioMp3 = radioMp3;
         this.barProgress = barProgress;
     }
 
@@ -42,17 +38,17 @@ public class MainViewController {
     public void configFrame() {
         frame.setTitle("MediaBox");
         frame.setResizable(false);
-        frame.setSize(1200, 700);
+        frame.setSize(1200, 800);
         frame.setLocationRelativeTo(frame);
         frame.setLayout(null);
 
-        mainPanel.setSize(1200, 700);
+        mainPanel.setSize(1200, 800);
         frame.getContentPane().add(mainPanel);
     }
 
     //Configuración de JPanel Preferences
     public void configPreferencesPanel() {
-        preferences.setBounds(0, 0, 1200, 700);
+        preferences.setBounds(0, 0, 1200, 800);
         preferences.setVisible(false);
         frame.getContentPane().add(preferences);
     }
@@ -67,14 +63,6 @@ public class MainViewController {
     public void showPreferencesPanel() {
         mainPanel.setVisible(false);
         preferences.setVisible(true);
-    }
-
-    public void configRadioButtons() {
-        ButtonGroup bg = new ButtonGroup();
-        bg.add(radioMp4);
-        bg.add(radioMp3);
-
-        radioMp4.setSelected(true);
     }
 
     //Actualiza el progreso de JProgressBar
@@ -94,8 +82,11 @@ public class MainViewController {
         cbbxFilter.removeAllItems();
         cbbxFilter.addItem("All");
         cbbxFilter.addItem("MP4");
+        cbbxFilter.addItem("MKV");
+        cbbxFilter.addItem("WEBM");
         cbbxFilter.addItem("MP3");
-        cbbxFilter.addItem("M3U");
+        cbbxFilter.addItem("WAV");
+        cbbxFilter.addItem("M4A");
     }
     
     //Muestra las descargas pertenecientes a un directorio y permite flitrarlas por tipo de archivo
@@ -113,9 +104,15 @@ public class MainViewController {
                 filtered.add(fi);
             } else if (selectedFilter.equals("MP4") && fi.type.contains("mp4")) {
                 filtered.add(fi);
+            } else if (selectedFilter.equals("MKV") && fi.type.contains("x-matroska")) {
+                filtered.add(fi);
+            } else if (selectedFilter.equals("WEBM") && fi.type.contains("webm")) {
+                filtered.add(fi);
             } else if (selectedFilter.equals("MP3") && fi.type.contains("mpeg")) {
                 filtered.add(fi);
-            } else if (selectedFilter.equals("m3u") && fi.type.contains("m3u")) {
+            } else if (selectedFilter.equals("WAV") && fi.type.contains("wav")) {
+                filtered.add(fi);
+            } else if (selectedFilter.equals("M4A") && fi.type.contains("m4a")) {
                 filtered.add(fi);
             }
         }

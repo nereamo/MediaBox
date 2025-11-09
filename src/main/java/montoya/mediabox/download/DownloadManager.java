@@ -1,6 +1,8 @@
 package montoya.mediabox.download;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import javax.swing.*;
 import montoya.mediabox.fileInformation.FileProperties;
@@ -100,31 +102,154 @@ public class DownloadManager {
         task.execute();
     }
 
-    //Instrucciones de descarga dependiendo del formato seleccioando
+//    //Instrucciones de descarga dependiendo del formato seleccioando
+//    private ProcessBuilder buildCommand(String url, String folder, String format) {
+//        
+//        ProcessBuilder pb;
+//        
+//        if ("mp3".equals(format)) {
+//            pb = new ProcessBuilder(
+//                    ytDlpLocation,
+//                    "-x", "--audio-format", "mp3", "-o", folder + File.separator + "%(title)s.%(ext)s", url);
+//
+//        } else {
+//            pb = new ProcessBuilder(
+//                    ytDlpLocation,
+//                    "-f", "mp4", "-o", folder + File.separator + "%(title)s.%(ext)s", url);
+//        }
+//
+//        //Archivo .m3u
+//        if (createM3u) {
+//            pb.command().add("--write-info-json");
+//        }
+//
+//        //Limite de velocidad
+//        if (maxSpeed > 0) {
+//            pb.command().add("--limit-rate");
+//            pb.command().add(maxSpeed + "M");
+//        }
+//
+//        pb.redirectErrorStream(true);
+//        return pb;
+//    }
+    
+//    //Instrucciones de descarga dependiendo del formato seleccioando
+//    private ProcessBuilder buildCommand(String url, String folder, String format) {
+//        
+//        ProcessBuilder pb;
+//        
+//        if ("mp3".equals(format)) {
+//            pb = new ProcessBuilder(
+//                    ytDlpLocation,
+//                    "-x", "--audio-format", "mp3", "-o", folder + File.separator + "%(title)s.%(ext)s", url);
+//
+//        } else if("mp4".equals(format)){
+//            pb = new ProcessBuilder(
+//                    ytDlpLocation,
+//                    "-f", "mp4", "-o", folder + File.separator + "%(title)s.%(ext)s", url);
+//            
+//        } else if("mkv".equals(format)){
+//            pb = new ProcessBuilder(
+//                    ytDlpLocation,
+//                    "-f", "mkv", "-o", folder + File.separator + "%(title)s.%(ext)s", url);
+//        } else if("webm".equals(format)){
+//            pb = new ProcessBuilder(
+//                    ytDlpLocation,
+//                    "-f", "webm", "-o", folder + File.separator + "%(title)s.%(ext)s", url);
+//        } else if("wav".equals(format)){
+//            pb = new ProcessBuilder(
+//                    ytDlpLocation,
+//                    "-x", "--audio-format", "wav", "-o", folder + File.separator + "%(title)s.%(ext)s", url);
+//        } else{
+//            pb = new ProcessBuilder(
+//                    ytDlpLocation,
+//                    "-x", "--audio-format", "aac", "-o", folder + File.separator + "%(title)s.%(ext)s", url);
+//        }
+//
+//        //Archivo .m3u
+//        if (createM3u) {
+//            pb.command().add("--write-info-json");
+//        }
+//
+//        //Limite de velocidad
+//        if (maxSpeed > 0) {
+//            pb.command().add("--limit-rate");
+//            pb.command().add(maxSpeed + "M");
+//        }
+//
+//        pb.redirectErrorStream(true);
+//        return pb;
+//    }
+    
     private ProcessBuilder buildCommand(String url, String folder, String format) {
-        ProcessBuilder pb;
-        if ("mp3".equals(format)) {
-            pb = new ProcessBuilder(
-                    ytDlpLocation,
-                    "-x", "--audio-format", "mp3", "-o", folder + File.separator + "%(title)s.%(ext)s", url);
-
+        List<String> cmd = new ArrayList<>();
+        cmd.add(ytDlpLocation);
+        cmd.add("-o");
+        cmd.add(folder + File.separator + "%(title)s.%(ext)s");
+        
+        if ("mp3".equals(format) || "wav".equals(format) || "m4a".equals(format)) {
+            cmd.add("-o");
+            cmd.add(folder + File.separator + "%(title)s_audio.%(ext)s");
         } else {
-            pb = new ProcessBuilder(
-                    ytDlpLocation,
-                    "-f", "mp4", "-o", folder + File.separator + "%(title)s.%(ext)s", url);
+            cmd.add("-o");
+            cmd.add(folder + File.separator + "%(title)s.%(ext)s");
         }
 
+        switch (format) {
+            //Audio
+            case "mp3":
+                cmd.add("-x");
+                cmd.add("--audio-format");
+                cmd.add("mp3");
+                break;
+            case "wav":
+                cmd.add("-x");
+                cmd.add("--audio-format");
+                cmd.add("wav");
+                break;
+            case "m4a":
+                cmd.add("-x");
+                cmd.add("--audio-format");
+                cmd.add("m4a");
+                break;
+            //Video
+            case "mp4":
+                cmd.add("-f");
+                cmd.add("bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4");
+                cmd.add("--merge-output-format");
+                cmd.add("mp4");
+                break;
+            case "mkv":
+                cmd.add("-f");
+                cmd.add("bestvideo+bestaudio/best");
+                cmd.add("--merge-output-format");
+                cmd.add("mkv");
+                break;
+            case "webm":
+                cmd.add("-f");
+                cmd.add("bestvideo[ext=webm]+bestaudio[ext=webm]/webm");
+                cmd.add("--merge-output-format");
+                cmd.add("webm");
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Unknown format selected: " + format, "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+        
         //Archivo .m3u
         if (createM3u) {
-            pb.command().add("--write-info-json");
+            cmd.add("--write-info-json");
         }
 
-        //Limite de velocidad
+        //Limite velocidad
         if (maxSpeed > 0) {
-            pb.command().add("--limit-rate");
-            pb.command().add(maxSpeed + "M");
+            cmd.add("--limit-rate");
+            cmd.add(maxSpeed + "M");
         }
 
+        cmd.add(url);
+
+        ProcessBuilder pb = new ProcessBuilder(cmd);
         pb.redirectErrorStream(true);
         return pb;
     }
