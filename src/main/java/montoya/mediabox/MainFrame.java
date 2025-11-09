@@ -30,8 +30,8 @@ public class MainFrame extends JFrame {
     List<FileInformation> fileList = new ArrayList<>();
     private final Set<String> downloadDirectories = new HashSet<>();
     private FileTableModel tblModel;
-    private FileProperties fp;
-    private MainViewController mvc;
+    private final FileProperties fp;
+    private final MainViewController mvc;
 
     public MainFrame() {
         initComponents();
@@ -64,7 +64,9 @@ public class MainFrame extends JFrame {
         listDirectories.setModel(listModel);
         
         //Muestra las descargas pertenecientes a un directorio
-        mvc.configDownloadList(listDirectories, fileList, tblInfo);
+        mvc.configDownloadList(listDirectories, cbbxFilter, fileList, tblInfo);
+        
+        mvc.applyFilters(cbbxFilter);
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -90,7 +92,7 @@ public class MainFrame extends JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         areaInfo = new javax.swing.JTextArea();
         barProgress = new javax.swing.JProgressBar();
-        cbxFilter = new javax.swing.JComboBox<>();
+        cbbxFilter = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         listDirectories = new javax.swing.JList<>();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -222,10 +224,15 @@ public class MainFrame extends JFrame {
         mainPanel.add(barProgress);
         barProgress.setBounds(50, 320, 340, 20);
 
-        cbxFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        cbxFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Filter" }));
-        mainPanel.add(cbxFilter);
-        cbxFilter.setBounds(790, 230, 230, 23);
+        cbbxFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        cbbxFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Filter" }));
+        cbbxFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbbxFilterActionPerformed(evt);
+            }
+        });
+        mainPanel.add(cbbxFilter);
+        cbbxFilter.setBounds(790, 240, 230, 23);
 
         listDirectories.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         listDirectories.setPreferredSize(new java.awt.Dimension(40, 60));
@@ -272,7 +279,7 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnDelete);
-        btnDelete.setBounds(1040, 230, 90, 24);
+        btnDelete.setBounds(560, 530, 90, 24);
 
         getContentPane().add(mainPanel);
         mainPanel.setBounds(0, 0, 1200, 670);
@@ -462,7 +469,7 @@ public class MainFrame extends JFrame {
 
         FileInformation info = tblModel.getFileAt(row);
 
-        int confirm = JOptionPane.showConfirmDialog(this,"Do you want to delete this file? - " + info.name,"Delete",JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(this, "Do you want to delete this file? - " + info.name, "Delete", JOptionPane.YES_NO_OPTION);
 
         if (confirm == JOptionPane.YES_OPTION) {
 
@@ -472,7 +479,8 @@ public class MainFrame extends JFrame {
             //Actualiza tabla
             Object selected = listDirectories.getSelectedValue();
             if (selected instanceof FolderItem folder) {
-                mvc.mostrarDescargasPorDirectorio(folder.getFullPath(), fileList, tblInfo);
+                String filtro = (String) cbbxFilter.getSelectedItem(); //obtener filtro actual
+                mvc.showFilteredDownloads(folder.getFullPath(), filtro, fileList, tblInfo);
             } else {
                 tblInfo.setModel(new FileTableModel(fileList));
             }
@@ -487,6 +495,15 @@ public class MainFrame extends JFrame {
             fp.guardarDatos(new DirectoryInformation(fileList, downloadDirectories));
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void cbbxFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbxFilterActionPerformed
+        Object selected = listDirectories.getSelectedValue();
+        if (selected instanceof FolderItem) {
+            String folderPath = ((FolderItem) selected).getFullPath();
+            String filtro = (String) cbbxFilter.getSelectedItem();
+            mvc.showFilteredDownloads(folderPath, filtro, fileList, tblInfo);
+        }
+    }//GEN-LAST:event_cbbxFilterActionPerformed
 
     public static void main(String args[]) {
         /* Set the Metal look and feel */
@@ -519,7 +536,7 @@ public class MainFrame extends JFrame {
     private javax.swing.JButton btnDownload;
     private javax.swing.JButton btnOpenLast;
     private javax.swing.JButton btnPaste;
-    private javax.swing.JComboBox<String> cbxFilter;
+    private javax.swing.JComboBox<String> cbbxFilter;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;

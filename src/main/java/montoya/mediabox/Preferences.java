@@ -12,7 +12,7 @@ import montoya.mediabox.download.DownloadManager;
  */
 public class Preferences extends javax.swing.JPanel {
 
-    private MainFrame mainFrame;
+    private final MainFrame mainFrame;
     private MainViewController mvc;
     private final DownloadManager dm;
 

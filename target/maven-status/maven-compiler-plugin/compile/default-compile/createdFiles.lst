@@ -9,6 +9,7 @@ montoya\mediabox\fileInformation\DirectoryInformation.class
 montoya\mediabox\Preferences$2.class
 montoya\mediabox\MainFrame$3.class
 montoya\mediabox\MainFrame$5.class
+montoya\mediabox\MainFrame$12.class
 montoya\mediabox\controller\MainViewController$2.class
 montoya\mediabox\download\DownloadManager$1.class
 montoya\mediabox\Preferences$1.class

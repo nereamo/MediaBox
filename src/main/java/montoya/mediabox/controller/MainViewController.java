@@ -88,29 +88,52 @@ public class MainViewController {
             }
         });
     }
+    
+    //Añade los filtros a JComboBox
+    public void applyFilters(JComboBox cbbxFilter){
+        cbbxFilter.removeAllItems();
+        cbbxFilter.addItem("All");
+        cbbxFilter.addItem("MP4");
+        cbbxFilter.addItem("MP3");
+        cbbxFilter.addItem("M3U");
+    }
+    
+    //Muestra las descargas pertenecientes a un directorio y permite flitrarlas por tipo de archivo
+    public void showFilteredDownloads(String folderPath, String selectedFilter, List<FileInformation> fileList, JTable tblInfo) {
 
-    public void mostrarDescargasPorDirectorio(String folderPath, List<FileInformation> fileList, JTable tblInfo) {
-        List<FileInformation> filter = new ArrayList<>();
+        List<FileInformation> filtered = new ArrayList<>();
 
-        for (FileInformation info : fileList) {
-            if (info.folderPath.equals(folderPath)) {
-                filter.add(info);
+        for (FileInformation fi : fileList) {
+
+            if (!fi.folderPath.equals(folderPath)) {
+                continue;
+            }
+
+            if (selectedFilter == null || selectedFilter.equals("All")) {
+                filtered.add(fi);
+            } else if (selectedFilter.equals("MP4") && fi.type.contains("mp4")) {
+                filtered.add(fi);
+            } else if (selectedFilter.equals("MP3") && fi.type.contains("mpeg")) {
+                filtered.add(fi);
+            } else if (selectedFilter.equals("m3u") && fi.type.contains("m3u")) {
+                filtered.add(fi);
             }
         }
 
-        tblInfo.setModel(new FileTableModel(filter));
-
+        tblInfo.setModel(new FileTableModel(filtered));
     }
 
     //Configuracion de JList, al seleccionar un directorio muestra las descargas.
-    public void configDownloadList(JList<?> listDirectories, List<FileInformation> fileList, JTable tblInfo) {
+    public void configDownloadList(JList<?> listDirectories, JComboBox<String> cbbxFilter, List<FileInformation> fileList, JTable tblInfo) {
         listDirectories.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
                     Object selected = listDirectories.getSelectedValue();
                     if (selected instanceof FolderItem folder) {
-                        mostrarDescargasPorDirectorio(folder.getFullPath(), fileList, tblInfo);
+
+                        String filtro = (String) cbbxFilter.getSelectedItem();
+                        showFilteredDownloads(folder.getFullPath(), filtro, fileList, tblInfo);
                     }
                 }
             }
