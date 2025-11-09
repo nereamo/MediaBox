@@ -28,6 +28,17 @@ Implementació de Threads.
     - Gemini: 
         · Distintos tipos de formatos a descargar.
         · Logica para obtener la ubicacion de yt-dlp.exe de forma automática.
+
+
+#Funcionalidades extra:
+
+Pegar desde Clipboard.
+
+    - Permite copiar la url del portapepeles utilizando el botón "Paste" de la interfaz principal.
+
+Barra de progreso:
+
+    - Muestra el progreso de descarga en un JProgressBar
         
     
 
