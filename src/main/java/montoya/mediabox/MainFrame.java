@@ -40,7 +40,6 @@ public class MainFrame extends JFrame {
         bg = new ButtonGroup();
         downloader = new DownloadManager(fp);
         preferences = new Preferences(this, downloader);
-//        mvc = new MainViewController(this, mainPanel, preferences, radioMp4, radioMp3, barProgress);
         mvc = new MainViewController(this, mainPanel, preferences, barProgress);
 
         preferences.setMainController(mvc);
@@ -48,8 +47,8 @@ public class MainFrame extends JFrame {
         //Métodos de clase MainViewController
         mvc.configFrame();
         mvc.configPreferencesPanel();
+        
         radioButtons();
-//        mvc.configRadioButtons();
 
         //Carga datos guardados en archivo .json
         DirectoryInformation data = fp.cargarDatos();
@@ -73,22 +72,23 @@ public class MainFrame extends JFrame {
         mvc.applyFilters(cbbxFilter);
     }
     
-    private void radioButtons(){
+    //Añadir los radioButtons a ButtonGroup
+    private void radioButtons() {
         bg.add(radioMp4);
         bg.add(radioMkv);
         bg.add(radioWebm);
         bg.add(radioMp3);
         bg.add(radioWav);
         bg.add(radioM4a);
-        
+
         radioMp4.setActionCommand("mp4");
-    radioMkv.setActionCommand("mkv");
-    radioWebm.setActionCommand("webm");
-    radioMp3.setActionCommand("mp3");
-    radioWav.setActionCommand("wav");
-    radioM4a.setActionCommand("m4a");
-        
-        radioMp4.setSelected(true);
+        radioMkv.setActionCommand("mkv");
+        radioWebm.setActionCommand("webm");
+        radioMp3.setActionCommand("mp3");
+        radioWav.setActionCommand("wav");
+        radioM4a.setActionCommand("m4a");
+
+        radioMp4.setSelected(true); //Dejar seleccionado por defecto MP4
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -478,7 +478,6 @@ public class MainFrame extends JFrame {
         String url = txtUrl.getText().trim();
         String folder = txtFolder.getText().trim();
         String format = bg.getSelection().getActionCommand();
-//        String format = radioMp3.isSelected() ? "mp3" : "mp4";
 
         downloader.setTempPath(folder);
         areaInfo.setText("");
@@ -557,10 +556,11 @@ public class MainFrame extends JFrame {
 
     //Permite filtra por type los elementos de una tabla
     private void cbbxFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbxFilterActionPerformed
-        Object selected = listDirectories.getSelectedValue();
+        Object selected = listDirectories.getSelectedValue(); //Obtiene objeto seleccionado de JList
+        
         if (selected instanceof FolderItem) {
-            String folderPath = ((FolderItem) selected).getFullPath();
-            String filtro = (String) cbbxFilter.getSelectedItem();
+            String folderPath = ((FolderItem) selected).getFullPath(); //Obtiene ruta
+            String filtro = (String) cbbxFilter.getSelectedItem(); //Lee filtro
             mvc.showFilteredDownloads(folderPath, filtro, fileList, tblInfo);
         }
     }//GEN-LAST:event_cbbxFilterActionPerformed
