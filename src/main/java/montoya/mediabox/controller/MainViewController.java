@@ -38,17 +38,17 @@ public class MainViewController {
     public void configFrame() {
         frame.setTitle("MediaBox");
         frame.setResizable(false);
-        frame.setSize(1200, 800);
+        frame.setSize(1300, 800);
         frame.setLocationRelativeTo(frame);
         frame.setLayout(null);
 
-        mainPanel.setSize(1200, 800);
+        mainPanel.setSize(1300, 800);
         frame.getContentPane().add(mainPanel);
     }
 
     //Configuración de JPanel Preferences
     public void configPreferencesPanel() {
-        preferences.setBounds(0, 0, 1200, 800);
+        preferences.setBounds(0, 0, 1300, 800);
         preferences.setVisible(false);
         frame.getContentPane().add(preferences);
     }

@@ -1,5 +1,6 @@
 package montoya.mediabox;
 
+import java.awt.Color;
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
@@ -25,7 +26,7 @@ import montoya.mediabox.fileInformation.FolderItem;
 public class MainFrame extends JFrame {
 
     private static final Logger logger = Logger.getLogger(MainFrame.class.getName());
-    private DownloadManager downloader;
+    private DownloadManager dm;
     private Preferences preferences;
     List<FileInformation> fileList = new ArrayList<>();
     private final Set<String> downloadDirectories = new HashSet<>();
@@ -38,8 +39,8 @@ public class MainFrame extends JFrame {
         initComponents();
         fp = new FileProperties();
         bg = new ButtonGroup();
-        downloader = new DownloadManager(fp);
-        preferences = new Preferences(this, downloader);
+        dm = new DownloadManager(fp);
+        preferences = new Preferences(this, dm);
         mvc = new MainViewController(this, mainPanel, preferences, barProgress);
 
         preferences.setMainController(mvc);
@@ -105,28 +106,29 @@ public class MainFrame extends JFrame {
         lblFolder = new javax.swing.JLabel();
         txtFolder = new javax.swing.JTextField();
         btnBrowse = new javax.swing.JButton();
-        lblFormat = new javax.swing.JLabel();
-        radioMp4 = new javax.swing.JRadioButton();
-        radioMp3 = new javax.swing.JRadioButton();
         btnDownload = new javax.swing.JButton();
         btnOpenLast = new javax.swing.JButton();
         logoLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         areaInfo = new javax.swing.JTextArea();
         barProgress = new javax.swing.JProgressBar();
-        cbbxFilter = new javax.swing.JComboBox<>();
+        pnlVideo = new javax.swing.JPanel();
+        radioMp4 = new javax.swing.JRadioButton();
+        radioMkv = new javax.swing.JRadioButton();
+        radioWebm = new javax.swing.JRadioButton();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        pnlAudio = new javax.swing.JPanel();
+        radioMp3 = new javax.swing.JRadioButton();
+        radioWav = new javax.swing.JRadioButton();
+        radioM4a = new javax.swing.JRadioButton();
+        pnlDownloads = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         listDirectories = new javax.swing.JList<>();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblInfo = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
+        cbbxFilter = new javax.swing.JComboBox<>();
         btnDelete = new javax.swing.JButton();
-        radioWav = new javax.swing.JRadioButton();
-        radioM4a = new javax.swing.JRadioButton();
-        radioMkv = new javax.swing.JRadioButton();
-        radioWebm = new javax.swing.JRadioButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel2 = new javax.swing.JLabel();
+        btnPlay = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mnuExit = new javax.swing.JMenuItem();
@@ -147,8 +149,8 @@ public class MainFrame extends JFrame {
         getContentPane().setLayout(null);
 
         mainPanel.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
-        mainPanel.setMinimumSize(new java.awt.Dimension(1200, 800));
-        mainPanel.setPreferredSize(new java.awt.Dimension(1200, 770));
+        mainPanel.setMinimumSize(new java.awt.Dimension(1300, 800));
+        mainPanel.setPreferredSize(new java.awt.Dimension(1300, 770));
         mainPanel.setLayout(null);
 
         lblUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -158,7 +160,7 @@ public class MainFrame extends JFrame {
 
         txtUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mainPanel.add(txtUrl);
-        txtUrl.setBounds(150, 50, 330, 23);
+        txtUrl.setBounds(150, 50, 250, 23);
 
         btnPaste.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnPaste.setText("Paste");
@@ -178,16 +180,16 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnClear);
-        btnClear.setBounds(490, 50, 100, 24);
+        btnClear.setBounds(410, 50, 100, 24);
 
         lblFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblFolder.setText("Folder:");
         mainPanel.add(lblFolder);
-        lblFolder.setBounds(700, 20, 50, 20);
+        lblFolder.setBounds(50, 100, 50, 20);
 
         txtFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mainPanel.add(txtFolder);
-        txtFolder.setBounds(800, 50, 330, 23);
+        txtFolder.setBounds(150, 130, 250, 23);
 
         btnBrowse.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnBrowse.setText("Browse");
@@ -197,22 +199,7 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnBrowse);
-        btnBrowse.setBounds(700, 50, 90, 24);
-
-        lblFormat.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lblFormat.setText("Video");
-        mainPanel.add(lblFormat);
-        lblFormat.setBounds(50, 140, 70, 17);
-
-        radioMp4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        radioMp4.setText("MP4");
-        mainPanel.add(radioMp4);
-        radioMp4.setBounds(50, 170, 110, 22);
-
-        radioMp3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        radioMp3.setText("MP3 (Audio)");
-        mainPanel.add(radioMp3);
-        radioMp3.setBounds(380, 170, 110, 22);
+        btnBrowse.setBounds(50, 130, 90, 24);
 
         btnDownload.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnDownload.setText("Download");
@@ -222,7 +209,7 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnDownload);
-        btnDownload.setBounds(90, 410, 120, 24);
+        btnDownload.setBounds(130, 440, 120, 24);
 
         btnOpenLast.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnOpenLast.setText("Open Last");
@@ -232,11 +219,11 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnOpenLast);
-        btnOpenLast.setBounds(230, 410, 120, 24);
+        btnOpenLast.setBounds(290, 440, 120, 24);
 
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/largelogoSmall3.png"))); // NOI18N
         mainPanel.add(logoLabel);
-        logoLabel.setBounds(1000, 670, 180, 50);
+        logoLabel.setBounds(1100, 670, 180, 50);
 
         areaInfo.setColumns(20);
         areaInfo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -244,30 +231,105 @@ public class MainFrame extends JFrame {
         jScrollPane1.setViewportView(areaInfo);
 
         mainPanel.add(jScrollPane1);
-        jScrollPane1.setBounds(50, 490, 340, 170);
+        jScrollPane1.setBounds(40, 510, 450, 140);
 
         barProgress.setBackground(new java.awt.Color(204, 204, 204));
         barProgress.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         barProgress.setForeground(new java.awt.Color(255, 153, 51));
         mainPanel.add(barProgress);
-        barProgress.setBounds(50, 450, 340, 20);
+        barProgress.setBounds(40, 480, 450, 20);
 
-        cbbxFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        cbbxFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Filter" }));
-        cbbxFilter.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbbxFilterActionPerformed(evt);
-            }
-        });
-        mainPanel.add(cbbxFilter);
-        cbbxFilter.setBounds(800, 390, 230, 23);
+        pnlVideo.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Video", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14))); // NOI18N
+
+        radioMp4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        radioMp4.setText("MP4");
+
+        radioMkv.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        radioMkv.setText("MKV");
+
+        radioWebm.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        radioWebm.setText("WEBM");
+
+        jComboBox1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Quality" }));
+
+        javax.swing.GroupLayout pnlVideoLayout = new javax.swing.GroupLayout(pnlVideo);
+        pnlVideo.setLayout(pnlVideoLayout);
+        pnlVideoLayout.setHorizontalGroup(
+            pnlVideoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlVideoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlVideoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(pnlVideoLayout.createSequentialGroup()
+                        .addGroup(pnlVideoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(radioMp4, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(radioMkv, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(radioWebm, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 58, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        pnlVideoLayout.setVerticalGroup(
+            pnlVideoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlVideoLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(radioMp4)
+                .addGap(18, 18, 18)
+                .addComponent(radioMkv)
+                .addGap(18, 18, 18)
+                .addComponent(radioWebm)
+                .addGap(18, 18, 18)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+
+        mainPanel.add(pnlVideo);
+        pnlVideo.setBounds(40, 190, 210, 210);
+
+        pnlAudio.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Audio", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14))); // NOI18N
+
+        radioMp3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        radioMp3.setText("MP3 (Audio)");
+
+        radioWav.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        radioWav.setText("WAV (Audio)");
+
+        radioM4a.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        radioM4a.setText("M4A (Audio)");
+
+        javax.swing.GroupLayout pnlAudioLayout = new javax.swing.GroupLayout(pnlAudio);
+        pnlAudio.setLayout(pnlAudioLayout);
+        pnlAudioLayout.setHorizontalGroup(
+            pnlAudioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlAudioLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(pnlAudioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(radioM4a, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(radioWav, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(radioMp3, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(76, Short.MAX_VALUE))
+        );
+        pnlAudioLayout.setVerticalGroup(
+            pnlAudioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlAudioLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(radioMp3)
+                .addGap(18, 18, 18)
+                .addComponent(radioWav)
+                .addGap(18, 18, 18)
+                .addComponent(radioM4a)
+                .addContainerGap(63, Short.MAX_VALUE))
+        );
+
+        mainPanel.add(pnlAudio);
+        pnlAudio.setBounds(280, 190, 210, 210);
+
+        pnlDownloads.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Downloads", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14))); // NOI18N
 
         listDirectories.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         listDirectories.setPreferredSize(new java.awt.Dimension(40, 60));
+        listDirectories.setSelectionBackground(new java.awt.Color(255, 204, 153));
         jScrollPane2.setViewportView(listDirectories);
-
-        mainPanel.add(jScrollPane2);
-        jScrollPane2.setBounds(570, 420, 120, 240);
 
         tblInfo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tblInfo.setModel(new javax.swing.table.DefaultTableModel(
@@ -289,15 +351,16 @@ public class MainFrame extends JFrame {
                 return types [columnIndex];
             }
         });
+        tblInfo.setSelectionBackground(new java.awt.Color(255, 204, 153));
         jScrollPane3.setViewportView(tblInfo);
 
-        mainPanel.add(jScrollPane3);
-        jScrollPane3.setBounds(690, 420, 450, 240);
-
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel1.setText("Directories");
-        mainPanel.add(jLabel1);
-        jLabel1.setBounds(570, 400, 70, 17);
+        cbbxFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        cbbxFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Filter" }));
+        cbbxFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbbxFilterActionPerformed(evt);
+            }
+        });
 
         btnDelete.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnDelete.setText("Delete");
@@ -306,40 +369,57 @@ public class MainFrame extends JFrame {
                 btnDeleteActionPerformed(evt);
             }
         });
-        mainPanel.add(btnDelete);
-        btnDelete.setBounds(1050, 390, 90, 24);
 
-        radioWav.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        radioWav.setText("WAV (Audio)");
-        mainPanel.add(radioWav);
-        radioWav.setBounds(380, 200, 110, 22);
+        btnPlay.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnPlay.setText("Play");
+        btnPlay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPlayActionPerformed(evt);
+            }
+        });
 
-        radioM4a.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        radioM4a.setText("M4A (Audio)");
-        mainPanel.add(radioM4a);
-        radioM4a.setBounds(380, 230, 110, 22);
+        javax.swing.GroupLayout pnlDownloadsLayout = new javax.swing.GroupLayout(pnlDownloads);
+        pnlDownloads.setLayout(pnlDownloadsLayout);
+        pnlDownloadsLayout.setHorizontalGroup(
+            pnlDownloadsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDownloadsLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(cbbxFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(176, 176, 176))
+            .addGroup(pnlDownloadsLayout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(pnlDownloadsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pnlDownloadsLayout.createSequentialGroup()
+                        .addComponent(btnPlay, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlDownloadsLayout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+        pnlDownloadsLayout.setVerticalGroup(
+            pnlDownloadsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlDownloadsLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(cbbxFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlDownloadsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(pnlDownloadsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDelete)
+                    .addComponent(btnPlay))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
-        radioMkv.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        radioMkv.setText("MKV");
-        mainPanel.add(radioMkv);
-        radioMkv.setBounds(50, 200, 110, 22);
-
-        radioWebm.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        radioWebm.setText("WEBM");
-        mainPanel.add(radioWebm);
-        radioWebm.setBounds(50, 230, 130, 22);
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Quality" }));
-        mainPanel.add(jComboBox1);
-        jComboBox1.setBounds(50, 270, 180, 30);
-
-        jLabel2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel2.setText("Audio");
-        mainPanel.add(jLabel2);
-        jLabel2.setBounds(380, 140, 70, 17);
+        mainPanel.add(pnlDownloads);
+        pnlDownloads.setBounds(630, 20, 630, 380);
 
         getContentPane().add(mainPanel);
-        mainPanel.setBounds(0, 0, 1200, 770);
+        mainPanel.setBounds(0, 0, 1300, 770);
 
         menuBar.setBackground(new java.awt.Color(255, 102, 0));
         menuBar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 102, 0)));
@@ -479,13 +559,13 @@ public class MainFrame extends JFrame {
         String folder = txtFolder.getText().trim();
         String format = bg.getSelection().getActionCommand();
 
-        downloader.setTempPath(folder);
+        dm.setTempPath(folder);
         areaInfo.setText("");
 
         Thread th = new Thread() {
             @Override
             public void run() {
-                downloader.download(url, folder, format, areaInfo, barProgress, tblModel, listDirectories, downloadDirectories);
+                dm.download(url, folder, format, areaInfo, barProgress, tblModel, listDirectories, downloadDirectories);
 
                 if (downloadDirectories.add(folder)) {
                     DefaultListModel listModel = (DefaultListModel) listDirectories.getModel();
@@ -505,7 +585,7 @@ public class MainFrame extends JFrame {
     //Abre el ultimo archivo descargado
     private void btnOpenLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenLastActionPerformed
 
-        File lastFile = downloader.getLastDownloadedFile();
+        File lastFile = dm.getLastDownloadedFile();
         if (lastFile != null && lastFile.exists()) {
             try {
                 Desktop.getDesktop().open(lastFile);
@@ -565,6 +645,32 @@ public class MainFrame extends JFrame {
         }
     }//GEN-LAST:event_cbbxFilterActionPerformed
 
+    //Reproduce el archivo seleccionado en la tabla
+    private void btnPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayActionPerformed
+
+//        int row = tblInfo.getSelectedRow();
+//        if (row < 0) {
+//            JOptionPane.showMessageDialog(this, "Select a file to play.");
+//            return;
+//        }
+//        
+//        int modelRow = tblInfo.convertRowIndexToModel(row);
+//
+//        FileInformation info = tblModel.getFileAt(modelRow);
+// 
+//        File file = new File(info.folderPath, info.name);
+//        
+//        if (file.exists()) {
+//            try {
+//                Desktop.getDesktop().open(file);
+//            } catch (IOException ex) {
+//                JOptionPane.showMessageDialog(this, "Could not open file:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//            }
+//        } else {
+//            JOptionPane.showMessageDialog(this, "File not found: " + file.getAbsolutePath(), "Error", JOptionPane.ERROR_MESSAGE);
+//        }
+    }//GEN-LAST:event_btnPlayActionPerformed
+
     public static void main(String args[]) {
         /* Set the Metal look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -596,10 +702,9 @@ public class MainFrame extends JFrame {
     private javax.swing.JButton btnDownload;
     private javax.swing.JButton btnOpenLast;
     private javax.swing.JButton btnPaste;
+    private javax.swing.JButton btnPlay;
     private javax.swing.JComboBox<String> cbbxFilter;
     private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -607,7 +712,6 @@ public class MainFrame extends JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblFolder;
-    private javax.swing.JLabel lblFormat;
     private javax.swing.JLabel lblUrl;
     private javax.swing.JList<FolderItem> listDirectories;
     private javax.swing.JLabel logoLabel;
@@ -619,6 +723,9 @@ public class MainFrame extends JFrame {
     private javax.swing.JMenu mnuFile;
     private javax.swing.JMenu mnuHelp;
     private javax.swing.JMenuItem mnuPreferences;
+    private javax.swing.JPanel pnlAudio;
+    private javax.swing.JPanel pnlDownloads;
+    private javax.swing.JPanel pnlVideo;
     private javax.swing.JRadioButton radioM4a;
     private javax.swing.JRadioButton radioMkv;
     private javax.swing.JRadioButton radioMp3;

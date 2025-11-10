@@ -74,8 +74,8 @@ public class Preferences extends javax.swing.JPanel {
         lblPath = new javax.swing.JLabel();
         logoLabel = new javax.swing.JLabel();
 
-        setMinimumSize(new java.awt.Dimension(1100, 770));
-        setPreferredSize(new java.awt.Dimension(1100, 770));
+        setMinimumSize(new java.awt.Dimension(1300, 770));
+        setPreferredSize(new java.awt.Dimension(1300, 770));
         setLayout(null);
 
         lblM3u.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -162,7 +162,7 @@ public class Preferences extends javax.swing.JPanel {
 
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/largelogoSmall3.png"))); // NOI18N
         add(logoLabel);
-        logoLabel.setBounds(1000, 670, 180, 50);
+        logoLabel.setBounds(1100, 670, 180, 50);
     }// </editor-fold>//GEN-END:initComponents
 
     //Cancelar preferencias

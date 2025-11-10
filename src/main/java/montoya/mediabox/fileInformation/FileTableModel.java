@@ -74,11 +74,4 @@ public class FileTableModel extends AbstractTableModel {
     public List<FileInformation> getFileList() {
         return fileList;
     }
-    
-    //Reemplaza todos los datos de la tabla
-//    public void setData(List<FileInformation> newList) {
-//        fileList.clear();
-//        fileList.addAll(newList);
-//        fireTableDataChanged();
-//    }
 }

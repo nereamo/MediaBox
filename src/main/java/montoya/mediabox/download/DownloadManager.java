@@ -102,11 +102,13 @@ public class DownloadManager {
         task.execute();
     }
     
+    //Devuelve ProcessBuilder con configuración para yt-dlp
     private ProcessBuilder buildCommand(String url, String folder, String format) {
         List<String> cmd = new ArrayList<>();
+        
         cmd.add(ytDlpLocation);
         cmd.add("-o");
-        cmd.add(folder + File.separator + "%(title)s.%(ext)s");
+        cmd.add(folder + File.separator + "%(title)s.%(ext)s"); //Añade a carpeta el archivo con nombre
         
         if ("mp3".equals(format) || "wav".equals(format) || "m4a".equals(format)) {
             cmd.add("-o");
@@ -116,6 +118,7 @@ public class DownloadManager {
             cmd.add(folder + File.separator + "%(title)s.%(ext)s");
         }
 
+        //Ajustar descarga según formato
         switch (format) {
             //Audio
             case "mp3":
@@ -168,7 +171,7 @@ public class DownloadManager {
             cmd.add(maxSpeed + "M");
         }
 
-        cmd.add(url);
+        cmd.add(url); //url del archivo
 
         ProcessBuilder pb = new ProcessBuilder(cmd);
         pb.redirectErrorStream(true);
