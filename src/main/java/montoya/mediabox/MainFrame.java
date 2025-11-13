@@ -69,6 +69,7 @@ public class MainFrame extends JFrame {
         //Muestra las descargas pertenecientes a un directorio
         mvc.configDownloadList(listDirectories, cbbxTypeFilter, tblInfo);
         
+        //Aplica el filtro seleccionado en el comboBox
         mvc.applyFilters(cbbxTypeFilter);
     }
     
@@ -514,10 +515,12 @@ public class MainFrame extends JFrame {
 
     //Directorio para guardar archivo descargado
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
+        //Ventana que permite seleccionar un directorio
         JFileChooser directory = new JFileChooser();
         directory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         int result = directory.showOpenDialog(this);
+        
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFolder = directory.getSelectedFile();
 
@@ -525,7 +528,7 @@ public class MainFrame extends JFrame {
                 String folderPath = selectedFolder.getAbsolutePath();
                 txtFolder.setText(selectedFolder.getAbsolutePath());
 
-                // Añadir el directorio a la JList si no está ya
+                // Añadir el directorio a la lista si no está ya
                 if (downloadDirectories.add(folderPath)) {
                     DefaultListModel listModel = (DefaultListModel) listDirectories.getModel();
                     listModel.addElement(new FolderItem(folderPath));
@@ -536,9 +539,12 @@ public class MainFrame extends JFrame {
 
     //Copia del portapapeles a JTextField "urlField"
     private void btnPasteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPasteActionPerformed
+        
         Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
         DataFlavor df = DataFlavor.stringFlavor;
+        
         if (cb.isDataFlavorAvailable(df)) {
+            
             try {
                 String clipboardContent = (String) cb.getData(df);
                 txtUrl.setText(clipboardContent);
@@ -570,7 +576,6 @@ public class MainFrame extends JFrame {
                     DefaultListModel listModel = (DefaultListModel) listDirectories.getModel();
                     listModel.addElement(new FolderItem(folder));
                 }
-                //fp.guardarDatos(new DirectoryInformation(fileList, downloadDirectories));
             }
         };
         th.start();
@@ -598,89 +603,49 @@ public class MainFrame extends JFrame {
 
     //Elimina archivo seleccionado en la JTable
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-//        int row = tblInfo.getSelectedRow();
-//        if (row < 0) {
-//            JOptionPane.showMessageDialog(this, "Select a file to delete.");
-//            return;
-//        }
-//
-//        FileInformation info = tblModel.getFileAt(row);
-//
-//        int confirm = JOptionPane.showConfirmDialog(this, "Do you want to delete this file? - " + info.name, "Delete", JOptionPane.YES_NO_OPTION);
-//
-//        if (confirm == JOptionPane.YES_OPTION) {
-//
-//            //Borra archivo fisico y de interfaz
-//            mvc.deleteDownload(info, fileList, downloadDirectories, fp);
-//
-//            //Actualiza tabla
-//            Object selected = listDirectories.getSelectedValue();
-//            if (selected instanceof FolderItem folder) {
-//                String filtro = (String) cbbxTypeFilter.getSelectedItem(); //obtener filtro actual
-//                
-//                List<FileInformation> filteredByDirectory = mvc.filterByDirectory(fileList, folder.getFullPath());
-//            List<FileInformation> filteredByType = mvc.filterByType(filteredByDirectory, filtro);
-//
-//            tblModel.setFileList(filteredByType);
-//            tblModel.fireTableDataChanged();
-////                mvc.showFilteredDownloads(folder.getFullPath(), filtro, fileList, tblInfo);
-//            } else {
-//                // Mostrar todos los archivos si no hay directorio seleccionado
-//        tblModel.setFileList(fileList);
-//        tblModel.fireTableDataChanged();
-//            }
-//
-//            //Refresca directorios de lista
-//            DefaultListModel<FolderItem> newModel = new DefaultListModel<>();
-//            for (String folderPath : downloadDirectories) {
-//                newModel.addElement(new FolderItem(folderPath));
-//            }
-//            listDirectories.setModel(newModel);
-//
-//            fp.guardarTodo(new DirectoryInformation(fileList, downloadDirectories));
-//        }
+        int row = tblInfo.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Select a file to delete.");
+            return;
+        }
 
-int row = tblInfo.getSelectedRow();
-    if (row < 0) {
-        JOptionPane.showMessageDialog(this, "Select a file to delete.");
-        return;
-    }
+        FileInformation info = tblModel.getFileAt(row);
 
-    FileInformation info = tblModel.getFileAt(row);
+        int confirm = JOptionPane.showConfirmDialog(this, "Do you want to delete this file? - " + info.name, "Delete", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
 
-    int confirm = JOptionPane.showConfirmDialog(this, "Do you want to delete this file? - " + info.name, "Delete", JOptionPane.YES_NO_OPTION);
-    if (confirm != JOptionPane.YES_OPTION) return;
+        //Carga lista de .json
+        FileProperties fp = new FileProperties();
+        DirectoryInformation data = fp.cargarDatos();
+        List<FileInformation> allFiles = data.downloads;
+        Set<String> allDirs = data.downloadFolders;
 
-    // 1️⃣ Cargar lista maestra desde JSON
-    FileProperties fp = new FileProperties();
-    DirectoryInformation data = fp.cargarDatos();
-    List<FileInformation> allFiles = data.downloads;
-    Set<String> allDirs = data.downloadFolders;
+        //Borra archivo físico y de .json
+        mvc.deleteDownload(info, allFiles, allDirs, fp);
 
-    // 2️⃣ Borrar archivo de la lista maestra y del JSON
-    mvc.deleteDownload(info, allFiles, allDirs, fp);
+        //Actualiza la tabla dependiento del directorio seleccionado
+        Object selected = listDirectories.getSelectedValue();
+        if (selected instanceof FolderItem folder) {
+            String filtro = (String) cbbxTypeFilter.getSelectedItem();
 
-    // 3️⃣ Actualizar tabla según directorio y filtro actual
-    Object selected = listDirectories.getSelectedValue();
-    if (selected instanceof FolderItem folder) {
-        String filtro = (String) cbbxTypeFilter.getSelectedItem();
+            List<FileInformation> filteredByDirectory = mvc.filterByDirectory(allFiles, folder.getFullPath());
+            List<FileInformation> filteredByType = mvc.filterByType(filteredByDirectory, filtro);
 
-        List<FileInformation> filteredByDirectory = mvc.filterByDirectory(allFiles, folder.getFullPath());
-        List<FileInformation> filteredByType = mvc.filterByType(filteredByDirectory, filtro);
+            tblModel.setFileList(filteredByType);
+            tblModel.fireTableDataChanged();
+        } else {
+            tblModel.setFileList(allFiles);
+            tblModel.fireTableDataChanged();
+        }
 
-        tblModel.setFileList(filteredByType);
-        tblModel.fireTableDataChanged();
-    } else {
-        tblModel.setFileList(allFiles);
-        tblModel.fireTableDataChanged();
-    }
-
-    // 4️⃣ Refresca lista de directorios
-    DefaultListModel<FolderItem> newModel = new DefaultListModel<>();
-    for (String folderPath : allDirs) {
-        newModel.addElement(new FolderItem(folderPath));
-    }
-    listDirectories.setModel(newModel);
+        //Actualiza los directorios en el listado
+        DefaultListModel<FolderItem> newModel = new DefaultListModel<>();
+        for (String folderPath : allDirs) {
+            newModel.addElement(new FolderItem(folderPath));
+        }
+        listDirectories.setModel(newModel);
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     //Filtra por type los elementos del directorio seleccionado
