@@ -69,6 +69,13 @@ public class FileTableModel extends AbstractTableModel {
         fileList.add(file);
         fireTableRowsInserted(fileList.size() - 1, fileList.size() - 1);
     }
+    
+    // En FileTableModel
+public void setFileList(List<FileInformation> newList) {
+    fileList.clear();          // limpiar la lista actual
+    fileList.addAll(newList);  // añadir los elementos filtrados
+    fireTableDataChanged();    // notificar a la tabla que los datos cambiaron
+}
 
     //Devuelve lista de archivos
     public List<FileInformation> getFileList() {

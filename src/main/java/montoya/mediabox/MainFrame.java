@@ -1,6 +1,5 @@
 package montoya.mediabox;
 
-import java.awt.Color;
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
@@ -68,9 +67,9 @@ public class MainFrame extends JFrame {
         listDirectories.setModel(listModel);
         
         //Muestra las descargas pertenecientes a un directorio
-        mvc.configDownloadList(listDirectories, cbbxFilter, fileList, tblInfo);
+        mvc.configDownloadList(listDirectories, cbbxTypeFilter, tblInfo);
         
-        mvc.applyFilters(cbbxFilter);
+        mvc.applyFilters(cbbxTypeFilter);
     }
     
     //Añadir los radioButtons a ButtonGroup
@@ -126,7 +125,7 @@ public class MainFrame extends JFrame {
         listDirectories = new javax.swing.JList<>();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblInfo = new javax.swing.JTable();
-        cbbxFilter = new javax.swing.JComboBox<>();
+        cbbxTypeFilter = new javax.swing.JComboBox<>();
         btnDelete = new javax.swing.JButton();
         btnPlay = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
@@ -354,11 +353,11 @@ public class MainFrame extends JFrame {
         tblInfo.setSelectionBackground(new java.awt.Color(255, 204, 153));
         jScrollPane3.setViewportView(tblInfo);
 
-        cbbxFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        cbbxFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Filter" }));
-        cbbxFilter.addActionListener(new java.awt.event.ActionListener() {
+        cbbxTypeFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        cbbxTypeFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Filter" }));
+        cbbxTypeFilter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbbxFilterActionPerformed(evt);
+                cbbxTypeFilterActionPerformed(evt);
             }
         });
 
@@ -384,7 +383,7 @@ public class MainFrame extends JFrame {
             pnlDownloadsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDownloadsLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(cbbxFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cbbxTypeFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(176, 176, 176))
             .addGroup(pnlDownloadsLayout.createSequentialGroup()
                 .addGap(26, 26, 26)
@@ -403,7 +402,7 @@ public class MainFrame extends JFrame {
             pnlDownloadsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlDownloadsLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addComponent(cbbxFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cbbxTypeFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlDownloadsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -571,7 +570,7 @@ public class MainFrame extends JFrame {
                     DefaultListModel listModel = (DefaultListModel) listDirectories.getModel();
                     listModel.addElement(new FolderItem(folder));
                 }
-                fp.guardarDatos(new DirectoryInformation(fileList, downloadDirectories));
+                //fp.guardarDatos(new DirectoryInformation(fileList, downloadDirectories));
             }
         };
         th.start();
@@ -599,76 +598,142 @@ public class MainFrame extends JFrame {
 
     //Elimina archivo seleccionado en la JTable
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        int row = tblInfo.getSelectedRow();
-        if (row < 0) {
-            JOptionPane.showMessageDialog(this, "Select a file to delete.");
-            return;
-        }
+//        int row = tblInfo.getSelectedRow();
+//        if (row < 0) {
+//            JOptionPane.showMessageDialog(this, "Select a file to delete.");
+//            return;
+//        }
+//
+//        FileInformation info = tblModel.getFileAt(row);
+//
+//        int confirm = JOptionPane.showConfirmDialog(this, "Do you want to delete this file? - " + info.name, "Delete", JOptionPane.YES_NO_OPTION);
+//
+//        if (confirm == JOptionPane.YES_OPTION) {
+//
+//            //Borra archivo fisico y de interfaz
+//            mvc.deleteDownload(info, fileList, downloadDirectories, fp);
+//
+//            //Actualiza tabla
+//            Object selected = listDirectories.getSelectedValue();
+//            if (selected instanceof FolderItem folder) {
+//                String filtro = (String) cbbxTypeFilter.getSelectedItem(); //obtener filtro actual
+//                
+//                List<FileInformation> filteredByDirectory = mvc.filterByDirectory(fileList, folder.getFullPath());
+//            List<FileInformation> filteredByType = mvc.filterByType(filteredByDirectory, filtro);
+//
+//            tblModel.setFileList(filteredByType);
+//            tblModel.fireTableDataChanged();
+////                mvc.showFilteredDownloads(folder.getFullPath(), filtro, fileList, tblInfo);
+//            } else {
+//                // Mostrar todos los archivos si no hay directorio seleccionado
+//        tblModel.setFileList(fileList);
+//        tblModel.fireTableDataChanged();
+//            }
+//
+//            //Refresca directorios de lista
+//            DefaultListModel<FolderItem> newModel = new DefaultListModel<>();
+//            for (String folderPath : downloadDirectories) {
+//                newModel.addElement(new FolderItem(folderPath));
+//            }
+//            listDirectories.setModel(newModel);
+//
+//            fp.guardarTodo(new DirectoryInformation(fileList, downloadDirectories));
+//        }
 
-        FileInformation info = tblModel.getFileAt(row);
+int row = tblInfo.getSelectedRow();
+    if (row < 0) {
+        JOptionPane.showMessageDialog(this, "Select a file to delete.");
+        return;
+    }
 
-        int confirm = JOptionPane.showConfirmDialog(this, "Do you want to delete this file? - " + info.name, "Delete", JOptionPane.YES_NO_OPTION);
+    FileInformation info = tblModel.getFileAt(row);
 
-        if (confirm == JOptionPane.YES_OPTION) {
+    int confirm = JOptionPane.showConfirmDialog(this, "Do you want to delete this file? - " + info.name, "Delete", JOptionPane.YES_NO_OPTION);
+    if (confirm != JOptionPane.YES_OPTION) return;
 
-            //Borra archivo fisico y de interfaz
-            mvc.deleteDownload(info, fileList, downloadDirectories, fp);
+    // 1️⃣ Cargar lista maestra desde JSON
+    FileProperties fp = new FileProperties();
+    DirectoryInformation data = fp.cargarDatos();
+    List<FileInformation> allFiles = data.downloads;
+    Set<String> allDirs = data.downloadFolders;
 
-            //Actualiza tabla
-            Object selected = listDirectories.getSelectedValue();
-            if (selected instanceof FolderItem folder) {
-                String filtro = (String) cbbxFilter.getSelectedItem(); //obtener filtro actual
-                mvc.showFilteredDownloads(folder.getFullPath(), filtro, fileList, tblInfo);
-            } else {
-                tblInfo.setModel(new FileTableModel(fileList));
-            }
+    // 2️⃣ Borrar archivo de la lista maestra y del JSON
+    mvc.deleteDownload(info, allFiles, allDirs, fp);
 
-            //Refresca directorios de lista
-            DefaultListModel<FolderItem> newModel = new DefaultListModel<>();
-            for (String folderPath : downloadDirectories) {
-                newModel.addElement(new FolderItem(folderPath));
-            }
-            listDirectories.setModel(newModel);
+    // 3️⃣ Actualizar tabla según directorio y filtro actual
+    Object selected = listDirectories.getSelectedValue();
+    if (selected instanceof FolderItem folder) {
+        String filtro = (String) cbbxTypeFilter.getSelectedItem();
 
-            fp.guardarDatos(new DirectoryInformation(fileList, downloadDirectories));
-        }
+        List<FileInformation> filteredByDirectory = mvc.filterByDirectory(allFiles, folder.getFullPath());
+        List<FileInformation> filteredByType = mvc.filterByType(filteredByDirectory, filtro);
+
+        tblModel.setFileList(filteredByType);
+        tblModel.fireTableDataChanged();
+    } else {
+        tblModel.setFileList(allFiles);
+        tblModel.fireTableDataChanged();
+    }
+
+    // 4️⃣ Refresca lista de directorios
+    DefaultListModel<FolderItem> newModel = new DefaultListModel<>();
+    for (String folderPath : allDirs) {
+        newModel.addElement(new FolderItem(folderPath));
+    }
+    listDirectories.setModel(newModel);
     }//GEN-LAST:event_btnDeleteActionPerformed
 
-    //Permite filtra por type los elementos de una tabla
-    private void cbbxFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbxFilterActionPerformed
-        Object selected = listDirectories.getSelectedValue(); //Obtiene objeto seleccionado de JList
-        
+    //Filtra por type los elementos del directorio seleccionado
+    private void cbbxTypeFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbxTypeFilterActionPerformed
+        //Objeto seleccionado de JList
+        Object selected = listDirectories.getSelectedValue(); 
+
+        //Obtiene la ruta absoluta del archivo y el valor seleccionado de cbbx
         if (selected instanceof FolderItem) {
-            String folderPath = ((FolderItem) selected).getFullPath(); //Obtiene ruta
-            String filtro = (String) cbbxFilter.getSelectedItem(); //Lee filtro
-            mvc.showFilteredDownloads(folderPath, filtro, fileList, tblInfo);
+            String folderPath = ((FolderItem) selected).getFullPath(); 
+            String filtro = (String) cbbxTypeFilter.getSelectedItem();
+
+            //Obtiene los archivos gurdados en .json
+            FileProperties fp = new FileProperties();
+            DirectoryInformation allData = fp.cargarDatos();
+            List<FileInformation> allFiles = allData.downloads;
+
+            //Filtrar por directorio
+            List<FileInformation> filteredByDirectory = mvc.filterByDirectory(allFiles, folderPath);
+
+            //Filtrar por tipo
+            List<FileInformation> filteredByType = mvc.filterByType(filteredByDirectory, filtro);
+
+            //Actualizar tabla con los elementos filtrados
+            FileTableModel model = (FileTableModel) tblInfo.getModel();
+            model.setFileList(filteredByType);
+            model.fireTableDataChanged();
         }
-    }//GEN-LAST:event_cbbxFilterActionPerformed
+    }//GEN-LAST:event_cbbxTypeFilterActionPerformed
 
     //Reproduce el archivo seleccionado en la tabla
     private void btnPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayActionPerformed
 
-//        int row = tblInfo.getSelectedRow();
-//        if (row < 0) {
-//            JOptionPane.showMessageDialog(this, "Select a file to play.");
-//            return;
-//        }
-//        
-//        int modelRow = tblInfo.convertRowIndexToModel(row);
-//
-//        FileInformation info = tblModel.getFileAt(modelRow);
-// 
-//        File file = new File(info.folderPath, info.name);
-//        
-//        if (file.exists()) {
-//            try {
-//                Desktop.getDesktop().open(file);
-//            } catch (IOException ex) {
-//                JOptionPane.showMessageDialog(this, "Could not open file:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//            }
-//        } else {
-//            JOptionPane.showMessageDialog(this, "File not found: " + file.getAbsolutePath(), "Error", JOptionPane.ERROR_MESSAGE);
-//        }
+        int row = tblInfo.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Select a file to play.");
+            return;
+        }
+        
+        int modelRow = tblInfo.convertRowIndexToModel(row);
+        FileInformation info = tblModel.getFileAt(modelRow);
+ 
+        File file = new File(info.folderPath, info.name);
+        
+        if (file.exists()) {
+            try {
+                Desktop.getDesktop().open(file);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Could not open file:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "File not found: " + file.getAbsolutePath(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnPlayActionPerformed
 
     public static void main(String args[]) {
@@ -703,7 +768,7 @@ public class MainFrame extends JFrame {
     private javax.swing.JButton btnOpenLast;
     private javax.swing.JButton btnPaste;
     private javax.swing.JButton btnPlay;
-    private javax.swing.JComboBox<String> cbbxFilter;
+    private javax.swing.JComboBox<String> cbbxTypeFilter;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;

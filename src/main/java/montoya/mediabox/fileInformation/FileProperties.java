@@ -17,14 +17,38 @@ public class FileProperties {
     private static final Path JSON_PATH = Paths.get(FOLDER_NAME, "downloads.json");
 
     //Crea carpeta y almacena fichero .json con información de la descarga
-    public void guardarDatos(DirectoryInformation data) {
+    public void guardarDatos(FileInformation newFile) {
+        
+//        // Depuración: imprime nombre y ruta del archivo que se va a guardar
+//    System.out.println("Guardando archivo: " + newFile.name + " -> " + newFile.folderPath);
+        try {
+            Files.createDirectories(Paths.get(FOLDER_NAME));
+            DirectoryInformation dirInfo = cargarDatos();
+            
+//            // Depuración: mostrar todos los archivos y sus rutas
+//for (FileInformation f : dirInfo.downloads) {
+//    System.out.println(f.name + " -> " + f.folderPath);
+//}
+            dirInfo.downloads.add(newFile);
+            dirInfo.downloadFolders.add(newFile.folderPath);
+            
+            try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(JSON_PATH.toFile()))) {
+                out.writeObject(dirInfo);
+            }
+        } catch (IOException e) {
+            System.err.println("Error saving download data: " + e.getMessage());
+        }
+    }
+    
+    //Sobrescribe el fichero .json con toda la lista actual
+    public void guardarTodo(DirectoryInformation data) {
         try {
             Files.createDirectories(Paths.get(FOLDER_NAME));
             try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(JSON_PATH.toFile()))) {
                 out.writeObject(data);
             }
         } catch (IOException e) {
-            System.err.println("Error saving download data: " + e.getMessage());
+            System.err.println("Error saving all download data: " + e.getMessage());
         }
     }
 

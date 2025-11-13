@@ -4,9 +4,6 @@ import java.io.File;
 import javax.swing.*;
 import java.util.List;
 import java.util.Set;
-import java.util.ArrayList;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import montoya.mediabox.MainFrame;
 import montoya.mediabox.Preferences;
 import montoya.mediabox.fileInformation.DirectoryInformation;
@@ -89,78 +86,170 @@ public class MainViewController {
         cbbxFilter.addItem("M4A");
     }
     
-    //Muestra las descargas pertenecientes a un directorio y permite flitrarlas por tipo de archivo
-    public void showFilteredDownloads(String folderPath, String selectedFilter, List<FileInformation> fileList, JTable tblInfo) {
-
-        List<FileInformation> filtered = new ArrayList<>();
-
-        for (FileInformation fi : fileList) {
-
-            if (!fi.folderPath.equals(folderPath)) {
-                continue;
-            }
-
-            if (selectedFilter == null || selectedFilter.equals("All")) {
-                filtered.add(fi);
-            } else if (selectedFilter.equals("MP4") && fi.type.contains("mp4")) {
-                filtered.add(fi);
-            } else if (selectedFilter.equals("MKV") && fi.type.contains("x-matroska")) {
-                filtered.add(fi);
-            } else if (selectedFilter.equals("WEBM") && fi.type.contains("webm")) {
-                filtered.add(fi);
-            } else if (selectedFilter.equals("MP3") && fi.type.contains("mpeg")) {
-                filtered.add(fi);
-            } else if (selectedFilter.equals("WAV") && fi.type.contains("wav")) {
-                filtered.add(fi);
-            } else if (selectedFilter.equals("M4A") && fi.type.contains("m4a")) {
-                filtered.add(fi);
-            }
-        }
-
-        tblInfo.setModel(new FileTableModel(filtered));
+//    //Muestra las descargas pertenecientes a un directorio y permite flitrarlas por tipo de archivo
+//    public void showTypeFiltered(String folderPath, String selectedFilter, List<FileInformation> fileList, JTable tblInfo) {
+//
+//        List<FileInformation> filtered = new ArrayList<>();
+//
+//        for (FileInformation fi : fileList) {
+//
+//            if (!fi.folderPath.equals(folderPath)) {
+//                continue;
+//            }
+//
+//            if (selectedFilter == null || selectedFilter.equals("All")) {
+//                filtered.add(fi);
+//            } else if (selectedFilter.equals("MP4") && fi.type.contains("mp4")) {
+//                filtered.add(fi);
+//            } else if (selectedFilter.equals("MKV") && fi.type.contains("x-matroska")) {
+//                filtered.add(fi);
+//            } else if (selectedFilter.equals("WEBM") && fi.type.contains("webm")) {
+//                filtered.add(fi);
+//            } else if (selectedFilter.equals("MP3") && fi.type.contains("mpeg")) {
+//                filtered.add(fi);
+//            } else if (selectedFilter.equals("WAV") && fi.type.contains("wav")) {
+//                filtered.add(fi);
+//            } else if (selectedFilter.equals("M4A") && fi.type.contains("m4a")) {
+//                filtered.add(fi);
+//            }
+//        }
+//
+//        // 🔹 Actualiza la tabla en lugar de crear un nuevo modelo
+//        FileTableModel model = (FileTableModel) tblInfo.getModel();
+//        model.setFileList(filtered);
+//    }
+    
+    public List<FileInformation> filterByDirectory(List<FileInformation> allFiles, String folderPath) {
+    return allFiles.stream()
+            .filter(f -> f.folderPath.equals(folderPath))
+            .toList(); // o .collect(Collectors.toList()) si Java 8
+}
+    
+    public List<FileInformation> filterByType(List<FileInformation> files, String selectedType) {
+    if (selectedType == null || selectedType.equals("All")) {
+        return files;
     }
 
-    //Configuracion de JList, al seleccionar un directorio muestra las descargas.
-    public void configDownloadList(JList<?> listDirectories, JComboBox<String> cbbxFilter, List<FileInformation> fileList, JTable tblInfo) {
-        listDirectories.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {
-                    Object selected = listDirectories.getSelectedValue();
-                    if (selected instanceof FolderItem folder) {
+    return files.stream().filter(f -> {
+        return switch (selectedType) {
+            case "MP4" -> f.type.contains("mp4");
+            case "MKV" -> f.type.contains("x-matroska");
+            case "WEBM" -> f.type.contains("webm");
+            case "MP3" -> f.type.contains("mpeg");
+            case "WAV" -> f.type.contains("wav");
+            case "M4A" -> f.type.contains("m4a");
+            default -> false;
+        };
+    }).toList();
+}
+    
+    // Configuración de JList, al seleccionar un directorio muestra las descargas.
+public void configDownloadList(JList<?> listDirectories, JComboBox<String> cbbxFilter, JTable tblInfo) {
+    listDirectories.addListSelectionListener(e -> {
+        if (!e.getValueIsAdjusting()) {
+            Object selected = listDirectories.getSelectedValue();
+            if (selected instanceof FolderItem folder) {
 
-                        String filtro = (String) cbbxFilter.getSelectedItem();
-                        showFilteredDownloads(folder.getFullPath(), filtro, fileList, tblInfo);
-                    }
-                }
+                String selectedFilter = (String) cbbxFilter.getSelectedItem();
+                
+                FileProperties fp = new FileProperties();
+DirectoryInformation allData = fp.cargarDatos(); // lee JSON
+
+                // Lista maestra de todos los archivos descargados
+                List<FileInformation> allFiles = allData.downloads;
+
+                // 1️⃣ Filtrar por directorio
+                List<FileInformation> filteredByDirectory = filterByDirectory(allFiles, folder.getFullPath());
+
+                // 2️⃣ Filtrar por tipo
+                List<FileInformation> filteredByType = filterByType(filteredByDirectory, selectedFilter);
+
+                // 3️⃣ Actualizar el modelo de la tabla con los archivos filtrados
+                FileTableModel model = (FileTableModel) tblInfo.getModel();
+                model.setFileList(filteredByType);
+                model.fireTableDataChanged();
             }
-        });
+        }
+    });
+}
+
+//    //Configuracion de JList, al seleccionar un directorio muestra las descargas.
+//    public void configDownloadList(JList<?> listDirectories, JComboBox<String> cbbxFilter, List<FileInformation> fileList, JTable tblInfo) {
+//        listDirectories.addListSelectionListener(new ListSelectionListener() {
+//            @Override
+//            public void valueChanged(ListSelectionEvent e) {
+//                if (!e.getValueIsAdjusting()) {
+//                    Object selected = listDirectories.getSelectedValue();
+//                    if (selected instanceof FolderItem folder) {
+//
+//                        String filtro = (String) cbbxFilter.getSelectedItem();
+//                        
+//                        // Lista maestra de todos los archivos
+//List<FileInformation> allFiles = cargarTodosLosArchivos();
+//                        
+//                        // 🔹 Filtrar solo los archivos que pertenecen al directorio seleccionado
+//                    List<FileInformation> filteredFiles = fileList.stream()
+//                            .filter(f -> f.folderPath.equals(folder.getFullPath()))
+//                            .toList(); // si usas Java 8: .collect(Collectors.toList())
+//
+//                    // 🔹 Actualizar el modelo de la tabla con los archivos filtrados
+//                    FileTableModel model = (FileTableModel) tblInfo.getModel();
+//                    model.setFileList(filteredFiles);
+//                    model.fireTableDataChanged();
+//                        showTypeFiltered(folder.getFullPath(), filtro, fileList, tblInfo);
+//                    }
+//                }
+//            }
+//        });
+//    }
+
+//    //Borra la descarga tanto física como de la interfaz y actualiza los directorios mostrados
+//    public void deleteDownload(FileInformation fileInfo, List<FileInformation> fileList, Set<String> directoriosDescarga, FileProperties fp) {
+//
+//        //Borra descarga fisica
+//        File f = new File(fileInfo.folderPath, fileInfo.name); 
+//        if (f.exists()) {
+//            f.delete();
+//        }
+//
+//        fileList.remove(fileInfo);
+//
+//        //Si la carpeta esta vacia, la quita de JList lstDownload
+//        boolean emptyFolder = true; 
+//        for (FileInformation fi : fileList) {
+//            if (fi.folderPath.equals(fileInfo.folderPath)) {
+//                emptyFolder = false;
+//                break;
+//            }
+//        }
+//
+//        if (emptyFolder) {
+//            directoriosDescarga.remove(fileInfo.folderPath);
+//        }
+//        
+//        fp.guardarTodo(new DirectoryInformation(fileList, directoriosDescarga));
+//
+//        //fp.guardarDatos(new DirectoryInformation(fileList, directoriosDescarga));
+//    }
+
+public void deleteDownload(FileInformation fileInfo, List<FileInformation> allFiles, Set<String> allDirs, FileProperties fp) {
+
+    // 1️⃣ Borra archivo físico
+    File f = new File(fileInfo.folderPath, fileInfo.name);
+    if (f.exists()) {
+        f.delete();
     }
 
-    //Borra la descarga tanto física como de la interfaz y actualiza los directorios mostrados
-    public void deleteDownload(FileInformation fileInfo, List<FileInformation> fileList, Set<String> directoriosDescarga, FileProperties fp) {
+    // 2️⃣ Quita el archivo de la lista maestra
+    allFiles.removeIf(fi -> fi.name.equals(fileInfo.name) && fi.folderPath.equals(fileInfo.folderPath));
 
-        //Borra descarga fisica
-        File f = new File(fileInfo.folderPath, fileInfo.name); 
-        if (f.exists()) {
-            f.delete();
-        }
-
-        fileList.remove(fileInfo);
-
-        //Si la carpeta esta vacia, la quita de JList lstDownload
-        boolean emptyFolder = true; 
-        for (FileInformation fi : fileList) {
-            if (fi.folderPath.equals(fileInfo.folderPath)) {
-                emptyFolder = false;
-                break;
-            }
-        }
-
-        if (emptyFolder) {
-            directoriosDescarga.remove(fileInfo.folderPath);
-        }
-
-        fp.guardarDatos(new DirectoryInformation(fileList, directoriosDescarga));
+    // 3️⃣ Si la carpeta quedó vacía, quítala de los directorios
+    boolean emptyFolder = allFiles.stream().noneMatch(fi -> fi.folderPath.equals(fileInfo.folderPath));
+    if (emptyFolder) {
+        allDirs.remove(fileInfo.folderPath);
     }
+
+    // 4️⃣ Guarda la lista maestra actualizada en JSON
+    fp.guardarTodo(new DirectoryInformation(allFiles, allDirs));
+}
 }

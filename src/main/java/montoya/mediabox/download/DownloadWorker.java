@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Date;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
-import montoya.mediabox.fileInformation.DirectoryInformation;
 import montoya.mediabox.fileInformation.FileInformation;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
@@ -88,7 +87,9 @@ public class DownloadWorker extends SwingWorker<Void, String> {
                         tblModel.addFile(info);
                     }
                 });
-                fp.guardarDatos(new DirectoryInformation(tblModel.getFileList(), downloadDirectories)); //Guarda el archivo .json
+
+                fp.guardarDatos(info);
+//                fp.guardarDatos(new DirectoryInformation(tblModel.getFileList(), downloadDirectories)); //Guarda el archivo .json
             }
         }
 
