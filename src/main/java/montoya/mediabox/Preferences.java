@@ -219,7 +219,7 @@ public class Preferences extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnYtDlpActionPerformed
 
-    //Boton save llama a metodos save y clear
+    //Boton save llama a metodos save
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         savePreferences();
     }//GEN-LAST:event_btnSaveActionPerformed

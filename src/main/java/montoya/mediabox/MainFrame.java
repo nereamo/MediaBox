@@ -1,5 +1,6 @@
 package montoya.mediabox;
 
+import java.awt.Color;
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
@@ -41,6 +42,8 @@ public class MainFrame extends JFrame {
         dm = new DownloadManager(fp);
         preferences = new Preferences(this, dm);
         mvc = new MainViewController(this, mainPanel, preferences, barProgress);
+        
+        btnDownload.setForeground(Color.BLACK);
 
         preferences.setMainController(mvc);
 
@@ -51,7 +54,7 @@ public class MainFrame extends JFrame {
         radioButtons();
 
         //Carga datos guardados en archivo .json
-        DirectoryInformation data = fp.cargarDatos();
+        DirectoryInformation data = fp.loadDownloads();
         fileList = data.downloads;
         downloadDirectories.addAll(data.downloadFolders);
 
@@ -153,8 +156,8 @@ public class MainFrame extends JFrame {
         mainPanel.setPreferredSize(new java.awt.Dimension(1300, 770));
         mainPanel.setLayout(null);
 
-        lblUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblUrl.setText("URL:");
+        lblUrl.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lblUrl.setText("URL");
         mainPanel.add(lblUrl);
         lblUrl.setBounds(50, 20, 37, 20);
 
@@ -182,8 +185,8 @@ public class MainFrame extends JFrame {
         mainPanel.add(btnClear);
         btnClear.setBounds(410, 50, 100, 24);
 
-        lblFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblFolder.setText("Folder:");
+        lblFolder.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lblFolder.setText("Folder");
         mainPanel.add(lblFolder);
         lblFolder.setBounds(50, 100, 50, 20);
 
@@ -201,6 +204,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(btnBrowse);
         btnBrowse.setBounds(50, 130, 90, 24);
 
+        btnDownload.setBackground(new java.awt.Color(255, 204, 153));
         btnDownload.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnDownload.setText("Download");
         btnDownload.addActionListener(new java.awt.event.ActionListener() {
@@ -209,7 +213,7 @@ public class MainFrame extends JFrame {
             }
         });
         mainPanel.add(btnDownload);
-        btnDownload.setBounds(130, 440, 120, 24);
+        btnDownload.setBounds(140, 440, 120, 24);
 
         btnOpenLast.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnOpenLast.setText("Open Last");
@@ -284,7 +288,7 @@ public class MainFrame extends JFrame {
         );
 
         mainPanel.add(pnlVideo);
-        pnlVideo.setBounds(40, 190, 210, 210);
+        pnlVideo.setBounds(50, 190, 210, 210);
 
         pnlAudio.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Audio", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14))); // NOI18N
 
@@ -322,7 +326,7 @@ public class MainFrame extends JFrame {
         );
 
         mainPanel.add(pnlAudio);
-        pnlAudio.setBounds(280, 190, 210, 210);
+        pnlAudio.setBounds(290, 190, 210, 210);
 
         pnlDownloads.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Downloads", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14))); // NOI18N
 
@@ -394,10 +398,11 @@ public class MainFrame extends JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlDownloadsLayout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(18, Short.MAX_VALUE))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 484, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(8, 8, 8)))
+                .addContainerGap(10, Short.MAX_VALUE))
         );
         pnlDownloadsLayout.setVerticalGroup(
             pnlDownloadsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -408,15 +413,15 @@ public class MainFrame extends JFrame {
                 .addGroup(pnlDownloadsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addGroup(pnlDownloadsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDelete)
                     .addComponent(btnPlay))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(25, 25, 25))
         );
 
         mainPanel.add(pnlDownloads);
-        pnlDownloads.setBounds(630, 20, 630, 380);
+        pnlDownloads.setBounds(630, 20, 630, 400);
 
         getContentPane().add(mainPanel);
         mainPanel.setBounds(0, 0, 1300, 770);
@@ -537,7 +542,7 @@ public class MainFrame extends JFrame {
         }
     }//GEN-LAST:event_btnBrowseActionPerformed
 
-    //Copia del portapapeles a JTextField "urlField"
+    //Copia del portapapeles a JTextField para pegar la url
     private void btnPasteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPasteActionPerformed
         
         Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -618,12 +623,12 @@ public class MainFrame extends JFrame {
 
         //Carga lista de .json
         FileProperties fp = new FileProperties();
-        DirectoryInformation data = fp.cargarDatos();
+        DirectoryInformation data = fp.loadDownloads();
         List<FileInformation> allFiles = data.downloads;
         Set<String> allDirs = data.downloadFolders;
 
         //Borra archivo físico y de .json
-        mvc.deleteDownload(info, allFiles, allDirs, fp);
+        fp.deleteDownload(info, allFiles, allDirs);
 
         //Actualiza la tabla dependiento del directorio seleccionado
         Object selected = listDirectories.getSelectedValue();
@@ -660,7 +665,7 @@ public class MainFrame extends JFrame {
 
             //Obtiene los archivos gurdados en .json
             FileProperties fp = new FileProperties();
-            DirectoryInformation allData = fp.cargarDatos();
+            DirectoryInformation allData = fp.loadDownloads();
             List<FileInformation> allFiles = allData.downloads;
 
             //Filtrar por directorio
@@ -681,7 +686,7 @@ public class MainFrame extends JFrame {
 
         int row = tblInfo.getSelectedRow();
         if (row < 0) {
-            JOptionPane.showMessageDialog(this, "Select a file to play.");
+            JOptionPane.showMessageDialog(this, "Please select a file to play.");
             return;
         }
         

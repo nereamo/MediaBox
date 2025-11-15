@@ -2,7 +2,6 @@ package montoya.mediabox.controller;
 
 import java.util.*;
 import javax.swing.*;
-import java.io.File;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import montoya.mediabox.MainFrame;
@@ -117,26 +116,32 @@ public class MainViewController {
                         if (fi.type.contains("mp4")) {
                             filter.add(fi);
                         }
+                        break;
                     case "MKV":
                         if (fi.type.contains("x-matroska")) {
                             filter.add(fi);
                         }
+                        break;
                     case "WEBM":
                         if (fi.type.contains("webm")) {
                             filter.add(fi);
                         }
+                        break;
                     case "MP3":
                         if (fi.type.contains("mpeg")) {
                             filter.add(fi);
                         }
+                        break;
                     case "WAV":
                         if (fi.type.contains("wav")) {
                             filter.add(fi);
                         }
+                        break;
                     case "M4A":
                         if (fi.type.contains("m4a")) {
                             filter.add(fi);
                         }
+                        break;
                     default:
                         break;
                 }
@@ -159,12 +164,12 @@ public class MainViewController {
                     String selectedFilter = (String) cbbxFilter.getSelectedItem();
 
                     FileProperties fp = new FileProperties();
-                    DirectoryInformation allData = fp.cargarDatos(); // lee JSON
+                    DirectoryInformation allData = fp.loadDownloads(); // lee JSON
 
                     //Lista completa de todas las descargas
                     List<FileInformation> allFiles = allData.downloads;
 
-                    //Filtra por directorio seleccionado en lista
+                    //Filtra por directorio seleccionado en JList
                     List<FileInformation> filteredByDirectory = filterByDirectory(allFiles, folder.getFullPath());
 
                     //Filtra por tipo selccionado en comboBox
@@ -179,49 +184,5 @@ public class MainViewController {
                 
             }
         });
-    }
-
-    public void deleteDownload(FileInformation fileInfo, List<FileInformation> allFiles, Set<String> allDirs, FileProperties fp) {
-
-        //Borra archivo fisico
-        File f = new File(fileInfo.folderPath, fileInfo.name);
-        if (f.exists()) {
-            f.delete();
-        }
-
-        for(int i = 0; i <allFiles.size(); i++){
-            FileInformation fi = allFiles.get(i);
-            if(fi.name.equals(fileInfo.name) && fi.folderPath.equals(fileInfo.folderPath)){
-                allFiles.remove(i);
-                break;
-            }
-        }
-        
-        boolean emptyFolder = true;
-        for(int i = 0; i < allFiles.size(); i++){
-            FileInformation fi = allFiles.get(i);
-            if(fi.folderPath.equals(fileInfo.folderPath)){
-                emptyFolder = false;
-                break;
-            }
-        }
-        
-        if(emptyFolder){
-            allDirs.remove(fileInfo.folderPath);
-        }
-        
-        fp.guardarTodo(new DirectoryInformation(allFiles, allDirs));
-        
-//        //Borra elemnto de la lista completa
-//        allFiles.removeIf(fi -> fi.name.equals(fileInfo.name) && fi.folderPath.equals(fileInfo.folderPath));
-
-//        //Si la carpeta quedo vacia la quita del listado
-//        boolean emptyFolder = allFiles.stream().noneMatch(fi -> fi.folderPath.equals(fileInfo.folderPath));
-//        if (emptyFolder) {
-//            allDirs.remove(fileInfo.folderPath);
-//        }
-
-        //Guarda el .json actualizado
-        fp.guardarTodo(new DirectoryInformation(allFiles, allDirs));
     }
 }

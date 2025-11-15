@@ -88,8 +88,7 @@ public class DownloadWorker extends SwingWorker<Void, String> {
                     }
                 });
 
-                fp.guardarDatos(info);
-//                fp.guardarDatos(new DirectoryInformation(tblModel.getFileList(), downloadDirectories)); //Guarda el archivo .json
+                fp.addDownload(info); //Guarda el archivo .json 
             }
         }
 
