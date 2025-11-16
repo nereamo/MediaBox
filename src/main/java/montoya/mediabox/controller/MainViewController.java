@@ -85,6 +85,13 @@ public class MainViewController {
         cbbxFilter.addItem("WAV");
         cbbxFilter.addItem("M4A");
     }
+    
+    public void applyQuality(JComboBox cbbxQuality){
+        cbbxQuality.removeAllItems();
+        cbbxQuality.addItem("1080");
+        cbbxQuality.addItem("720");
+        cbbxQuality.addItem("480");
+    }
 
     //Filtramos por directorio seleccionado en la lista
     public List<FileInformation> filterByDirectory(List<FileInformation> allFiles, String folderPath) {

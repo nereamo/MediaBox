@@ -34,6 +34,7 @@ public class MainFrame extends JFrame {
     private final FileProperties fp;
     private final MainViewController mvc;
     private ButtonGroup bg;
+    private String quality;
 
     public MainFrame() {
         initComponents();
@@ -72,8 +73,12 @@ public class MainFrame extends JFrame {
         //Muestra las descargas pertenecientes a un directorio
         mvc.configDownloadList(listDirectories, cbbxTypeFilter, tblInfo);
         
-        //Aplica el filtro seleccionado en el comboBox
+        //Aplica el filtro por tipo de archivo
         mvc.applyFilters(cbbxTypeFilter);
+        
+        //Aplica filtro de calidad 
+        mvc.applyQuality(cbbxQualityFilter);
+        
     }
     
     //Añadir los radioButtons a ButtonGroup
@@ -119,7 +124,7 @@ public class MainFrame extends JFrame {
         radioMp4 = new javax.swing.JRadioButton();
         radioMkv = new javax.swing.JRadioButton();
         radioWebm = new javax.swing.JRadioButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbbxQualityFilter = new javax.swing.JComboBox<>();
         pnlAudio = new javax.swing.JPanel();
         radioMp3 = new javax.swing.JRadioButton();
         radioWav = new javax.swing.JRadioButton();
@@ -254,24 +259,26 @@ public class MainFrame extends JFrame {
         radioWebm.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         radioWebm.setText("WEBM");
 
-        jComboBox1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Quality" }));
+        cbbxQualityFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        cbbxQualityFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Quality" }));
 
         javax.swing.GroupLayout pnlVideoLayout = new javax.swing.GroupLayout(pnlVideo);
         pnlVideo.setLayout(pnlVideoLayout);
         pnlVideoLayout.setHorizontalGroup(
             pnlVideoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlVideoLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(pnlVideoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(pnlVideoLayout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(cbbxQualityFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlVideoLayout.createSequentialGroup()
+                        .addGap(15, 15, 15)
                         .addGroup(pnlVideoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(radioMp4, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(radioMkv, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(radioWebm, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 58, Short.MAX_VALUE)))
-                .addContainerGap())
+                            .addComponent(radioWebm, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(pnlVideoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(radioMkv, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(radioMp4, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         pnlVideoLayout.setVerticalGroup(
             pnlVideoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -282,9 +289,9 @@ public class MainFrame extends JFrame {
                 .addComponent(radioMkv)
                 .addGap(18, 18, 18)
                 .addComponent(radioWebm)
-                .addGap(18, 18, 18)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addComponent(cbbxQualityFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17))
         );
 
         mainPanel.add(pnlVideo);
@@ -568,6 +575,7 @@ public class MainFrame extends JFrame {
         String url = txtUrl.getText().trim();
         String folder = txtFolder.getText().trim();
         String format = bg.getSelection().getActionCommand();
+        String quality = (String) cbbxQualityFilter.getSelectedItem();
 
         dm.setTempPath(folder);
         areaInfo.setText("");
@@ -575,7 +583,7 @@ public class MainFrame extends JFrame {
         Thread th = new Thread() {
             @Override
             public void run() {
-                dm.download(url, folder, format, areaInfo, barProgress, tblModel, listDirectories, downloadDirectories);
+                dm.download(url, folder, format, quality, areaInfo, barProgress, tblModel, listDirectories, downloadDirectories);
 
                 if (downloadDirectories.add(folder)) {
                     DefaultListModel listModel = (DefaultListModel) listDirectories.getModel();
@@ -738,8 +746,8 @@ public class MainFrame extends JFrame {
     private javax.swing.JButton btnOpenLast;
     private javax.swing.JButton btnPaste;
     private javax.swing.JButton btnPlay;
+    private javax.swing.JComboBox<String> cbbxQualityFilter;
     private javax.swing.JComboBox<String> cbbxTypeFilter;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;

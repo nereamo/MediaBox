@@ -73,7 +73,7 @@ public class DownloadManager {
     }
 
     //Verifica si los campos de preferences se han completado
-    public void download(String url, String folder, String format, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, JList<FolderItem> listDirectories, Set<String> downloadDirectories) {
+    public void download(String url, String folder, String format, String quality, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, JList<FolderItem> listDirectories, Set<String> downloadDirectories) {
         if (url.isEmpty() || folder.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter a URL and select a folder.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -84,7 +84,7 @@ public class DownloadManager {
             return;
         }
 
-        ProcessBuilder pb = buildCommand(url, folder, format);
+        ProcessBuilder pb = buildCommand(url, folder, format, quality);
 
         progressBar.setVisible(true);
         progressBar.setIndeterminate(true);
@@ -103,7 +103,7 @@ public class DownloadManager {
     }
     
     //Devuelve ProcessBuilder con configuración para yt-dlp
-    private ProcessBuilder buildCommand(String url, String folder, String format) {
+    private ProcessBuilder buildCommand(String url, String folder, String format, String quality) {
         List<String> cmd = new ArrayList<>();
         
         cmd.add(ytDlpLocation);
@@ -116,6 +116,24 @@ public class DownloadManager {
         } else {
             cmd.add("-o");
             cmd.add(folder + File.separator + "%(title)s.%(ext)s");
+        }
+        
+        String qualityFilter = "";
+        
+        //Ajustar calidad de video
+        switch (quality){
+            case "1080":
+                qualityFilter = "[height<=1080]";
+                break;
+            case "720":
+                qualityFilter = "[height<=720]";
+                break;
+            case "480":
+                qualityFilter = "[height<=480]";
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Unknown quality selected: " + quality, "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
 
         //Ajustar descarga según formato
@@ -139,19 +157,19 @@ public class DownloadManager {
             //Video
             case "mp4":
                 cmd.add("-f");
-                cmd.add("bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4");
+                cmd.add("bestvideo" + qualityFilter + "+bestaudio[ext=m4a]/mp4");
                 cmd.add("--merge-output-format");
                 cmd.add("mp4");
                 break;
             case "mkv":
                 cmd.add("-f");
-                cmd.add("bestvideo+bestaudio/best");
+                cmd.add("bestvideo" + qualityFilter + "+bestaudio/best");
                 cmd.add("--merge-output-format");
                 cmd.add("mkv");
                 break;
             case "webm":
                 cmd.add("-f");
-                cmd.add("bestvideo[ext=webm]+bestaudio[ext=webm]/webm");
+                cmd.add("bestvideo[ext=webm]" + qualityFilter + "+bestaudio[ext=webm]/webm");
                 cmd.add("--merge-output-format");
                 cmd.add("webm");
                 break;
@@ -159,6 +177,7 @@ public class DownloadManager {
                 JOptionPane.showMessageDialog(null, "Unknown format selected: " + format, "Error", JOptionPane.ERROR_MESSAGE);
             return null;
         }
+        
         
         //Archivo .m3u
         if (createM3u) {
