@@ -586,8 +586,13 @@ public class MainFrame extends JFrame {
                 dm.download(url, folder, format, quality, areaInfo, barProgress, tblModel, listDirectories, downloadDirectories);
 
                 if (downloadDirectories.add(folder)) {
-                    DefaultListModel listModel = (DefaultListModel) listDirectories.getModel();
-                    listModel.addElement(new FolderItem(folder));
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            DefaultListModel listModel = (DefaultListModel) listDirectories.getModel();
+                            listModel.addElement(new FolderItem(folder));
+                        }
+                    });
                 }
             }
         };
