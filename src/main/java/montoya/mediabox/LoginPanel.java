@@ -28,7 +28,7 @@ public class LoginPanel extends JPanel{
     private final JButton btnLogin = new JButton("Login");
     private final JButton btnClean = new JButton("Clean");
     private JCheckBox chkShowPssw = new JCheckBox("Show Password");
-    private JCheckBox chkRemember = new JCheckBox("Remember");
+    private JCheckBox chkRemember = new JCheckBox("Remember me");
     private Font bold = new Font("Arial", Font.BOLD, 14);
     private Font plain = new Font("Arial", Font.PLAIN, 14);
     
@@ -51,6 +51,7 @@ public class LoginPanel extends JPanel{
         cleanTextFields();
     } 
     
+    //Configuracion del panel que contiene el campo para introducir email
     private void configEmail(){
         pnlEmail.setLayout(new MigLayout("center", "[grow]", "[]"));
         pnlEmail.setBorder(BorderFactory.createTitledBorder("Email"));
@@ -58,6 +59,7 @@ public class LoginPanel extends JPanel{
         pnlEmail.add(txtEmail, "wrap, align center");
     }
     
+    //Configuracion del panel que contiene el campo para password y ver password
     private void configPassword(){
         pnlPassword.setLayout(new MigLayout("center", "[grow]", "[]"));
         pnlPassword.setBorder(BorderFactory.createTitledBorder("Password"));
@@ -66,6 +68,7 @@ public class LoginPanel extends JPanel{
         pnlPassword.add(chkShowPssw);
     }
     
+    //Configuracion del panel que contiene los botones clean, login y el checkBox remember
     private void configButtons(){
         pnlButtons.setLayout(new MigLayout("center", "[grow]", "[]"));
         pnlButtons.add(chkRemember, "wrap, align center");
@@ -75,6 +78,7 @@ public class LoginPanel extends JPanel{
         btnLogin.setBackground(new Color(255, 204, 153)); 
     }
     
+    //Configuración de la fuente de los componentes
     private void applyFontToAll(Font fontBold, Font fontPlain) {
         txtEmail.setFont(fontPlain);
         txtPassword.setFont(fontPlain);
@@ -87,6 +91,7 @@ public class LoginPanel extends JPanel{
         ((TitledBorder) pnlPassword.getBorder()).setTitleFont(fontBold);
     }
     
+    //Boton clean limpia el texto escrito en txtEmail y txtPassword
     private void cleanTextFields(){
         btnClean.addActionListener(e -> {
             txtEmail.setText("");
@@ -94,6 +99,7 @@ public class LoginPanel extends JPanel{
         });
     } 
     
+    //Muestra '*' en campo password y oculta password al ser escrita
     private void writerPassword(){
         
         txtPassword.setEchoChar((char)0);
@@ -118,6 +124,7 @@ public class LoginPanel extends JPanel{
         });
     }
     
+    //CheckBox que permite ver la contraseña introducida
     private void showPassword(){
         
         chkShowPssw.addActionListener(e ->{
