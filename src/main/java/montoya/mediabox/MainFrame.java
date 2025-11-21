@@ -1,6 +1,5 @@
 package montoya.mediabox;
 
-import java.awt.Color;
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
@@ -13,9 +12,7 @@ import montoya.mediabox.download.DownloadManager;
 import montoya.mediabox.dialogs.DialogAbout;
 import montoya.mediabox.controller.MainViewController;
 import montoya.mediabox.fileInformation.FileInformation;
-import montoya.mediabox.fileInformation.FileTableModel;
 import montoya.mediabox.fileInformation.FileProperties;
-import montoya.mediabox.fileInformation.DirectoryInformation;
 import montoya.mediabox.fileInformation.FolderItem;
 
 /**
@@ -30,11 +27,11 @@ public class MainFrame extends JFrame {
     private Preferences preferences;
     List<FileInformation> fileList = new ArrayList<>();
     private final Set<String> downloadDirectories = new HashSet<>();
-    private FileTableModel tblModel;
     private final FileProperties fp;
     private final MainViewController mvc;
-    private ButtonGroup bg;
-    private String quality;
+    private final DownloadsPanel dp;
+    private final ButtonGroup bg;
+ 
 
     public MainFrame() {
         initComponents();
@@ -42,9 +39,8 @@ public class MainFrame extends JFrame {
         bg = new ButtonGroup();
         dm = new DownloadManager(fp);
         preferences = new Preferences(this, dm);
-        mvc = new MainViewController(this, mainPanel, preferences, barProgress);
-        
-        btnDownload.setForeground(Color.BLACK);
+        mvc = new MainViewController(this, pnlMain, preferences, barProgress);
+        dp = new DownloadsPanel(fp, mvc, fileList, downloadDirectories);
 
         preferences.setMainController(mvc);
 
@@ -52,29 +48,12 @@ public class MainFrame extends JFrame {
         mvc.configFrame();
         mvc.configPreferencesPanel();
         
+        //Metodo que agrupa los radioButtons
         radioButtons();
 
-        //Carga datos guardados en archivo .json
-        DirectoryInformation data = fp.loadDownloads();
-        fileList = data.downloads;
-        downloadDirectories.addAll(data.downloadFolders);
-
-        //AbstractTableMode
-        tblModel = new FileTableModel(fileList);
-        tblInfo.setModel(tblModel);
-
-        //Lista de objeto 'descarga'
-        DefaultListModel listModel = new DefaultListModel();
-        for (String folder : downloadDirectories) {
-            listModel.addElement(new FolderItem(folder));
-        }
-        listDirectories.setModel(listModel);
-        
-        //Muestra las descargas pertenecientes a un directorio
-        mvc.configDownloadList(listDirectories, cbbxTypeFilter, tblInfo);
-        
-        //Aplica el filtro por tipo de archivo
-        mvc.applyFilters(cbbxTypeFilter);
+       //Configuración de DownloadsPanel
+        dp.setBounds(630, 40, 630, 400);
+        pnlMain.add(dp);
         
         //Aplica filtro de calidad 
         mvc.applyQuality(cbbxQualityFilter);
@@ -106,7 +85,7 @@ public class MainFrame extends JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
-        mainPanel = new javax.swing.JPanel();
+        pnlMain = new javax.swing.JPanel();
         lblUrl = new javax.swing.JLabel();
         txtUrl = new javax.swing.JTextField();
         btnPaste = new javax.swing.JButton();
@@ -129,14 +108,6 @@ public class MainFrame extends JFrame {
         radioMp3 = new javax.swing.JRadioButton();
         radioWav = new javax.swing.JRadioButton();
         radioM4a = new javax.swing.JRadioButton();
-        pnlDownloads = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        listDirectories = new javax.swing.JList<>();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        tblInfo = new javax.swing.JTable();
-        cbbxTypeFilter = new javax.swing.JComboBox<>();
-        btnDelete = new javax.swing.JButton();
-        btnPlay = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mnuExit = new javax.swing.JMenuItem();
@@ -156,18 +127,18 @@ public class MainFrame extends JFrame {
         setResizable(false);
         getContentPane().setLayout(null);
 
-        mainPanel.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
-        mainPanel.setMinimumSize(new java.awt.Dimension(1300, 800));
-        mainPanel.setPreferredSize(new java.awt.Dimension(1300, 770));
-        mainPanel.setLayout(null);
+        pnlMain.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
+        pnlMain.setMinimumSize(new java.awt.Dimension(1300, 800));
+        pnlMain.setPreferredSize(new java.awt.Dimension(1300, 770));
+        pnlMain.setLayout(null);
 
         lblUrl.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lblUrl.setText("URL");
-        mainPanel.add(lblUrl);
+        pnlMain.add(lblUrl);
         lblUrl.setBounds(50, 20, 37, 20);
 
         txtUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        mainPanel.add(txtUrl);
+        pnlMain.add(txtUrl);
         txtUrl.setBounds(150, 50, 250, 23);
 
         btnPaste.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -177,7 +148,7 @@ public class MainFrame extends JFrame {
                 btnPasteActionPerformed(evt);
             }
         });
-        mainPanel.add(btnPaste);
+        pnlMain.add(btnPaste);
         btnPaste.setBounds(50, 50, 90, 24);
 
         btnClear.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -187,16 +158,16 @@ public class MainFrame extends JFrame {
                 btnClearActionPerformed(evt);
             }
         });
-        mainPanel.add(btnClear);
+        pnlMain.add(btnClear);
         btnClear.setBounds(410, 50, 100, 24);
 
         lblFolder.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lblFolder.setText("Folder");
-        mainPanel.add(lblFolder);
+        pnlMain.add(lblFolder);
         lblFolder.setBounds(50, 100, 50, 20);
 
         txtFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        mainPanel.add(txtFolder);
+        pnlMain.add(txtFolder);
         txtFolder.setBounds(150, 130, 250, 23);
 
         btnBrowse.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -206,7 +177,7 @@ public class MainFrame extends JFrame {
                 btnBrowseActionPerformed(evt);
             }
         });
-        mainPanel.add(btnBrowse);
+        pnlMain.add(btnBrowse);
         btnBrowse.setBounds(50, 130, 90, 24);
 
         btnDownload.setBackground(new java.awt.Color(255, 204, 153));
@@ -217,7 +188,7 @@ public class MainFrame extends JFrame {
                 btnDownloadActionPerformed(evt);
             }
         });
-        mainPanel.add(btnDownload);
+        pnlMain.add(btnDownload);
         btnDownload.setBounds(140, 440, 120, 24);
 
         btnOpenLast.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -227,11 +198,11 @@ public class MainFrame extends JFrame {
                 btnOpenLastActionPerformed(evt);
             }
         });
-        mainPanel.add(btnOpenLast);
+        pnlMain.add(btnOpenLast);
         btnOpenLast.setBounds(290, 440, 120, 24);
 
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/largelogoSmall3.png"))); // NOI18N
-        mainPanel.add(logoLabel);
+        pnlMain.add(logoLabel);
         logoLabel.setBounds(1100, 670, 180, 50);
 
         areaInfo.setColumns(20);
@@ -239,13 +210,13 @@ public class MainFrame extends JFrame {
         areaInfo.setRows(5);
         jScrollPane1.setViewportView(areaInfo);
 
-        mainPanel.add(jScrollPane1);
+        pnlMain.add(jScrollPane1);
         jScrollPane1.setBounds(40, 510, 450, 140);
 
         barProgress.setBackground(new java.awt.Color(204, 204, 204));
         barProgress.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         barProgress.setForeground(new java.awt.Color(255, 153, 51));
-        mainPanel.add(barProgress);
+        pnlMain.add(barProgress);
         barProgress.setBounds(40, 480, 450, 20);
 
         pnlVideo.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Video", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14))); // NOI18N
@@ -294,7 +265,7 @@ public class MainFrame extends JFrame {
                 .addGap(17, 17, 17))
         );
 
-        mainPanel.add(pnlVideo);
+        pnlMain.add(pnlVideo);
         pnlVideo.setBounds(50, 190, 210, 210);
 
         pnlAudio.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Audio", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14))); // NOI18N
@@ -332,106 +303,11 @@ public class MainFrame extends JFrame {
                 .addContainerGap(63, Short.MAX_VALUE))
         );
 
-        mainPanel.add(pnlAudio);
+        pnlMain.add(pnlAudio);
         pnlAudio.setBounds(290, 190, 210, 210);
 
-        pnlDownloads.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Downloads", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14))); // NOI18N
-
-        listDirectories.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        listDirectories.setPreferredSize(new java.awt.Dimension(40, 60));
-        listDirectories.setSelectionBackground(new java.awt.Color(255, 204, 153));
-        jScrollPane2.setViewportView(listDirectories);
-
-        tblInfo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        tblInfo.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Name", "Size", "Type", "Date"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Long.class, java.lang.String.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        tblInfo.setSelectionBackground(new java.awt.Color(255, 204, 153));
-        jScrollPane3.setViewportView(tblInfo);
-
-        cbbxTypeFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        cbbxTypeFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Filter" }));
-        cbbxTypeFilter.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbbxTypeFilterActionPerformed(evt);
-            }
-        });
-
-        btnDelete.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnDelete.setText("Delete");
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
-
-        btnPlay.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnPlay.setText("Play");
-        btnPlay.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPlayActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout pnlDownloadsLayout = new javax.swing.GroupLayout(pnlDownloads);
-        pnlDownloads.setLayout(pnlDownloadsLayout);
-        pnlDownloadsLayout.setHorizontalGroup(
-            pnlDownloadsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDownloadsLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(cbbxTypeFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(176, 176, 176))
-            .addGroup(pnlDownloadsLayout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addGroup(pnlDownloadsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlDownloadsLayout.createSequentialGroup()
-                        .addComponent(btnPlay, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlDownloadsLayout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 484, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(8, 8, 8)))
-                .addContainerGap(10, Short.MAX_VALUE))
-        );
-        pnlDownloadsLayout.setVerticalGroup(
-            pnlDownloadsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlDownloadsLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(cbbxTypeFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlDownloadsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                .addGroup(pnlDownloadsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDelete)
-                    .addComponent(btnPlay))
-                .addGap(25, 25, 25))
-        );
-
-        mainPanel.add(pnlDownloads);
-        pnlDownloads.setBounds(630, 20, 630, 400);
-
-        getContentPane().add(mainPanel);
-        mainPanel.setBounds(0, 0, 1300, 770);
+        getContentPane().add(pnlMain);
+        pnlMain.setBounds(0, 0, 1300, 770);
 
         menuBar.setBackground(new java.awt.Color(255, 102, 0));
         menuBar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 102, 0)));
@@ -527,12 +403,13 @@ public class MainFrame extends JFrame {
 
     //Directorio para guardar archivo descargado
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
+
         //Ventana que permite seleccionar un directorio
         JFileChooser directory = new JFileChooser();
         directory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         int result = directory.showOpenDialog(this);
-        
+
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFolder = directory.getSelectedFile();
 
@@ -542,7 +419,7 @@ public class MainFrame extends JFrame {
 
                 // Añadir el directorio a la lista si no está ya
                 if (downloadDirectories.add(folderPath)) {
-                    DefaultListModel listModel = (DefaultListModel) listDirectories.getModel();
+                    DefaultListModel<FolderItem> listModel = (DefaultListModel<FolderItem>) dp.getListDirectories().getModel();
                     listModel.addElement(new FolderItem(folderPath));
                 }
             }
@@ -570,8 +447,7 @@ public class MainFrame extends JFrame {
 
     //Ejecuta la descarga
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
-        //new Thread(() -> downloader.download(url, folder, format, areaInfo, barProgress)).start(); --> Expresion lambda
-
+        
         String url = txtUrl.getText().trim();
         String folder = txtFolder.getText().trim();
         String format = bg.getSelection().getActionCommand();
@@ -583,15 +459,16 @@ public class MainFrame extends JFrame {
         Thread th = new Thread() {
             @Override
             public void run() {
-                dm.download(url, folder, format, quality, areaInfo, barProgress, tblModel, listDirectories, downloadDirectories);
+                dm.download(url, folder, format, quality, areaInfo, barProgress, dp.getTableModel(), dp.getListDirectories(), downloadDirectories);
 
                 if (downloadDirectories.add(folder)) {
                     SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            DefaultListModel listModel = (DefaultListModel) listDirectories.getModel();
-                            listModel.addElement(new FolderItem(folder));
-                        }
+                    @Override
+                    public void run() {
+                        DefaultListModel<FolderItem> listModel
+                                = (DefaultListModel<FolderItem>) dp.getListDirectories().getModel();
+                        listModel.addElement(new FolderItem(folder));
+                     }
                     });
                 }
             }
@@ -618,106 +495,6 @@ public class MainFrame extends JFrame {
             JOptionPane.showMessageDialog(null, "No downloaded file found.", "Info", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnOpenLastActionPerformed
-
-    //Elimina archivo seleccionado en la JTable
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        int row = tblInfo.getSelectedRow();
-        if (row < 0) {
-            JOptionPane.showMessageDialog(this, "Select a file to delete.");
-            return;
-        }
-
-        FileInformation info = tblModel.getFileAt(row);
-
-        int confirm = JOptionPane.showConfirmDialog(this, "Do you want to delete this file? - " + info.name, "Delete", JOptionPane.YES_NO_OPTION);
-        if (confirm != JOptionPane.YES_OPTION) {
-            return;
-        }
-
-        //Carga lista de .json
-        FileProperties fp = new FileProperties();
-        DirectoryInformation data = fp.loadDownloads();
-        List<FileInformation> allFiles = data.downloads;
-        Set<String> allDirs = data.downloadFolders;
-
-        //Borra archivo físico y de .json
-        fp.deleteDownload(info, allFiles, allDirs);
-
-        //Actualiza la tabla dependiento del directorio seleccionado
-        Object selected = listDirectories.getSelectedValue();
-        if (selected instanceof FolderItem folder) {
-            String filtro = (String) cbbxTypeFilter.getSelectedItem();
-
-            List<FileInformation> filteredByDirectory = mvc.filterByDirectory(allFiles, folder.getFullPath());
-            List<FileInformation> filteredByType = mvc.filterByType(filteredByDirectory, filtro);
-
-            tblModel.setFileList(filteredByType);
-            tblModel.fireTableDataChanged();
-        } else {
-            tblModel.setFileList(allFiles);
-            tblModel.fireTableDataChanged();
-        }
-
-        //Actualiza los directorios en el listado
-        DefaultListModel<FolderItem> newModel = new DefaultListModel<>();
-        for (String folderPath : allDirs) {
-            newModel.addElement(new FolderItem(folderPath));
-        }
-        listDirectories.setModel(newModel);
-    }//GEN-LAST:event_btnDeleteActionPerformed
-
-    //Filtra por type los elementos del directorio seleccionado
-    private void cbbxTypeFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbxTypeFilterActionPerformed
-        //Objeto seleccionado de JList
-        Object selected = listDirectories.getSelectedValue(); 
-
-        //Obtiene la ruta absoluta del archivo y el valor seleccionado de cbbx
-        if (selected instanceof FolderItem) {
-            String folderPath = ((FolderItem) selected).getFullPath(); 
-            String filtro = (String) cbbxTypeFilter.getSelectedItem();
-
-            //Obtiene los archivos gurdados en .json
-            FileProperties fp = new FileProperties();
-            DirectoryInformation allData = fp.loadDownloads();
-            List<FileInformation> allFiles = allData.downloads;
-
-            //Filtrar por directorio
-            List<FileInformation> filteredByDirectory = mvc.filterByDirectory(allFiles, folderPath);
-
-            //Filtrar por tipo
-            List<FileInformation> filteredByType = mvc.filterByType(filteredByDirectory, filtro);
-
-            //Actualizar tabla con los elementos filtrados
-            FileTableModel model = (FileTableModel) tblInfo.getModel();
-            model.setFileList(filteredByType);
-            model.fireTableDataChanged();
-        }
-    }//GEN-LAST:event_cbbxTypeFilterActionPerformed
-
-    //Reproduce el archivo seleccionado en la tabla
-    private void btnPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayActionPerformed
-
-        int row = tblInfo.getSelectedRow();
-        if (row < 0) {
-            JOptionPane.showMessageDialog(this, "Please select a file to play.");
-            return;
-        }
-        
-        int modelRow = tblInfo.convertRowIndexToModel(row);
-        FileInformation info = tblModel.getFileAt(modelRow);
- 
-        File file = new File(info.folderPath, info.name);
-        
-        if (file.exists()) {
-            try {
-                Desktop.getDesktop().open(file);
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, "Could not open file:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "File not found: " + file.getAbsolutePath(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_btnPlayActionPerformed
 
     public static void main(String args[]) {
         /* Set the Metal look and feel */
@@ -746,24 +523,17 @@ public class MainFrame extends JFrame {
     private javax.swing.JProgressBar barProgress;
     private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnClear;
-    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnDownload;
     private javax.swing.JButton btnOpenLast;
     private javax.swing.JButton btnPaste;
-    private javax.swing.JButton btnPlay;
     private javax.swing.JComboBox<String> cbbxQualityFilter;
-    private javax.swing.JComboBox<String> cbbxTypeFilter;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblFolder;
     private javax.swing.JLabel lblUrl;
-    private javax.swing.JList<FolderItem> listDirectories;
     private javax.swing.JLabel logoLabel;
-    private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem mnuAbout;
     private javax.swing.JMenu mnuEdit;
@@ -772,7 +542,7 @@ public class MainFrame extends JFrame {
     private javax.swing.JMenu mnuHelp;
     private javax.swing.JMenuItem mnuPreferences;
     private javax.swing.JPanel pnlAudio;
-    private javax.swing.JPanel pnlDownloads;
+    private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlVideo;
     private javax.swing.JRadioButton radioM4a;
     private javax.swing.JRadioButton radioMkv;
@@ -780,7 +550,6 @@ public class MainFrame extends JFrame {
     private javax.swing.JRadioButton radioMp4;
     private javax.swing.JRadioButton radioWav;
     private javax.swing.JRadioButton radioWebm;
-    private javax.swing.JTable tblInfo;
     private javax.swing.JTextField txtFolder;
     private javax.swing.JTextField txtUrl;
     // End of variables declaration//GEN-END:variables

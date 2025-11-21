@@ -20,13 +20,13 @@ import montoya.mediabox.fileInformation.DirectoryInformation;
 public class MainViewController {
 
     private final MainFrame frame;
-    private final JPanel mainPanel;
+    private final JPanel pnlMain;
     private final Preferences preferences;
     private final JProgressBar barProgress;
 
-    public MainViewController(MainFrame frame, JPanel mainPanel, Preferences preferences, JProgressBar barProgress) {
+    public MainViewController(MainFrame frame, JPanel pnlMain, Preferences preferences, JProgressBar barProgress) {
         this.frame = frame;
-        this.mainPanel = mainPanel;
+        this.pnlMain = pnlMain;
         this.preferences = preferences;
         this.barProgress = barProgress;
     }
@@ -39,8 +39,8 @@ public class MainViewController {
         frame.setLocationRelativeTo(frame);
         frame.setLayout(null);
 
-        mainPanel.setSize(1300, 800);
-        frame.getContentPane().add(mainPanel);
+        pnlMain.setSize(1300, 800);
+        frame.getContentPane().add(pnlMain);
     }
 
     //Configuración de JPanel Preferences
@@ -53,18 +53,17 @@ public class MainViewController {
     //Mostrar el JPanel principal del JFrame
     public void showMainFramePanel() {
         preferences.setVisible(false);
-        mainPanel.setVisible(true);
+        pnlMain.setVisible(true);
     }
 
     //Mostrar el JPanel Preferences 
     public void showPreferencesPanel() {
-        mainPanel.setVisible(false);
+        pnlMain.setVisible(false);
         preferences.setVisible(true);
     }
 
     //Actualiza el progreso de JProgressBar
     public void updateProgressBar(int value) {
-        //SwingUtilities.invokeLater(() -> barProgress.setValue(value)); --> lambda
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
