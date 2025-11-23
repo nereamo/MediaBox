@@ -1,7 +1,8 @@
-package montoya.mediabox;
+package montoya.mediabox.panels;
 
 import java.io.*;
 import javax.swing.*;
+import montoya.mediabox.MainFrame;
 import montoya.mediabox.controller.MainViewController;
 import montoya.mediabox.download.DownloadManager;
 

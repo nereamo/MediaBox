@@ -1,5 +1,9 @@
 package montoya.mediabox;
 
+import java.awt.CardLayout;
+import montoya.mediabox.panels.DownloadsPanel;
+import montoya.mediabox.panels.Preferences;
+import montoya.mediabox.panels.LoginPanel;
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
@@ -8,6 +12,7 @@ import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.util.logging.Logger;
+import montoya.mediabox.controller.DataFilter;
 import montoya.mediabox.download.DownloadManager;
 import montoya.mediabox.dialogs.DialogAbout;
 import montoya.mediabox.controller.MainViewController;
@@ -30,9 +35,15 @@ public class MainFrame extends JFrame {
     private final Set<String> downloadDirectories = new HashSet<>();
     private final FileProperties fp;
     private final MainViewController mvc;
+    private final DataFilter df;
     private final DownloadsPanel dp;
     private final ButtonGroup bg;
     private boolean isLoggedIn = false;
+    private CardLayout cards;
+    private JPanel container;
+    public static final String CARD_LOGIN = "login";
+    public static final String CARD_MAIN = "main";
+    public static final String CARD_PREF = "preferences";
  
 
     public MainFrame() {
@@ -43,15 +54,28 @@ public class MainFrame extends JFrame {
         dm = new DownloadManager(fp);
         preferences = new Preferences(this, dm);
         mvc = new MainViewController(this, pnlMain, preferences, barProgress);
-        dp = new DownloadsPanel(fp, mvc, fileList, downloadDirectories);
-  
-        lp.autoLogin();
+        df = new DataFilter();
+        dp = new DownloadsPanel(fp, mvc, df, fileList, downloadDirectories);
+
+//        cards = new CardLayout();
+//        container = new JPanel(cards);
+//
+//        container.add(lp, CARD_LOGIN);
+//        container.add(pnlMain, CARD_MAIN);
+//        container.add(preferences, CARD_PREF);
+//
+//        cards.show(container, CARD_LOGIN);
+
+//       //Configuración de DownloadsPanel
+        dp.setBounds(630, 40, 630, 400);
+        pnlMain.add(dp);
         
-        if (!isLoggedIn) {
-            this.setContentPane(lp); 
-            this.setSize(1300, 800); // Tamaño más adecuado para el login
-            this.setLocationRelativeTo(null); // Centrar
-        }
+        
+container = mvc.showCards(lp, pnlMain, preferences);
+        setContentPane(container);
+        cards = (CardLayout) container.getLayout();
+
+        lp.autoLogin();
 
         preferences.setMainController(mvc);
 
@@ -60,60 +84,47 @@ public class MainFrame extends JFrame {
         mvc.configPreferencesPanel();
         
         //Metodo que agrupa los radioButtons
-        radioButtons();
+        //radioButtons();
+        mvc.configRadioButtons(bg, radioMp4, radioMkv, radioWebm, radioMp3, radioWav, radioM4a);
 
-       //Configuración de DownloadsPanel
-        dp.setBounds(630, 40, 630, 400);
-        pnlMain.add(dp);
-        
+
         //Aplica filtro de calidad 
         mvc.applyQuality(cbbxQualityFilter);
         
         this.setVisible(true);
         
     }
-    
-    public void loginSuccess(String token) {
-        
-        
-        System.out.println("Login Exitoso. Token recibido: " + token);  
-        
-        this.isLoggedIn = true;
-        
-        // 1. Cambiar el panel de contenido
-        this.setContentPane(pnlMain);
-        
-        // 2. Redimensionar el Frame al tamaño de la aplicación principal
-        this.setSize(1300, 800);
-        
-        // 3. Revalidar para que Swing reconozca el nuevo panel y tamaño
+
+    public void showCard(String cardName) {
+        cards.show(container, cardName);
         this.revalidate();
-        
-        // 4. Repintar la ventana para mostrar el nuevo contenido
         this.repaint();
-        
-        // 5. Opcional: Centrar la ventana más grande
-        this.setLocationRelativeTo(null);
     }
-    
+
+    public void loginSuccess(String token) {
+        System.out.println("Login Exitoso. Token recibido: " + token);
+        this.isLoggedIn = true;
+        showCard(CARD_MAIN);
+    }
+
     //Añadir los radioButtons a ButtonGroup
-    private void radioButtons() {
-        bg.add(radioMp4);
-        bg.add(radioMkv);
-        bg.add(radioWebm);
-        bg.add(radioMp3);
-        bg.add(radioWav);
-        bg.add(radioM4a);
-
-        radioMp4.setActionCommand("mp4");
-        radioMkv.setActionCommand("mkv");
-        radioWebm.setActionCommand("webm");
-        radioMp3.setActionCommand("mp3");
-        radioWav.setActionCommand("wav");
-        radioM4a.setActionCommand("m4a");
-
-        radioMp4.setSelected(true); //Dejar seleccionado por defecto MP4
-    }
+//    private void radioButtons() {
+//        bg.add(radioMp4);
+//        bg.add(radioMkv);
+//        bg.add(radioWebm);
+//        bg.add(radioMp3);
+//        bg.add(radioWav);
+//        bg.add(radioM4a);
+//
+//        radioMp4.setActionCommand("mp4");
+//        radioMkv.setActionCommand("mkv");
+//        radioWebm.setActionCommand("webm");
+//        radioMp3.setActionCommand("mp3");
+//        radioWav.setActionCommand("wav");
+//        radioM4a.setActionCommand("m4a");
+//
+//        radioMp4.setSelected(true); //Dejar seleccionado por defecto MP4
+//    }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -544,13 +555,10 @@ public class MainFrame extends JFrame {
 
     private void mnuLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLogoutActionPerformed
         this.isLoggedIn = false;
+        
+        showCard(CARD_LOGIN);
 
-        this.setContentPane(lp);
-        this.setSize(1300, 800);
         JOptionPane.showMessageDialog(this, "Sesión cerrada.", "Información", JOptionPane.INFORMATION_MESSAGE);
-
-        this.revalidate();
-        this.repaint();
     }//GEN-LAST:event_mnuLogoutActionPerformed
 
     public static void main(String args[]) {

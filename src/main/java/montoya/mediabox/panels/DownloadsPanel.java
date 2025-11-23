@@ -1,4 +1,4 @@
-package montoya.mediabox;
+package montoya.mediabox.panels;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -12,6 +12,7 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import montoya.mediabox.controller.DataFilter;
 import montoya.mediabox.controller.MainViewController;
 import montoya.mediabox.fileInformation.DirectoryInformation;
 import montoya.mediabox.fileInformation.FileInformation;
@@ -29,13 +30,15 @@ public class DownloadsPanel extends javax.swing.JPanel {
     private List<FileInformation> fileList = new ArrayList<>();
     private Set<String> downloadDirectories = new HashSet<>();
     private final MainViewController mvc;
+    private final DataFilter df;
     private Preferences preferences;
     private final FileProperties fp;
 
-    public DownloadsPanel(FileProperties fp, MainViewController mvc, List<FileInformation> fileList, Set<String> downloadDirectories) {
+    public DownloadsPanel(FileProperties fp, MainViewController mvc, DataFilter df, List<FileInformation> fileList, Set<String> downloadDirectories) {
         initComponents();
         this.fp = fp;
         this.mvc = mvc;
+        this.df = df;
         this.fileList = fileList;
         this.downloadDirectories = downloadDirectories;
         this.setSize(630, 400);
@@ -78,6 +81,18 @@ public class DownloadsPanel extends javax.swing.JPanel {
 
     public JComboBox<String> getTypeFilter() {
         return cbbxTypeFilter;
+    }
+    
+    public void refreshDirectoryList() {
+        DefaultListModel<FolderItem> model = new DefaultListModel<>();
+        for (String folderPath : downloadDirectories) {
+            model.addElement(new FolderItem(folderPath));
+        }
+        listDirectories.setModel(model);
+
+        if (!downloadDirectories.isEmpty()) {
+            listDirectories.setSelectedIndex(0); // Selecciona la primera carpeta
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -176,10 +191,10 @@ public class DownloadsPanel extends javax.swing.JPanel {
             List<FileInformation> allFiles = allData.downloads;
 
             //Filtrar por directorio
-            List<FileInformation> filteredByDirectory = mvc.filterByDirectory(allFiles, folderPath);
+            List<FileInformation> filteredByDirectory = df.filterByDirectory(allFiles, folderPath);
 
             //Filtrar por tipo
-            List<FileInformation> filteredByType = mvc.filterByType(filteredByDirectory, filtro);
+            List<FileInformation> filteredByType = df.filterByType(filteredByDirectory, filtro);
 
             //Actualizar tabla con los elementos filtrados
             FileTableModel model = (FileTableModel) tblInfo.getModel();
@@ -240,8 +255,8 @@ public class DownloadsPanel extends javax.swing.JPanel {
         if (selected instanceof FolderItem folder) {
             String filtro = (String) cbbxTypeFilter.getSelectedItem();
 
-            List<FileInformation> filteredByDirectory = mvc.filterByDirectory(allFiles, folder.getFullPath());
-            List<FileInformation> filteredByType = mvc.filterByType(filteredByDirectory, filtro);
+            List<FileInformation> filteredByDirectory = df.filterByDirectory(allFiles, folder.getFullPath());
+            List<FileInformation> filteredByType = df.filterByType(filteredByDirectory, filtro);
 
             tblModel.setFileList(filteredByType);
             tblModel.fireTableDataChanged();

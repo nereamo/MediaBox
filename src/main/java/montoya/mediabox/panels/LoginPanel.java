@@ -1,4 +1,4 @@
-package montoya.mediabox;
+package montoya.mediabox.panels;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+import montoya.mediabox.MainFrame;
 import montoya.mediabox.apiclient.ApiClient;
 import montoya.mediabox.tokenuser.TokenController;
 import montoya.mediabox.tokenuser.TokenUser;
