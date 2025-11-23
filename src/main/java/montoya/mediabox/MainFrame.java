@@ -110,6 +110,7 @@ public class MainFrame extends JFrame {
         radioM4a = new javax.swing.JRadioButton();
         menuBar = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         mnuExit = new javax.swing.JMenuItem();
         mnuEdit = new javax.swing.JMenu();
         mnuPreferences = new javax.swing.JMenuItem();
@@ -325,6 +326,10 @@ public class MainFrame extends JFrame {
         mnuFile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mnuFile.setPreferredSize(new java.awt.Dimension(40, 40));
 
+        jMenuItem1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jMenuItem1.setText("Logout");
+        mnuFile.add(jMenuItem1);
+
         mnuExit.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mnuExit.setText("Exit");
         mnuExit.setToolTipText("Exit");
@@ -530,6 +535,7 @@ public class MainFrame extends JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblFolder;
     private javax.swing.JLabel lblUrl;

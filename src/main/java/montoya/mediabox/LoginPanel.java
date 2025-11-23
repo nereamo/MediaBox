@@ -5,6 +5,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -12,6 +16,9 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+import montoya.mediabox.apiclient.ApiClient;
+import montoya.mediabox.tokenuser.TokenController;
+import montoya.mediabox.tokenuser.TokenUser;
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -31,6 +38,10 @@ public class LoginPanel extends JPanel{
     private JCheckBox chkRemember = new JCheckBox("Remember me");
     private Font bold = new Font("Arial", Font.BOLD, 14);
     private Font plain = new Font("Arial", Font.PLAIN, 14);
+    private static ApiClient client;
+    private static String token;
+    private static final String FOLDER_NAME = System.getProperty("user.home") + "/Token MediaBox";
+    private static final Path JSON_PATH = Paths.get(FOLDER_NAME, "token.json");
     
     public LoginPanel(){
         
@@ -92,12 +103,13 @@ public class LoginPanel extends JPanel{
     }
     
     //Boton clean limpia el texto escrito en txtEmail y txtPassword
-    private void cleanTextFields(){
+    private void cleanTextFields() {
         btnClean.addActionListener(e -> {
             txtEmail.setText("");
-            txtPassword.setText("");
+            txtPassword.setText("**********");
+            txtPassword.setEchoChar((char) 0);
         });
-    } 
+    }
     
     //Muestra '*' en campo password y oculta password al ser escrita
     private void writerPassword(){
@@ -137,9 +149,48 @@ public class LoginPanel extends JPanel{
     }
     
     
+    private void loginUser() {
+
+        btnLogin.addActionListener(e -> {
+
+            String email = txtEmail.getText();
+            String password = String.valueOf(txtPassword.getPassword());
+
+            try {
+                token = client.login(email, password);
+
+                if (chkRemember.isSelected()) {
+                    
+                    TokenController.saveToken(token);
+                    System.out.println("Archivo Token.json creado en " + FOLDER_NAME);
+                }
+            } catch (Exception ex) {
+                System.getLogger(LoginPanel.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
+        });
+    }
     
-    private void rememberUser(){
+    public static void autoLogin(){
+        try{
+            TokenUser save = TokenController.readToken();
+            
+            if(save != null){
+                token = save.getToken();
+                client.getMe(token);
+                return;
+            }
+        } catch (Exception ex) {
+            System.getLogger(LoginPanel.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
         
+        try{
+            Files.deleteIfExists(JSON_PATH);
+            
+        }catch(IOException e){
+            System.getLogger(LoginPanel.class.getName()).log(System.Logger.Level.ERROR, (String) null, e);
+        }
+        
+        token = null;
     }
     
 }
