@@ -45,17 +45,18 @@ public class MainViewController {
         pnlMain.setSize(1300, 800);
     }
     
+    //Configuración de los JPanels
     public JPanel showCards(LoginPanel lp, JPanel mainPanel, Preferences p) {
         JPanel container = new JPanel(new CardLayout());
         container.add(lp, MainFrame.CARD_LOGIN);
         container.add(mainPanel, MainFrame.CARD_MAIN);
         container.add(p, MainFrame.CARD_PREF);
-        
-         CardLayout cl = (CardLayout) container.getLayout();
-    cl.show(container, MainFrame.CARD_LOGIN);
-    
+
+        CardLayout cl = (CardLayout) container.getLayout();
+        cl.show(container, MainFrame.CARD_LOGIN);
+
         return container;
-        
+
     }
 
     //Configuración de JPanel Preferences
@@ -73,6 +74,7 @@ public class MainViewController {
         frame.showCard(MainFrame.CARD_PREF);
     }
     
+    //Configuración de ButtonGroup
     public void configRadioButtons(ButtonGroup bg, JRadioButton... buttons) {
         String[] commands = {"mp4", "mkv", "webm", "mp3", "wav", "m4a"};
         for (int i = 0; i < buttons.length; i++) {
@@ -82,6 +84,7 @@ public class MainViewController {
         buttons[0].setSelected(true);
     }
     
+    //Aplicar la calidad de video
     public void applyQuality(JComboBox cbbxQuality){
         cbbxQuality.removeAllItems();
         cbbxQuality.addItem("1080");
@@ -136,7 +139,8 @@ public class MainViewController {
         });
     }
     
-    public void configDwonloadsPanel(JPanel pnlMain, DownloadsPanel dp) {
+    //propiedades del panel Downloads
+    public void configDownloadsPanel(JPanel pnlMain, DownloadsPanel dp) {
         dp.setBounds(630, 40, 630, 400);
         pnlMain.add(dp);
     }

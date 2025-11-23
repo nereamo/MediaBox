@@ -154,7 +154,7 @@ public class LoginPanel extends JPanel{
         });  
     }
     
-    
+    //Loguea usuario al pulsar boton Login y guarda token
     private void loginUser() {
 
         btnLogin.addActionListener(e -> {
@@ -178,6 +178,7 @@ public class LoginPanel extends JPanel{
         });
     }
     
+    //Lee token y si es correcto, accede a Frame directamente
     public static void autoLogin(){
         try{
             TokenUser save = TokenController.readToken();

@@ -57,24 +57,15 @@ public class MainFrame extends JFrame {
         df = new DataFilter();
         dp = new DownloadsPanel(fp, mvc, df, fileList, downloadDirectories);
 
-//        cards = new CardLayout();
-//        container = new JPanel(cards);
-//
-//        container.add(lp, CARD_LOGIN);
-//        container.add(pnlMain, CARD_MAIN);
-//        container.add(preferences, CARD_PREF);
-//
-//        cards.show(container, CARD_LOGIN);
+        //Configuración de DownloadsPanel
+        mvc.configDownloadsPanel(pnlMain, dp);
 
-//       //Configuración de DownloadsPanel
-        dp.setBounds(630, 40, 630, 400);
-        pnlMain.add(dp);
-        
-        
-container = mvc.showCards(lp, pnlMain, preferences);
+        //Configuracion de los cards
+        container = mvc.showCards(lp, pnlMain, preferences);
         setContentPane(container);
         cards = (CardLayout) container.getLayout();
 
+        //Metodo autologin
         lp.autoLogin();
 
         preferences.setMainController(mvc);
@@ -84,47 +75,27 @@ container = mvc.showCards(lp, pnlMain, preferences);
         mvc.configPreferencesPanel();
         
         //Metodo que agrupa los radioButtons
-        //radioButtons();
         mvc.configRadioButtons(bg, radioMp4, radioMkv, radioWebm, radioMp3, radioWav, radioM4a);
-
 
         //Aplica filtro de calidad 
         mvc.applyQuality(cbbxQualityFilter);
         
         this.setVisible(true);
-        
     }
 
+    //Cambia el panel que se muestra
     public void showCard(String cardName) {
         cards.show(container, cardName);
         this.revalidate();
         this.repaint();
     }
 
+    //Indica que el login fue correcto
     public void loginSuccess(String token) {
-        System.out.println("Login Exitoso. Token recibido: " + token);
+        System.out.println("Login Exitoso.");
         this.isLoggedIn = true;
         showCard(CARD_MAIN);
     }
-
-    //Añadir los radioButtons a ButtonGroup
-//    private void radioButtons() {
-//        bg.add(radioMp4);
-//        bg.add(radioMkv);
-//        bg.add(radioWebm);
-//        bg.add(radioMp3);
-//        bg.add(radioWav);
-//        bg.add(radioM4a);
-//
-//        radioMp4.setActionCommand("mp4");
-//        radioMkv.setActionCommand("mkv");
-//        radioWebm.setActionCommand("webm");
-//        radioMp3.setActionCommand("mp3");
-//        radioWav.setActionCommand("wav");
-//        radioM4a.setActionCommand("m4a");
-//
-//        radioMp4.setSelected(true); //Dejar seleccionado por defecto MP4
-//    }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
