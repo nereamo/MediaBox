@@ -40,7 +40,7 @@ public class MainViewController {
         frame.setLayout(null);
 
         pnlMain.setSize(1300, 800);
-        frame.getContentPane().add(pnlMain);
+        //frame.getContentPane().add(pnlMain);
     }
 
     //Configuración de JPanel Preferences

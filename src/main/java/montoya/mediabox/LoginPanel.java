@@ -57,6 +57,7 @@ public class LoginPanel extends JPanel{
         configButtons();
         writerPassword();
         showPassword();
+        loginUser();
         
         this.add(pnlEmail, "cell 0 0 3 1, align center");
         this.add(pnlPassword, "cell 0 1 3 1, align center");
@@ -163,13 +164,15 @@ public class LoginPanel extends JPanel{
             try {
                 token = client.login(email, password);
 
-                if (chkRemember.isSelected()) {
-                    
-                    TokenController.saveToken(token);
-                    System.out.println("Archivo Token.json creado en " + FOLDER_NAME);
+                if (token != null) {
+                    mainFrame.loginSuccess(token);
+
+                    if (chkRemember.isSelected()) {
+                        TokenController.saveToken(token);
+                        System.out.println("Archivo Token.json creado en " + FOLDER_NAME);
+                    }
                 }
             } catch (Exception ex) {
-                System.getLogger(LoginPanel.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
         });
     }
@@ -181,6 +184,7 @@ public class LoginPanel extends JPanel{
             if(save != null){
                 token = save.getToken();
                 client.getMe(token);
+                mainFrame.loginSuccess(token);
                 return;
             }
         } catch (Exception ex) {

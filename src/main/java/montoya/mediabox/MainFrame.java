@@ -25,22 +25,33 @@ public class MainFrame extends JFrame {
     private static final Logger logger = Logger.getLogger(MainFrame.class.getName());
     private DownloadManager dm;
     private Preferences preferences;
+    private final LoginPanel lp;
     List<FileInformation> fileList = new ArrayList<>();
     private final Set<String> downloadDirectories = new HashSet<>();
     private final FileProperties fp;
     private final MainViewController mvc;
     private final DownloadsPanel dp;
     private final ButtonGroup bg;
+    private boolean isLoggedIn = false;
  
 
     public MainFrame() {
         initComponents();
+        lp = new LoginPanel(this);
         fp = new FileProperties();
         bg = new ButtonGroup();
         dm = new DownloadManager(fp);
         preferences = new Preferences(this, dm);
         mvc = new MainViewController(this, pnlMain, preferences, barProgress);
         dp = new DownloadsPanel(fp, mvc, fileList, downloadDirectories);
+  
+        lp.autoLogin();
+        
+        if (!isLoggedIn) {
+            this.setContentPane(lp); 
+            this.setSize(1300, 800); // Tamaño más adecuado para el login
+            this.setLocationRelativeTo(null); // Centrar
+        }
 
         preferences.setMainController(mvc);
 
@@ -58,6 +69,31 @@ public class MainFrame extends JFrame {
         //Aplica filtro de calidad 
         mvc.applyQuality(cbbxQualityFilter);
         
+        this.setVisible(true);
+        
+    }
+    
+    public void loginSuccess(String token) {
+        
+        
+        System.out.println("Login Exitoso. Token recibido: " + token);  
+        
+        this.isLoggedIn = true;
+        
+        // 1. Cambiar el panel de contenido
+        this.setContentPane(pnlMain);
+        
+        // 2. Redimensionar el Frame al tamaño de la aplicación principal
+        this.setSize(1300, 800);
+        
+        // 3. Revalidar para que Swing reconozca el nuevo panel y tamaño
+        this.revalidate();
+        
+        // 4. Repintar la ventana para mostrar el nuevo contenido
+        this.repaint();
+        
+        // 5. Opcional: Centrar la ventana más grande
+        this.setLocationRelativeTo(null);
     }
     
     //Añadir los radioButtons a ButtonGroup
@@ -110,7 +146,7 @@ public class MainFrame extends JFrame {
         radioM4a = new javax.swing.JRadioButton();
         menuBar = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        mnuLogout = new javax.swing.JMenuItem();
         mnuExit = new javax.swing.JMenuItem();
         mnuEdit = new javax.swing.JMenu();
         mnuPreferences = new javax.swing.JMenuItem();
@@ -326,9 +362,14 @@ public class MainFrame extends JFrame {
         mnuFile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mnuFile.setPreferredSize(new java.awt.Dimension(40, 40));
 
-        jMenuItem1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jMenuItem1.setText("Logout");
-        mnuFile.add(jMenuItem1);
+        mnuLogout.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        mnuLogout.setText("Logout");
+        mnuLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuLogoutActionPerformed(evt);
+            }
+        });
+        mnuFile.add(mnuLogout);
 
         mnuExit.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mnuExit.setText("Exit");
@@ -501,6 +542,17 @@ public class MainFrame extends JFrame {
         }
     }//GEN-LAST:event_btnOpenLastActionPerformed
 
+    private void mnuLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLogoutActionPerformed
+        this.isLoggedIn = false;
+
+        this.setContentPane(lp);
+        this.setSize(1300, 800);
+        JOptionPane.showMessageDialog(this, "Sesión cerrada.", "Información", JOptionPane.INFORMATION_MESSAGE);
+
+        this.revalidate();
+        this.repaint();
+    }//GEN-LAST:event_mnuLogoutActionPerformed
+
     public static void main(String args[]) {
         /* Set the Metal look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -535,7 +587,6 @@ public class MainFrame extends JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblFolder;
     private javax.swing.JLabel lblUrl;
@@ -546,6 +597,7 @@ public class MainFrame extends JFrame {
     private javax.swing.JMenuItem mnuExit;
     private javax.swing.JMenu mnuFile;
     private javax.swing.JMenu mnuHelp;
+    private javax.swing.JMenuItem mnuLogout;
     private javax.swing.JMenuItem mnuPreferences;
     private javax.swing.JPanel pnlAudio;
     private javax.swing.JPanel pnlMain;
