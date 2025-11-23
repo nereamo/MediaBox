@@ -50,6 +50,17 @@ Barra de progreso:
 :white_check_mark: Solucion
 
     - Cambiar el nombre añadiendo _audio al descargar en audio: "%(title)s_audio.%(ext)s"
+
+
+## Cambio entre los paneles Login, Frame y Preferences:
+
+:red_circle: Problema
+
+    - Al añadir el JPanel Login mostraba en Frame con sus componentes, pero al querer editar las preferencias, no se visualizaban los componentes de JPanel Preferences.
+
+:white_check_mark: Solucion
+
+    - Cambiar el Layout(null) a CardLayout, añadiendo todos los JPanels a CardLayout y alternar entre ellos.
         
     
 
