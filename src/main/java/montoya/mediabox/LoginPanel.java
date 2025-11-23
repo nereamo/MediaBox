@@ -27,6 +27,7 @@ import net.miginfocom.swing.MigLayout;
  */
 public class LoginPanel extends JPanel{
     
+    private static MainFrame mainFrame;
     private JTextField txtEmail = new JTextField();
     private JPasswordField txtPassword = new JPasswordField("**********");
     private JPanel pnlEmail = new JPanel();
@@ -38,12 +39,15 @@ public class LoginPanel extends JPanel{
     private JCheckBox chkRemember = new JCheckBox("Remember me");
     private Font bold = new Font("Arial", Font.BOLD, 14);
     private Font plain = new Font("Arial", Font.PLAIN, 14);
-    private static ApiClient client;
+    private static final String API_BASE_URL = "https://dimedianetapi9.azurewebsites.net";
+    private static ApiClient client = new ApiClient(API_BASE_URL);
     private static String token;
     private static final String FOLDER_NAME = System.getProperty("user.home") + "/Token MediaBox";
     private static final Path JSON_PATH = Paths.get(FOLDER_NAME, "token.json");
     
-    public LoginPanel(){
+    public LoginPanel(MainFrame mainFrame){
+        
+        this.mainFrame = mainFrame;
         
         this.setBounds(0, 0, 1300, 770);
         this.setLayout(new MigLayout("center", "[][grow][]", "100[]10[]20[]"));

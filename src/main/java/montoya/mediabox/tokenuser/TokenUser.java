@@ -8,6 +8,8 @@ public class TokenUser {
     
     private String token;
     
+    public TokenUser(){}
+    
     public TokenUser(String token){
         this.token = token;
     }
