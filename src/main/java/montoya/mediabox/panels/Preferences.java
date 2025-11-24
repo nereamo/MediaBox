@@ -16,6 +16,8 @@ public class Preferences extends javax.swing.JPanel {
     private final MainFrame mainFrame;
     private MainViewController mvc;
     private final DownloadManager dm;
+    public static final String CARD_PREF = "preferences";
+    public static final String CARD_MAIN = "main";
 
     public Preferences(MainFrame mainFrame, DownloadManager dm) {
         initComponents();
@@ -44,7 +46,7 @@ public class Preferences extends javax.swing.JPanel {
         dm.setMaxSpeed(((Number) spnSpeed.getValue()).doubleValue());
 
         JOptionPane.showMessageDialog(this, "Preferences saved!", "Saved", JOptionPane.INFORMATION_MESSAGE);
-        mvc.showMainFramePanel();
+        mvc.showPanel(CARD_MAIN);
     }
 
     //Velocidad de descarga hasta un max de 100MB/s
@@ -170,7 +172,7 @@ public class Preferences extends javax.swing.JPanel {
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         if (JOptionPane.showConfirmDialog(null, "Changes will not be saved. Do you want to continue?", "Cancel", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             clearTextFields();
-            mvc.showMainFramePanel();
+            mvc.showPanel(CARD_MAIN);
         }
     }//GEN-LAST:event_btnCancelActionPerformed
 

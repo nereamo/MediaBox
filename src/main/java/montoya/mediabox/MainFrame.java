@@ -61,7 +61,7 @@ public class MainFrame extends JFrame {
         mvc.configDownloadsPanel(pnlMain, dp);
 
         //Configuracion de los cards
-        container = mvc.showCards(lp, pnlMain, preferences);
+        container = showCards(lp, pnlMain, preferences);
         setContentPane(container);
         cards = (CardLayout) container.getLayout();
 
@@ -81,6 +81,19 @@ public class MainFrame extends JFrame {
         mvc.applyQuality(cbbxQualityFilter);
         
         this.setVisible(true);
+    }
+    
+    //Configuración de los JPanels
+    public JPanel showCards(LoginPanel lp, JPanel mainPanel, Preferences p) {
+        JPanel container = new JPanel(new CardLayout());
+        container.add(lp, MainFrame.CARD_LOGIN);
+        container.add(mainPanel, MainFrame.CARD_MAIN);
+        container.add(p, MainFrame.CARD_PREF);
+
+        CardLayout cl = (CardLayout) container.getLayout();
+        cl.show(container, MainFrame.CARD_LOGIN);
+
+        return container;
     }
 
     //Cambia el panel que se muestra
@@ -413,7 +426,7 @@ public class MainFrame extends JFrame {
 
     //Preferences
     private void mnuPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPreferencesActionPerformed
-        mvc.showPreferencesPanel();
+        showCard(CARD_PREF);
     }//GEN-LAST:event_mnuPreferencesActionPerformed
 
     //About

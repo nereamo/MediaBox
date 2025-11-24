@@ -1,20 +1,12 @@
 package montoya.mediabox.panels;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import montoya.mediabox.MainFrame;
 import montoya.mediabox.apiclient.ApiClient;
@@ -143,37 +135,45 @@ public class LoginPanel extends JPanel{
     }
     
     //CheckBox que permite ver la contraseña introducida
-    private void showPassword(){
-        
-        chkShowPssw.addActionListener(e ->{
-            if(chkShowPssw.isSelected()){
-                txtPassword.setEchoChar((char)0);
-            }else{
-                txtPassword.setEchoChar('*');
+    private void showPassword() {
+
+        chkShowPssw.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (chkShowPssw.isSelected()) {
+                    txtPassword.setEchoChar((char) 0);
+                } else {
+                    txtPassword.setEchoChar('*');
+                }
             }
-        });  
+        });
     }
-    
+
     //Loguea usuario al pulsar boton Login y guarda token
     private void loginUser() {
 
-        btnLogin.addActionListener(e -> {
+        btnLogin.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-            String email = txtEmail.getText();
-            String password = String.valueOf(txtPassword.getPassword());
+                String email = txtEmail.getText();
+                String password = String.valueOf(txtPassword.getPassword());
 
-            try {
-                token = client.login(email, password);
+                try {
+                    token = client.login(email, password);
 
-                if (token != null) {
-                    mainFrame.loginSuccess(token);
+                    if (token != null) {
+                        mainFrame.loginSuccess(token);
 
-                    if (chkRemember.isSelected()) {
-                        TokenController.saveToken(token);
-                        System.out.println("Archivo Token.json creado en " + FOLDER_NAME);
+                        if (chkRemember.isSelected()) {
+                            TokenController.saveToken(token);
+                            System.out.println("Archivo Token.json creado en " + FOLDER_NAME);
+                        }
                     }
+                } catch (Exception ex) {
+                    System.getLogger(LoginPanel.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
                 }
-            } catch (Exception ex) {
+
             }
         });
     }

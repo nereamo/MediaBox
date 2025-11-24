@@ -17,6 +17,7 @@ public class TokenController {
     
     //Guarar el TOKEN en archivo token.json
     public static void saveToken(String token) throws Exception{
+        
         Files.createDirectories(Paths.get(FOLDER_NAME));
         TokenUser tu = new TokenUser(token);
         mapper.writeValue(JSON_PATH.toFile(), tu);
@@ -24,6 +25,7 @@ public class TokenController {
     
     //Leer archivo token.json
     public static TokenUser readToken() throws Exception {
+        
         if(!Files.exists(JSON_PATH)){
             return null;
         }

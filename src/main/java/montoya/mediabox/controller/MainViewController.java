@@ -35,6 +35,8 @@ public class MainViewController {
         this.barProgress = barProgress;
         this.df = new DataFilter();
     }
+    
+    // --- Views configuration ---
 
     //Configuración de JFrame
     public void configFrame() {
@@ -45,18 +47,9 @@ public class MainViewController {
         pnlMain.setSize(1300, 800);
     }
     
-    //Configuración de los JPanels
-    public JPanel showCards(LoginPanel lp, JPanel mainPanel, Preferences p) {
-        JPanel container = new JPanel(new CardLayout());
-        container.add(lp, MainFrame.CARD_LOGIN);
-        container.add(mainPanel, MainFrame.CARD_MAIN);
-        container.add(p, MainFrame.CARD_PREF);
-
-        CardLayout cl = (CardLayout) container.getLayout();
-        cl.show(container, MainFrame.CARD_LOGIN);
-
-        return container;
-
+    //Cambia visualmente los paneles
+    public void showPanel(String cardName){
+        frame.showCard(cardName);
     }
 
     //Configuración de JPanel Preferences
@@ -64,15 +57,8 @@ public class MainViewController {
         preferences.setBounds(0, 0, 1300, 800);
     }
 
-    //Mostrar el JPanel principal del JFrame
-    public void showMainFramePanel() {
-        frame.showCard(MainFrame.CARD_MAIN);
-    }
-
-    //Mostrar el JPanel Preferences 
-    public void showPreferencesPanel() {
-        frame.showCard(MainFrame.CARD_PREF);
-    }
+    
+    // --- UI Controls ---
     
     //Configuración de ButtonGroup
     public void configRadioButtons(ButtonGroup bg, JRadioButton... buttons) {
@@ -83,7 +69,7 @@ public class MainViewController {
         }
         buttons[0].setSelected(true);
     }
-    
+
     //Aplicar la calidad de video
     public void applyQuality(JComboBox cbbxQuality){
         cbbxQuality.removeAllItems();
@@ -91,6 +77,21 @@ public class MainViewController {
         cbbxQuality.addItem("720");
         cbbxQuality.addItem("480");
     }
+    
+    //Añade los filtros a JComboBox
+    public void applyFilters(JComboBox cbbxFilter) {
+        cbbxFilter.removeAllItems();
+        cbbxFilter.addItem("All");
+        cbbxFilter.addItem("MP4");
+        cbbxFilter.addItem("MKV");
+        cbbxFilter.addItem("WEBM");
+        cbbxFilter.addItem("MP3");
+        cbbxFilter.addItem("WAV");
+        cbbxFilter.addItem("M4A");
+    }
+
+    
+    // --- Downloads configuration ---
 
     //Actualiza el progreso de JProgressBar
     public void updateProgressBar(int value) {
@@ -143,17 +144,5 @@ public class MainViewController {
     public void configDownloadsPanel(JPanel pnlMain, DownloadsPanel dp) {
         dp.setBounds(630, 40, 630, 400);
         pnlMain.add(dp);
-    }
-    
-    //Añade los filtros a JComboBox
-    public void applyFilters(JComboBox cbbxFilter) {
-        cbbxFilter.removeAllItems();
-        cbbxFilter.addItem("All");
-        cbbxFilter.addItem("MP4");
-        cbbxFilter.addItem("MKV");
-        cbbxFilter.addItem("WEBM");
-        cbbxFilter.addItem("MP3");
-        cbbxFilter.addItem("WAV");
-        cbbxFilter.addItem("M4A");
-    }
+    }  
 }
