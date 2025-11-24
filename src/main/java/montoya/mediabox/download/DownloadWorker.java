@@ -76,7 +76,7 @@ public class DownloadWorker extends SwingWorker<Void, String> {
                         latest = f;
                     }
                 }
-                
+
                 //Para la tabla
                 lastDownloadFile = latest;
                 FileInformation info = fileInfo(lastDownloadFile); //Crea objeto FileInfo con los datos
@@ -90,17 +90,22 @@ public class DownloadWorker extends SwingWorker<Void, String> {
 
                 fp.addDownload(info); //Guarda el archivo .json 
                 downloadDirectories.add(info.folderPath);
-                //Refresca la lista de directorios
-                SwingUtilities.invokeLater(() -> {
-                    DefaultListModel<FolderItem> model = new DefaultListModel<>();
-                    for (String folderPath : downloadDirectories) {
-                        model.addElement(new FolderItem(folderPath));
-                    }
-                    listDirectories.setModel(model);
 
-                    if (!downloadDirectories.isEmpty()) {
-                        listDirectories.setSelectedIndex(0);
+                //Refresca la lista de directorios
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        DefaultListModel<FolderItem> model = new DefaultListModel<>();
+                        for (String folderPath : downloadDirectories) {
+                            model.addElement(new FolderItem(folderPath));
+                        }
+                        listDirectories.setModel(model);
+
+                        if (!downloadDirectories.isEmpty()) {
+                            listDirectories.setSelectedIndex(0);
+                        }
                     }
+
                 });
             }
         }

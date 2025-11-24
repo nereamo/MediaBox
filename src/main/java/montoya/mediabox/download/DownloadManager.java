@@ -24,8 +24,7 @@ public class DownloadManager {
     private DownloadWorker dw;
     private FileProperties fp;
 
-    public DownloadManager() {
-    }
+    public DownloadManager() {}
 
     //Getters y Setters
     public String getTempPath() {
@@ -178,7 +177,6 @@ public class DownloadManager {
             return null;
         }
         
-        
         //Archivo .m3u
         if (createM3u) {
             cmd.add("--write-info-json");
@@ -207,11 +205,5 @@ public class DownloadManager {
                 progressBar.setString("Downloading... " + percent + "%");
             }
         });
-
-//        SwingUtilities.invokeLater(() -> {    --> lambda
-//            progressBar.setIndeterminate(false);
-//            progressBar.setValue(percent);
-//            progressBar.setString("Downloading... " + percent + "%");
-//        });
     }
 }

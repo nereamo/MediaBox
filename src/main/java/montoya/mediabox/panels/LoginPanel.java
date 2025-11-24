@@ -102,10 +102,14 @@ public class LoginPanel extends JPanel{
     
     //Boton clean limpia el texto escrito en txtEmail y txtPassword
     private void cleanTextFields() {
-        btnClean.addActionListener(e -> {
-            txtEmail.setText("");
-            txtPassword.setText("**********");
-            txtPassword.setEchoChar((char) 0);
+
+        btnClean.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                txtEmail.setText("");
+                txtPassword.setText("**********");
+                txtPassword.setEchoChar((char) 0);
+            }
         });
     }
     
@@ -130,7 +134,6 @@ public class LoginPanel extends JPanel{
                     txtPassword.setEchoChar((char)0);
                 }
             }
-            
         });
     }
     
@@ -201,6 +204,5 @@ public class LoginPanel extends JPanel{
         }
         
         token = null;
-    }
-    
+    } 
 }

@@ -1,6 +1,5 @@
 package montoya.mediabox.controller;
 
-import java.awt.CardLayout;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -13,7 +12,6 @@ import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
 import montoya.mediabox.fileInformation.FolderItem;
 import montoya.mediabox.panels.DownloadsPanel;
-import montoya.mediabox.panels.LoginPanel;
 
 /**
  * Gestiona la configuración de elementos visuales de la interfaz
@@ -47,14 +45,14 @@ public class MainViewController {
         pnlMain.setSize(1300, 800);
     }
     
-    //Cambia visualmente los paneles
-    public void showPanel(String cardName){
-        frame.showCard(cardName);
-    }
-
     //Configuración de JPanel Preferences
     public void configPreferencesPanel() {
         preferences.setBounds(0, 0, 1300, 800);
+    }
+    
+    //Cambia visualmente los paneles
+    public void showPanel(String cardName){
+        frame.showCard(cardName);
     }
 
     
