@@ -1,7 +1,7 @@
 Nerea Montoya
 
 # MediaBox
-Aplicación para descarga de videos
+Aplicación para descarga de videos y audio.
 
 ## Commits del repo anterior
 <img width="2560" height="1392" alt="Captura de pantalla 2025-10-23 121514" src="https://github.com/user-attachments/assets/a5db15ff-f833-413e-afc3-7fe6e1d75acb" />
@@ -19,6 +19,9 @@ Implementació de Threads.
     - https://programandoenjava.com/hilos-thread-en-java/
     - https://es.stackoverflow.com/questions/41453/c%C3%B3mo-terminar-o-eliminar-un-hilo-por-completo-en-java
 
+Creación de JSON con libreria Jackson.
+
+    - https://www.arquitecturajava.com/java-json-con-jackson/
 
 ### IAs Utilizadas:
 
@@ -35,9 +38,13 @@ Implementació de Threads.
 
     - Permite copiar la url del portapepeles utilizando el botón "Paste" de la interfaz principal.
 
-Barra de progreso:
+Barra de progreso.
 
-    - Muestra el progreso de descarga en un JProgressBar
+    - Muestra el progreso de descarga en un JProgressBar.
+
+Botón PLAY en tabla.
+
+    - Permite abrir cualquier descarga seleccionado un archivo de la tabla.
 
 
 # Problemas encontrados:
@@ -47,7 +54,7 @@ Barra de progreso:
 
     - Al descargar en formato Webm y despues descargar el mismo archivo pero en formato audio, se sobreescribia el archivo con extensión Webm.
 
-:white_check_mark: Solucion
+:white_check_mark: Solución
 
     - Cambiar el nombre añadiendo _audio al descargar en audio: "%(title)s_audio.%(ext)s"
 
@@ -58,7 +65,7 @@ Barra de progreso:
 
     - Al añadir el JPanel Login mostraba en Frame con sus componentes, pero al querer editar las preferencias, no se visualizaban los componentes de JPanel Preferences.
 
-:white_check_mark: Solucion
+:white_check_mark: Solución
 
     - Cambiar el Layout(null) a CardLayout, añadiendo todos los JPanels a CardLayout y alternar entre ellos.
         
