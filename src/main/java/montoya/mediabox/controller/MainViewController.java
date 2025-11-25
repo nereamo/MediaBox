@@ -49,11 +49,6 @@ public class MainViewController {
     public void configPreferencesPanel() {
         preferences.setBounds(0, 0, 1300, 800);
     }
-    
-    //Cambia visualmente los paneles
-    public void showPanel(String cardName){
-        frame.showCard(cardName);
-    }
 
     
     // --- UI Controls ---

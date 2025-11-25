@@ -59,11 +59,16 @@ public class MainFrame extends JFrame {
 
         //Configuración de DownloadsPanel
         mvc.configDownloadsPanel(pnlMain, dp);
-
+        
+        
         //Configuracion de los cards
-        container = showCards(lp, pnlMain, preferences);
-        setContentPane(container);
-        cards = (CardLayout) container.getLayout();
+        container = new JPanel();
+        cards = new CardLayout();
+        container.setLayout(cards);
+        
+        initCards();
+        showCard(CARD_LOGIN);
+        
 
         //Metodo autologin
         lp.autoLogin();
@@ -80,21 +85,17 @@ public class MainFrame extends JFrame {
         //Aplica filtro de calidad 
         mvc.applyQuality(cbbxQualityFilter);
         
+        this.setContentPane(container);
         this.setVisible(true);
     }
     
-    //Configuración de los JPanels
-    public JPanel showCards(LoginPanel lp, JPanel mainPanel, Preferences p) {
-        JPanel container = new JPanel(new CardLayout());
-        container.add(lp, MainFrame.CARD_LOGIN);
-        container.add(mainPanel, MainFrame.CARD_MAIN);
-        container.add(p, MainFrame.CARD_PREF);
-
-        CardLayout cl = (CardLayout) container.getLayout();
-        cl.show(container, MainFrame.CARD_LOGIN);
-
-        return container;
+    public void initCards(){
+        
+        container.add(lp,CARD_LOGIN);
+        container.add(pnlMain, CARD_MAIN);
+        container.add(preferences, CARD_PREF); 
     }
+
 
     //Cambia el panel que se muestra
     public void showCard(String cardName) {
