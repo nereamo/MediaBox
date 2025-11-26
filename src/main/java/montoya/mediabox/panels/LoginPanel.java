@@ -100,15 +100,21 @@ public class LoginPanel extends JPanel{
         ((TitledBorder) pnlPassword.getBorder()).setTitleFont(fontBold);
     }
     
+    public void resetFields() {
+        txtEmail.setText("");
+        txtPassword.setText("**********");
+        txtPassword.setEchoChar((char) 0);
+        chkShowPssw.setSelected(false);
+        chkRemember.setSelected(false);
+    }
+    
     //Boton clean limpia el texto escrito en txtEmail y txtPassword
     private void cleanTextFields() {
 
         btnClean.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                txtEmail.setText("");
-                txtPassword.setText("**********");
-                txtPassword.setEchoChar((char) 0);
+                resetFields();
             }
         });
     }

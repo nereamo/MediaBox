@@ -89,6 +89,7 @@ public class MainFrame extends JFrame {
         this.setVisible(true);
     }
     
+    //Añade los panels a CardLayout
     public void initCards(){
         
         container.add(lp,CARD_LOGIN);
@@ -542,6 +543,8 @@ public class MainFrame extends JFrame {
         this.isLoggedIn = false;
         
         showCard(CARD_LOGIN);
+        
+        lp.resetFields();
 
         JOptionPane.showMessageDialog(this, "Sesión cerrada.", "Información", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_mnuLogoutActionPerformed
