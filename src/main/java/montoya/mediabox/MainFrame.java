@@ -108,9 +108,11 @@ public class MainFrame extends JFrame {
 
     //Indica que el login fue correcto
     public void loginSuccess(String token) {
-        System.out.println("Login Exitoso.");
-        this.isLoggedIn = true;
-        showCard(CARD_MAIN);
+        
+        if(this.isLoggedIn = true){
+          System.out.println("Login Exitoso.");  
+          showCard(CARD_MAIN);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -541,19 +543,15 @@ public class MainFrame extends JFrame {
     }//GEN-LAST:event_btnOpenLastActionPerformed
 
     private void mnuLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLogoutActionPerformed
-        try {
+        
             this.isLoggedIn = false;
             
             showCard(CARD_LOGIN);
             
             lp.resetFields();
             
-            TokenController.deleteToken();
-            
-            JOptionPane.showMessageDialog(this, "Sesión cerrada.", "Información", JOptionPane.INFORMATION_MESSAGE);
-        } catch (IOException ex) {
-            System.getLogger(MainFrame.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-        }
+            JOptionPane.showMessageDialog(this, "Closed sesion.", "Information", JOptionPane.INFORMATION_MESSAGE);
+        
     }//GEN-LAST:event_mnuLogoutActionPerformed
 
     public static void main(String args[]) {

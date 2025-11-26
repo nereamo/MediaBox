@@ -166,6 +166,15 @@ public class LoginPanel extends JPanel{
                 String email = txtEmail.getText();
                 String password = String.valueOf(txtPassword.getPassword());
 
+                if (email == null || email.trim().equals("")
+                        || password == null || password.trim().equals("")) {
+                    JOptionPane.showMessageDialog(LoginPanel.this,
+                            "Please, enter an Email and Password",
+                            "Login error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 try {
                     token = client.login(email, password);
 
@@ -178,13 +187,13 @@ public class LoginPanel extends JPanel{
                         }
                     }
                 } catch (Exception ex) {
-                    System.getLogger(LoginPanel.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                    JOptionPane.showMessageDialog(LoginPanel.this, "Login failed: Incorrect credentials or expired token.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
 
             }
         });
     }
-    
+
     //Lee token y si es correcto, accede a Frame directamente
     public static void autoLogin(){
         try{
