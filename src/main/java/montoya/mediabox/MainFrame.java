@@ -19,6 +19,7 @@ import montoya.mediabox.controller.MainViewController;
 import montoya.mediabox.fileInformation.FileInformation;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FolderItem;
+import montoya.mediabox.tokenuser.TokenController;
 
 /**
  * Class principal
@@ -540,13 +541,19 @@ public class MainFrame extends JFrame {
     }//GEN-LAST:event_btnOpenLastActionPerformed
 
     private void mnuLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLogoutActionPerformed
-        this.isLoggedIn = false;
-        
-        showCard(CARD_LOGIN);
-        
-        lp.resetFields();
-
-        JOptionPane.showMessageDialog(this, "Sesión cerrada.", "Información", JOptionPane.INFORMATION_MESSAGE);
+        try {
+            this.isLoggedIn = false;
+            
+            showCard(CARD_LOGIN);
+            
+            lp.resetFields();
+            
+            TokenController.deleteToken();
+            
+            JOptionPane.showMessageDialog(this, "Sesión cerrada.", "Información", JOptionPane.INFORMATION_MESSAGE);
+        } catch (IOException ex) {
+            System.getLogger(MainFrame.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
     }//GEN-LAST:event_mnuLogoutActionPerformed
 
     public static void main(String args[]) {

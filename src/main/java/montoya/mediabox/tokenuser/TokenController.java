@@ -1,5 +1,6 @@
 package montoya.mediabox.tokenuser;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,12 +12,12 @@ import tools.jackson.databind.ObjectMapper;
  */
 public class TokenController {
     
-    private static final String FOLDER_NAME = System.getProperty("user.home") + "/Descargas MediaBox";
+    private static final String FOLDER_NAME = System.getProperty("user.home") + "/AppData/Local/MediaBox";
     private static final Path JSON_PATH = Paths.get(FOLDER_NAME, "token.json");
     private static final ObjectMapper mapper = new ObjectMapper();
     
     //Guarar el TOKEN en archivo token.json
-    public static void saveToken(String token) throws Exception{
+    public static void saveToken(String token) throws IOException {
         
         Files.createDirectories(Paths.get(FOLDER_NAME));
         TokenUser tu = new TokenUser(token);
@@ -24,12 +25,17 @@ public class TokenController {
     }
     
     //Leer archivo token.json
-    public static TokenUser readToken() throws Exception {
+    public static TokenUser readToken() throws IOException  {
         
         if(!Files.exists(JSON_PATH)){
             return null;
         }
         
         return mapper.readValue(JSON_PATH.toFile(), TokenUser.class);
+    }
+    
+    public static void deleteToken() throws IOException{
+
+        Files.deleteIfExists(JSON_PATH);
     }
 }

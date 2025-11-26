@@ -2,8 +2,6 @@ package montoya.mediabox.panels;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import javax.swing.*;
@@ -35,7 +33,7 @@ public class LoginPanel extends JPanel{
     private static final String API_BASE_URL = "https://dimedianetapi9.azurewebsites.net";
     private static ApiClient client = new ApiClient(API_BASE_URL);
     private static String token;
-    private static final String FOLDER_NAME = System.getProperty("user.home") + "/Token MediaBox";
+    private static final String FOLDER_NAME = System.getProperty("user.home") + "/AppData/Local/MediaBox";
     private static final Path JSON_PATH = Paths.get(FOLDER_NAME, "token.json");
     
     public LoginPanel(MainFrame mainFrame){
@@ -201,14 +199,6 @@ public class LoginPanel extends JPanel{
         } catch (Exception ex) {
             System.getLogger(LoginPanel.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
-        
-        try{
-            Files.deleteIfExists(JSON_PATH);
-            
-        }catch(IOException e){
-            System.getLogger(LoginPanel.class.getName()).log(System.Logger.Level.ERROR, (String) null, e);
-        }
-        
         token = null;
     } 
 }
