@@ -3,7 +3,8 @@ package montoya.mediabox.panels;
 import java.io.*;
 import javax.swing.*;
 import montoya.mediabox.MainFrame;
-import montoya.mediabox.controller.MainViewController;
+import montoya.mediabox.controller.CardManager;
+import montoya.mediabox.controller.View;
 import montoya.mediabox.download.DownloadManager;
 
 /**
@@ -13,20 +14,22 @@ import montoya.mediabox.download.DownloadManager;
  */
 public class Preferences extends javax.swing.JPanel {
 
-    private final MainFrame mainFrame;
-    private MainViewController mvc;
-    private final DownloadManager dm;
+    private final MainFrame frame;
+    private View view;
+    private final DownloadManager downloadManager;
+    private final CardManager cardManager;
     public static final String CARD_MAIN = "main";
 
-    public Preferences(MainFrame mainFrame, DownloadManager dm) {
+    public Preferences(MainFrame frame, DownloadManager dwlManager, CardManager cardManager) {
         initComponents();
-        this.mainFrame = mainFrame;
-        this.dm = dm;
+        this.frame = frame;
+        this.downloadManager = dwlManager;
+        this.cardManager = cardManager;
         mbSpeedSpinner();
     }
 
-    public void setMainController(MainViewController mvc) {
-        this.mvc = mvc;
+    public void setMainController(View view) {
+        this.view = view;
     }
 
     //Limpiar entradas de JTextFields
@@ -39,13 +42,13 @@ public class Preferences extends javax.swing.JPanel {
 
     //Guarda los valores de preferences
     public void savePreferences() {
-        dm.setTempPath(txtPathTemp.getText().trim());
-        dm.setYtDlpLocation(txtYtDlp.getText().trim());
-        dm.setCreateM3u(chkCreate.isSelected());
-        dm.setMaxSpeed(((Number) spnSpeed.getValue()).doubleValue());
+        downloadManager.setTempPath(txtPathTemp.getText().trim());
+        downloadManager.setYtDlpLocation(txtYtDlp.getText().trim());
+        downloadManager.setCreateM3u(chkCreate.isSelected());
+        downloadManager.setMaxSpeed(((Number) spnSpeed.getValue()).doubleValue());
 
         JOptionPane.showMessageDialog(this, "Preferences saved!", "Saved", JOptionPane.INFORMATION_MESSAGE);
-        mainFrame.showCard(CARD_MAIN);
+        cardManager.showCard(CARD_MAIN);
     }
 
     //Velocidad de descarga hasta un max de 100MB/s
@@ -171,7 +174,7 @@ public class Preferences extends javax.swing.JPanel {
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         if (JOptionPane.showConfirmDialog(null, "Changes will not be saved. Do you want to continue?", "Cancel", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             clearTextFields();
-            mainFrame.showCard(CARD_MAIN);
+            cardManager.showCard(CARD_MAIN);
         }
     }//GEN-LAST:event_btnCancelActionPerformed
 

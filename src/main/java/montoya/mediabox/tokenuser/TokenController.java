@@ -33,9 +33,4 @@ public class TokenController {
         
         return mapper.readValue(JSON_PATH.toFile(), TokenUser.class);
     }
-    
-    public static void deleteToken() throws IOException{
-
-        Files.deleteIfExists(JSON_PATH);
-    }
 }

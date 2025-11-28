@@ -12,14 +12,14 @@ import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.util.logging.Logger;
+import montoya.mediabox.controller.CardManager;
 import montoya.mediabox.controller.DataFilter;
 import montoya.mediabox.download.DownloadManager;
 import montoya.mediabox.dialogs.DialogAbout;
-import montoya.mediabox.controller.MainViewController;
+import montoya.mediabox.controller.View;
 import montoya.mediabox.fileInformation.FileInformation;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FolderItem;
-import montoya.mediabox.tokenuser.TokenController;
 
 /**
  * Class principal
@@ -29,18 +29,19 @@ import montoya.mediabox.tokenuser.TokenController;
 public class MainFrame extends JFrame {
 
     private static final Logger logger = Logger.getLogger(MainFrame.class.getName());
-    private DownloadManager dm;
+    private DownloadManager downloadManager;
     private Preferences preferences;
-    private final LoginPanel lp;
+    private final LoginPanel pnlLogin;
     List<FileInformation> fileList = new ArrayList<>();
-    private final Set<String> downloadDirectories = new HashSet<>();
-    private final FileProperties fp;
-    private final MainViewController mvc;
-    private final DataFilter df;
-    private final DownloadsPanel dp;
-    private final ButtonGroup bg;
+    private final Set<String> dwlDirectories = new HashSet<>();
+    private final FileProperties fileProperties;
+    private final View view;
+    private final DataFilter dataFilter;
+    private final DownloadsPanel pnlDownloads;
+    private CardManager cardManager = null;
+    private final ButtonGroup btnGroup;
     private boolean isLoggedIn = false;
-    private CardLayout cards;
+    private CardLayout layout;
     private JPanel container;
     public static final String CARD_LOGIN = "login";
     public static final String CARD_MAIN = "main";
@@ -49,61 +50,42 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
         initComponents();
-        lp = new LoginPanel(this);
-        fp = new FileProperties();
-        bg = new ButtonGroup();
-        dm = new DownloadManager(fp);
-        preferences = new Preferences(this, dm);
-        mvc = new MainViewController(this, pnlMain, preferences, barProgress);
-        df = new DataFilter();
-        dp = new DownloadsPanel(fp, mvc, df, fileList, downloadDirectories);
+        pnlLogin = new LoginPanel(this);
+        fileProperties = new FileProperties();
+        btnGroup = new ButtonGroup();
+        downloadManager = new DownloadManager(fileProperties);
+        layout = new CardLayout();
+        container = new JPanel(layout);
+        cardManager = new CardManager(container, layout);
+        preferences = new Preferences(this, downloadManager,cardManager);
+        view = new View(this, pnlMain, preferences, barProgress);
+        dataFilter = new DataFilter();
+        pnlDownloads = new DownloadsPanel(fileProperties, view, dataFilter, fileList, dwlDirectories);
 
         //Configuración de DownloadsPanel
-        mvc.configDownloadsPanel(pnlMain, dp);
-        
-        
-        //Configuracion de los cards
-        container = new JPanel();
-        cards = new CardLayout();
-        container.setLayout(cards);
-        
-        initCards();
-        showCard(CARD_LOGIN);
-        
+        view.configDownloadsPanel(pnlMain, pnlDownloads);
+
+        //Añade panels a CardLayout
+        cardManager.initCards(pnlLogin, pnlMain, preferences);
+        cardManager.showCard(CARD_LOGIN);
 
         //Metodo autologin
-        lp.autoLogin();
+        pnlLogin.autoLogin();
 
-        preferences.setMainController(mvc);
+        preferences.setMainController(view);
 
         //Métodos de clase MainViewController
-        mvc.configFrame();
-        mvc.configPreferencesPanel();
+        view.configFrame();
+        view.configPreferencesPanel();
         
         //Metodo que agrupa los radioButtons
-        mvc.configRadioButtons(bg, radioMp4, radioMkv, radioWebm, radioMp3, radioWav, radioM4a);
+        view.configRadioButtons(btnGroup, radioMp4, radioMkv, radioWebm, radioMp3, radioWav, radioM4a);
 
         //Aplica filtro de calidad 
-        mvc.applyQuality(cbbxQualityFilter);
+        view.applyQuality(cbbxQualityFilter);
         
         this.setContentPane(container);
         this.setVisible(true);
-    }
-    
-    //Añade los panels a CardLayout
-    public void initCards(){
-        
-        container.add(lp,CARD_LOGIN);
-        container.add(pnlMain, CARD_MAIN);
-        container.add(preferences, CARD_PREF); 
-    }
-
-
-    //Cambia el panel que se muestra
-    public void showCard(String cardName) {
-        cards.show(container, cardName);
-        this.revalidate();
-        this.repaint();
     }
 
     //Indica que el login fue correcto
@@ -111,7 +93,7 @@ public class MainFrame extends JFrame {
         
         if(this.isLoggedIn = true){
           System.out.println("Login Exitoso.");  
-          showCard(CARD_MAIN);
+          cardManager.showCard(CARD_MAIN);
         }
     }
 
@@ -431,7 +413,7 @@ public class MainFrame extends JFrame {
 
     //Preferences
     private void mnuPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPreferencesActionPerformed
-        showCard(CARD_PREF);
+        cardManager.showCard(CARD_PREF);
     }//GEN-LAST:event_mnuPreferencesActionPerformed
 
     //About
@@ -464,8 +446,8 @@ public class MainFrame extends JFrame {
                 txtFolder.setText(selectedFolder.getAbsolutePath());
 
                 // Añadir el directorio a la lista si no está ya
-                if (downloadDirectories.add(folderPath)) {
-                    DefaultListModel<FolderItem> listModel = (DefaultListModel<FolderItem>) dp.getListDirectories().getModel();
+                if (dwlDirectories.add(folderPath)) {
+                    DefaultListModel<FolderItem> listModel = (DefaultListModel<FolderItem>) pnlDownloads.getListDirectories().getModel();
                     listModel.addElement(new FolderItem(folderPath));
                 }
             }
@@ -496,23 +478,23 @@ public class MainFrame extends JFrame {
         
         String url = txtUrl.getText().trim();
         String folder = txtFolder.getText().trim();
-        String format = bg.getSelection().getActionCommand();
+        String format = btnGroup.getSelection().getActionCommand();
         String quality = (String) cbbxQualityFilter.getSelectedItem();
 
-        dm.setTempPath(folder);
+        downloadManager.setTempPath(folder);
         areaInfo.setText("");
 
         Thread th = new Thread() {
             @Override
             public void run() {
-                dm.download(url, folder, format, quality, areaInfo, barProgress, dp.getTableModel(), dp.getListDirectories(), downloadDirectories);
+                downloadManager.download(url, folder, format, quality, areaInfo, barProgress, pnlDownloads.getTableModel(), pnlDownloads.getListDirectories(), dwlDirectories);
 
-                if (downloadDirectories.add(folder)) {
+                if (dwlDirectories.add(folder)) {
                     SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
                         DefaultListModel<FolderItem> listModel
-                                = (DefaultListModel<FolderItem>) dp.getListDirectories().getModel();
+                                = (DefaultListModel<FolderItem>) pnlDownloads.getListDirectories().getModel();
                         listModel.addElement(new FolderItem(folder));
                      }
                     });
@@ -530,7 +512,7 @@ public class MainFrame extends JFrame {
     //Abre el ultimo archivo descargado
     private void btnOpenLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenLastActionPerformed
 
-        File lastFile = dm.getLastDownloadedFile();
+        File lastFile = downloadManager.getLastDownloadedFile();
         if (lastFile != null && lastFile.exists()) {
             try {
                 Desktop.getDesktop().open(lastFile);
@@ -546,9 +528,9 @@ public class MainFrame extends JFrame {
         
             this.isLoggedIn = false;
             
-            showCard(CARD_LOGIN);
+            cardManager.showCard(CARD_LOGIN);
             
-            lp.resetFields();
+            pnlLogin.resetFields();
             
             JOptionPane.showMessageDialog(this, "Closed sesion.", "Information", JOptionPane.INFORMATION_MESSAGE);
         

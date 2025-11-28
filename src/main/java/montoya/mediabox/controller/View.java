@@ -18,20 +18,20 @@ import montoya.mediabox.panels.DownloadsPanel;
  *
  * @author Nerea
  */
-public class MainViewController {
+public class View {
 
     private final MainFrame frame;
     private final JPanel pnlMain;
     private final Preferences preferences;
     private final JProgressBar barProgress;
-    private final DataFilter df;
+    private final DataFilter dataFilter;
 
-    public MainViewController(MainFrame frame, JPanel pnlMain, Preferences preferences, JProgressBar barProgress) {
+    public View(MainFrame frame, JPanel pnlMain, Preferences preferences, JProgressBar barProgress) {
         this.frame = frame;
         this.pnlMain = pnlMain;
         this.preferences = preferences;
         this.barProgress = barProgress;
-        this.df = new DataFilter();
+        this.dataFilter = new DataFilter();
     }
     
     // --- Views configuration ---
@@ -117,10 +117,10 @@ public class MainViewController {
                         List<FileInformation> allFiles = allData.downloads;
 
                         //Filtra por directorio seleccionado en JList
-                        List<FileInformation> filteredByDirectory = df.filterByDirectory(allFiles, folder.getFullPath());
+                        List<FileInformation> filteredByDirectory = dataFilter.filterByDirectory(allFiles, folder.getFullPath());
 
                         //Filtra por tipo selccionado en comboBox
-                        List<FileInformation> filteredByType = df.filterByType(filteredByDirectory, selectedFilter);
+                        List<FileInformation> filteredByType = dataFilter.filterByType(filteredByDirectory, selectedFilter);
 
                         //Actualiza la tabla con los filtros aplicados
                         FileTableModel model = (FileTableModel) tblInfo.getModel();

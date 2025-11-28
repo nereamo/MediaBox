@@ -13,7 +13,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import montoya.mediabox.controller.DataFilter;
-import montoya.mediabox.controller.MainViewController;
+import montoya.mediabox.controller.View;
 import montoya.mediabox.fileInformation.DirectoryInformation;
 import montoya.mediabox.fileInformation.FileInformation;
 import montoya.mediabox.fileInformation.FileProperties;
@@ -27,43 +27,43 @@ import montoya.mediabox.fileInformation.FolderItem;
 public class DownloadsPanel extends javax.swing.JPanel {
 
     private FileTableModel tblModel;
-    private List<FileInformation> fileList = new ArrayList<>();
+    private List<FileInformation> lstFiles = new ArrayList<>();
     private Set<String> downloadDirectories = new HashSet<>();
-    private final MainViewController mvc;
-    private final DataFilter df;
+    private final View view;
+    private final DataFilter dataFilter;
     private Preferences preferences;
-    private final FileProperties fp;
+    private final FileProperties fileProperties;
 
-    public DownloadsPanel(FileProperties fp, MainViewController mvc, DataFilter df, List<FileInformation> fileList, Set<String> downloadDirectories) {
+    public DownloadsPanel(FileProperties fp, View view, DataFilter df, List<FileInformation> lstFiles, Set<String> dwlDirectories) {
         initComponents();
-        this.fp = fp;
-        this.mvc = mvc;
-        this.df = df;
-        this.fileList = fileList;
-        this.downloadDirectories = downloadDirectories;
+        this.fileProperties = fp;
+        this.view = view;
+        this.dataFilter = df;
+        this.lstFiles = lstFiles;
+        this.downloadDirectories = dwlDirectories;
         this.setSize(630, 400);
 
         //Carga datos guardados en archivo .json
         DirectoryInformation data = fp.loadDownloads();
-        fileList = data.downloads;
-        downloadDirectories.addAll(data.downloadFolders);
+        lstFiles = data.downloads;
+        dwlDirectories.addAll(data.downloadFolders);
 
         //AbstractTableMode
-        tblModel = new FileTableModel(fileList);
+        tblModel = new FileTableModel(lstFiles);
         tblInfo.setModel(tblModel);
 
         //Lista de objeto 'descarga'
         DefaultListModel listModel = new DefaultListModel();
-        for (String folder : downloadDirectories) {
+        for (String folder : dwlDirectories) {
             listModel.addElement(new FolderItem(folder));
         }
         listDirectories.setModel(listModel);
 
         //Muestra las descargas pertenecientes a un directorio
-        mvc.configDownloadList(listDirectories, cbbxTypeFilter, tblInfo);
+        view.configDownloadList(listDirectories, cbbxTypeFilter, tblInfo);
         
         //Aplica el filtro por tipo de archivo
-        mvc.applyFilters(cbbxTypeFilter);
+        view.applyFilters(cbbxTypeFilter);
  
     }
 
@@ -191,10 +191,10 @@ public class DownloadsPanel extends javax.swing.JPanel {
             List<FileInformation> allFiles = allData.downloads;
 
             //Filtrar por directorio
-            List<FileInformation> filteredByDirectory = df.filterByDirectory(allFiles, folderPath);
+            List<FileInformation> filteredByDirectory = dataFilter.filterByDirectory(allFiles, folderPath);
 
             //Filtrar por tipo
-            List<FileInformation> filteredByType = df.filterByType(filteredByDirectory, filtro);
+            List<FileInformation> filteredByType = dataFilter.filterByType(filteredByDirectory, filtro);
 
             //Actualizar tabla con los elementos filtrados
             FileTableModel model = (FileTableModel) tblInfo.getModel();
@@ -255,8 +255,8 @@ public class DownloadsPanel extends javax.swing.JPanel {
         if (selected instanceof FolderItem folder) {
             String filtro = (String) cbbxTypeFilter.getSelectedItem();
 
-            List<FileInformation> filteredByDirectory = df.filterByDirectory(allFiles, folder.getFullPath());
-            List<FileInformation> filteredByType = df.filterByType(filteredByDirectory, filtro);
+            List<FileInformation> filteredByDirectory = dataFilter.filterByDirectory(allFiles, folder.getFullPath());
+            List<FileInformation> filteredByType = dataFilter.filterByType(filteredByDirectory, filtro);
 
             tblModel.setFileList(filteredByType);
             tblModel.fireTableDataChanged();

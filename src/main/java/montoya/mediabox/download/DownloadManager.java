@@ -21,8 +21,8 @@ public class DownloadManager {
     private String ytDlpLocation;
     private boolean createM3u;
     private double maxSpeed;
-    private DownloadWorker dw;
-    private FileProperties fp;
+    private DownloadWorker downloadWorker;
+    private FileProperties fileProperties;
 
     public DownloadManager() {}
 
@@ -61,14 +61,14 @@ public class DownloadManager {
 
     //Devuelve el ultimo archivo descargado
     public File getLastDownloadedFile() {
-        if (dw != null) {
-            return dw.getLastDownloadedFile();
+        if (downloadWorker != null) {
+            return downloadWorker.getLastDownloadedFile();
         }
         return null;
     }
 
     public DownloadManager(FileProperties fp) {
-        this.fp = fp;
+        this.fileProperties = fp;
     }
 
     //Verifica si los campos de preferences se han completado
@@ -88,8 +88,8 @@ public class DownloadManager {
         progressBar.setVisible(true);
         progressBar.setIndeterminate(true);
 
-        dw = new DownloadWorker(pb, folder, outputArea, progressBar, tblModel, fp, listDirectories, downloadDirectories);
-        DownloadWorker task = dw;
+        downloadWorker = new DownloadWorker(pb, folder, outputArea, progressBar, tblModel, fileProperties, listDirectories, downloadDirectories);
+        DownloadWorker task = downloadWorker;
 
         task.addPropertyChangeListener(evt -> {
             if ("progress".equals(evt.getPropertyName())) {

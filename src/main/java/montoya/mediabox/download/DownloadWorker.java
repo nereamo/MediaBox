@@ -22,22 +22,22 @@ public class DownloadWorker extends SwingWorker<Void, String> {
     private final ProcessBuilder pb;
     private final String folder;
     private final JTextArea outputArea;
-    private final JProgressBar progressBar;
+    private final JProgressBar barProgress;
     private File lastDownloadFile;
     private final FileTableModel tblModel;
-    private JList<FolderItem> listDirectories;
-    private final FileProperties fp;
-    private final Set<String> downloadDirectories;
+    private JList<FolderItem> lstDirectories;
+    private final FileProperties fileProperties;
+    private final Set<String> dwlDirectories;
 
-    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, FileProperties fp, JList<FolderItem> listDirectories, Set<String> dowloadDirectories) {
+    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, FileProperties properties, JList<FolderItem> lstDirectories, Set<String> dwlDirectories) {
         this.pb = pb;
         this.folder = folder;
         this.outputArea = outputArea;
-        this.progressBar = progressBar;
+        this.barProgress = progressBar;
         this.tblModel = tblModel;
-        this.fp = fp;
-        this.listDirectories = listDirectories;
-        this.downloadDirectories = dowloadDirectories;
+        this.fileProperties = properties;
+        this.lstDirectories = lstDirectories;
+        this.dwlDirectories = dwlDirectories;
     }
 
     //Devuelve ultimo archivo descargado
@@ -88,21 +88,21 @@ public class DownloadWorker extends SwingWorker<Void, String> {
                     }
                 });
 
-                fp.addDownload(info); //Guarda el archivo .json 
-                downloadDirectories.add(info.folderPath);
+                fileProperties.addDownload(info); //Guarda el archivo .json 
+                dwlDirectories.add(info.folderPath);
 
                 //Refresca la lista de directorios
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
                         DefaultListModel<FolderItem> model = new DefaultListModel<>();
-                        for (String folderPath : downloadDirectories) {
+                        for (String folderPath : dwlDirectories) {
                             model.addElement(new FolderItem(folderPath));
                         }
-                        listDirectories.setModel(model);
+                        lstDirectories.setModel(model);
 
-                        if (!downloadDirectories.isEmpty()) {
-                            listDirectories.setSelectedIndex(0);
+                        if (!dwlDirectories.isEmpty()) {
+                            lstDirectories.setSelectedIndex(0);
                         }
                     }
 
@@ -125,9 +125,9 @@ public class DownloadWorker extends SwingWorker<Void, String> {
     //Se ejecuta cuando doInBackground ha terminado, muestra mensaje de finalización
     @Override
     protected void done() {
-        progressBar.setIndeterminate(false);
-        progressBar.setValue(100);
-        progressBar.setString("Download completed!");
+        barProgress.setIndeterminate(false);
+        barProgress.setValue(100);
+        barProgress.setString("Download completed!");
         JOptionPane.showMessageDialog(null, "Download completed!", "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
