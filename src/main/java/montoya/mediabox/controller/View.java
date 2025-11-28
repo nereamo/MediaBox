@@ -1,17 +1,8 @@
 package montoya.mediabox.controller;
 
-import java.util.List;
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import montoya.mediabox.MainFrame;
-import montoya.mediabox.panels.Preferences;
-import montoya.mediabox.fileInformation.DirectoryInformation;
-import montoya.mediabox.fileInformation.FileInformation;
-import montoya.mediabox.fileInformation.FileProperties;
-import montoya.mediabox.fileInformation.FileTableModel;
-import montoya.mediabox.fileInformation.FolderItem;
-import montoya.mediabox.panels.DownloadsPanel;
+import montoya.mediabox.panels.*;
 
 /**
  * Gestiona la configuración de elementos visuales de la interfaz
@@ -35,21 +26,21 @@ public class View {
     }
     
     // --- Views configuration ---
-
-    //Configuración de JFrame
-    public void configFrame() {
+    public void configPanels(MainFrame frame, Login login, Preferences preferences, JPanel pnlMain, JPanel pnlMediaInfo) {
+        //Frame
         frame.setTitle("MediaBox");
         frame.setResizable(false);
         frame.setSize(1300, 800);
         frame.setLocationRelativeTo(frame);
         pnlMain.setSize(1300, 800);
-    }
-    
-    //Configuración de JPanel Preferences
-    public void configPreferencesPanel() {
+        
+        //Login y preferences
+        login.setBounds(0, 0, 1300, 800);
         preferences.setBounds(0, 0, 1300, 800);
+        
+        //infoMediaPanel
+        pnlMediaInfo.setBounds(630, 40, 630, 400);
     }
-
     
     // --- UI Controls ---
     
@@ -64,7 +55,7 @@ public class View {
     }
 
     //Aplicar la calidad de video
-    public void applyQuality(JComboBox cbbxQuality){
+    public void qualityOptions(JComboBox cbbxQuality){
         cbbxQuality.removeAllItems();
         cbbxQuality.addItem("1080");
         cbbxQuality.addItem("720");
@@ -72,7 +63,7 @@ public class View {
     }
     
     //Añade los filtros a JComboBox
-    public void applyFilters(JComboBox cbbxFilter) {
+    public void filterOptions(JComboBox cbbxFilter) {
         cbbxFilter.removeAllItems();
         cbbxFilter.addItem("All");
         cbbxFilter.addItem("MP4");
@@ -96,46 +87,4 @@ public class View {
             }
         });
     }
-    
-    //Configuración de JList, al seleccionar un directorio muestra las descargas.
-    public void configDownloadList(JList<?> listDirectories, JComboBox<String> cbbxFilter, JTable tblInfo) {
-
-        listDirectories.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-
-                if (!e.getValueIsAdjusting()) {
-                    Object selected = listDirectories.getSelectedValue();
-                    if (selected instanceof FolderItem folder) {
-
-                        String selectedFilter = (String) cbbxFilter.getSelectedItem();
-
-                        FileProperties fp = new FileProperties();
-                        DirectoryInformation allData = fp.loadDownloads(); // lee JSON
-
-                        //Lista completa de todas las descargas
-                        List<FileInformation> allFiles = allData.downloads;
-
-                        //Filtra por directorio seleccionado en JList
-                        List<FileInformation> filteredByDirectory = dataFilter.filterByDirectory(allFiles, folder.getFullPath());
-
-                        //Filtra por tipo selccionado en comboBox
-                        List<FileInformation> filteredByType = dataFilter.filterByType(filteredByDirectory, selectedFilter);
-
-                        //Actualiza la tabla con los filtros aplicados
-                        FileTableModel model = (FileTableModel) tblInfo.getModel();
-                        model.setFileList(filteredByType);
-                        model.fireTableDataChanged();
-                    }
-                }
-
-            }
-        });
-    }
-    
-    //propiedades del panel Downloads
-    public void configDownloadsPanel(JPanel pnlMain, DownloadsPanel dp) {
-        dp.setBounds(630, 40, 630, 400);
-        pnlMain.add(dp);
-    }  
 }

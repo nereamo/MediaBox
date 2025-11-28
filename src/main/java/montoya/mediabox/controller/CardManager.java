@@ -3,7 +3,6 @@ package montoya.mediabox.controller;
 import java.awt.CardLayout;
 import javax.swing.JPanel;
 
-
 /**
  *
  * @author Nerea

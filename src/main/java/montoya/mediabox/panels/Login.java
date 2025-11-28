@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import montoya.mediabox.MainFrame;
 import montoya.mediabox.apiclient.ApiClient;
+import montoya.mediabox.controller.CardManager;
 import montoya.mediabox.tokenuser.TokenController;
 import montoya.mediabox.tokenuser.TokenUser;
 import net.miginfocom.swing.MigLayout;
@@ -16,9 +17,10 @@ import net.miginfocom.swing.MigLayout;
  *
  * @author Nerea
  */
-public class LoginPanel extends JPanel{
+public class Login extends JPanel{
     
-    private static MainFrame mainFrame;
+    private MainFrame frame;
+    private CardManager cardManager;
     private JTextField txtEmail = new JTextField();
     private JPasswordField txtPassword = new JPasswordField("**********");
     private JPanel pnlEmail = new JPanel();
@@ -36,9 +38,10 @@ public class LoginPanel extends JPanel{
     private static final String FOLDER_NAME = System.getProperty("user.home") + "/AppData/Local/MediaBox";
     private static final Path JSON_PATH = Paths.get(FOLDER_NAME, "token.json");
     
-    public LoginPanel(MainFrame mainFrame){
+    public Login(MainFrame frame, CardManager cardManager){
         
-        this.mainFrame = mainFrame;
+        this.frame = frame;
+        this.cardManager = cardManager;
         
         this.setBounds(0, 0, 1300, 770);
         this.setLayout(new MigLayout("center", "[][grow][]", "100[]10[]20[]"));
@@ -168,7 +171,7 @@ public class LoginPanel extends JPanel{
 
                 if (email == null || email.trim().equals("")
                         || password == null || password.trim().equals("")) {
-                    JOptionPane.showMessageDialog(LoginPanel.this,
+                    JOptionPane.showMessageDialog(Login.this,
                             "Please, enter an Email and Password",
                             "Login error",
                             JOptionPane.ERROR_MESSAGE);
@@ -179,7 +182,11 @@ public class LoginPanel extends JPanel{
                     token = client.login(email, password);
 
                     if (token != null) {
-                        mainFrame.loginSuccess(token);
+                        JOptionPane.showMessageDialog(Login.this,
+                                "Login successful: " + email,
+                                "Success",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        cardManager.showCard("main");
 
                         if (chkRemember.isSelected()) {
                             TokenController.saveToken(token);
@@ -187,7 +194,7 @@ public class LoginPanel extends JPanel{
                         }
                     }
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(LoginPanel.this, "Login failed: Incorrect credentials or expired token.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(Login.this, "Login failed: Incorrect credentials or expired token.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
 
             }
@@ -195,19 +202,20 @@ public class LoginPanel extends JPanel{
     }
 
     //Lee token y si es correcto, accede a Frame directamente
-    public static void autoLogin(){
+    public void autoLogin(){
         try{
             TokenUser save = TokenController.readToken();
             
             if(save != null){
                 token = save.getToken();
                 client.getMe(token);
-                mainFrame.loginSuccess(token);
+                System.out.println("Login Exitoso." + token);
+                cardManager.showCard("main");
                 return;
             }
         } catch (Exception ex) {
-            System.getLogger(LoginPanel.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            System.getLogger(Login.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
         token = null;
-    } 
+    }
 }

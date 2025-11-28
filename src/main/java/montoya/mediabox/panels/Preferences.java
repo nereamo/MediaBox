@@ -28,7 +28,7 @@ public class Preferences extends javax.swing.JPanel {
         mbSpeedSpinner();
     }
 
-    public void setMainController(View view) {
+    public void setView(View view) {
         this.view = view;
     }
 
