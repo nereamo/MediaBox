@@ -15,41 +15,42 @@ public class FileProperties {
 
     private static final String FOLDER_NAME = System.getProperty("user.home") + "/Descargas MediaBox";
     private static final Path JSON_PATH = Paths.get(FOLDER_NAME, "downloads.json");
-
-    //Lee archivo .json y develve objeto DirectoryInformation
+    
+     //Lee archivo .json y develve objeto DirectoryInformation
     public DirectoryInformation loadDownloads() {
-        
+
         try {
-            
             Files.createDirectories(Paths.get(FOLDER_NAME));
+
             if (!Files.exists(JSON_PATH)) {
                 return new DirectoryInformation(new ArrayList<>(), new HashSet<>());
             }
-            
-            try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(JSON_PATH.toFile()))) {
+
+            try (ObjectInputStream in =
+                         new ObjectInputStream(new FileInputStream(JSON_PATH.toFile()))) {
                 return (DirectoryInformation) in.readObject();
             }
-        
+
         } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Error loading downloads.json: " + e.getMessage());
             return new DirectoryInformation(new ArrayList<>(), new HashSet<>());
         }
     }
-
-    //Guarda el archivo descargado en archivo .json
+    
     public void addDownload(FileInformation newFile) {
 
         try {
             Files.createDirectories(Paths.get(FOLDER_NAME));
-            DirectoryInformation dirInfo = loadDownloads();
 
-            dirInfo.downloads.add(newFile);
-            dirInfo.downloadFolders.add(newFile.folderPath);
+            DirectoryInformation data = loadDownloads();
 
-            try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(JSON_PATH.toFile()))) {
-                out.writeObject(dirInfo);
-            }
-        } catch (IOException e) {
-            System.err.println("Error saving download data: " + e.getMessage());
+            data.fileList.add(newFile);
+            data.folderPaths.add(newFile.folderPath);
+
+            saveAllDownloads(data);
+
+        } catch (Exception e) {
+            System.err.println("Error adding download: " + e.getMessage());
         }
     }
     

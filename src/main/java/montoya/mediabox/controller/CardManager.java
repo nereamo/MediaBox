@@ -12,7 +12,7 @@ public class CardManager {
     private JPanel container;
     private CardLayout layout;
     public static final String CARD_LOGIN = "login";
-    public static final String CARD_MAIN = "main";
+    public static final String CARD_DOWN = "downloads";
     public static final String CARD_PREF = "preferences";
     
     public CardManager(JPanel container, CardLayout cards){
@@ -21,10 +21,10 @@ public class CardManager {
     }
     
     //Añade los panels a CardLayout
-    public void initCards(JPanel pnlLogin, JPanel pnlMain, JPanel preferences){
+    public void initCards(JPanel pnlLogin, JPanel pnlDownloads, JPanel preferences){
         
         container.add(pnlLogin,CARD_LOGIN);
-        container.add(pnlMain, CARD_MAIN);
+        container.add(pnlDownloads, CARD_DOWN);
         container.add(preferences, CARD_PREF); 
     }
 

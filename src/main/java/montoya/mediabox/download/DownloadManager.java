@@ -25,6 +25,10 @@ public class DownloadManager {
     private FileProperties fileProperties;
 
     public DownloadManager() {}
+    
+    public DownloadManager(FileProperties fileProperties) {
+        this.fileProperties = fileProperties;
+    }
 
     //Getters y Setters
     public String getTempPath() {
@@ -67,12 +71,9 @@ public class DownloadManager {
         return null;
     }
 
-    public DownloadManager(FileProperties fp) {
-        this.fileProperties = fp;
-    }
-
+    
     //Verifica si los campos de preferences se han completado
-    public void download(String url, String folder, String format, String quality, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, JList<FolderItem> listDirectories, Set<String> downloadDirectories) {
+    public void download(String url, String folder, String format, String quality, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, JList<FolderItem> folderList, Set<String> folderPaths) {
         if (url.isEmpty() || folder.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter a URL and select a folder.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -88,7 +89,7 @@ public class DownloadManager {
         progressBar.setVisible(true);
         progressBar.setIndeterminate(true);
 
-        downloadWorker = new DownloadWorker(pb, folder, outputArea, progressBar, tblModel, fileProperties, listDirectories, downloadDirectories);
+        downloadWorker = new DownloadWorker(pb, folder, outputArea, progressBar, tblModel, fileProperties, folderList, folderPaths);
         DownloadWorker task = downloadWorker;
 
         task.addPropertyChangeListener(evt -> {

@@ -12,11 +12,11 @@ import java.util.Set;
  */
 public class DirectoryInformation implements Serializable{
     
-    public List<FileInformation> downloads;
-    public Set<String> downloadFolders;
+    public List<FileInformation> fileList;
+    public Set<String> folderPaths;
     
-    public DirectoryInformation(List<FileInformation> downloads, Set<String> downloadFolders) {
-        this.downloads = downloads;
-        this.downloadFolders = downloadFolders;
+    public DirectoryInformation(List<FileInformation> fileList, Set<String> folderPaths) {
+        this.fileList = fileList;
+        this.folderPaths = folderPaths;
     }  
 }

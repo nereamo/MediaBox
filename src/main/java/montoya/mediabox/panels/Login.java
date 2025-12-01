@@ -21,6 +21,7 @@ public class Login extends JPanel{
     
     private MainFrame frame;
     private CardManager cardManager;
+
     private JTextField txtEmail = new JTextField();
     private JPasswordField txtPassword = new JPasswordField("**********");
     private JPanel pnlEmail = new JPanel();
@@ -186,7 +187,7 @@ public class Login extends JPanel{
                                 "Login successful: " + email,
                                 "Success",
                                 JOptionPane.INFORMATION_MESSAGE);
-                        cardManager.showCard("main");
+                        cardManager.showCard("downloads");
 
                         if (chkRemember.isSelected()) {
                             TokenController.saveToken(token);
@@ -210,7 +211,7 @@ public class Login extends JPanel{
                 token = save.getToken();
                 client.getMe(token);
                 System.out.println("Login Exitoso." + token);
-                cardManager.showCard("main");
+                cardManager.showCard("downloads");
                 return;
             }
         } catch (Exception ex) {

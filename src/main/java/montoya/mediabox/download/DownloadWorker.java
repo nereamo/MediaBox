@@ -11,6 +11,7 @@ import montoya.mediabox.fileInformation.FileInformation;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
 import montoya.mediabox.fileInformation.FolderItem;
+import montoya.mediabox.panels.InfoMedia;
 
 /**
  * Clase creada con ayuda de Copilot para entender como funciona SwingWorker y que metodos utilizar. SwingWorker ejecuta tareas en segundo plano impidiendo que no se bloquee la GUI. Contiene metodos para descaragar archivos en segundo plano
@@ -25,19 +26,20 @@ public class DownloadWorker extends SwingWorker<Void, String> {
     private final JProgressBar barProgress;
     private File lastDownloadFile;
     private final FileTableModel tblModel;
-    private JList<FolderItem> lstDirectories;
+    private InfoMedia infoMedia;
+    private JList<FolderItem> folderList;
     private final FileProperties fileProperties;
-    private final Set<String> dwlDirectories;
+    private final Set<String> folderPaths;
 
-    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, FileProperties properties, JList<FolderItem> lstDirectories, Set<String> dwlDirectories) {
+    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, FileProperties fileProperties, JList<FolderItem> folderList, Set<String> folderPaths) {
         this.pb = pb;
         this.folder = folder;
         this.outputArea = outputArea;
         this.barProgress = progressBar;
         this.tblModel = tblModel;
-        this.fileProperties = properties;
-        this.lstDirectories = lstDirectories;
-        this.dwlDirectories = dwlDirectories;
+        this.fileProperties = fileProperties;
+        this.folderList = folderList;
+        this.folderPaths = folderPaths;
     }
 
     //Devuelve ultimo archivo descargado
@@ -85,27 +87,23 @@ public class DownloadWorker extends SwingWorker<Void, String> {
                     @Override
                     public void run() {
                         tblModel.addFile(info);
+                        tblModel.fireTableDataChanged();
                     }
                 });
 
                 fileProperties.addDownload(info); //Guarda el archivo .json 
-                dwlDirectories.add(info.folderPath);
+                folderPaths.add(info.folderPath);
 
                 //Refresca la lista de directorios
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
                         DefaultListModel<FolderItem> model = new DefaultListModel<>();
-                        for (String folderPath : dwlDirectories) {
+                        for (String folderPath : folderPaths) {
                             model.addElement(new FolderItem(folderPath));
                         }
-                        lstDirectories.setModel(model);
-
-                        if (!dwlDirectories.isEmpty()) {
-                            lstDirectories.setSelectedIndex(0);
-                        }
+                        folderList.setModel(model);
                     }
-
                 });
             }
         }

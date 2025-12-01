@@ -14,6 +14,7 @@ public class TokenController {
     
     private static final String FOLDER_NAME = System.getProperty("user.home") + "/AppData/Local/MediaBox";
     private static final Path JSON_PATH = Paths.get(FOLDER_NAME, "token.json");
+    
     private static final ObjectMapper mapper = new ObjectMapper();
     
     //Guarar el TOKEN en archivo token.json
