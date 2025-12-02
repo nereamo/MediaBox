@@ -11,7 +11,7 @@ import javax.swing.table.AbstractTableModel;
 public class FileTableModel extends AbstractTableModel {
 
     private final String[] column = {"Name", "Size (MB)", "Type", "Date"};
-    private final List<FileInformation> fileList;
+    private List<FileInformation> fileList;
 
     public FileTableModel(List<FileInformation> fileList) { //Recibe lista del archivo .json
         this.fileList = fileList;
@@ -69,7 +69,7 @@ public class FileTableModel extends AbstractTableModel {
         fileList.add(file);
         fireTableRowsInserted(fileList.size() - 1, fileList.size() - 1);
     }
-    
+   
     //Actualiza los archivos mostrado en la tabla
     public void setFileList(List<FileInformation> newList) {
         fileList.clear();          

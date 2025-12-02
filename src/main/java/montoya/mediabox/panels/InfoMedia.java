@@ -3,7 +3,6 @@ package montoya.mediabox.panels;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -65,21 +64,6 @@ public class InfoMedia extends javax.swing.JPanel {
         }
         folderList.setModel(listModel);
 
-        // Seleccionamos automáticamente el primer elemento
-        if (!folderPaths.isEmpty()) {
-            folderList.setSelectedIndex(0);  // selecciona el primer elemento
-            FolderItem firstFolder = folderList.getSelectedValue();
-            if (firstFolder != null) {
-                // Cargar las descargas de ese directorio en la tabla
-                DirectoryInformation allData = fileProperties.loadDownloads();
-                List<FileInformation> allFiles = allData.fileList;
-                List<FileInformation> filteredFiles = dataFilter.filterByDirectory(allFiles, firstFolder.getFullPath());
-
-                tblModel.setFileList(filteredFiles);
-                tblModel.fireTableDataChanged();
-            }
-        }
-
         //Muestra las descargas pertenecientes a un directorio
         configDownloadList(folderList, cbbxTypeFilter, tblMedia);
     }
@@ -125,7 +109,8 @@ public class InfoMedia extends javax.swing.JPanel {
 
                         String selectedFilter = (String) cbbxFilter.getSelectedItem();
 
-                        DirectoryInformation allData = fileProperties.loadDownloads();
+                        FileProperties fp = new FileProperties();
+                        DirectoryInformation allData = fp.loadDownloads(); // lee JSON
 
                         //Lista completa de todas las descargas
                         List<FileInformation> allFiles = allData.fileList;
@@ -150,9 +135,9 @@ public class InfoMedia extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane2 = new javax.swing.JScrollPane();
+        scrFolderList = new javax.swing.JScrollPane();
         folderList = new javax.swing.JList<>();
-        jScrollPane3 = new javax.swing.JScrollPane();
+        scrTableMedia = new javax.swing.JScrollPane();
         tblMedia = new javax.swing.JTable();
         btnPlay = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
@@ -165,11 +150,12 @@ public class InfoMedia extends javax.swing.JPanel {
         folderList.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         folderList.setPreferredSize(new java.awt.Dimension(40, 60));
         folderList.setSelectionBackground(new java.awt.Color(255, 204, 153));
-        jScrollPane2.setViewportView(folderList);
+        scrFolderList.setViewportView(folderList);
 
-        add(jScrollPane2);
-        jScrollPane2.setBounds(16, 80, 100, 240);
+        add(scrFolderList);
+        scrFolderList.setBounds(16, 80, 100, 240);
 
+        tblMedia.setAutoCreateRowSorter(true);
         tblMedia.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tblMedia.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -190,12 +176,12 @@ public class InfoMedia extends javax.swing.JPanel {
                 return types [columnIndex];
             }
         });
-        tblMedia.setPreferredSize(new java.awt.Dimension(60, 80));
+        tblMedia.setPreferredSize(null);
         tblMedia.setSelectionBackground(new java.awt.Color(255, 204, 153));
-        jScrollPane3.setViewportView(tblMedia);
+        scrTableMedia.setViewportView(tblMedia);
 
-        add(jScrollPane3);
-        jScrollPane3.setBounds(120, 80, 490, 240);
+        add(scrTableMedia);
+        scrTableMedia.setBounds(120, 80, 490, 240);
 
         btnPlay.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnPlay.setText("Play");
@@ -318,6 +304,7 @@ public class InfoMedia extends javax.swing.JPanel {
             //Filtrar por tipo
             List<FileInformation> filteredByType = dataFilter.filterByType(filteredByDirectory, filtro);
 
+
             //Actualizar tabla con los elementos filtrados
             tblModel.setFileList(filteredByType);
             tblModel.fireTableDataChanged();
@@ -330,8 +317,8 @@ public class InfoMedia extends javax.swing.JPanel {
     private javax.swing.JButton btnPlay;
     private javax.swing.JComboBox<String> cbbxTypeFilter;
     private javax.swing.JList<FolderItem> folderList;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane scrFolderList;
+    private javax.swing.JScrollPane scrTableMedia;
     private javax.swing.JTable tblMedia;
     // End of variables declaration//GEN-END:variables
 }
