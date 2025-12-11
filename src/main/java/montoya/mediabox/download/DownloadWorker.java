@@ -100,7 +100,7 @@ public class DownloadWorker extends SwingWorker<Void, String> {
                     public void run() {
                         DefaultListModel<FolderItem> model = new DefaultListModel<>();
                         for (String folderPath : folderPaths) {
-                            model.addElement(new FolderItem(folderPath));
+                            model.addElement(new FolderItem(folderPath, false));
                         }
                         folderList.setModel(model);
                     }

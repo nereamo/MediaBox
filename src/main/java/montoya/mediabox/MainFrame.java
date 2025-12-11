@@ -10,6 +10,9 @@ import montoya.mediabox.controller.*;
 import montoya.mediabox.dialogs.DialogAbout;
 import montoya.mediabox.download.DownloadManager;
 import montoya.mediabox.fileInformation.FileProperties;
+import montoya.mediapollingcomponent.MediaEvent;
+import montoya.mediapollingcomponent.MediaListener;
+import montoya.mediapollingcomponent.MediaPollingComponent;
 
 /**
  * Class principal
@@ -24,6 +27,7 @@ public class MainFrame extends JFrame {
     private Preferences preferences;
     private Login pnlLogin;
     private DownloadManager downloadManager;
+    private MediaPollingComponent mediaComponent;
     
     private CardManager cardManager;
     private CardLayout layout;
@@ -40,10 +44,11 @@ public class MainFrame extends JFrame {
         layout = new CardLayout();
         container = new JPanel(layout);
         cardManager = new CardManager(container, layout);
+        mediaPollingComponent = new MediaPollingComponent();
         
         downloadManager = new DownloadManager(new FileProperties());
-        pnlLogin = new Login(this, cardManager);
-        pnlDownload = new Downloads(this, folderPaths, downloadManager);
+        pnlLogin = new Login(this, cardManager, getMediaPollingComponent());
+        pnlDownload = new Downloads(this, folderPaths, downloadManager, mediaPollingComponent);
         preferences = new Preferences(this, downloadManager, cardManager);
 
         cardManager.initCards(pnlLogin, pnlDownload, preferences);
@@ -53,20 +58,40 @@ public class MainFrame extends JFrame {
         this.setContentPane(container);
         this.setVisible(true);
     }
-    
+
     private void configurationFrame(){
         this.setTitle("MediaBox");
         this.setResizable(false);
         this.setSize(1300, 800);
         this.setLocationRelativeTo(this);
     }
-
+    
+    public MediaPollingComponent getMediaPollingComponent() {
+        return mediaPollingComponent;
+    }
+    
+    public void initializePolling(String token){
+    
+    mediaPollingComponent.setToken(token);
+    mediaPollingComponent.setApiUrl("https://dimedianetapi9.azurewebsites.net");
+    mediaPollingComponent.setPollingInterval(5);
+    
+    mediaPollingComponent.addMediaListener(new MediaListener() {
+        @Override
+        public void newMediaFound(MediaEvent me) {
+            System.out.println("Nuevos medios encontrados: " + me.getMediaList().size() + " " + me.getMediaList());
+        }
+    });
+    
+    mediaPollingComponent.setRunning(true);
+}
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
+        mediaPollingComponent = new montoya.mediapollingcomponent.MediaPollingComponent();
         menuBar = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mnuLogout = new javax.swing.JMenuItem();
@@ -86,6 +111,8 @@ public class MainFrame extends JFrame {
         setName("mainFrame"); // NOI18N
         setResizable(false);
         getContentPane().setLayout(null);
+        getContentPane().add(mediaPollingComponent);
+        mediaPollingComponent.setBounds(1210, 680, 35, 35);
 
         menuBar.setBackground(new java.awt.Color(255, 102, 0));
         menuBar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 102, 0)));
@@ -222,6 +249,7 @@ public class MainFrame extends JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private montoya.mediapollingcomponent.MediaPollingComponent mediaPollingComponent;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem mnuAbout;
     private javax.swing.JMenu mnuEdit;

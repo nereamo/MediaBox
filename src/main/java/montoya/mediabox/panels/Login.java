@@ -11,6 +11,7 @@ import montoya.mediabox.apiclient.ApiClient;
 import montoya.mediabox.controller.CardManager;
 import montoya.mediabox.tokenuser.TokenController;
 import montoya.mediabox.tokenuser.TokenUser;
+import montoya.mediapollingcomponent.MediaPollingComponent;
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -38,11 +39,13 @@ public class Login extends JPanel{
     private static String token;
     private static final String FOLDER_NAME = System.getProperty("user.home") + "/AppData/Local/MediaBox";
     private static final Path JSON_PATH = Paths.get(FOLDER_NAME, "token.json");
+    private MediaPollingComponent mediaComponent;
     
-    public Login(MainFrame frame, CardManager cardManager){
+    public Login(MainFrame frame, CardManager cardManager, MediaPollingComponent mediaComponent){
         
         this.frame = frame;
         this.cardManager = cardManager;
+        this.mediaComponent = mediaComponent;
         
         this.setBounds(0, 0, 1300, 770);
         this.setLayout(new MigLayout("center", "[][grow][]", "100[]10[]20[]"));
@@ -180,13 +183,17 @@ public class Login extends JPanel{
                 }
 
                 try {
-                    token = client.login(email, password);
+                    TokenController.deleteToken(); // -->>> Aqui se ha modificado
+                    token = mediaComponent.login(email, password); // -->>> Aqui se ha modificado
+                    //token = client.login(email, password);
+                    frame.initializePolling(token); // -->>> Aqui se ha modificado
 
                     if (token != null) {
                         JOptionPane.showMessageDialog(Login.this,
                                 "Login successful: " + email,
                                 "Success",
                                 JOptionPane.INFORMATION_MESSAGE);
+                        //mediaComponent.setToken(token); // -->>> Aqui se ha modificado
                         cardManager.showCard("downloads");
 
                         if (chkRemember.isSelected()) {
@@ -209,7 +216,9 @@ public class Login extends JPanel{
             
             if(save != null){
                 token = save.getToken();
-                client.getMe(token);
+                mediaComponent.setToken(token);
+                frame.initializePolling(token);
+                //client.getMe(token); // ---->>>>> Modificado aqui
                 System.out.println("Login Exitoso." + token);
                 cardManager.showCard("downloads");
                 return;

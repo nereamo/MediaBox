@@ -34,4 +34,16 @@ public class TokenController {
         
         return mapper.readValue(JSON_PATH.toFile(), TokenUser.class);
     }
+    
+    public static void deleteToken(){
+        
+        try {
+            if (Files.exists(JSON_PATH)) {
+                Files.delete(JSON_PATH);
+                System.out.println("Token eliminado correctamente.");
+            }
+        } catch (IOException e) {
+            System.err.println("No se pudo eliminar el token: " + e.getMessage());
+        }
+    }
 }

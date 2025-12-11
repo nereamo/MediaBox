@@ -10,13 +10,19 @@ import java.io.File;
 public class FolderItem {
 
     private String fullPath;
+    private boolean isNetwork;
 
-    public FolderItem(String fullPath) {
+    public FolderItem(String fullPath, boolean isNetwork) {
         this.fullPath = fullPath;
+        this.isNetwork = isNetwork;
     }
 
     public String getFullPath() {
         return fullPath;
+    }
+
+    public boolean isIsNetwork() {
+        return isNetwork;
     }
 
     @Override

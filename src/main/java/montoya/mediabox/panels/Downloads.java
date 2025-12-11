@@ -25,6 +25,7 @@ import montoya.mediabox.fileInformation.FileInformation;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
 import montoya.mediabox.fileInformation.FolderItem;
+import montoya.mediapollingcomponent.MediaPollingComponent;
 
 /**
  *
@@ -38,13 +39,15 @@ public class Downloads extends javax.swing.JPanel {
     private DataFilter dataFilter;
     private FileTableModel tblModel;
     private final FileProperties fileProperties;
+    private final MediaPollingComponent mediaComponent;
     
     private final ButtonGroup btnGroup;
     private final Set<String> folderPaths;
     private JList<FolderItem> folderList;
     private List<FileInformation> fileList = new ArrayList<>();
 
-    public Downloads(MainFrame frame, Set<String> folderPaths, DownloadManager downloadManager) {
+    // -->>> Aqui se ha modificado
+    public Downloads(MainFrame frame, Set<String> folderPaths, DownloadManager downloadManager, MediaPollingComponent mediaComponent) {
         initComponents();
         
         this.setBounds(0, 0, 1300, 770);
@@ -54,11 +57,12 @@ public class Downloads extends javax.swing.JPanel {
         this.downloadManager = downloadManager;
         this.folderPaths = folderPaths;
         this.fileProperties = new FileProperties();
+        this.mediaComponent = mediaComponent; // -->>> Aqui se ha modificado
        
         folderList = new JList<>(new DefaultListModel<>()); 
         btnGroup = new ButtonGroup();
         tblModel = new FileTableModel(fileList);
-        infoMedia = new InfoMedia(fileProperties, dataFilter, fileList, folderPaths);
+        infoMedia = new InfoMedia(fileProperties, dataFilter, fileList, folderPaths, mediaComponent);// -->>> Aqui se ha modificado
         
         
         //Aplica filtro de calidad 
@@ -333,7 +337,7 @@ public class Downloads extends javax.swing.JPanel {
                 // Añadir el directorio a la lista si no está ya
                 if (folderPaths.add(folderPath)) {
                     DefaultListModel<FolderItem> listModel = (DefaultListModel<FolderItem>) infoMedia.getListDirectories().getModel();
-                    listModel.addElement(new FolderItem(folderPath));
+                    listModel.addElement(new FolderItem(folderPath, false)); //--->>>>modificado
                 }
             }
         }
@@ -359,7 +363,7 @@ public class Downloads extends javax.swing.JPanel {
                     @Override
                     public void run() {
                         DefaultListModel<FolderItem> listModel = (DefaultListModel<FolderItem>) folderList.getModel();
-                        listModel.addElement(new FolderItem(folder));
+                        listModel.addElement(new FolderItem(folder, false)); //--->>>>modificado
                      }
                     });
                 }
