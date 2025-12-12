@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import montoya.mediabox.MainFrame;
-import montoya.mediabox.apiclient.ApiClient;
 import montoya.mediabox.controller.CardManager;
 import montoya.mediabox.tokenuser.TokenController;
 import montoya.mediabox.tokenuser.TokenUser;
@@ -34,8 +33,7 @@ public class Login extends JPanel{
     private JCheckBox chkRemember = new JCheckBox("Remember me");
     private Font bold = new Font("Arial", Font.BOLD, 14);
     private Font plain = new Font("Arial", Font.PLAIN, 14);
-    private static final String API_BASE_URL = "https://dimedianetapi9.azurewebsites.net";
-    private static ApiClient client = new ApiClient(API_BASE_URL);
+    private static final String API_BASE_URL = "https://difreenet9.azurewebsites.net";
     private static String token;
     private static final String FOLDER_NAME = System.getProperty("user.home") + "/AppData/Local/MediaBox";
     private static final Path JSON_PATH = Paths.get(FOLDER_NAME, "token.json");
@@ -175,25 +173,19 @@ public class Login extends JPanel{
 
                 if (email == null || email.trim().equals("")
                         || password == null || password.trim().equals("")) {
-                    JOptionPane.showMessageDialog(Login.this,
-                            "Please, enter an Email and Password",
-                            "Login error",
-                            JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(Login.this,"Please, enter an Email and Password","Login error",JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 try {
-                    TokenController.deleteToken(); // -->>> Aqui se ha modificado
+                    mediaComponent.setApiUrl(API_BASE_URL);
                     token = mediaComponent.login(email, password); // -->>> Aqui se ha modificado
-                    //token = client.login(email, password);
-                    frame.initializePolling(token); // -->>> Aqui se ha modificado
 
                     if (token != null) {
-                        JOptionPane.showMessageDialog(Login.this,
-                                "Login successful: " + email,
-                                "Success",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        //mediaComponent.setToken(token); // -->>> Aqui se ha modificado
+                        TokenController.deleteToken(); // -->>> Aqui se ha modificado
+                        mediaComponent.setToken(token);
+                        frame.initializePolling(token); // -->>> Aqui se ha modificado
+                        JOptionPane.showMessageDialog(Login.this,"Login successful: " + email,"Success",JOptionPane.INFORMATION_MESSAGE);
                         cardManager.showCard("downloads");
 
                         if (chkRemember.isSelected()) {
@@ -218,7 +210,6 @@ public class Login extends JPanel{
                 token = save.getToken();
                 mediaComponent.setToken(token);
                 frame.initializePolling(token);
-                //client.getMe(token); // ---->>>>> Modificado aqui
                 System.out.println("Login Exitoso." + token);
                 cardManager.showCard("downloads");
                 return;
