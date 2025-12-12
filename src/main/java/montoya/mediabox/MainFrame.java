@@ -27,7 +27,7 @@ public class MainFrame extends JFrame {
     private Preferences preferences;
     private Login pnlLogin;
     private DownloadManager downloadManager;
-    private MediaPollingComponent mediaComponent;
+    //private MediaPollingComponent mediaComponent;
     
     private CardManager cardManager;
     private CardLayout layout;
@@ -47,7 +47,7 @@ public class MainFrame extends JFrame {
         mediaPollingComponent = new MediaPollingComponent();
         
         downloadManager = new DownloadManager(new FileProperties());
-        pnlLogin = new Login(this, cardManager, getMediaPollingComponent());
+        pnlLogin = new Login(this, cardManager, mediaPollingComponent);
         pnlDownload = new Downloads(this, folderPaths, downloadManager, mediaPollingComponent);
         preferences = new Preferences(this, downloadManager, cardManager);
 
@@ -66,14 +66,10 @@ public class MainFrame extends JFrame {
         this.setLocationRelativeTo(this);
     }
     
-    public MediaPollingComponent getMediaPollingComponent() {
-        return mediaPollingComponent;
-    }
-    
     public void initializePolling(String token){
     
     mediaPollingComponent.setToken(token);
-    mediaPollingComponent.setApiUrl("https://dimedianetapi9.azurewebsites.net");
+    mediaPollingComponent.setApiUrl("https://difreenet9.azurewebsites.net");
     mediaPollingComponent.setPollingInterval(5);
     
     mediaPollingComponent.addMediaListener(new MediaListener() {

@@ -39,7 +39,7 @@ public class Downloads extends javax.swing.JPanel {
     private DataFilter dataFilter;
     private FileTableModel tblModel;
     private final FileProperties fileProperties;
-    private final MediaPollingComponent mediaComponent;
+    private final MediaPollingComponent mediaPollingComponent;
     
     private final ButtonGroup btnGroup;
     private final Set<String> folderPaths;
@@ -47,7 +47,7 @@ public class Downloads extends javax.swing.JPanel {
     private List<FileInformation> fileList = new ArrayList<>();
 
     // -->>> Aqui se ha modificado
-    public Downloads(MainFrame frame, Set<String> folderPaths, DownloadManager downloadManager, MediaPollingComponent mediaComponent) {
+    public Downloads(MainFrame frame, Set<String> folderPaths, DownloadManager downloadManager, MediaPollingComponent mediaPollingComponent) {
         initComponents();
         
         this.setBounds(0, 0, 1300, 770);
@@ -57,12 +57,12 @@ public class Downloads extends javax.swing.JPanel {
         this.downloadManager = downloadManager;
         this.folderPaths = folderPaths;
         this.fileProperties = new FileProperties();
-        this.mediaComponent = mediaComponent; // -->>> Aqui se ha modificado
+        this.mediaPollingComponent = mediaPollingComponent; // -->>> Aqui se ha modificado
        
         folderList = new JList<>(new DefaultListModel<>()); 
         btnGroup = new ButtonGroup();
         tblModel = new FileTableModel(fileList);
-        infoMedia = new InfoMedia(fileProperties, dataFilter, fileList, folderPaths, mediaComponent);// -->>> Aqui se ha modificado
+        infoMedia = new InfoMedia(fileProperties, dataFilter, fileList, folderPaths, mediaPollingComponent);// -->>> Aqui se ha modificado
         
         
         //Aplica filtro de calidad 

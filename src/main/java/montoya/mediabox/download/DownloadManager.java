@@ -17,12 +17,13 @@ import montoya.mediabox.fileInformation.FolderItem;
  */
 public class DownloadManager {
 
+    private DownloadWorker downloadWorker;
+    private FileProperties fileProperties;
+    
     private String tempPath;
     private String ytDlpLocation;
     private boolean createM3u;
     private double maxSpeed;
-    private DownloadWorker downloadWorker;
-    private FileProperties fileProperties;
 
     public DownloadManager() {}
     

@@ -36,7 +36,7 @@ public class InfoMedia extends javax.swing.JPanel {
     private FileTableModel tblModel;
     private FileInformation fileInfo;
     private final DataFilter dataFilter;
-    private final MediaPollingComponent mediaComponent;
+    private final MediaPollingComponent mediaPollingComponent;
 
     private List<FileInformation> allFiles;
 
@@ -44,12 +44,12 @@ public class InfoMedia extends javax.swing.JPanel {
     private final FileProperties fileProperties;
     private Set<String> folderPaths = new HashSet<>();
 
-    public InfoMedia(FileProperties fileProperties, DataFilter dataFilter, List<FileInformation> fileList, Set<String> folderPaths, MediaPollingComponent mediaComponent) {
+    public InfoMedia(FileProperties fileProperties, DataFilter dataFilter, List<FileInformation> fileList, Set<String> folderPaths, MediaPollingComponent mediaPollingComponent) {
         initComponents();
 
         this.dataFilter = dataFilter;
         this.fileProperties = fileProperties;
-        this.mediaComponent = mediaComponent;
+        this.mediaPollingComponent = mediaPollingComponent;
 
         //Carga datos guardados en archivo .json
         DirectoryInformation data = fileProperties.loadDownloads();
@@ -150,8 +150,8 @@ public class InfoMedia extends javax.swing.JPanel {
     private List<FileInformation> getNetworkFiles(String filter) {
         List<FileInformation> networkFiles = new ArrayList<>();
 
-        String token = mediaComponent.getToken();
-        String apiUrl = mediaComponent.getApiUrl();
+        String token = mediaPollingComponent.getToken();
+        String apiUrl = mediaPollingComponent.getApiUrl();
 
         if (token == null || token.isBlank() || apiUrl == null || apiUrl.isBlank()) {
             System.err.println("Cannot fetch network files: token or API URL is missing");
@@ -160,7 +160,7 @@ public class InfoMedia extends javax.swing.JPanel {
 
         try {
         // Obtener todos los medios de la API
-        List<Media> mediaList = mediaComponent.getAllMedia(token);
+        List<Media> mediaList = mediaPollingComponent.getAllMedia(token);
 
         // Convertir a FileInformation
         for (Media m : mediaList) {

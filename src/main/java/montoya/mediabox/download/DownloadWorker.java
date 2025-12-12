@@ -20,15 +20,16 @@ import montoya.mediabox.panels.InfoMedia;
  */
 public class DownloadWorker extends SwingWorker<Void, String> {
 
+    private File lastDownloadFile;
+    private final FileTableModel tblModel;
+    private InfoMedia infoMedia;
+    private final FileProperties fileProperties;
+
     private final ProcessBuilder pb;
     private final String folder;
     private final JTextArea outputArea;
     private final JProgressBar barProgress;
-    private File lastDownloadFile;
-    private final FileTableModel tblModel;
-    private InfoMedia infoMedia;
     private JList<FolderItem> folderList;
-    private final FileProperties fileProperties;
     private final Set<String> folderPaths;
 
     public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, FileProperties fileProperties, JList<FolderItem> folderList, Set<String> folderPaths) {

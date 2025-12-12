@@ -37,13 +37,13 @@ public class Login extends JPanel{
     private static String token;
     private static final String FOLDER_NAME = System.getProperty("user.home") + "/AppData/Local/MediaBox";
     private static final Path JSON_PATH = Paths.get(FOLDER_NAME, "token.json");
-    private MediaPollingComponent mediaComponent;
+    private MediaPollingComponent mediaPollingComponent;
     
-    public Login(MainFrame frame, CardManager cardManager, MediaPollingComponent mediaComponent){
+    public Login(MainFrame frame, CardManager cardManager, MediaPollingComponent mediaPollingComponent){
         
         this.frame = frame;
         this.cardManager = cardManager;
-        this.mediaComponent = mediaComponent;
+        this.mediaPollingComponent = mediaPollingComponent;
         
         this.setBounds(0, 0, 1300, 770);
         this.setLayout(new MigLayout("center", "[][grow][]", "100[]10[]20[]"));
@@ -178,12 +178,12 @@ public class Login extends JPanel{
                 }
 
                 try {
-                    mediaComponent.setApiUrl(API_BASE_URL);
-                    token = mediaComponent.login(email, password); // -->>> Aqui se ha modificado
+                    mediaPollingComponent.setApiUrl(API_BASE_URL);
+                    token = mediaPollingComponent.login(email, password); // -->>> Aqui se ha modificado
 
                     if (token != null) {
                         TokenController.deleteToken(); // -->>> Aqui se ha modificado
-                        mediaComponent.setToken(token);
+                        mediaPollingComponent.setToken(token);
                         frame.initializePolling(token); // -->>> Aqui se ha modificado
                         JOptionPane.showMessageDialog(Login.this,"Login successful: " + email,"Success",JOptionPane.INFORMATION_MESSAGE);
                         cardManager.showCard("downloads");
@@ -208,7 +208,7 @@ public class Login extends JPanel{
             
             if(save != null){
                 token = save.getToken();
-                mediaComponent.setToken(token);
+                mediaPollingComponent.setToken(token);
                 frame.initializePolling(token);
                 System.out.println("Login Exitoso." + token);
                 cardManager.showCard("downloads");
