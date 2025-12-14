@@ -30,6 +30,7 @@ public class InfoMedia extends javax.swing.JPanel {
     private DirectoryInformation allData;
     private List<FileInformation> allFiles;
 
+    private List<FileInformation> fileList;
     private final FileProperties fileProperties;
     private Set<String> folderPaths = new HashSet<>();
 
@@ -44,7 +45,7 @@ public class InfoMedia extends javax.swing.JPanel {
         this.fileManager = new FileManager(allData, typeFilter, mediaPollingComponent);
         this.allFiles = allData.fileList;
         folderPaths.addAll(allData.folderPaths);
-
+        
         tblModel = new FileTableModel(allFiles);
         tblMedia.setModel(tblModel);
 
@@ -105,6 +106,8 @@ public class InfoMedia extends javax.swing.JPanel {
                     if (folder != null) {
 
                         String selectedFilter = (String) cbbxFilter.getSelectedItem();
+                        
+                        fileManager.refreshFiles(fileProperties);
 
                         List<FileInformation> resultFiles = new ArrayList<>();
 
@@ -140,6 +143,8 @@ public class InfoMedia extends javax.swing.JPanel {
         btnPlay = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         cbbxTypeFilter = new javax.swing.JComboBox<>();
+        btnDownload = new javax.swing.JButton();
+        btnUpload = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Downloads", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14))); // NOI18N
         setMinimumSize(new java.awt.Dimension(630, 400));
@@ -189,7 +194,7 @@ public class InfoMedia extends javax.swing.JPanel {
             }
         });
         add(btnPlay);
-        btnPlay.setBounds(420, 350, 90, 24);
+        btnPlay.setBounds(130, 350, 90, 24);
 
         btnDelete.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnDelete.setText("Delete");
@@ -199,7 +204,7 @@ public class InfoMedia extends javax.swing.JPanel {
             }
         });
         add(btnDelete);
-        btnDelete.setBounds(520, 350, 90, 24);
+        btnDelete.setBounds(230, 350, 90, 24);
 
         cbbxTypeFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         cbbxTypeFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Filter" }));
@@ -210,6 +215,23 @@ public class InfoMedia extends javax.swing.JPanel {
         });
         add(cbbxTypeFilter);
         cbbxTypeFilter.setBounds(240, 40, 250, 23);
+
+        btnDownload.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnDownload.setText("Download");
+        btnDownload.setMinimumSize(new java.awt.Dimension(72, 24));
+        btnDownload.setPreferredSize(new java.awt.Dimension(72, 24));
+        btnDownload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDownloadActionPerformed(evt);
+            }
+        });
+        add(btnDownload);
+        btnDownload.setBounds(400, 350, 100, 24);
+
+        btnUpload.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnUpload.setText("Upload");
+        add(btnUpload);
+        btnUpload.setBounds(510, 350, 100, 24);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayActionPerformed
@@ -243,8 +265,8 @@ public class InfoMedia extends javax.swing.JPanel {
             return;
         }
 
-        int modelRow = tblMedia.convertRowIndexToModel(row);
-        FileInformation info = tblModel.getFileAt(modelRow);
+        //int modelRow = tblMedia.convertRowIndexToModel(row);
+        FileInformation info = tblModel.getFileAt(row);
 
         Object selected = folderList.getSelectedValue();
         if (selected instanceof FolderItem folder && folder.isIsNetwork()) {
@@ -264,8 +286,8 @@ public class InfoMedia extends javax.swing.JPanel {
         DirectoryInformation updateData = fileProperties.loadDownloads();
         allFiles = updateData.fileList;
         folderPaths.clear();
-        folderPaths.addAll(allData.folderPaths);
-
+        folderPaths.addAll(updateData.folderPaths);
+        
         //Actualiza la tabla dependiento del directorio seleccionado
         if (selected instanceof FolderItem folder) {
             String filtro = (String) cbbxTypeFilter.getSelectedItem();
@@ -282,6 +304,9 @@ public class InfoMedia extends javax.swing.JPanel {
 
         //Actualiza los directorios en el listado
         DefaultListModel<FolderItem> newModel = new DefaultListModel<>();
+        newModel.addElement(new FolderItem("API FILES", true, false));
+        newModel.addElement(new FolderItem("BOTH", false, true));
+
         for (String folderPath : folderPaths) {
             newModel.addElement(new FolderItem(folderPath, false, false));
         }
@@ -316,10 +341,16 @@ public class InfoMedia extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_cbbxTypeFilterActionPerformed
 
+    private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDownloadActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnDownload;
     private javax.swing.JButton btnPlay;
+    private javax.swing.JButton btnUpload;
     private javax.swing.JComboBox<String> cbbxTypeFilter;
     private javax.swing.JList<FolderItem> folderList;
     private javax.swing.JScrollPane scrFolderList;

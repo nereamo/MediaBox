@@ -61,9 +61,9 @@ public class Downloads extends javax.swing.JPanel {
        
         foldersList = new JList<>(new DefaultListModel<>()); 
         btnGroup = new ButtonGroup();
-        tblModel = new FileTableModel(allFiles);
+        //tblModel = new FileTableModel(allFiles);
         infoMedia = new InfoMedia(fileProperties,typeFilter, allFiles, folderPaths, mediaPollingComponent);
-        
+        tblModel = infoMedia.getTableModel();
         
         //Aplica filtro de calidad 
         qualityOptions(cbbxQualityFilter);
@@ -362,8 +362,12 @@ public class Downloads extends javax.swing.JPanel {
                     SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        
+                        tblModel.fireTableDataChanged();
+                        
                         DefaultListModel<FolderItem> listModel = (DefaultListModel<FolderItem>) foldersList.getModel();
                         listModel.addElement(new FolderItem(folder, false, false));
+                        
                      }
                     });
                 }

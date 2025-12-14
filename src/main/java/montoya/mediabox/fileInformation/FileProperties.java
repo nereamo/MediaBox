@@ -26,9 +26,18 @@ public class FileProperties {
                 return new DirectoryInformation(new ArrayList<>(), new HashSet<>());
             }
 
-            try (ObjectInputStream in =
-                         new ObjectInputStream(new FileInputStream(JSON_PATH.toFile()))) {
-                return (DirectoryInformation) in.readObject();
+            try (ObjectInputStream in =new ObjectInputStream(new FileInputStream(JSON_PATH.toFile()))) {
+                DirectoryInformation data = (DirectoryInformation) in.readObject();
+
+            // 🔑 Recalcular folderPaths a partir de fileList
+            Set<String> rebuiltPaths = new HashSet<>();
+            for (FileInformation fi : data.fileList) {
+                rebuiltPaths.add(fi.folderPath);
+            }
+            data.folderPaths.clear();
+            data.folderPaths.addAll(rebuiltPaths);
+
+            return data;
             }
 
         } catch (IOException | ClassNotFoundException e) {
