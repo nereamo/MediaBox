@@ -22,24 +22,24 @@ public class DownloadWorker extends SwingWorker<Void, String> {
 
     private File lastDownloadFile;
     private final FileTableModel tblModel;
-    private InfoMedia infoMedia;
+    //private InfoMedia infoMedia;
     private final FileProperties fileProperties;
 
     private final ProcessBuilder pb;
     private final String folder;
     private final JTextArea outputArea;
     private final JProgressBar barProgress;
-    private JList<FolderItem> folderList;
+    private JList<FolderItem> foldersList;
     private final Set<String> folderPaths;
 
-    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, FileProperties fileProperties, JList<FolderItem> folderList, Set<String> folderPaths) {
+    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, FileProperties fileProperties, JList<FolderItem> foldersList, Set<String> folderPaths) {
         this.pb = pb;
         this.folder = folder;
         this.outputArea = outputArea;
         this.barProgress = progressBar;
         this.tblModel = tblModel;
         this.fileProperties = fileProperties;
-        this.folderList = folderList;
+        this.foldersList = foldersList;
         this.folderPaths = folderPaths;
     }
 
@@ -101,9 +101,9 @@ public class DownloadWorker extends SwingWorker<Void, String> {
                     public void run() {
                         DefaultListModel<FolderItem> model = new DefaultListModel<>();
                         for (String folderPath : folderPaths) {
-                            model.addElement(new FolderItem(folderPath, false));
+                            model.addElement(new FolderItem(folderPath, false, false));
                         }
-                        folderList.setModel(model);
+                        foldersList.setModel(model);
                     }
                 });
             }

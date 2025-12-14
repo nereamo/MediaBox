@@ -24,10 +24,9 @@ public class MainFrame extends JFrame {
     private static final Logger logger = Logger.getLogger(MainFrame.class.getName());
     
     private Downloads pnlDownload;
-    private Preferences preferences;
+    private Preferences pnlPreferences;
     private Login pnlLogin;
     private DownloadManager downloadManager;
-    //private MediaPollingComponent mediaComponent;
     
     private CardManager cardManager;
     private CardLayout layout;
@@ -49,9 +48,9 @@ public class MainFrame extends JFrame {
         downloadManager = new DownloadManager(new FileProperties());
         pnlLogin = new Login(this, cardManager, mediaPollingComponent);
         pnlDownload = new Downloads(this, folderPaths, downloadManager, mediaPollingComponent);
-        preferences = new Preferences(this, downloadManager, cardManager);
+        pnlPreferences = new Preferences(this, downloadManager, cardManager);
 
-        cardManager.initCards(pnlLogin, pnlDownload, preferences);
+        cardManager.initCards(pnlLogin, pnlDownload, pnlPreferences);
         cardManager.showCard("login");
         pnlLogin.autoLogin();
         
@@ -59,28 +58,30 @@ public class MainFrame extends JFrame {
         this.setVisible(true);
     }
 
-    private void configurationFrame(){
+    //Configuración del frame
+    private void configurationFrame() {
         this.setTitle("MediaBox");
         this.setResizable(false);
         this.setSize(1300, 800);
         this.setLocationRelativeTo(this);
     }
-    
-    public void initializePolling(String token){
-    
-    mediaPollingComponent.setToken(token);
-    mediaPollingComponent.setApiUrl("https://difreenet9.azurewebsites.net");
-    mediaPollingComponent.setPollingInterval(5);
-    
-    mediaPollingComponent.addMediaListener(new MediaListener() {
-        @Override
-        public void newMediaFound(MediaEvent me) {
-            System.out.println("Nuevos medios encontrados: " + me.getMediaList().size() + " " + me.getMediaList());
-        }
-    });
-    
-    mediaPollingComponent.setRunning(true);
-}
+
+    //Método que inicializa el componente
+    public void initializePolling(String token) {
+
+        mediaPollingComponent.setToken(token);
+        mediaPollingComponent.setApiUrl("https://difreenet9.azurewebsites.net");
+        mediaPollingComponent.setPollingInterval(5);
+
+        mediaPollingComponent.addMediaListener(new MediaListener() {
+            @Override
+            public void newMediaFound(MediaEvent me) {
+                System.out.println("Nuevos medios encontrados: " + me.getMediaList().size() + " " + me.getMediaList());
+            }
+        });
+
+        mediaPollingComponent.setRunning(true);
+    }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 

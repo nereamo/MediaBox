@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.util.logging.Logger;
 
 /**
- * Contiene la información de alumno, curso y los recursos para la tarea
+ * Dialog que contiene la información de alumno, curso y los recursos para la tarea
  * 
  * @author Nerea
  */

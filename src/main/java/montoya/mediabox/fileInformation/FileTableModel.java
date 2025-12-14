@@ -13,8 +13,8 @@ public class FileTableModel extends AbstractTableModel {
     private final String[] column = {"Name", "Size (MB)", "Type", "Date"};
     private List<FileInformation> fileList;
 
-    public FileTableModel(List<FileInformation> fileList) { //Recibe lista del archivo .json
-        this.fileList = fileList;
+    public FileTableModel(List<FileInformation> allFiles) { //Recibe lista del archivo .json
+        this.fileList = allFiles;
     }
 
     //Nº filas

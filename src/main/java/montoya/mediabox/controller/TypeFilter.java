@@ -5,10 +5,10 @@ import java.util.List;
 import montoya.mediabox.fileInformation.FileInformation;
 
 /**
- *
+ * Clase que aplica el filtrado por directorio y tipo de archivo
  * @author Nerea
  */
-public class DataFilter {
+public class TypeFilter {
     
     //Filtramos por directorio seleccionado en la lista
     public List<FileInformation> filterByDirectory(List<FileInformation> allFiles, String folderPath) {
@@ -26,44 +26,44 @@ public class DataFilter {
     }
     
     //Filtramos por tipo de archivo en el combobox
-    public List<FileInformation> filterByType(List<FileInformation> files, String selectedType) {
+    public List<FileInformation> filterByType(List<FileInformation> allFiles, String filter) {
 
-        List<FileInformation> filter = new ArrayList<>();
+        List<FileInformation> applyFilter = new ArrayList<>();
         
-        for (FileInformation fi : files) {
+        for (FileInformation fi : allFiles) {
 
-            if (selectedType == null || selectedType.equals("All")) {
-                filter.add(fi);
+            if (filter == null || filter.equals("All")) {
+                applyFilter.add(fi);
             } else {
-                switch (selectedType) {
+                switch (filter) {
                     case "MP4":
                         if (fi.type.contains("mp4")) {
-                            filter.add(fi);
+                            applyFilter.add(fi);
                         }
                         break;
                     case "MKV":
                         if (fi.type.contains("x-matroska")) {
-                            filter.add(fi);
+                            applyFilter.add(fi);
                         }
                         break;
                     case "WEBM":
                         if (fi.type.contains("webm")) {
-                            filter.add(fi);
+                            applyFilter.add(fi);
                         }
                         break;
                     case "MP3":
                         if (fi.type.contains("mpeg")) {
-                            filter.add(fi);
+                            applyFilter.add(fi);
                         }
                         break;
                     case "WAV":
                         if (fi.type.contains("wav")) {
-                            filter.add(fi);
+                            applyFilter.add(fi);
                         }
                         break;
                     case "M4A":
                         if (fi.type.contains("m4a")) {
-                            filter.add(fi);
+                            applyFilter.add(fi);
                         }
                         break;
                     default:
@@ -71,6 +71,6 @@ public class DataFilter {
                 }
             }
         }
-        return filter;
+        return applyFilter;
     }
 }

@@ -11,10 +11,12 @@ public class FolderItem {
 
     private String fullPath;
     private boolean isNetwork;
+    private boolean isBoth;
 
-    public FolderItem(String fullPath, boolean isNetwork) {
+    public FolderItem(String fullPath, boolean isNetwork, boolean isBoth) {
         this.fullPath = fullPath;
         this.isNetwork = isNetwork;
+        this.isBoth = isBoth;
     }
 
     public String getFullPath() {
@@ -23,6 +25,10 @@ public class FolderItem {
 
     public boolean isIsNetwork() {
         return isNetwork;
+    }
+
+    public boolean isIsBoth() {
+        return isBoth;
     }
 
     @Override

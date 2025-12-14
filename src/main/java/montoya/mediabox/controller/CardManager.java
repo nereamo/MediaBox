@@ -4,7 +4,7 @@ import java.awt.CardLayout;
 import javax.swing.JPanel;
 
 /**
- *
+ * Clase que gestiona los distintos paneles
  * @author Nerea
  */
 public class CardManager {

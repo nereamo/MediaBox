@@ -3,60 +3,49 @@ package montoya.mediabox.panels;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import javax.swing.DefaultListModel;
-import javax.swing.JComboBox;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
+import java.util.*;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import montoya.mediabox.MainFrame;
-import montoya.mediabox.controller.DataFilter;
+import montoya.mediabox.controller.FileManager;
+import montoya.mediabox.controller.TypeFilter;
 import montoya.mediabox.fileInformation.DirectoryInformation;
 import montoya.mediabox.fileInformation.FileInformation;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
 import montoya.mediabox.fileInformation.FolderItem;
 import montoya.mediapollingcomponent.MediaPollingComponent;
-import montoya.mediapollingcomponent.apiclient.Media;
 
 /**
- *
+ * Panel que muestra las descargas realizadas y su información, permitiendo eliminar o reproducir archivos
  * @author Nerea
  */
 public class InfoMedia extends javax.swing.JPanel {
 
-    private MainFrame frame;
-    private Downloads downloads;
-    private Preferences preferences;
     private FileTableModel tblModel;
-    private FileInformation fileInfo;
-    private final DataFilter dataFilter;
+    private FileManager fileManager;
+    private final TypeFilter typeFilter;
     private final MediaPollingComponent mediaPollingComponent;
 
+    private DirectoryInformation allData;
     private List<FileInformation> allFiles;
 
-    private List<FileInformation> fileList;
     private final FileProperties fileProperties;
     private Set<String> folderPaths = new HashSet<>();
 
-    public InfoMedia(FileProperties fileProperties, DataFilter dataFilter, List<FileInformation> fileList, Set<String> folderPaths, MediaPollingComponent mediaPollingComponent) {
+    public InfoMedia(FileProperties fileProperties, TypeFilter typeFilter, List<FileInformation> allFiles, Set<String> folderPaths, MediaPollingComponent mediaPollingComponent) {
         initComponents();
 
-        this.dataFilter = dataFilter;
+        this.typeFilter = typeFilter;
         this.fileProperties = fileProperties;
         this.mediaPollingComponent = mediaPollingComponent;
+        
+        this.allData = fileProperties.loadDownloads();
+        this.fileManager = new FileManager(allData, typeFilter, mediaPollingComponent);
+        this.allFiles = allData.fileList;
+        folderPaths.addAll(allData.folderPaths);
 
-        //Carga datos guardados en archivo .json
-        DirectoryInformation data = fileProperties.loadDownloads();
-        allFiles = data.fileList;
-        folderPaths.addAll(data.folderPaths);
-
-        tblModel = new FileTableModel(fileList);
+        tblModel = new FileTableModel(allFiles);
         tblMedia.setModel(tblModel);
 
         //Aplica el filtro según tipo de archivo
@@ -64,15 +53,16 @@ public class InfoMedia extends javax.swing.JPanel {
 
         //Lista de objeto 'descarga'
         DefaultListModel<FolderItem> listModel = new DefaultListModel();
-        listModel.addElement(new FolderItem("API FILES", true));
+        listModel.addElement(new FolderItem("API FILES", true, false));
+        listModel.addElement(new FolderItem("BOTH", false, true));
         
         for (String folder : folderPaths) {
-            listModel.addElement(new FolderItem(folder, false));
+            listModel.addElement(new FolderItem(folder, false, false));
         }
         folderList.setModel(listModel);
 
         //Muestra las descargas pertenecientes a un directorio
-        configDownloadList(folderList, cbbxTypeFilter, tblMedia);
+        configDownloadList(folderList, cbbxTypeFilter);
     }
 
     public JList<FolderItem> getListDirectories() {
@@ -104,7 +94,7 @@ public class InfoMedia extends javax.swing.JPanel {
     }
 
     //Configuración de JList, al seleccionar un directorio muestra las descargas.
-    private void configDownloadList(JList<FolderItem> folderList, JComboBox<String> cbbxFilter, JTable tblInfo) {
+    private void configDownloadList(JList<FolderItem> folderList, JComboBox<String> cbbxFilter) {
 
         folderList.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -116,67 +106,27 @@ public class InfoMedia extends javax.swing.JPanel {
 
                         String selectedFilter = (String) cbbxFilter.getSelectedItem();
 
+                        List<FileInformation> resultFiles = new ArrayList<>();
+
                         if (folder.isIsNetwork()) {
-                            List<FileInformation> networkFiles = getNetworkFiles(selectedFilter);
-                            tblModel.setFileList(networkFiles);
-                            tblModel.fireTableDataChanged();
+
+                            resultFiles = fileManager.getNetworkFiles(selectedFilter);
+
+                        } else if (folder.isIsBoth()) {
+
+                            resultFiles = fileManager.getBothFiles(selectedFilter);
+
                         } else {
 
-                            FileProperties fp = new FileProperties();
-                            DirectoryInformation allData = fp.loadDownloads(); // lee JSON
-
-                            //Lista completa de todas las descargas
-                            List<FileInformation> allFiles = allData.fileList;
-
-                            //Filtra por directorio seleccionado en JList
-                            List<FileInformation> filteredByDirectory = dataFilter.filterByDirectory(allFiles, folder.getFullPath());
-
-                            //Filtra por tipo selccionado en comboBox
-                            List<FileInformation> filteredByType = dataFilter.filterByType(filteredByDirectory, selectedFilter);
-
-                            //Actualiza la tabla con los filtros aplicados
-                            FileTableModel model = (FileTableModel) tblInfo.getModel();
-                            model.setFileList(filteredByType);
-                            model.fireTableDataChanged();
+                            resultFiles = fileManager.getLocalFiles(folder.getFullPath(), selectedFilter);
 
                         }
-
+                        tblModel.setFileList(resultFiles);
+                        tblModel.fireTableDataChanged();
                     }
                 }
             }
         });
-    }
-    
-    private List<FileInformation> getNetworkFiles(String filter) {
-        List<FileInformation> networkFiles = new ArrayList<>();
-
-        String token = mediaPollingComponent.getToken();
-        String apiUrl = mediaPollingComponent.getApiUrl();
-
-        if (token == null || token.isBlank() || apiUrl == null || apiUrl.isBlank()) {
-            System.err.println("Cannot fetch network files: token or API URL is missing");
-            return networkFiles;
-        }
-
-        try {
-        // Obtener todos los medios de la API
-        List<Media> mediaList = mediaPollingComponent.getAllMedia(token);
-
-        // Convertir a FileInformation
-        for (Media m : mediaList) {
-            FileInformation fi = new FileInformation(m.mediaFileName, 0, m.mediaMimeType, null, "API FILES");
-            networkFiles.add(fi);
-        }
-
-        // Aplicar el mismo filtro por tipo que usamos para los locales
-        networkFiles = dataFilter.filterByType(networkFiles, filter);
-
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(this, "Error retrieving network files:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        ex.printStackTrace();
-    }
-
-        return networkFiles;
     }
 
     @SuppressWarnings("unchecked")
@@ -293,9 +243,9 @@ public class InfoMedia extends javax.swing.JPanel {
             return;
         }
 
-        FileInformation info = tblModel.getFileAt(row);
+        int modelRow = tblMedia.convertRowIndexToModel(row);
+        FileInformation info = tblModel.getFileAt(modelRow);
 
-        // --->>>> linea modificada
         Object selected = folderList.getSelectedValue();
         if (selected instanceof FolderItem folder && folder.isIsNetwork()) {
             JOptionPane.showMessageDialog(this, "Cannot delete network files.");
@@ -307,22 +257,21 @@ public class InfoMedia extends javax.swing.JPanel {
             return;
         }
 
-        //Carga lista de .json
-        FileProperties fp = new FileProperties();
-        DirectoryInformation data = fp.loadDownloads();
-        List<FileInformation> allFiles = data.fileList;
-        Set<String> allDirs = data.folderPaths;
-
-        //Borra archivo físico y de .json
-        fp.deleteDownload(info, allFiles, allDirs);
+        //Borra archivo físico y del archivo JSON
+        fileProperties.deleteDownload(info, allFiles, folderPaths);
+        
+        //Carga los archivo actuales del archivo JSON
+        DirectoryInformation updateData = fileProperties.loadDownloads();
+        allFiles = updateData.fileList;
+        folderPaths.clear();
+        folderPaths.addAll(allData.folderPaths);
 
         //Actualiza la tabla dependiento del directorio seleccionado
-        //Object selected = folderList.getSelectedValue();  --- linea modificada
         if (selected instanceof FolderItem folder) {
             String filtro = (String) cbbxTypeFilter.getSelectedItem();
 
-            List<FileInformation> filteredByDirectory = dataFilter.filterByDirectory(allFiles, folder.getFullPath());
-            List<FileInformation> filteredByType = dataFilter.filterByType(filteredByDirectory, filtro);
+            List<FileInformation> filteredByDirectory = typeFilter.filterByDirectory(allFiles, folder.getFullPath());
+            List<FileInformation> filteredByType = typeFilter.filterByType(filteredByDirectory, filtro);
 
             tblModel.setFileList(filteredByType);
             tblModel.fireTableDataChanged();
@@ -333,8 +282,8 @@ public class InfoMedia extends javax.swing.JPanel {
 
         //Actualiza los directorios en el listado
         DefaultListModel<FolderItem> newModel = new DefaultListModel<>();
-        for (String folderPath : allDirs) {
-            newModel.addElement(new FolderItem(folderPath, false));  //-->>>>modificado
+        for (String folderPath : folderPaths) {
+            newModel.addElement(new FolderItem(folderPath, false, false));
         }
         folderList.setModel(newModel);
     }//GEN-LAST:event_btnDeleteActionPerformed
@@ -345,23 +294,20 @@ public class InfoMedia extends javax.swing.JPanel {
 
         //Obtiene la ruta del archivo y el valor seleccionado de cbbx
         if (folder != null) {
-            String filtro = (String) cbbxTypeFilter.getSelectedItem();
+            
+            String selectedFilter = (String) cbbxTypeFilter.getSelectedItem();
             List<FileInformation> filesToShow;
 
             if (folder.isIsNetwork()) {
                 //Obtiene los archivos de la API
-                filesToShow = getNetworkFiles(filtro);
-            } else {
-                //Obtiene los archivos gurdados en .json
-                FileProperties fp = new FileProperties();
-                DirectoryInformation allData = fp.loadDownloads();
-                List<FileInformation> allFiles = allData.fileList;
+                filesToShow = fileManager.getNetworkFiles(selectedFilter);
+                
+            } else if(folder.isIsBoth()){
+                filesToShow = fileManager.getBothFiles(selectedFilter);
+           
+            }else{
 
-                //Filtrar por directorio
-                List<FileInformation> filteredByDirectory = dataFilter.filterByDirectory(allFiles, folder.getFullPath());
-
-                //Filtrar por tipo
-                filesToShow = dataFilter.filterByType(filteredByDirectory, filtro);
+                filesToShow = fileManager.getLocalFiles(folder.getFullPath(), selectedFilter);
             }
 
             //Actualizar tabla con los elementos filtrados

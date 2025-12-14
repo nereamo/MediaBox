@@ -2,8 +2,6 @@ package montoya.mediabox.panels;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import montoya.mediabox.MainFrame;
@@ -14,7 +12,7 @@ import montoya.mediapollingcomponent.MediaPollingComponent;
 import net.miginfocom.swing.MigLayout;
 
 /**
- *
+ * Panel que gestiona el login del usuario
  * @author Nerea
  */
 public class Login extends JPanel{
@@ -36,7 +34,6 @@ public class Login extends JPanel{
     private static final String API_BASE_URL = "https://difreenet9.azurewebsites.net";
     private static String token;
     private static final String FOLDER_NAME = System.getProperty("user.home") + "/AppData/Local/MediaBox";
-    private static final Path JSON_PATH = Paths.get(FOLDER_NAME, "token.json");
     private MediaPollingComponent mediaPollingComponent;
     
     public Login(MainFrame frame, CardManager cardManager, MediaPollingComponent mediaPollingComponent){
@@ -179,12 +176,12 @@ public class Login extends JPanel{
 
                 try {
                     mediaPollingComponent.setApiUrl(API_BASE_URL);
-                    token = mediaPollingComponent.login(email, password); // -->>> Aqui se ha modificado
+                    token = mediaPollingComponent.login(email, password);
 
                     if (token != null) {
-                        TokenController.deleteToken(); // -->>> Aqui se ha modificado
+                        TokenController.deleteToken();
                         mediaPollingComponent.setToken(token);
-                        frame.initializePolling(token); // -->>> Aqui se ha modificado
+                        frame.initializePolling(token);
                         JOptionPane.showMessageDialog(Login.this,"Login successful: " + email,"Success",JOptionPane.INFORMATION_MESSAGE);
                         cardManager.showCard("downloads");
 

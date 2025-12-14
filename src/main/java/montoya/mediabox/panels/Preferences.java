@@ -7,7 +7,7 @@ import montoya.mediabox.controller.CardManager;
 import montoya.mediabox.download.DownloadManager;
 
 /**
- * Contiene las propiedades y metodos de JPanel Preferences
+ * Panel que contiene las propiedades y metodos de JPanel Preferences
  *
  * @author Nerea
  */

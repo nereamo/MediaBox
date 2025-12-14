@@ -88,13 +88,13 @@ public class FileProperties {
     }
     
     //Sobrescribe el fichero .json con toda la lista actual
-    public void saveAllDownloads(DirectoryInformation data) {
+    public void saveAllDownloads(DirectoryInformation dirInfo) {
         
         try {
             
             Files.createDirectories(Paths.get(FOLDER_NAME));
             try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(JSON_PATH.toFile()))) {
-                out.writeObject(data);
+                out.writeObject(dirInfo);
             }
         
         } catch (IOException e) {
