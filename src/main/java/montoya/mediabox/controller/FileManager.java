@@ -10,7 +10,8 @@ import montoya.mediapollingcomponent.MediaPollingComponent;
 import montoya.mediapollingcomponent.apiclient.Media;
 
 /**
- *
+ * Clase encargada de gestionar los archivos mostrados en la tabla.
+ * Muestra archivos de API, locales y que esten en ambos sitios a la vez.
  * @author Nerea
  */
 public class FileManager {
@@ -26,13 +27,17 @@ public class FileManager {
         this.mediaPollingComponent = mediaPollingComponent;
     }
     
-    
+    //Obtiene los archivos de API y local
     public List<FileInformation> getBothFiles(String filter) {
         List<FileInformation> bothFiles = new ArrayList<>();
 
+        //Obtener archivos locales
         List<FileInformation> localFiles = typeFilter.filterByType(directoryInfo.fileList, filter);
 
+        //Obtener archivos de API
         List<FileInformation> networkFiles = getNetworkFiles(filter);
+        
+        //Compara las dos listas en busca de la concidencia
         for (FileInformation netFi : networkFiles) {
             for (FileInformation localFi : localFiles) {
                 if (netFi.name.equalsIgnoreCase(localFi.name)) {
@@ -44,6 +49,7 @@ public class FileManager {
         return bothFiles;
     }
     
+    //Obtiene los archivos de API
     public List<FileInformation> getNetworkFiles(String filter) {
         List<FileInformation> networkFiles = new ArrayList<>();
         String token = mediaPollingComponent.getToken();
@@ -55,16 +61,16 @@ public class FileManager {
         }
 
         try {
-            // Obtener todos los medios de la API
+            //Obtener archivos API
             List<Media> mediaList = mediaPollingComponent.getAllMedia(token);
 
-            // Convertir a FileInformation
+            //Convertir Medi en FileInformation
             for (Media m : mediaList) {
                 FileInformation fi = new FileInformation(m.mediaFileName, 0, m.mediaMimeType, null, "API FILES");
                 networkFiles.add(fi);
             }
 
-            // Aplicar el mismo filtro por tipo que usamos para los locales
+            //Aplicar filtro
             networkFiles = typeFilter.filterByType(networkFiles, filter);
 
         } catch (Exception ex) {
@@ -75,12 +81,14 @@ public class FileManager {
         return networkFiles;
     }
     
+    //Obtiene los archivos locales dependiendo del directorio seleccionado
     public List<FileInformation> getLocalFiles(String folderPath, String filter) {
         List<FileInformation> localFiles = typeFilter.filterByDirectory(directoryInfo.fileList, folderPath);
 
         return typeFilter.filterByType(localFiles, filter);
     }
     
+    //Refresca la lista de archivos
     public void refreshFiles(FileProperties fileProperties){
         this.directoryInfo = fileProperties.loadDownloads();
     }

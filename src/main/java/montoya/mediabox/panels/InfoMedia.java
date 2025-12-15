@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -299,8 +300,9 @@ public class InfoMedia extends javax.swing.JPanel {
         }
 
         int modelRow = tblMedia.convertRowIndexToModel(row);
-        FileInformation info = tblModel.getFileAt(row);
+        FileInformation info = tblModel.getFileAt(modelRow);
 
+        //Si al seleccionar u archivo de la carpeta API FILES no permite borrado
         Object selected = folderList.getSelectedValue();
         if (selected instanceof FolderItem folder && folder.isIsNetwork()) {
             JOptionPane.showMessageDialog(this, "Cannot delete network files.");
@@ -322,7 +324,9 @@ public class InfoMedia extends javax.swing.JPanel {
         allFiles = allData.fileList;
         folderPaths = allData.folderPaths;
         
-        // Actualizar la tabla según directorio seleccionado
+        initDirectoryList();
+        
+        //Actualizar la tabla según directorio seleccionado
         List<FileInformation> filesToShow;
         
         if (selected instanceof FolderItem folder) {
@@ -353,10 +357,11 @@ public class InfoMedia extends javax.swing.JPanel {
                 filesToShow = fileManager.getNetworkFiles(selectedFilter);
                 
             } else if(folder.isIsBoth()){
+                //Obtiene los archivos de la API y local
                 filesToShow = fileManager.getBothFiles(selectedFilter);
            
             }else{
-
+                //Obtiene los archivos locales
                 filesToShow = fileManager.getLocalFiles(folder.getFullPath(), selectedFilter);
             }
 
@@ -366,8 +371,10 @@ public class InfoMedia extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_cbbxTypeFilterActionPerformed
 
+    //Realiza la descarga de archivos de la API
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
 
+        //Fila seleccionada de la tabla
         int row = tblMedia.getSelectedRow();
         if (row < 0) {
             JOptionPane.showMessageDialog(this, "Please, Select file on this table.");
@@ -377,18 +384,19 @@ public class InfoMedia extends javax.swing.JPanel {
         int modelRow = tblMedia.convertRowIndexToModel(row);
         FileInformation info = tblModel.getFileAt(modelRow);
 
+        //Valida que el directorio sea de API
         FolderItem selectedFolder = folderList.getSelectedValue();
-
         if (selectedFolder == null || !selectedFolder.isIsNetwork()) {
             JOptionPane.showMessageDialog(this, "Select a network file to download.");
             return;
         }
 
-        // Obtener el objeto Media correspondiente
-        List<Media> mediaList;
         try {
-            mediaList = mediaPollingComponent.getAllMedia(mediaPollingComponent.getToken());
+            
+            //Obtener los archivos de API
+            List<Media>mediaList = mediaPollingComponent.getAllMedia(mediaPollingComponent.getToken());
 
+            //Obtener el archivo seleccionado
             Media mediaFile = null;
             for (Media m : mediaList) {
                 if (m.mediaFileName.equals(info.name)) {
@@ -402,6 +410,7 @@ public class InfoMedia extends javax.swing.JPanel {
                 return;
             }
 
+            //Eleccion de directorio donde se descargara
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
@@ -412,16 +421,17 @@ public class InfoMedia extends javax.swing.JPanel {
             File folder = fileChooser.getSelectedFile();
             File file = new File(folder, info.name);
 
+            //Metodo Wrapper del componente para la descarga
             mediaPollingComponent.download(mediaFile.id, file, mediaPollingComponent.getToken());
 
+            //Crea la descarga de API en objeto FileInformation
             FileInformation newFile = new FileInformation(mediaFile.mediaFileName, file.length(), mediaFile.mediaMimeType, LocalDate.now().toString(), folder.getAbsolutePath());
 
+            //Añade descarga a JSON y actualiza la tabla con las nuevas descargas
             fileProperties.addDownload(newFile);
-
             fileManager.refreshFiles(fileProperties);
             allFiles = fileProperties.loadDownloads().fileList;
             initDirectoryList();
-            
             tblModel.fireTableDataChanged();
 
             JOptionPane.showMessageDialog(this, "Download completed.");
@@ -431,8 +441,10 @@ public class InfoMedia extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnDownloadActionPerformed
 
+    //Sube un archivo local a API
     private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed
 
+        //Eleccion del archivo.
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
@@ -442,24 +454,28 @@ public class InfoMedia extends javax.swing.JPanel {
 
         File file = fileChooser.getSelectedFile();
 
+        //Validar que el archivo existe en local
         if (file == null || !file.exists()) {
             JOptionPane.showMessageDialog(this, "Cannot find the selected file.");
             return;
         }
-        
-        if(file.exists()){
-            JOptionPane.showMessageDialog(this, "This file is exists in APi");
-            return;
-        }
 
         try {
+            
+            //Detecta el mimeType del archivo
             String mimeType = Files.probeContentType(file.toPath());
 
+            //Uso del metodo Wrapper upload 
             mediaPollingComponent.uploadFileMultipart(file, mimeType, mediaPollingComponent.getToken());
-
+            
+            //Ajustar el lastChecked para que el polling notifique la subida
+            mediaPollingComponent.setLastChecked(OffsetDateTime.now().minusMinutes(1).toString()); //Forzar notificado de subida
+            
             JOptionPane.showMessageDialog(this, "Upload completed.");
 
+            //Actualiza la tabla con las nuevas subidas
             fileManager.refreshFiles(fileProperties);
+            allFiles = fileProperties.loadDownloads().fileList;
             tblModel.fireTableDataChanged();
             
         } catch (Exception ex) {

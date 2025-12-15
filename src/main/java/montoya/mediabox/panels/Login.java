@@ -193,7 +193,6 @@ public class Login extends JPanel{
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(Login.this, "Login failed: Incorrect credentials or expired token.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-
             }
         });
     }
