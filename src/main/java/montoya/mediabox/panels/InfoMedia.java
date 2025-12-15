@@ -3,6 +3,7 @@ package montoya.mediabox.panels;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.*;
 import javax.swing.*;
@@ -420,29 +421,49 @@ public class InfoMedia extends javax.swing.JPanel {
             fileManager.refreshFiles(fileProperties);
             allFiles = fileProperties.loadDownloads().fileList;
             initDirectoryList();
+            
+            tblModel.fireTableDataChanged();
 
             JOptionPane.showMessageDialog(this, "Download completed.");
 
         } catch (Exception ex) {
-            System.getLogger(InfoMedia.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            JOptionPane.showMessageDialog(this,"Download failed:\n" + ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnDownloadActionPerformed
 
     private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed
-        int row = tblMedia.getSelectedRow();
-        if (row < 0) {
-            JOptionPane.showMessageDialog(this, "Please, Select file on this table.");
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        if (fileChooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) {
             return;
         }
 
-        int modelRow = tblMedia.convertRowIndexToModel(row);
-        FileInformation info = tblModel.getFileAt(modelRow);
+        File file = fileChooser.getSelectedFile();
 
-        FolderItem selectedFolder = folderList.getSelectedValue();
-
-        if (selectedFolder == null) {
-            JOptionPane.showMessageDialog(this, "Select a network file to download.");
+        if (file == null || !file.exists()) {
+            JOptionPane.showMessageDialog(this, "Cannot find the selected file.");
             return;
+        }
+        
+        if(file.exists()){
+            JOptionPane.showMessageDialog(this, "This file is exists in APi");
+            return;
+        }
+
+        try {
+            String mimeType = Files.probeContentType(file.toPath());
+
+            mediaPollingComponent.uploadFileMultipart(file, mimeType, mediaPollingComponent.getToken());
+
+            JOptionPane.showMessageDialog(this, "Upload completed.");
+
+            fileManager.refreshFiles(fileProperties);
+            tblModel.fireTableDataChanged();
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,"Upload failed:\n" + ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnUploadActionPerformed
 
