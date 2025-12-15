@@ -71,7 +71,7 @@ public class Downloads extends javax.swing.JPanel {
         //Configura como se ven los botones
         configRadioButtons(btnGroup, radioMp4, radioMkv, radioWebm, radioMp3, radioWav, radioM4a);
         
-        infoMedia.setBounds(640, 40, 630, 400);
+        infoMedia.setBounds(640, 40, 630, 540);
         this.add(infoMedia);
     }
     
@@ -102,7 +102,7 @@ public class Downloads extends javax.swing.JPanel {
         txtUrl = new javax.swing.JTextField();
         btnClear = new javax.swing.JButton();
         lblFolder = new javax.swing.JLabel();
-        btnBrowse = new javax.swing.JButton();
+        btnFolder = new javax.swing.JButton();
         txtFolder = new javax.swing.JTextField();
         pnlVideo = new javax.swing.JPanel();
         radioMp4 = new javax.swing.JRadioButton();
@@ -158,15 +158,15 @@ public class Downloads extends javax.swing.JPanel {
         add(lblFolder);
         lblFolder.setBounds(50, 100, 50, 20);
 
-        btnBrowse.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnBrowse.setText("Browse");
-        btnBrowse.addActionListener(new java.awt.event.ActionListener() {
+        btnFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnFolder.setText("Folder");
+        btnFolder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBrowseActionPerformed(evt);
+                btnFolderActionPerformed(evt);
             }
         });
-        add(btnBrowse);
-        btnBrowse.setBounds(50, 130, 90, 24);
+        add(btnFolder);
+        btnFolder.setBounds(50, 130, 90, 24);
 
         txtFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(txtFolder);
@@ -321,7 +321,7 @@ public class Downloads extends javax.swing.JPanel {
         txtUrl.setText("");
     }//GEN-LAST:event_btnClearActionPerformed
 
-    private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
+    private void btnFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFolderActionPerformed
         JFileChooser directory = new JFileChooser();
         directory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
@@ -341,7 +341,7 @@ public class Downloads extends javax.swing.JPanel {
                 }
             }
         }
-    }//GEN-LAST:event_btnBrowseActionPerformed
+    }//GEN-LAST:event_btnFolderActionPerformed
 
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
 
@@ -392,9 +392,9 @@ public class Downloads extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea areaInfo;
-    private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnDownload;
+    private javax.swing.JButton btnFolder;
     private javax.swing.JButton btnOpenLast;
     private javax.swing.JButton btnPaste;
     private javax.swing.JComboBox<String> cbbxQualityFilter;
