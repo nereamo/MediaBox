@@ -179,10 +179,11 @@ public class Login extends JPanel{
                     token = mediaPollingComponent.login(email, password);
 
                     if (token != null) {
-                        TokenController.deleteToken();
+                        //TokenController.deleteToken();
                         mediaPollingComponent.setToken(token);
                         frame.initializePolling(token);
                         JOptionPane.showMessageDialog(Login.this,"Login successful: " + email,"Success",JOptionPane.INFORMATION_MESSAGE);
+                        
                         cardManager.showCard("downloads");
 
                         if (chkRemember.isSelected()) {

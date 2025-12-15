@@ -12,23 +12,25 @@ import tools.jackson.databind.ObjectMapper;
  */
 public class TokenController {
     
-    private static final String FOLDER_NAME = System.getProperty("user.home") + "/AppData/Local/MediaBox";
-    private static final Path JSON_PATH = Paths.get(FOLDER_NAME, "token.json");
+    private static final Path FOLDER_PATH = Paths.get(System.getProperty("user.home"), "AppData", "Local", "MediaBox");
+    private static final Path JSON_PATH = FOLDER_PATH.resolve("token.json");
     
     private static final ObjectMapper mapper = new ObjectMapper();
     
     //Guarar el TOKEN en archivo token.json
     public static void saveToken(String token) throws IOException {
         
-        Files.createDirectories(Paths.get(FOLDER_NAME));
+        Files.createDirectories(FOLDER_PATH);
         TokenUser tu = new TokenUser(token);
         mapper.writeValue(JSON_PATH.toFile(), tu);
+        System.out.println("Token guardado en: " + JSON_PATH.toAbsolutePath());
     }
     
     //Leer archivo token.json
     public static TokenUser readToken() throws IOException  {
         
         if(!Files.exists(JSON_PATH)){
+            System.out.println("Archivo token.json no encontrado en: " + JSON_PATH.toAbsolutePath());
             return null;
         }
         

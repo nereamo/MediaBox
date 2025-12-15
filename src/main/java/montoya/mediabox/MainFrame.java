@@ -43,7 +43,6 @@ public class MainFrame extends JFrame {
         layout = new CardLayout();
         container = new JPanel(layout);
         cardManager = new CardManager(container, layout);
-        mediaPollingComponent = new MediaPollingComponent();
         
         downloadManager = new DownloadManager(new FileProperties());
         pnlLogin = new Login(this, cardManager, mediaPollingComponent);
@@ -70,17 +69,12 @@ public class MainFrame extends JFrame {
     public void initializePolling(String token) {
 
         mediaPollingComponent.setToken(token);
-        mediaPollingComponent.setApiUrl("https://difreenet9.azurewebsites.net");
-        mediaPollingComponent.setPollingInterval(5);
-
         mediaPollingComponent.addMediaListener(new MediaListener() {
             @Override
             public void newMediaFound(MediaEvent me) {
                 System.out.println("Nuevos medios encontrados: " + me.getMediaList().size() + " " + me.getMediaList());
             }
         });
-
-        mediaPollingComponent.setRunning(true);
     }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -108,8 +102,12 @@ public class MainFrame extends JFrame {
         setName("mainFrame"); // NOI18N
         setResizable(false);
         getContentPane().setLayout(null);
+
+        mediaPollingComponent.setApiUrl("https://difreenet9.azurewebsites.net");
+        mediaPollingComponent.setPollingInterval(5);
+        mediaPollingComponent.setRunning(true);
         getContentPane().add(mediaPollingComponent);
-        mediaPollingComponent.setBounds(1210, 680, 35, 35);
+        mediaPollingComponent.setBounds(1230, 680, 35, 35);
 
         menuBar.setBackground(new java.awt.Color(255, 102, 0));
         menuBar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 102, 0)));
