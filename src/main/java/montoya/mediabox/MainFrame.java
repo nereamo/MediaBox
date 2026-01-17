@@ -110,15 +110,16 @@ public class MainFrame extends JFrame {
 
         menuBar.setBackground(new java.awt.Color(0, 0, 0));
         menuBar.setBorder(new javax.swing.border.MatteBorder(null));
-        menuBar.setForeground(new java.awt.Color(255, 153, 51));
+        menuBar.setForeground(new java.awt.Color(255, 255, 255));
         menuBar.setToolTipText("");
+        menuBar.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         menuBar.setMinimumSize(new java.awt.Dimension(70, 35));
         menuBar.setPreferredSize(new java.awt.Dimension(70, 35));
 
         mnuFile.setBackground(new java.awt.Color(255, 102, 0));
         mnuFile.setBorder(null);
-        mnuFile.setForeground(new java.awt.Color(255, 153, 0));
-        mnuFile.setText("File");
+        mnuFile.setForeground(new java.awt.Color(255, 255, 255));
+        mnuFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logout.png"))); // NOI18N
         mnuFile.setToolTipText("File");
         mnuFile.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         mnuFile.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -127,6 +128,7 @@ public class MainFrame extends JFrame {
 
         mnuLogout.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mnuLogout.setText("Logout");
+        mnuLogout.setToolTipText("Logout");
         mnuLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuLogoutActionPerformed(evt);
@@ -147,8 +149,8 @@ public class MainFrame extends JFrame {
         menuBar.add(mnuFile);
 
         mnuEdit.setBorder(null);
-        mnuEdit.setForeground(new java.awt.Color(255, 153, 0));
-        mnuEdit.setText("Edit");
+        mnuEdit.setForeground(new java.awt.Color(255, 255, 255));
+        mnuEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit.png"))); // NOI18N
         mnuEdit.setToolTipText("Edit");
         mnuEdit.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         mnuEdit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -158,6 +160,7 @@ public class MainFrame extends JFrame {
 
         mnuPreferences.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mnuPreferences.setText("Preferences");
+        mnuPreferences.setToolTipText("Preferences");
         mnuPreferences.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuPreferencesActionPerformed(evt);
@@ -168,8 +171,9 @@ public class MainFrame extends JFrame {
         menuBar.add(mnuEdit);
 
         mnuHelp.setBorder(null);
-        mnuHelp.setForeground(new java.awt.Color(255, 153, 0));
-        mnuHelp.setText("Help");
+        mnuHelp.setForeground(new java.awt.Color(255, 255, 255));
+        mnuHelp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
+        mnuHelp.setToolTipText("Help");
         mnuHelp.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         mnuHelp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         mnuHelp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -178,6 +182,7 @@ public class MainFrame extends JFrame {
 
         mnuAbout.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mnuAbout.setText("About");
+        mnuAbout.setToolTipText("About");
         mnuAbout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuAboutActionPerformed(evt);
