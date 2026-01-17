@@ -12,7 +12,6 @@ import montoya.mediabox.download.DownloadManager;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediapollingcomponent.MediaEvent;
 import montoya.mediapollingcomponent.MediaListener;
-import montoya.mediapollingcomponent.MediaPollingComponent;
 
 /**
  * Class principal
@@ -104,20 +103,21 @@ public class MainFrame extends JFrame {
         getContentPane().setLayout(null);
 
         mediaPollingComponent.setApiUrl("https://difreenet9.azurewebsites.net");
-        mediaPollingComponent.setPollingInterval(5);
+        mediaPollingComponent.setPollingInterval(10);
         mediaPollingComponent.setRunning(true);
         getContentPane().add(mediaPollingComponent);
         mediaPollingComponent.setBounds(1230, 680, 35, 35);
 
-        menuBar.setBackground(new java.awt.Color(255, 102, 0));
-        menuBar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 102, 0)));
+        menuBar.setBackground(new java.awt.Color(0, 0, 0));
+        menuBar.setBorder(new javax.swing.border.MatteBorder(null));
+        menuBar.setForeground(new java.awt.Color(255, 153, 51));
         menuBar.setToolTipText("");
         menuBar.setMinimumSize(new java.awt.Dimension(70, 35));
         menuBar.setPreferredSize(new java.awt.Dimension(70, 35));
 
         mnuFile.setBackground(new java.awt.Color(255, 102, 0));
         mnuFile.setBorder(null);
-        mnuFile.setForeground(new java.awt.Color(255, 255, 255));
+        mnuFile.setForeground(new java.awt.Color(255, 153, 0));
         mnuFile.setText("File");
         mnuFile.setToolTipText("File");
         mnuFile.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -147,7 +147,7 @@ public class MainFrame extends JFrame {
         menuBar.add(mnuFile);
 
         mnuEdit.setBorder(null);
-        mnuEdit.setForeground(new java.awt.Color(255, 255, 255));
+        mnuEdit.setForeground(new java.awt.Color(255, 153, 0));
         mnuEdit.setText("Edit");
         mnuEdit.setToolTipText("Edit");
         mnuEdit.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -168,7 +168,7 @@ public class MainFrame extends JFrame {
         menuBar.add(mnuEdit);
 
         mnuHelp.setBorder(null);
-        mnuHelp.setForeground(new java.awt.Color(255, 255, 255));
+        mnuHelp.setForeground(new java.awt.Color(255, 153, 0));
         mnuHelp.setText("Help");
         mnuHelp.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         mnuHelp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

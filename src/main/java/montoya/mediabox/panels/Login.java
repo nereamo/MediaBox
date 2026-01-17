@@ -3,6 +3,7 @@ package montoya.mediabox.panels;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import montoya.mediabox.MainFrame;
 import montoya.mediabox.controller.CardManager;
@@ -26,7 +27,7 @@ public class Login extends JPanel{
     private JPanel pnlPassword = new JPanel();
     private final JPanel pnlButtons = new JPanel();
     private final JButton btnLogin = new JButton("Login");
-    private final JButton btnClean = new JButton("Clean");
+    private final JButton btnClean = new JButton();
     private JCheckBox chkShowPssw = new JCheckBox("Show Password");
     private JCheckBox chkRemember = new JCheckBox("Remember me");
     private Font bold = new Font("Arial", Font.BOLD, 14);
@@ -44,6 +45,7 @@ public class Login extends JPanel{
         
         this.setBounds(0, 0, 1300, 770);
         this.setLayout(new MigLayout("center", "[][grow][]", "100[]10[]20[]"));
+        this.setBackground(Color.BLACK);
         
         configEmail();
         configPassword();
@@ -63,16 +65,26 @@ public class Login extends JPanel{
     //Configuracion del panel que contiene el campo para introducir email
     private void configEmail(){
         pnlEmail.setLayout(new MigLayout("center", "[grow]", "[]"));
-        pnlEmail.setBorder(BorderFactory.createTitledBorder("Email"));
+        Border border = BorderFactory.createLineBorder(new Color(255,153,51));
+        TitledBorder title = BorderFactory.createTitledBorder(border, "EMAIL");
+        title.setTitleColor(new Color(255,153,51));
+        pnlEmail.setBorder(title);
+        pnlEmail.setBackground(Color.BLACK);
         txtEmail.setPreferredSize(new Dimension(300, 30));
+        txtEmail.setToolTipText("Email");
         pnlEmail.add(txtEmail, "wrap, align center");
     }
     
     //Configuracion del panel que contiene el campo para password y ver password
     private void configPassword(){
         pnlPassword.setLayout(new MigLayout("center", "[grow]", "[]"));
-        pnlPassword.setBorder(BorderFactory.createTitledBorder("Password"));
+        Border border = BorderFactory.createLineBorder(new Color(255,153,51));
+        TitledBorder title = BorderFactory.createTitledBorder(border, "PASSWORD");
+        title.setTitleColor(new Color(255,153,51));
+        pnlPassword.setBorder(title);
+        pnlPassword.setBackground(Color.BLACK);
         txtPassword.setPreferredSize(new Dimension(300, 30));
+        txtPassword.setToolTipText("Password");
         pnlPassword.add(txtPassword, "wrap, align center");
         pnlPassword.add(chkShowPssw);
     }
@@ -80,7 +92,10 @@ public class Login extends JPanel{
     //Configuracion del panel que contiene los botones clean, login y el checkBox remember
     private void configButtons(){
         pnlButtons.setLayout(new MigLayout("center", "[grow]", "[]"));
+        pnlButtons.setBackground(Color.BLACK);
         pnlButtons.add(chkRemember, "wrap, align center");
+        chkRemember.setBackground(Color.BLACK);
+        chkRemember.setForeground(new Color(255,153,51));
         pnlButtons.add(btnClean, "split 2, align center");
         pnlButtons.add(btnLogin);
         
@@ -111,6 +126,7 @@ public class Login extends JPanel{
     //Boton clean limpia el texto escrito en txtEmail y txtPassword
     private void cleanTextFields() {
 
+        btnClean.setIcon(new ImageIcon(getClass().getResource("/images/clear.png")));
         btnClean.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -146,6 +162,10 @@ public class Login extends JPanel{
     //CheckBox que permite ver la contraseña introducida
     private void showPassword() {
 
+        chkShowPssw.setBackground(Color.BLACK);
+        chkShowPssw.setForeground(new Color(255,153,51));
+        chkShowPssw.setToolTipText("Show password");
+        
         chkShowPssw.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
