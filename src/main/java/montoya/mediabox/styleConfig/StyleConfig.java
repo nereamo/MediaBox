@@ -41,12 +41,19 @@ public class StyleConfig {
         return titBorder;
     }
     
+    public static void sytleLabel(JLabel label, String text, Color colorText){
+        label.setText(text);
+        label.setForeground(colorText);
+        label.setFont(FONT_PLAIN);
+    }
+    
     //CheckBox
-    public static void styleCheckBox(JCheckBox check, String toolTip){
-        check.setBackground(BACKGROUND);
-        check.setForeground(Color.WHITE);
+    public static void styleCheckBox(JCheckBox check, String text, Color colorText, String toolTip){
+        check.setOpaque(false);
+        check.setForeground(colorText);
         check.setFont(FONT_PLAIN);
         check.setFocusPainted(false);
+        check.setText(text);
         check.setToolTipText(toolTip);
     }
     
@@ -85,7 +92,7 @@ public class StyleConfig {
     }
     
     //Panel login
-    public static JPanel createFieldWithIcon(String iconPath, JComponent field) {
+    public static JPanel createLoginField(String iconPath, JComponent field) {
         JPanel panel = new JPanel(new MigLayout("insets 0", "[]10[grow]", "[]"));
         panel.setBackground(StyleConfig.BACKGROUND);
         
@@ -93,6 +100,14 @@ public class StyleConfig {
         panel.add(lblIcon);
         panel.add(field, "growx");
         
+        return panel;
+    }
+    
+    //Panel preferences
+    public static JPanel createFieldWrapper(JComponent field) {
+        JPanel panel = new JPanel(new MigLayout("insets 0", "[grow]", "[]"));
+        panel.setOpaque(false);
+        panel.add(field, "growx");
         return panel;
     }
 }

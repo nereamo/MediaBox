@@ -234,7 +234,6 @@ public class MainFrame extends JFrame {
             setMenuVisible(false);
             this.isLoggedIn = false;
             cardManager.showCard("login");
-            pnlLogin.resetFields();
             JOptionPane.showMessageDialog(this, "Closed sesion.", "Information", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_itemLogoutActionPerformed
 

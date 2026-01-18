@@ -21,14 +21,12 @@ public class Login extends JPanel{
     private CardManager cardManager;
     private MediaPollingComponent mediaPollingComponent;
     private JTextField txtEmail = new JTextField();
-    private JPasswordField txtPassword = new JPasswordField("**********");
-    private JPanel pnlEmail = new JPanel();
-    private JPanel pnlPassword = new JPanel();
-    private final JPanel pnlButtons = new JPanel();
-    private final JButton btnLogin = new JButton();
-    private final JButton btnClean = new JButton();
-    private JCheckBox showPassword = new JCheckBox("Show Password");
-    private JCheckBox remember = new JCheckBox("Remember me");
+    private JPasswordField txtPassword = new JPasswordField();
+    private JPanel pnlButtons = new JPanel();
+    private JButton btnLogin = new JButton();
+    private JButton btnClean = new JButton();
+    private JCheckBox showPassword = new JCheckBox();
+    private JCheckBox remember = new JCheckBox();
     private static final String API_BASE_URL = "https://difreenet9.azurewebsites.net";
     private static String token;
     private static final String FOLDER_NAME = System.getProperty("user.home") + "/AppData/Local/MediaBox";
@@ -48,7 +46,7 @@ public class Login extends JPanel{
         writerPassword();
         showPassword();
         loginUser();
-        cleanTextFields();
+        cleanButton();
     } 
     
     //Establece posicion para los componentes
@@ -58,14 +56,14 @@ public class Login extends JPanel{
         JLabel lblIcon = new JLabel(icon);
         this.add(lblIcon, "cell 0 0 3 1, align center"); 
         
-        JPanel emailRow = StyleConfig.createFieldWithIcon("/images/email.png", txtEmail);
+        JPanel emailRow = StyleConfig.createLoginField("/images/email.png", txtEmail);
         this.add(emailRow, "cell 0 2 3 1, growx, align center, wmin 200, w 300, wmax 300");
         
-        JPanel passwordRow = StyleConfig.createFieldWithIcon("/images/password.png", txtPassword);
+        JPanel passwordRow = StyleConfig.createLoginField("/images/password.png", txtPassword);
         this.add(passwordRow, "cell 0 3 3 1, growx, align center, wmin 200, w 300, wmax 300");
         
-        StyleConfig.styleCheckBox(showPassword, "Show password");
-        JPanel showPasswordRow = StyleConfig.createFieldWithIcon("/images/show_password.png", showPassword);
+        StyleConfig.styleCheckBox(showPassword,"Show Password",Color.WHITE, "Show password");
+        JPanel showPasswordRow = StyleConfig.createLoginField("/images/show_password.png", showPassword);
         this.add(showPasswordRow, "cell 0 4 3 1, growx, align center, wmin 200, w 300, wmax 300");
         
         this.add(pnlButtons, "cell 0 6 3 1, align center");
@@ -74,7 +72,7 @@ public class Login extends JPanel{
         pnlButtons.setBackground(StyleConfig.BACKGROUND);
         
         pnlButtons.add(remember, "wrap, align center");
-        StyleConfig.styleCheckBox(remember, "Remember credentials");
+        StyleConfig.styleCheckBox(remember,"Remember me",Color.WHITE, "Remember credentials");
 
         pnlButtons.add(btnClean, "split 2, align center");
         pnlButtons.add(btnLogin);
@@ -82,29 +80,25 @@ public class Login extends JPanel{
         StyleConfig.styleButton(btnLogin, "/images/login.png", "Login user");
     }
 
-    //Resetea los campos
-    public void resetFields() {
-        txtEmail.setText("");
-        txtPassword.setText("**********");
-        txtPassword.setEchoChar((char) 0);
-        showPassword.setSelected(false);
-        remember.setSelected(false);
-    }
     
-    //Boton clean limpia el texto escrito en txtEmail y txtPassword
-    private void cleanTextFields() {
+    //Boton clean limpia los campos
+    private void cleanButton() {
         StyleConfig.styleButton(btnClean, "/images/clear.png", "Clear fields");
-        
+
         btnClean.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                resetFields();
+                txtEmail.setText("");
+                txtPassword.setText("**********");
+                txtPassword.setEchoChar((char) 0);
+                showPassword.setSelected(false);
+                remember.setSelected(false);
             }
         });
     }
     
     //Al pulsar ENTER hace login
-    public void configKeyActions(){
+    private void configKeyActions(){
         txtEmail.addActionListener(new ActionListener (){
             @Override
             public void actionPerformed(ActionEvent e){
@@ -179,7 +173,6 @@ public class Login extends JPanel{
                 try {
                     mediaPollingComponent.setApiUrl(API_BASE_URL);
                     token = mediaPollingComponent.login(email, password);
-                    
 
                     if (token != null) {
                         mediaPollingComponent.setToken(token);
@@ -195,7 +188,6 @@ public class Login extends JPanel{
                             System.out.println("Archivo Token.json creado en " + FOLDER_NAME);
                         }
                     }
-
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(Login.this, "Login failed: Incorrect credentials or expired token.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -212,7 +204,7 @@ public class Login extends JPanel{
                 token = save.getToken();
                 mediaPollingComponent.setToken(token);
                 frame.initializePolling(token);
-                System.out.println("Login Exitoso." + token);
+                System.out.println("Login Exitoso.");
                 frame.setMenuVisible(true);
                 cardManager.showCard("downloads");
                 return;
