@@ -10,6 +10,7 @@ import montoya.mediabox.controller.*;
 import montoya.mediabox.dialogs.DialogAbout;
 import montoya.mediabox.download.DownloadManager;
 import montoya.mediabox.fileInformation.FileProperties;
+import montoya.mediabox.styleConfig.StyleConfig;
 import montoya.mediapollingcomponent.MediaEvent;
 import montoya.mediapollingcomponent.MediaListener;
 
@@ -38,6 +39,8 @@ public class MainFrame extends JFrame {
         initComponents();
         
         configurationFrame();
+        configIconMenuItems();
+        setMenuVisible(false);
         
         layout = new CardLayout();
         container = new JPanel(layout);
@@ -51,8 +54,9 @@ public class MainFrame extends JFrame {
         cardManager.initCards(pnlLogin, pnlDownload, pnlPreferences);
         cardManager.showCard("login");
         pnlLogin.autoLogin();
-        
+
         this.setContentPane(container);
+        this.setResizable(true);
         this.setVisible(true);
     }
 
@@ -63,6 +67,21 @@ public class MainFrame extends JFrame {
         this.setSize(1300, 800);
         this.setLocationRelativeTo(this);
     }
+    
+    //Iconos de los botones
+    public void configIconMenuItems(){
+        StyleConfig.styleItems(itemExit, "/images/exit.png", "Exit");
+        StyleConfig.styleItems(itemLogout, "/images/logout.png", "Logout");
+        StyleConfig.styleItems(itemPreferences, "/images/settings.png", "Settings");
+        StyleConfig.styleItems(itemAbout, "/images/information.png", "About");
+    }
+    
+    //Visibilidad del JMenu
+    public void setMenuVisible(boolean visible) {
+    menuBar.setVisible(visible);
+    this.revalidate();
+    this.repaint();
+}
 
     //Método que inicializa el componente
     public void initializePolling(String token) {
@@ -78,24 +97,15 @@ public class MainFrame extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
         mediaPollingComponent = new montoya.mediapollingcomponent.MediaPollingComponent();
         menuBar = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
-        mnuLogout = new javax.swing.JMenuItem();
-        mnuExit = new javax.swing.JMenuItem();
+        itemLogout = new javax.swing.JMenuItem();
+        itemExit = new javax.swing.JMenuItem();
         mnuEdit = new javax.swing.JMenu();
-        mnuPreferences = new javax.swing.JMenuItem();
+        itemPreferences = new javax.swing.JMenuItem();
         mnuHelp = new javax.swing.JMenu();
-        mnuAbout = new javax.swing.JMenuItem();
-
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        itemAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("mainFrame"); // NOI18N
@@ -126,25 +136,24 @@ public class MainFrame extends JFrame {
         mnuFile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mnuFile.setPreferredSize(new java.awt.Dimension(40, 40));
 
-        mnuLogout.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        mnuLogout.setText("Logout");
-        mnuLogout.setToolTipText("Logout");
-        mnuLogout.addActionListener(new java.awt.event.ActionListener() {
+        itemLogout.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        itemLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logout2.png"))); // NOI18N
+        itemLogout.setToolTipText("Logout from session");
+        itemLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuLogoutActionPerformed(evt);
+                itemLogoutActionPerformed(evt);
             }
         });
-        mnuFile.add(mnuLogout);
+        mnuFile.add(itemLogout);
 
-        mnuExit.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        mnuExit.setText("Exit");
-        mnuExit.setToolTipText("Exit");
-        mnuExit.addActionListener(new java.awt.event.ActionListener() {
+        itemExit.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        itemExit.setToolTipText("Exit Application");
+        itemExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuExitActionPerformed(evt);
+                itemExitActionPerformed(evt);
             }
         });
-        mnuFile.add(mnuExit);
+        mnuFile.add(itemExit);
 
         menuBar.add(mnuFile);
 
@@ -158,15 +167,14 @@ public class MainFrame extends JFrame {
         mnuEdit.setMinimumSize(new java.awt.Dimension(40, 40));
         mnuEdit.setPreferredSize(new java.awt.Dimension(40, 40));
 
-        mnuPreferences.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        mnuPreferences.setText("Preferences");
-        mnuPreferences.setToolTipText("Preferences");
-        mnuPreferences.addActionListener(new java.awt.event.ActionListener() {
+        itemPreferences.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        itemPreferences.setToolTipText("Settings");
+        itemPreferences.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuPreferencesActionPerformed(evt);
+                itemPreferencesActionPerformed(evt);
             }
         });
-        mnuEdit.add(mnuPreferences);
+        mnuEdit.add(itemPreferences);
 
         menuBar.add(mnuEdit);
 
@@ -180,15 +188,14 @@ public class MainFrame extends JFrame {
         mnuHelp.setMinimumSize(new java.awt.Dimension(40, 40));
         mnuHelp.setPreferredSize(new java.awt.Dimension(40, 40));
 
-        mnuAbout.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        mnuAbout.setText("About");
-        mnuAbout.setToolTipText("About");
-        mnuAbout.addActionListener(new java.awt.event.ActionListener() {
+        itemAbout.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        itemAbout.setToolTipText("About MediaBox");
+        itemAbout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuAboutActionPerformed(evt);
+                itemAboutActionPerformed(evt);
             }
         });
-        mnuHelp.add(mnuAbout);
+        mnuHelp.add(itemAbout);
 
         menuBar.add(mnuHelp);
 
@@ -198,30 +205,31 @@ public class MainFrame extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     //Preferences
-    private void mnuPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPreferencesActionPerformed
+    private void itemPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemPreferencesActionPerformed
         cardManager.showCard("preferences");
-    }//GEN-LAST:event_mnuPreferencesActionPerformed
+    }//GEN-LAST:event_itemPreferencesActionPerformed
 
     //About
-    private void mnuAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAboutActionPerformed
+    private void itemAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAboutActionPerformed
         DialogAbout dialogAbout = new DialogAbout(this, true);
         dialogAbout.setVisible(true);
-    }//GEN-LAST:event_mnuAboutActionPerformed
+    }//GEN-LAST:event_itemAboutActionPerformed
 
     //Exit
-    private void mnuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExitActionPerformed
+    private void itemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemExitActionPerformed
         if (JOptionPane.showConfirmDialog(null, "Do you want to exit the application?", "Exit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
-    }//GEN-LAST:event_mnuExitActionPerformed
+    }//GEN-LAST:event_itemExitActionPerformed
 
-    private void mnuLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLogoutActionPerformed
+    private void itemLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemLogoutActionPerformed
         
+            setMenuVisible(false);
             this.isLoggedIn = false;
             cardManager.showCard("login");
             pnlLogin.resetFields();
             JOptionPane.showMessageDialog(this, "Closed sesion.", "Information", JOptionPane.INFORMATION_MESSAGE);
-    }//GEN-LAST:event_mnuLogoutActionPerformed
+    }//GEN-LAST:event_itemLogoutActionPerformed
 
     public static void main(String args[]) {
         /* Set the Metal look and feel */
@@ -246,17 +254,14 @@ public class MainFrame extends JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem itemAbout;
+    private javax.swing.JMenuItem itemExit;
+    private javax.swing.JMenuItem itemLogout;
+    private javax.swing.JMenuItem itemPreferences;
     private montoya.mediapollingcomponent.MediaPollingComponent mediaPollingComponent;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenuItem mnuAbout;
     private javax.swing.JMenu mnuEdit;
-    private javax.swing.JMenuItem mnuExit;
     private javax.swing.JMenu mnuFile;
     private javax.swing.JMenu mnuHelp;
-    private javax.swing.JMenuItem mnuLogout;
-    private javax.swing.JMenuItem mnuPreferences;
     // End of variables declaration//GEN-END:variables
 }

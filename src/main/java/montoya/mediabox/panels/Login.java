@@ -47,6 +47,7 @@ public class Login extends JPanel{
         configEmail();
         configPassword();
         configComponents();
+        configKeyActions();
         writerPassword();
         showPassword();
         loginUser();
@@ -64,8 +65,7 @@ public class Login extends JPanel{
         pnlEmail.setBorder(StyleConfig.createTitleBorder("EMAIL"));
         pnlEmail.setBackground(StyleConfig.BACKGROUND);
         
-        StyleConfig.styleTextField(txtEmail);
-        txtEmail.setToolTipText("Email");
+        StyleConfig.styleTextFieldAndPasswordLogin(txtEmail, "Email");
         
         pnlEmail.add(txtEmail, "wrap, align center");
     }
@@ -76,11 +76,10 @@ public class Login extends JPanel{
         pnlPassword.setBorder(StyleConfig.createTitleBorder("PASSWORD"));
         pnlPassword.setBackground(StyleConfig.BACKGROUND);
    
-        StyleConfig.styleTextField(txtPassword);
-        txtPassword.setToolTipText("Password");
+        StyleConfig.styleTextFieldAndPasswordLogin(txtPassword, "Password");
         
         pnlPassword.add(txtPassword, "wrap, align center");
-        pnlPassword.add(chkShowPssw);
+        pnlPassword.add(chkShowPssw); 
     }
     
     //Configuracion del panel que contiene los botones clean, login y el checkBox remember
@@ -89,13 +88,12 @@ public class Login extends JPanel{
         pnlButtons.setBackground(StyleConfig.BACKGROUND);
         
         pnlButtons.add(chkRemember, "wrap, align center");
-        StyleConfig.styleCheckBox(chkRemember);
+        StyleConfig.styleCheckBox(chkRemember, "Remember credentials");
 
         pnlButtons.add(btnClean, "split 2, align center");
         pnlButtons.add(btnLogin);
         
-        StyleConfig.orangeButtons(btnLogin, "/images/login.png");
-        btnLogin.setToolTipText("Login");
+        StyleConfig.styleButtons(btnLogin, "/images/login.png", "Login user");
     }
     
     //Resetea los campos
@@ -109,8 +107,7 @@ public class Login extends JPanel{
     
     //Boton clean limpia el texto escrito en txtEmail y txtPassword
     private void cleanTextFields() {
-        StyleConfig.defaultButtons(btnClean, "/images/clear.png");
-        btnClean.setToolTipText("Clean");
+        StyleConfig.styleButtons(btnClean, "/images/clear.png", "Clear fields");
         
         btnClean.addActionListener(new ActionListener() {
             @Override
@@ -118,6 +115,23 @@ public class Login extends JPanel{
                 resetFields();
             }
         });
+    }
+    
+    //Al pulsar ENTER hace login
+    public void configKeyActions(){
+        txtEmail.addActionListener(new ActionListener (){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                txtPassword.requestFocusInWindow();
+            }
+        });
+        
+        txtPassword.addActionListener(new ActionListener (){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                btnLogin.doClick();
+            }
+        }); 
     }
     
     //Muestra '*' en campo password y oculta password al ser escrita
@@ -179,10 +193,12 @@ public class Login extends JPanel{
                 try {
                     mediaPollingComponent.setApiUrl(API_BASE_URL);
                     token = mediaPollingComponent.login(email, password);
+                    
 
                     if (token != null) {
-                        //TokenController.deleteToken();
                         mediaPollingComponent.setToken(token);
+                        frame.setMenuVisible(true); 
+                        TokenController.saveToken(token);
                         frame.initializePolling(token);
                         JOptionPane.showMessageDialog(Login.this,"Login successful: " + email,"Success",JOptionPane.INFORMATION_MESSAGE);
                         
@@ -193,6 +209,7 @@ public class Login extends JPanel{
                             System.out.println("Archivo Token.json creado en " + FOLDER_NAME);
                         }
                     }
+
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(Login.this, "Login failed: Incorrect credentials or expired token.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -210,6 +227,7 @@ public class Login extends JPanel{
                 mediaPollingComponent.setToken(token);
                 frame.initializePolling(token);
                 System.out.println("Login Exitoso." + token);
+                frame.setMenuVisible(true);
                 cardManager.showCard("downloads");
                 return;
             }

@@ -3,6 +3,7 @@ package montoya.mediabox.dialogs;
 import java.awt.*;
 import javax.swing.*;
 import java.util.logging.Logger;
+import montoya.mediabox.styleConfig.StyleConfig;
 
 /**
  * Dialog que contiene la información de alumno, curso y los recursos para la tarea
@@ -18,6 +19,7 @@ public class DialogAbout extends JDialog {
         initComponents();
         setSize(400,350);
         setLocationRelativeTo(this);
+        pnlAbout.setBackground(StyleConfig.PANEL_COLOR);
         setTitle("About");
         
         //Texto mostrado en About
@@ -51,7 +53,6 @@ public class DialogAbout extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        pnlAbout.setBackground(new java.awt.Color(255, 153, 51));
         pnlAbout.setMinimumSize(new java.awt.Dimension(400, 350));
         pnlAbout.setLayout(null);
 

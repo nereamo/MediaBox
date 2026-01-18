@@ -17,6 +17,7 @@ import montoya.mediabox.fileInformation.FileInformation;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
 import montoya.mediabox.fileInformation.FolderItem;
+import montoya.mediabox.styleConfig.StyleConfig;
 import montoya.mediapollingcomponent.MediaPollingComponent;
 import montoya.mediapollingcomponent.apiclient.Media;
 
@@ -38,6 +39,8 @@ public class InfoMedia extends javax.swing.JPanel {
 
     public InfoMedia(FileProperties fileProperties, TypeFilter typeFilter, List<FileInformation> allFiles, Set<String> folderPaths, MediaPollingComponent mediaPollingComponent) {
         initComponents();
+        
+        setBackground(StyleConfig.PANEL_COLOR);
 
         this.typeFilter = typeFilter;
         this.fileProperties = fileProperties;
@@ -58,6 +61,16 @@ public class InfoMedia extends javax.swing.JPanel {
 
         //Muestra las descargas pertenecientes a un directorio
         configDownloadList(folderList, cbbxTypeFilter);
+
+        //Mostrar archivos al iniciar la app
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (folderList.getModel().getSize() > 0) {
+                    folderList.setSelectedIndex(0);
+                }
+            }
+        });
     }
 
     public JList<FolderItem> getListDirectories() {
@@ -86,6 +99,7 @@ public class InfoMedia extends javax.swing.JPanel {
         cbbxFilter.addItem("MP3");
         cbbxFilter.addItem("WAV");
         cbbxFilter.addItem("M4A");
+        cbbxFilter.setSelectedIndex(0); //Seleccion por defecto "ALL"
     }
     
     public void initDirectoryList() {

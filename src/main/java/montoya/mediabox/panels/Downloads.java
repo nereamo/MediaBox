@@ -18,6 +18,7 @@ import montoya.mediabox.fileInformation.FileInformation;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
 import montoya.mediabox.fileInformation.FolderItem;
+import montoya.mediabox.styleConfig.StyleConfig;
 import montoya.mediapollingcomponent.MediaPollingComponent;
 
 /**
@@ -54,7 +55,6 @@ public class Downloads extends javax.swing.JPanel {
        
         foldersList = new JList<>(new DefaultListModel<>()); 
         btnGroup = new ButtonGroup();
-        //tblModel = new FileTableModel(allFiles);
         infoMedia = new InfoMedia(fileProperties,typeFilter, allFiles, folderPaths, mediaPollingComponent);
         tblModel = infoMedia.getTableModel();
         
@@ -65,7 +65,9 @@ public class Downloads extends javax.swing.JPanel {
         configRadioButtons(btnGroup, radioMp4, radioMkv, radioWebm, radioMp3, radioWav, radioM4a);
         
         infoMedia.setBounds(640, 40, 630, 540);
+        setBackground(StyleConfig.PANEL_COLOR);
         this.add(infoMedia);
+        
     }
     
     //Aplicar la calidad de video

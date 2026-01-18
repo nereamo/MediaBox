@@ -5,6 +5,7 @@ import javax.swing.*;
 import montoya.mediabox.MainFrame;
 import montoya.mediabox.controller.CardManager;
 import montoya.mediabox.download.DownloadManager;
+import montoya.mediabox.styleConfig.StyleConfig;
 
 /**
  * Panel que contiene las propiedades y metodos de JPanel Preferences
@@ -23,12 +24,27 @@ public class Preferences extends javax.swing.JPanel {
         initComponents();
         
         this.setBounds(0, 0, 1300, 770);
+        this.setBackground(StyleConfig.PANEL_COLOR);
         
         this.frame = frame;
         this.downloadManager = downloadManager;
         this.cardManager = cardManager;
         
+        StyleConfig.styleCheckBox(chkCreate, "Create files .M3U");
+        
+        
+        
+        //layoutComponents();
+        configIconButtons();
         mbSpeedSpinner();
+    }
+    
+    //Iconos de los botones
+    public void configIconButtons(){
+        StyleConfig.styleButtons(btnBrowseTemp, "/images/folder.png", "Select Folder");
+        StyleConfig.styleButtons(btnYtDlp, "/images/folder.png", "Automatic search");
+        StyleConfig.styleButtons(btnSave, "/images/save.png", "Save changes");
+        StyleConfig.styleButtons(btnCancel, "/images/cancel.png", "Discard changes");  
     }
 
     //Limpiar entradas de JTextFields
@@ -72,83 +88,91 @@ public class Preferences extends javax.swing.JPanel {
         setLayout(null);
 
         lblM3u.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblM3u.setForeground(new java.awt.Color(255, 255, 255));
         lblM3u.setText("File .m3u: ");
         add(lblM3u);
         lblM3u.setBounds(90, 170, 66, 20);
 
+        chkCreate.setBackground(new java.awt.Color(61, 61, 64));
         chkCreate.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        chkCreate.setText("Create");
+        chkCreate.setForeground(new java.awt.Color(255, 255, 255));
+        chkCreate.setToolTipText("");
         add(chkCreate);
-        chkCreate.setBounds(180, 170, 80, 21);
+        chkCreate.setBounds(180, 170, 80, 19);
 
         lblSpeed.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblSpeed.setForeground(new java.awt.Color(255, 255, 255));
         lblSpeed.setText("Speed: ");
         add(lblSpeed);
         lblSpeed.setBounds(100, 240, 50, 20);
 
         spnSpeed.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        spnSpeed.setToolTipText("MB/s");
         add(spnSpeed);
         spnSpeed.setBounds(180, 240, 100, 23);
 
         lblMbs.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblMbs.setForeground(new java.awt.Color(255, 255, 255));
         lblMbs.setText("MB/s");
         add(lblMbs);
         lblMbs.setBounds(290, 240, 50, 20);
 
         lblYtDlp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblYtDlp.setForeground(new java.awt.Color(255, 255, 255));
         lblYtDlp.setText("Location yt-dlp:");
         add(lblYtDlp);
         lblYtDlp.setBounds(60, 320, 110, 20);
 
         txtYtDlp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(txtYtDlp);
-        txtYtDlp.setBounds(280, 320, 330, 23);
+        txtYtDlp.setBounds(270, 320, 330, 23);
 
         btnYtDlp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnYtDlp.setText("Browse");
+        btnYtDlp.setToolTipText("");
         btnYtDlp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnYtDlpActionPerformed(evt);
             }
         });
         add(btnYtDlp);
-        btnYtDlp.setBounds(180, 320, 90, 24);
+        btnYtDlp.setBounds(170, 320, 90, 20);
 
         btnSave.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnSave.setText("Save");
+        btnSave.setToolTipText("");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
             }
         });
         add(btnSave);
-        btnSave.setBounds(290, 450, 80, 23);
+        btnSave.setBounds(290, 430, 80, 30);
 
         btnCancel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnCancel.setText("Cancel");
+        btnCancel.setToolTipText("");
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
             }
         });
         add(btnCancel);
-        btnCancel.setBounds(390, 450, 80, 23);
+        btnCancel.setBounds(380, 430, 80, 30);
 
         txtPathTemp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(txtPathTemp);
-        txtPathTemp.setBounds(280, 90, 330, 23);
+        txtPathTemp.setBounds(270, 90, 330, 23);
 
         btnBrowseTemp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnBrowseTemp.setText("Browse");
+        btnBrowseTemp.setToolTipText("");
         btnBrowseTemp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBrowseTempActionPerformed(evt);
             }
         });
         add(btnBrowseTemp);
-        btnBrowseTemp.setBounds(180, 90, 90, 24);
+        btnBrowseTemp.setBounds(170, 90, 90, 20);
 
         lblPath.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblPath.setForeground(new java.awt.Color(255, 255, 255));
         lblPath.setText("Temp Path:");
         add(lblPath);
         lblPath.setBounds(80, 90, 80, 20);
@@ -157,14 +181,6 @@ public class Preferences extends javax.swing.JPanel {
         add(logoLabel);
         logoLabel.setBounds(1100, 670, 180, 50);
     }// </editor-fold>//GEN-END:initComponents
-
-    //Cancelar preferencias
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        if (JOptionPane.showConfirmDialog(null, "Changes will not be saved. Do you want to continue?", "Cancel", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            clearTextFields();
-            cardManager.showCard(CARD_DOWN);
-        }
-    }//GEN-LAST:event_btnCancelActionPerformed
 
     //Directorio para archivos temporales
     private void btnBrowseTempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseTempActionPerformed
@@ -222,6 +238,14 @@ public class Preferences extends javax.swing.JPanel {
         JOptionPane.showMessageDialog(this, "Preferences saved!", "Saved", JOptionPane.INFORMATION_MESSAGE);
         cardManager.showCard(CARD_DOWN);
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    //Cancelar preferencias
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        if (JOptionPane.showConfirmDialog(null, "Changes will not be saved. Do you want to continue?", "Cancel", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            clearTextFields();
+            cardManager.showCard(CARD_DOWN);
+        }
+    }//GEN-LAST:event_btnCancelActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
