@@ -20,7 +20,6 @@ public class Login extends JPanel{
     private MainFrame frame;
     private CardManager cardManager;
     private MediaPollingComponent mediaPollingComponent;
-
     private JTextField txtEmail = new JTextField();
     private JPasswordField txtPassword = new JPasswordField("**********");
     private JPanel pnlEmail = new JPanel();
@@ -28,8 +27,8 @@ public class Login extends JPanel{
     private final JPanel pnlButtons = new JPanel();
     private final JButton btnLogin = new JButton();
     private final JButton btnClean = new JButton();
-    private JCheckBox chkShowPssw = new JCheckBox("Show Password");
-    private JCheckBox chkRemember = new JCheckBox("Remember me");
+    private JCheckBox showPassword = new JCheckBox("Show Password");
+    private JCheckBox remember = new JCheckBox("Remember me");
     private static final String API_BASE_URL = "https://difreenet9.azurewebsites.net";
     private static String token;
     private static final String FOLDER_NAME = System.getProperty("user.home") + "/AppData/Local/MediaBox";
@@ -44,70 +43,57 @@ public class Login extends JPanel{
         this.setLayout(new MigLayout("center", "[][grow][]", "100[]10[]20[]"));
         this.setBackground(StyleConfig.BACKGROUND);
         
-        configEmail();
-        configPassword();
         configComponents();
         configKeyActions();
         writerPassword();
         showPassword();
         loginUser();
-        
-        this.add(pnlEmail, "cell 0 0 3 1, align center");
-        this.add(pnlPassword, "cell 0 1 3 1, align center");
-        this.add(pnlButtons, "cell 0 2 3 1, align center");
-
         cleanTextFields();
     } 
     
-    //Configuracion del panel que contiene el campo para introducir email
-    private void configEmail(){
-        pnlEmail.setLayout(new MigLayout("center", "[grow]", "[]"));
-        pnlEmail.setBorder(StyleConfig.createTitleBorder("EMAIL"));
-        pnlEmail.setBackground(StyleConfig.BACKGROUND);
-        
-        StyleConfig.styleTextFieldAndPasswordLogin(txtEmail, "Email");
-        
-        pnlEmail.add(txtEmail, "wrap, align center");
-    }
-    
-    //Configuracion del panel que contiene el campo para password y ver password
-    private void configPassword(){
-        pnlPassword.setLayout(new MigLayout("center", "[grow]", "[]"));
-        pnlPassword.setBorder(StyleConfig.createTitleBorder("PASSWORD"));
-        pnlPassword.setBackground(StyleConfig.BACKGROUND);
-   
-        StyleConfig.styleTextFieldAndPasswordLogin(txtPassword, "Password");
-        
-        pnlPassword.add(txtPassword, "wrap, align center");
-        pnlPassword.add(chkShowPssw); 
-    }
-    
-    //Configuracion del panel que contiene los botones clean, login y el checkBox remember
+    //Establece posicion para los componentes
     private void configComponents(){
+        
+        ImageIcon icon = new ImageIcon(getClass().getResource("/images/big_logo2.png"));
+        JLabel lblIcon = new JLabel(icon);
+        this.add(lblIcon, "cell 0 0 3 1, align center"); 
+        
+        JPanel emailRow = StyleConfig.createFieldWithIcon("/images/email.png", txtEmail);
+        this.add(emailRow, "cell 0 2 3 1, growx, align center, wmin 200, w 300, wmax 300");
+        
+        JPanel passwordRow = StyleConfig.createFieldWithIcon("/images/password.png", txtPassword);
+        this.add(passwordRow, "cell 0 3 3 1, growx, align center, wmin 200, w 300, wmax 300");
+        
+        StyleConfig.styleCheckBox(showPassword, "Show password");
+        JPanel showPasswordRow = StyleConfig.createFieldWithIcon("/images/show_password.png", showPassword);
+        this.add(showPasswordRow, "cell 0 4 3 1, growx, align center, wmin 200, w 300, wmax 300");
+        
+        this.add(pnlButtons, "cell 0 6 3 1, align center");
+        
         pnlButtons.setLayout(new MigLayout("center", "[grow]", "[]"));
         pnlButtons.setBackground(StyleConfig.BACKGROUND);
         
-        pnlButtons.add(chkRemember, "wrap, align center");
-        StyleConfig.styleCheckBox(chkRemember, "Remember credentials");
+        pnlButtons.add(remember, "wrap, align center");
+        StyleConfig.styleCheckBox(remember, "Remember credentials");
 
         pnlButtons.add(btnClean, "split 2, align center");
         pnlButtons.add(btnLogin);
         
-        StyleConfig.styleButtons(btnLogin, "/images/login.png", "Login user");
+        StyleConfig.styleButton(btnLogin, "/images/login.png", "Login user");
     }
-    
+
     //Resetea los campos
     public void resetFields() {
         txtEmail.setText("");
         txtPassword.setText("**********");
         txtPassword.setEchoChar((char) 0);
-        chkShowPssw.setSelected(false);
-        chkRemember.setSelected(false);
+        showPassword.setSelected(false);
+        remember.setSelected(false);
     }
     
     //Boton clean limpia el texto escrito en txtEmail y txtPassword
     private void cleanTextFields() {
-        StyleConfig.styleButtons(btnClean, "/images/clear.png", "Clear fields");
+        StyleConfig.styleButton(btnClean, "/images/clear.png", "Clear fields");
         
         btnClean.addActionListener(new ActionListener() {
             @Override
@@ -159,14 +145,14 @@ public class Login extends JPanel{
     
     //CheckBox que permite ver la contraseña introducida
     private void showPassword() {
-        chkShowPssw.setBackground(StyleConfig.BACKGROUND);
-        chkShowPssw.setForeground(Color.WHITE);
-        chkShowPssw.setToolTipText("Show password");
+        showPassword.setBackground(StyleConfig.BACKGROUND);
+        showPassword.setForeground(Color.WHITE);
+        showPassword.setToolTipText("Show password");
         
-        chkShowPssw.addActionListener(new ActionListener() {
+        showPassword.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (chkShowPssw.isSelected()) {
+                if (showPassword.isSelected()) {
                     txtPassword.setEchoChar((char) 0);
                 } else {
                     txtPassword.setEchoChar('*');
@@ -204,7 +190,7 @@ public class Login extends JPanel{
                         
                         cardManager.showCard("downloads");
 
-                        if (chkRemember.isSelected()) {
+                        if (remember.isSelected()) {
                             TokenController.saveToken(token);
                             System.out.println("Archivo Token.json creado en " + FOLDER_NAME);
                         }

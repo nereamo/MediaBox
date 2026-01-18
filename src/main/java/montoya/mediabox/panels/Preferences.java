@@ -30,21 +30,17 @@ public class Preferences extends javax.swing.JPanel {
         this.downloadManager = downloadManager;
         this.cardManager = cardManager;
         
-        StyleConfig.styleCheckBox(chkCreate, "Create files .M3U");
-        
-        
-        
-        //layoutComponents();
-        configIconButtons();
+        styleComponents();
         mbSpeedSpinner();
     }
     
     //Iconos de los botones
-    public void configIconButtons(){
-        StyleConfig.styleButtons(btnBrowseTemp, "/images/folder.png", "Select Folder");
-        StyleConfig.styleButtons(btnYtDlp, "/images/folder.png", "Automatic search");
-        StyleConfig.styleButtons(btnSave, "/images/save.png", "Save changes");
-        StyleConfig.styleButtons(btnCancel, "/images/cancel.png", "Discard changes");  
+    public void styleComponents(){
+        StyleConfig.styleButton(btnBrowseTemp, "/images/folder.png", "Select Folder");
+        StyleConfig.styleButton(btnYtDlp, "/images/folder.png", "Automatic search");
+        StyleConfig.styleButton(btnSave, "/images/save.png", "Save changes");
+        StyleConfig.styleButton(btnCancel, "/images/cancel.png", "Discard changes");
+        StyleConfig.styleCheckBox(chkCreate, "Create files .M3U");
     }
 
     //Limpiar entradas de JTextFields
@@ -177,9 +173,9 @@ public class Preferences extends javax.swing.JPanel {
         add(lblPath);
         lblPath.setBounds(80, 90, 80, 20);
 
-        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/largelogoSmall3.png"))); // NOI18N
+        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/big_logo2.png"))); // NOI18N
         add(logoLabel);
-        logoLabel.setBounds(1100, 670, 180, 50);
+        logoLabel.setBounds(1120, 670, 150, 40);
     }// </editor-fold>//GEN-END:initComponents
 
     //Directorio para archivos temporales

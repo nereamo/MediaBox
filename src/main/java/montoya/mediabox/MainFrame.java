@@ -4,6 +4,7 @@ import java.util.*;
 import javax.swing.*;
 import java.awt.EventQueue;
 import java.awt.CardLayout;
+import java.awt.Image;
 import java.util.logging.Logger;
 import montoya.mediabox.panels.*;
 import montoya.mediabox.controller.*;
@@ -31,7 +32,6 @@ public class MainFrame extends JFrame {
     private CardManager cardManager;
     private CardLayout layout;
     private JPanel container;
-    
     private final Set<String> folderPaths = new HashSet<>();
     private boolean isLoggedIn = false;
 
@@ -39,8 +39,12 @@ public class MainFrame extends JFrame {
         initComponents();
         
         configurationFrame();
+        configIconMenu();
         configIconMenuItems();
         setMenuVisible(false);
+        
+        Image icon = new ImageIcon(getClass().getResource("/images/small_logo.png")).getImage();
+        this.setIconImage(icon);
         
         layout = new CardLayout();
         container = new JPanel(layout);
@@ -69,11 +73,18 @@ public class MainFrame extends JFrame {
     }
     
     //Iconos de los botones
+    public void configIconMenu(){
+        StyleConfig.styleMenuItems(mnuEdit, "/images/edit.png",null, "Settings");
+        StyleConfig.styleMenuItems(mnuFile, "/images/logout_exit.png",null, "Logout or Exit");
+        StyleConfig.styleMenuItems(mnuHelp, "/images/help.png",null, "Information MediaBox");
+    }
+    
+    //Iconos de los botones
     public void configIconMenuItems(){
-        StyleConfig.styleItems(itemExit, "/images/exit.png", "Exit");
-        StyleConfig.styleItems(itemLogout, "/images/logout.png", "Logout");
-        StyleConfig.styleItems(itemPreferences, "/images/settings.png", "Settings");
-        StyleConfig.styleItems(itemAbout, "/images/information.png", "About");
+        StyleConfig.styleMenuItems(itemExit, "/images/exit.png", "Exit", "Close App");
+        StyleConfig.styleMenuItems(itemLogout, "/images/logout.png", "Logout", "Return to login");
+        StyleConfig.styleMenuItems(itemPreferences, "/images/settings.png", "Settings", "Edit settings");
+        StyleConfig.styleMenuItems(itemAbout, "/images/information.png", "About", "Information MediaBox");
     }
     
     //Visibilidad del JMenu
@@ -129,16 +140,14 @@ public class MainFrame extends JFrame {
         mnuFile.setBackground(new java.awt.Color(255, 102, 0));
         mnuFile.setBorder(null);
         mnuFile.setForeground(new java.awt.Color(255, 255, 255));
-        mnuFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logout.png"))); // NOI18N
-        mnuFile.setToolTipText("File");
+        mnuFile.setToolTipText("");
         mnuFile.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         mnuFile.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         mnuFile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mnuFile.setPreferredSize(new java.awt.Dimension(40, 40));
 
         itemLogout.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        itemLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logout2.png"))); // NOI18N
-        itemLogout.setToolTipText("Logout from session");
+        itemLogout.setToolTipText("");
         itemLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemLogoutActionPerformed(evt);
@@ -147,7 +156,7 @@ public class MainFrame extends JFrame {
         mnuFile.add(itemLogout);
 
         itemExit.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        itemExit.setToolTipText("Exit Application");
+        itemExit.setToolTipText("");
         itemExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemExitActionPerformed(evt);
@@ -159,8 +168,7 @@ public class MainFrame extends JFrame {
 
         mnuEdit.setBorder(null);
         mnuEdit.setForeground(new java.awt.Color(255, 255, 255));
-        mnuEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit.png"))); // NOI18N
-        mnuEdit.setToolTipText("Edit");
+        mnuEdit.setToolTipText("");
         mnuEdit.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         mnuEdit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         mnuEdit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -168,7 +176,7 @@ public class MainFrame extends JFrame {
         mnuEdit.setPreferredSize(new java.awt.Dimension(40, 40));
 
         itemPreferences.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        itemPreferences.setToolTipText("Settings");
+        itemPreferences.setToolTipText("");
         itemPreferences.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemPreferencesActionPerformed(evt);
@@ -180,8 +188,7 @@ public class MainFrame extends JFrame {
 
         mnuHelp.setBorder(null);
         mnuHelp.setForeground(new java.awt.Color(255, 255, 255));
-        mnuHelp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
-        mnuHelp.setToolTipText("Help");
+        mnuHelp.setToolTipText("");
         mnuHelp.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         mnuHelp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         mnuHelp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -189,7 +196,7 @@ public class MainFrame extends JFrame {
         mnuHelp.setPreferredSize(new java.awt.Dimension(40, 40));
 
         itemAbout.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        itemAbout.setToolTipText("About MediaBox");
+        itemAbout.setToolTipText("");
         itemAbout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemAboutActionPerformed(evt);

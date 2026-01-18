@@ -8,10 +8,14 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import net.miginfocom.swing.MigLayout;
 
 /**
  *
@@ -54,7 +58,7 @@ public class StyleConfig {
     }
     
     //Buttons
-    public static void styleButtons(JButton btn, String iconPath, String tootlTip) {
+    public static void styleButton(JButton btn, String iconPath, String tootlTip) {
         btn.setOpaque(false);
         btn.setContentAreaFilled(false);
         btn.setBorderPainted(false);
@@ -63,13 +67,32 @@ public class StyleConfig {
         btn.setToolTipText(tootlTip);
     }
     
-    //Buttons
-    public static void styleItems(JMenuItem item, String iconPath, String text) {
+    //Items menu
+    public static void styleMenuItems(JMenuItem item, String iconPath, String text, String toolTip) {
+        item.setText(text == null ? "" : text);
         item.setOpaque(false);
         item.setContentAreaFilled(false);
         item.setBorderPainted(false);
-        item.setPreferredSize(new Dimension(100, 50));
+        item.setPreferredSize(new Dimension(90, 50));
         item.setIcon(new ImageIcon(StyleConfig.class.getResource(iconPath)));
-        item.setText(text);
+        item.setToolTipText(toolTip);
+    }
+    
+    //Logo
+    public static void setLogo(JLabel lblLogo, String logoPath){
+        lblLogo.setPreferredSize(new Dimension(150, 40));
+        lblLogo.setIcon(new ImageIcon(StyleConfig.class.getResource(logoPath)));
+    }
+    
+    //Panel login
+    public static JPanel createFieldWithIcon(String iconPath, JComponent field) {
+        JPanel panel = new JPanel(new MigLayout("insets 0", "[]10[grow]", "[]"));
+        panel.setBackground(StyleConfig.BACKGROUND);
+        
+        JLabel lblIcon = new JLabel(new ImageIcon(StyleConfig.class.getResource(iconPath)));
+        panel.add(lblIcon);
+        panel.add(field, "growx");
+        
+        return panel;
     }
 }
