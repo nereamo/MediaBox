@@ -11,7 +11,6 @@ import montoya.mediabox.fileInformation.FileInformation;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
 import montoya.mediabox.fileInformation.FolderItem;
-import montoya.mediabox.panels.InfoMedia;
 
 /**
  * Clase creada con ayuda de Copilot para entender como funciona SwingWorker y que metodos utilizar. SwingWorker ejecuta tareas en segundo plano impidiendo que no se bloquee la GUI. Contiene metodos para descaragar archivos en segundo plano

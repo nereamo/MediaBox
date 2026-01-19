@@ -39,14 +39,18 @@ public class Login extends JPanel{
         
         this.setBounds(0, 0, 1300, 770);
         this.setLayout(new MigLayout("center", "[][grow][]", "100[]10[]20[]"));
-        this.setBackground(StyleConfig.BACKGROUND);
+        this.setBackground(StyleConfig.PANEL_LOGIN_COLOR);
         
-        configComponents();
+        configComponents(); //Configuracion de componentes
         configKeyActions();
-        writerPassword();
+        
+        cleanButton(); //Limpia los campos
+        
+        txtPassword.setEchoChar('•'); //Configuracion de visibilidad de contraseña
         showPassword();
-        loginUser();
-        cleanButton();
+        
+        loginUser(); //Configuracion de login
+        
     } 
     
     //Establece posicion para los componentes
@@ -69,7 +73,7 @@ public class Login extends JPanel{
         this.add(pnlButtons, "cell 0 6 3 1, align center");
         
         pnlButtons.setLayout(new MigLayout("center", "[grow]", "[]"));
-        pnlButtons.setBackground(StyleConfig.BACKGROUND);
+        pnlButtons.setBackground(StyleConfig.PANEL_LOGIN_COLOR);
         
         pnlButtons.add(remember, "wrap, align center");
         StyleConfig.styleCheckBox(remember,"Remember me",Color.WHITE, "Remember credentials");
@@ -89,8 +93,8 @@ public class Login extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 txtEmail.setText("");
-                txtPassword.setText("**********");
-                txtPassword.setEchoChar((char) 0);
+                txtPassword.setText("");
+                txtPassword.setEchoChar('•');
                 showPassword.setSelected(false);
                 remember.setSelected(false);
             }
@@ -114,32 +118,9 @@ public class Login extends JPanel{
         }); 
     }
     
-    //Muestra '*' en campo password y oculta password al ser escrita
-    private void writerPassword(){
-        txtPassword.setEchoChar((char)0);
-        
-        txtPassword.addFocusListener(new FocusListener(){
-            @Override
-            public void focusGained(FocusEvent e) {
-                if(String.valueOf(txtPassword.getPassword()).equals("**********")){
-                    txtPassword.setText("");
-                    txtPassword.setEchoChar('*');
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if(txtPassword.getPassword().length == 0){
-                    txtPassword.setText("**********");
-                    txtPassword.setEchoChar((char)0);
-                }
-            }
-        });
-    }
-    
     //CheckBox que permite ver la contraseña introducida
     private void showPassword() {
-        showPassword.setBackground(StyleConfig.BACKGROUND);
+        showPassword.setBackground(StyleConfig.PANEL_LOGIN_COLOR);
         showPassword.setForeground(Color.WHITE);
         showPassword.setToolTipText("Show password");
         
@@ -149,7 +130,7 @@ public class Login extends JPanel{
                 if (showPassword.isSelected()) {
                     txtPassword.setEchoChar((char) 0);
                 } else {
-                    txtPassword.setEchoChar('*');
+                    txtPassword.setEchoChar('•');
                 }
             }
         });

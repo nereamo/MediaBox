@@ -2,8 +2,11 @@
 package montoya.mediabox.styleConfig;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -28,7 +31,7 @@ public class StyleConfig {
     public static final Font FONT_PLAIN = new Font("Arial", Font.PLAIN, 14);
 
     //Colors
-    public static final Color BACKGROUND = new Color(61, 61, 64);
+    public static final Color PANEL_LOGIN_COLOR = new Color(61, 61, 64);
     public static final Color ORANGE_COLOR = new Color(255, 153, 51);
     public static final Color PANEL_COLOR = new Color(177, 178, 189);
     
@@ -67,11 +70,26 @@ public class StyleConfig {
     //Buttons
     public static void styleButton(JButton btn, String iconPath, String tootlTip) {
         btn.setOpaque(false);
+        btn.setFocusPainted(false);
         btn.setContentAreaFilled(false);
         btn.setBorderPainted(false);
         btn.setPreferredSize(new Dimension(100, 50));
         btn.setIcon(new ImageIcon(StyleConfig.class.getResource(iconPath)));
         btn.setToolTipText(tootlTip);
+        
+        btn.addMouseListener(new MouseAdapter (){
+            @Override
+            public void mouseEntered(MouseEvent e){
+                btn.setBorderPainted(true);
+                btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                btn.setBorder(BorderFactory.createBevelBorder(1));
+            }
+            
+            @Override 
+            public void mouseExited(MouseEvent e){
+                btn.setBorderPainted(false);
+            }
+        });
     }
     
     //Items menu
@@ -94,7 +112,7 @@ public class StyleConfig {
     //Panel login
     public static JPanel createLoginField(String iconPath, JComponent field) {
         JPanel panel = new JPanel(new MigLayout("insets 0", "[]10[grow]", "[]"));
-        panel.setBackground(StyleConfig.BACKGROUND);
+        panel.setBackground(StyleConfig.PANEL_LOGIN_COLOR);
         
         JLabel lblIcon = new JLabel(new ImageIcon(StyleConfig.class.getResource(iconPath)));
         panel.add(lblIcon);

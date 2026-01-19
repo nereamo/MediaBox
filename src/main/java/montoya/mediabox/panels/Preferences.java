@@ -20,6 +20,7 @@ public class Preferences extends javax.swing.JPanel {
     private final DownloadManager downloadManager;
     private final CardManager cardManager;
     public static final String CARD_DOWN = "downloads";
+    private JSlider sldSpeed = new JSlider(0,100,50);
 
     public Preferences(MainFrame frame, DownloadManager downloadManager, CardManager cardManager) {
         initComponents();
@@ -32,7 +33,7 @@ public class Preferences extends javax.swing.JPanel {
         configLayout();
         styleLabel();
         styleComponents();
-        configSpinner();
+        configSliderSpeed();
     }
     
     //Configuración del panel
@@ -45,22 +46,21 @@ public class Preferences extends javax.swing.JPanel {
     //Configuracion de la posicion de los componentes
     private void configLayout(){
         add(lblPath, "cell 0 0, alignx right");
-        add(StyleConfig.createFieldWrapper(txtPathTemp), "cell 1 0, growx, wmin 200, w 300, wmax 300");
+        add(StyleConfig.createFieldWrapper(txtPathTemp), "cell 1 0, alignx left, growx, wmin 200, w 300, wmax 300");
         add(btnBrowseTemp, "cell 2 0");
         
-        add(lblM3u, "cell 0 1, alignx right"); 
-        add(chkCreate, "cell 1 1, alignx left");
+        add(lblM3u, "cell 0 1, alignx right, gaptop 15"); 
+        add(chkCreate, "cell 1 1, alignx left, gaptop 15");
+
+        add(lblSpeed, "cell 0 2, alignx right, aligny center, gaptop 15");
+        add(sldSpeed, "cell 1 2, growx, wmin 200, w 300, wmax 300, gaptop 15");
         
-        add(lblSpeed, "cell 0 2, alignx right"); 
-        add(spnSpeed, "cell 1 2, alignx left, w 100!"); 
-        add(lblMbs, "cell 1 2");
-        
-        add(lblYtDlp, "cell 0 3, alignx right"); 
-        add(StyleConfig.createFieldWrapper(txtYtDlp), "cell 1 3, growx, wmin 200, w 300, wmax 300"); 
+        add(lblYtDlp, "cell 0 3, alignx right, gaptop 20"); 
+        add(StyleConfig.createFieldWrapper(txtYtDlp), "cell 1 3,alignx left, growx, wmin 200, w 300, wmax 300, gaptop 20"); 
         add(btnYtDlp, "cell 2 3");
         
-        add(btnSave, "cell 1 5, split 2, alignx center"); 
-        add(btnCancel);
+        add(btnSave, "cell 1 4, split 2, alignx center, gaptop 30"); 
+        add(btnCancel, "gaptop 30");
         
         add(logoLabel, "cell 4 6, alignx right, aligny bottom"); 
     }
@@ -69,8 +69,7 @@ public class Preferences extends javax.swing.JPanel {
     private void styleLabel(){
         StyleConfig.sytleLabel(lblPath, "Temp Path: ", Color.BLACK);
         StyleConfig.sytleLabel(lblM3u, "File .m3u: ", Color.BLACK);
-        StyleConfig.sytleLabel(lblSpeed, "Speed: ", Color.BLACK);
-        StyleConfig.sytleLabel(lblMbs, "MB/s", Color.BLACK);
+        StyleConfig.sytleLabel(lblSpeed, "Speed (MB/s): ", Color.BLACK);
         StyleConfig.sytleLabel(lblYtDlp, "Location yt-dlp: ", Color.BLACK);
     }
     
@@ -83,13 +82,15 @@ public class Preferences extends javax.swing.JPanel {
         StyleConfig.styleCheckBox(chkCreate,"Create",Color.BLACK, "Create files .M3U");
     }
     
-    //Velocidad de descarga hasta un max de 100MB/s
-    private void configSpinner() {
-        SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0.0, 0.0, 100.0, 10.0);
-        spnSpeed.setModel(spinnerModel);
-
-        JSpinner.NumberEditor numberFormat = new JSpinner.NumberEditor(spnSpeed, "0.0");
-        spnSpeed.setEditor(numberFormat);
+    //configuracion del Slider para la velocidad de descarga
+    private void configSliderSpeed(){
+        sldSpeed.setMajorTickSpacing(10);
+        sldSpeed.setMinorTickSpacing(10);
+        sldSpeed.setPaintTicks(true);
+        sldSpeed.setPaintLabels(true);
+        sldSpeed.setSnapToTicks(true);
+        sldSpeed.setOpaque(false);
+        sldSpeed.setFont(StyleConfig.FONT_PLAIN);
     }
 
     @SuppressWarnings("unchecked")
@@ -99,8 +100,6 @@ public class Preferences extends javax.swing.JPanel {
         lblM3u = new javax.swing.JLabel();
         chkCreate = new javax.swing.JCheckBox();
         lblSpeed = new javax.swing.JLabel();
-        spnSpeed = new javax.swing.JSpinner();
-        lblMbs = new javax.swing.JLabel();
         lblYtDlp = new javax.swing.JLabel();
         txtYtDlp = new javax.swing.JTextField();
         btnYtDlp = new javax.swing.JButton();
@@ -129,15 +128,6 @@ public class Preferences extends javax.swing.JPanel {
         lblSpeed.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(lblSpeed);
         lblSpeed.setBounds(100, 240, 50, 20);
-
-        spnSpeed.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        spnSpeed.setToolTipText("MB/s");
-        add(spnSpeed);
-        spnSpeed.setBounds(180, 240, 100, 23);
-
-        lblMbs.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        add(lblMbs);
-        lblMbs.setBounds(290, 240, 50, 20);
 
         lblYtDlp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(lblYtDlp);
@@ -253,7 +243,7 @@ public class Preferences extends javax.swing.JPanel {
         downloadManager.setTempPath(txtPathTemp.getText().trim());
         downloadManager.setYtDlpLocation(txtYtDlp.getText().trim());
         downloadManager.setCreateM3u(chkCreate.isSelected());
-        downloadManager.setMaxSpeed(((Number) spnSpeed.getValue()).doubleValue());
+        downloadManager.setMaxSpeed(sldSpeed.getValue());
 
         JOptionPane.showMessageDialog(this, "Preferences saved!", "Saved", JOptionPane.INFORMATION_MESSAGE);
         cardManager.showCard(CARD_DOWN);
@@ -264,7 +254,7 @@ public class Preferences extends javax.swing.JPanel {
         if (JOptionPane.showConfirmDialog(null, "Changes will not be saved. Do you want to continue?", "Cancel", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             txtPathTemp.setText("");
             chkCreate.setSelected(false);
-            spnSpeed.setValue(0);
+            sldSpeed.setValue(50);
             txtYtDlp.setText("");
             cardManager.showCard(CARD_DOWN);
         }
@@ -277,12 +267,10 @@ public class Preferences extends javax.swing.JPanel {
     private javax.swing.JButton btnYtDlp;
     private javax.swing.JCheckBox chkCreate;
     private javax.swing.JLabel lblM3u;
-    private javax.swing.JLabel lblMbs;
     private javax.swing.JLabel lblPath;
     private javax.swing.JLabel lblSpeed;
     private javax.swing.JLabel lblYtDlp;
     private javax.swing.JLabel logoLabel;
-    private javax.swing.JSpinner spnSpeed;
     private javax.swing.JTextField txtPathTemp;
     private javax.swing.JTextField txtYtDlp;
     // End of variables declaration//GEN-END:variables
