@@ -290,9 +290,9 @@ public class Downloads extends javax.swing.JPanel {
         add(jScrollPane1);
         jScrollPane1.setBounds(40, 510, 450, 140);
 
-        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/big_logo2.png"))); // NOI18N
+        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo_2_2.png"))); // NOI18N
         add(logoLabel);
-        logoLabel.setBounds(1120, 670, 150, 40);
+        logoLabel.setBounds(1120, 630, 81, 80);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPasteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPasteActionPerformed

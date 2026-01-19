@@ -20,7 +20,7 @@ public class StyleConfig {
     public static final Font FONT_PLAIN = new Font("Arial", Font.PLAIN, 14);
 
     //Colors
-    public static final Color PANEL_LOGIN_COLOR = new Color(61, 61, 64);
+    //public static final Color PANEL_LOGIN_COLOR = new Color(61, 61, 64);
     public static final Color PANEL_COLOR = new Color(177, 178, 189);
     public static final Color SELECTION_COLOR = new Color(181, 182, 189);
     
@@ -137,13 +137,13 @@ public class StyleConfig {
     //Color seleccion en tabla
     public static void selectionColorTable(JTable table){
         
-        table.setSelectionBackground(SELECTION_COLOR); 
+        table.setSelectionBackground(PANEL_COLOR); 
 
     }
     
     //Color seleccion en lista
     public static void selectionColorList(JList<?> list){
-        list.setSelectionBackground(SELECTION_COLOR); 
+        list.setSelectionBackground(PANEL_COLOR); 
     }
     
     //Color seleccion en comboBox
