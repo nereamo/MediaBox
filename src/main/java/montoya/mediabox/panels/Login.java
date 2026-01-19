@@ -56,7 +56,7 @@ public class Login extends JPanel{
     //Establece posicion para los componentes
     private void configComponents(){
         
-        ImageIcon icon = new ImageIcon(getClass().getResource("/images/big_logo2.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/images/logo.png"));
         JLabel lblIcon = new JLabel(icon);
         this.add(lblIcon, "cell 0 0 3 1, align center"); 
         
