@@ -67,10 +67,10 @@ public class Preferences extends javax.swing.JPanel {
     
     //Configuracion de JLabel
     private void styleLabel(){
-        StyleConfig.sytleLabel(lblPath, "Temp Path: ", Color.BLACK);
-        StyleConfig.sytleLabel(lblM3u, "File .m3u: ", Color.BLACK);
-        StyleConfig.sytleLabel(lblSpeed, "Speed (MB/s): ", Color.BLACK);
-        StyleConfig.sytleLabel(lblYtDlp, "Location yt-dlp: ", Color.BLACK);
+        StyleConfig.styleLabel(lblPath, "Temp Path: ", Color.BLACK);
+        StyleConfig.styleLabel(lblM3u, "File .m3u: ", Color.BLACK);
+        StyleConfig.styleLabel(lblSpeed, "Speed (MB/s): ", Color.BLACK);
+        StyleConfig.styleLabel(lblYtDlp, "Location yt-dlp: ", Color.BLACK);
     }
     
     //Configuracion de botones y checkBox
@@ -79,7 +79,7 @@ public class Preferences extends javax.swing.JPanel {
         StyleConfig.styleButton(btnYtDlp, "/images/folder.png", "Automatic search");
         StyleConfig.styleButton(btnSave, "/images/save.png", "Save changes");
         StyleConfig.styleButton(btnCancel, "/images/cancel.png", "Discard changes");
-        StyleConfig.styleCheckBox(chkCreate,"Create",Color.BLACK, "Create files .M3U");
+        StyleConfig.styleCheckBox(chkCreate,"Create", "Create files .M3U");
     }
     
     //configuracion del Slider para la velocidad de descarga

@@ -51,7 +51,6 @@ public class Downloads extends javax.swing.JPanel {
         this.folderPaths = folderPaths;
         this.fileProperties = new FileProperties();
         this.mediaPollingComponent = mediaPollingComponent;
-
        
         foldersList = new JList<>(new DefaultListModel<>()); 
         btnGroup = new ButtonGroup();
@@ -65,8 +64,10 @@ public class Downloads extends javax.swing.JPanel {
         configRadioButtons(btnGroup, radioMp4, radioMkv, radioWebm, radioMp3, radioWav, radioM4a);
         
         infoMedia.setBounds(640, 40, 630, 540);
-        setBackground(StyleConfig.PANEL_COLOR);
+        setBackground(StyleConfig.PANEL_COLOR_AZULOSCURO);
         this.add(infoMedia);
+        
+        
         
     }
     

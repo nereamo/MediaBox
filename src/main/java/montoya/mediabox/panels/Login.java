@@ -39,7 +39,7 @@ public class Login extends JPanel{
         
         this.setBounds(0, 0, 1300, 770);
         this.setLayout(new MigLayout("center", "[][grow][]", "100[]10[]20[]"));
-        this.setBackground(StyleConfig.PANEL_LOGIN_COLOR);
+        this.setBackground(StyleConfig.PANEL_COLOR_AZULOSCURO);
         
         configComponents(); //Configuracion de componentes
         configKeyActions();
@@ -63,20 +63,21 @@ public class Login extends JPanel{
         JPanel emailRow = StyleConfig.createLoginField("/images/email.png", txtEmail);
         this.add(emailRow, "cell 0 2 3 1, growx, align center, wmin 200, w 300, wmax 300");
         
-        JPanel passwordRow = StyleConfig.createLoginField("/images/password.png", txtPassword);
+        JPanel passwordRow = StyleConfig.createLoginField("/images/password2.png", txtPassword);
         this.add(passwordRow, "cell 0 3 3 1, growx, align center, wmin 200, w 300, wmax 300");
-        
-        StyleConfig.styleCheckBox(showPassword,"Show Password",Color.WHITE, "Show password");
-        JPanel showPasswordRow = StyleConfig.createLoginField("/images/show_password.png", showPassword);
+
+        JPanel showPasswordRow = StyleConfig.createLoginField("", showPassword);
         this.add(showPasswordRow, "cell 0 4 3 1, growx, align center, wmin 200, w 300, wmax 300");
+        StyleConfig.styleCheckBox(showPassword,"Show Password", "Show password");
+        
+        JPanel rememberRow = StyleConfig.createLoginField("", remember);
+        this.add(rememberRow, "cell 0 5 3 1, growx, align center, wmin 200, w 300, wmax 300");
+        StyleConfig.styleCheckBox(remember,"Remember me", "Remember credentials");
         
         this.add(pnlButtons, "cell 0 6 3 1, align center");
         
         pnlButtons.setLayout(new MigLayout("center", "[grow]", "[]"));
-        pnlButtons.setBackground(StyleConfig.PANEL_LOGIN_COLOR);
-        
-        pnlButtons.add(remember, "wrap, align center");
-        StyleConfig.styleCheckBox(remember,"Remember me",Color.WHITE, "Remember credentials");
+        pnlButtons.setBackground(StyleConfig.PANEL_COLOR_AZULOSCURO);
 
         pnlButtons.add(btnClean, "split 2, align center");
         pnlButtons.add(btnLogin);
@@ -120,8 +121,8 @@ public class Login extends JPanel{
     
     //CheckBox que permite ver la contraseña introducida
     private void showPassword() {
-        showPassword.setBackground(StyleConfig.PANEL_LOGIN_COLOR);
-        showPassword.setForeground(Color.WHITE);
+        showPassword.setBackground(StyleConfig.PANEL_COLOR_AZULOSCURO);
+        showPassword.setForeground(StyleConfig.SELECTION_COLOR);
         showPassword.setToolTipText("Show password");
         
         showPassword.addActionListener(new ActionListener() {
@@ -161,12 +162,10 @@ public class Login extends JPanel{
                         TokenController.saveToken(token);
                         frame.initializePolling(token);
                         JOptionPane.showMessageDialog(Login.this,"Login successful: " + email,"Success",JOptionPane.INFORMATION_MESSAGE);
-                        
                         cardManager.showCard("downloads");
 
                         if (remember.isSelected()) {
                             TokenController.saveToken(token);
-                            System.out.println("Archivo Token.json creado en " + FOLDER_NAME);
                         }
                     }
                 } catch (Exception ex) {

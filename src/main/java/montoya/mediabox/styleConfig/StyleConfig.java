@@ -1,21 +1,10 @@
 
 package montoya.mediabox.styleConfig;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
+import java.awt.*;
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import net.miginfocom.swing.MigLayout;
@@ -32,28 +21,37 @@ public class StyleConfig {
 
     //Colors
     public static final Color PANEL_LOGIN_COLOR = new Color(61, 61, 64);
-    public static final Color ORANGE_COLOR = new Color(255, 153, 51);
     public static final Color PANEL_COLOR = new Color(177, 178, 189);
+    public static final Color SELECTION_COLOR = new Color(181, 182, 189);
+    
+    public static final Color PANEL_COLOR_AZULCLARO = new Color(77, 82, 150);
+    public static final Color PANEL_COLOR_AZULCLARO2 = new Color(84, 93, 171);
+    public static final Color PANEL_COLOR_AZULOSCURO = new Color(46, 51, 94);
     
     //Border
-    public static Border createTitleBorder(String title){
-        Border border = BorderFactory.createLineBorder(Color.WHITE);
+    public static void createTitleBorder(JPanel panel, String title){
+        Border border = BorderFactory.createLineBorder(SELECTION_COLOR);
         TitledBorder titBorder = BorderFactory.createTitledBorder(border, title);
-        titBorder.setTitleColor(Color.WHITE);
+        
+        titBorder.setTitleColor(SELECTION_COLOR);
         titBorder.setTitleFont(FONT_BOLD);
-        return titBorder;
+        
+        panel.setOpaque(false);
+        panel.setBorder(titBorder);
+        panel.setBackground(PANEL_COLOR_AZULCLARO2);
     }
     
-    public static void sytleLabel(JLabel label, String text, Color colorText){
+    //Labels
+    public static void styleLabel(JLabel label, String text, Color colorText){
         label.setText(text);
         label.setForeground(colorText);
         label.setFont(FONT_PLAIN);
     }
     
     //CheckBox
-    public static void styleCheckBox(JCheckBox check, String text, Color colorText, String toolTip){
+    public static void styleCheckBox(JCheckBox check, String text, String toolTip){
         check.setOpaque(false);
-        check.setForeground(colorText);
+        check.setForeground(SELECTION_COLOR);
         check.setFont(FONT_PLAIN);
         check.setFocusPainted(false);
         check.setText(text);
@@ -112,7 +110,7 @@ public class StyleConfig {
     //Panel login
     public static JPanel createLoginField(String iconPath, JComponent field) {
         JPanel panel = new JPanel(new MigLayout("insets 0", "[]10[grow]", "[]"));
-        panel.setBackground(StyleConfig.PANEL_LOGIN_COLOR);
+        panel.setBackground(StyleConfig.PANEL_COLOR_AZULOSCURO);
         
         JLabel lblIcon = new JLabel(new ImageIcon(StyleConfig.class.getResource(iconPath)));
         panel.add(lblIcon);
@@ -127,5 +125,47 @@ public class StyleConfig {
         panel.setOpaque(false);
         panel.add(field, "growx");
         return panel;
+    }
+    
+    //Cambio de cursor en componente
+    public static void handCursor(JComponent... components) {
+        for (JComponent component : components) {
+            component.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+    }
+    
+    //Color seleccion en tabla
+    public static void selectionColorTable(JTable table){
+        
+        table.setSelectionBackground(SELECTION_COLOR); 
+
+    }
+    
+    //Color seleccion en lista
+    public static void selectionColorList(JList<?> list){
+        list.setSelectionBackground(SELECTION_COLOR); 
+    }
+    
+    //Color seleccion en comboBox
+    public static void renderComboBox(JComboBox combo) {
+        combo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(
+                    JList<?> list, Object value, int index,
+                    boolean isSelected, boolean cellHasFocus) {
+
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+               if (isSelected) {
+                    setBackground(Color.WHITE);
+                }
+                return this;
+            }
+        });
+        
+        combo.setEditable(true);
+        Component editor = combo.getEditor().getEditorComponent();
+        editor.setBackground(StyleConfig.SELECTION_COLOR);
+
     }
 }

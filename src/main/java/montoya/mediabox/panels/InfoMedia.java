@@ -39,8 +39,6 @@ public class InfoMedia extends javax.swing.JPanel {
 
     public InfoMedia(FileProperties fileProperties, TypeFilter typeFilter, List<FileInformation> allFiles, Set<String> folderPaths, MediaPollingComponent mediaPollingComponent) {
         initComponents();
-        
-        setBackground(StyleConfig.PANEL_COLOR);
 
         this.typeFilter = typeFilter;
         this.fileProperties = fileProperties;
@@ -54,13 +52,13 @@ public class InfoMedia extends javax.swing.JPanel {
         tblModel = new FileTableModel(allFiles);
         tblMedia.setModel(tblModel);
 
-        //Aplica el filtro según tipo de archivo
-        filterOptions(cbbxTypeFilter);
+        filterOptions(cbbxTypeFilter); //Aplica el filtro según tipo de archivo
+        
+        styleComponents(); //Estilo de loc componentes
 
-        initDirectoryList();
-
-        //Muestra las descargas pertenecientes a un directorio
-        configDownloadList(folderList, cbbxTypeFilter);
+        initDirectoryList(); //Inicia la lista de directorios
+        
+        configDownloadList(folderList, cbbxTypeFilter); //Muestra las descargas pertenecientes a un directorio
 
         //Mostrar archivos al iniciar la app
         SwingUtilities.invokeLater(new Runnable() {
@@ -88,6 +86,23 @@ public class InfoMedia extends javax.swing.JPanel {
     public JComboBox<String> getTypeFilter() {
         return cbbxTypeFilter;
     }
+    
+    //Aplica estilos a los componentes
+    private void styleComponents(){
+        setBackground(StyleConfig.PANEL_COLOR_AZULCLARO);
+        StyleConfig.handCursor(tblMedia, folderList, cbbxTypeFilter);
+        StyleConfig.styleButton(btnPlay, "/images/play.png", "Play file");
+        StyleConfig.styleButton(btnDelete, "/images/delete.png", "Delete this file");
+        StyleConfig.styleButton(btnDownload, "/images/download.png", "Download this API file to your computer");
+        StyleConfig.styleButton(btnUpload, "/images/upload.png", "Upload a local file to the API");
+        StyleConfig.createTitleBorder(pnlDownload, "Download API File");
+        StyleConfig.createTitleBorder(pnlUpload, "Upload file to API");
+        StyleConfig.createTitleBorder(this, "DOWNLOADS");
+        StyleConfig.selectionColorList(folderList);
+        StyleConfig.selectionColorTable(tblMedia);
+        StyleConfig.renderComboBox(cbbxTypeFilter);
+        cbbxTypeFilter.setEditable(true);
+    }
 
     //Añade los filtros a JComboBox
     private void filterOptions(JComboBox cbbxFilter) {
@@ -102,7 +117,8 @@ public class InfoMedia extends javax.swing.JPanel {
         cbbxFilter.setSelectedIndex(0); //Seleccion por defecto "ALL"
     }
     
-    public void initDirectoryList() {
+    //Inicia los directorios
+    private void initDirectoryList() {
 
         DefaultListModel<FolderItem> listModel = new DefaultListModel();
         listModel.addElement(new FolderItem("API FILES", true, false)); //directorio Api files (muestra archivos de api)
@@ -167,9 +183,9 @@ public class InfoMedia extends javax.swing.JPanel {
         btnPlay = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         cbbxTypeFilter = new javax.swing.JComboBox<>();
-        jPanel1 = new javax.swing.JPanel();
+        pnlDownload = new javax.swing.JPanel();
         btnDownload = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
+        pnlUpload = new javax.swing.JPanel();
         btnUpload = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Downloads", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14))); // NOI18N
@@ -215,24 +231,28 @@ public class InfoMedia extends javax.swing.JPanel {
         scrTableMedia.setBounds(120, 80, 490, 240);
 
         btnPlay.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnPlay.setText("Play");
+        btnPlay.setMaximumSize(new java.awt.Dimension(72, 50));
+        btnPlay.setMinimumSize(new java.awt.Dimension(72, 50));
+        btnPlay.setPreferredSize(new java.awt.Dimension(72, 50));
         btnPlay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPlayActionPerformed(evt);
             }
         });
         add(btnPlay);
-        btnPlay.setBounds(420, 330, 90, 24);
+        btnPlay.setBounds(430, 340, 90, 50);
 
         btnDelete.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnDelete.setText("Delete");
+        btnDelete.setMaximumSize(new java.awt.Dimension(72, 50));
+        btnDelete.setMinimumSize(new java.awt.Dimension(72, 50));
+        btnDelete.setPreferredSize(new java.awt.Dimension(72, 50));
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteActionPerformed(evt);
             }
         });
         add(btnDelete);
-        btnDelete.setBounds(520, 330, 90, 24);
+        btnDelete.setBounds(520, 340, 90, 50);
 
         cbbxTypeFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         cbbxTypeFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Filter" }));
@@ -244,42 +264,43 @@ public class InfoMedia extends javax.swing.JPanel {
         add(cbbxTypeFilter);
         cbbxTypeFilter.setBounds(240, 40, 250, 23);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Download API File", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14))); // NOI18N
-        jPanel1.setPreferredSize(new java.awt.Dimension(590, 70));
-        jPanel1.setLayout(null);
+        pnlDownload.setPreferredSize(new java.awt.Dimension(590, 70));
+        pnlDownload.setLayout(null);
 
         btnDownload.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnDownload.setText("Download");
-        btnDownload.setMinimumSize(new java.awt.Dimension(72, 24));
-        btnDownload.setPreferredSize(new java.awt.Dimension(72, 24));
+        btnDownload.setMaximumSize(new java.awt.Dimension(72, 50));
+        btnDownload.setMinimumSize(new java.awt.Dimension(72, 50));
+        btnDownload.setPreferredSize(new java.awt.Dimension(72, 50));
         btnDownload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDownloadActionPerformed(evt);
             }
         });
-        jPanel1.add(btnDownload);
-        btnDownload.setBounds(20, 30, 120, 24);
+        pnlDownload.add(btnDownload);
+        btnDownload.setBounds(20, 30, 120, 40);
 
-        add(jPanel1);
-        jPanel1.setBounds(280, 450, 160, 70);
+        add(pnlDownload);
+        pnlDownload.setBounds(280, 440, 160, 80);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Upload file to API", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14))); // NOI18N
-        jPanel2.setMinimumSize(new java.awt.Dimension(590, 70));
-        jPanel2.setPreferredSize(new java.awt.Dimension(590, 70));
-        jPanel2.setLayout(null);
+        pnlUpload.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Upload file to API", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14))); // NOI18N
+        pnlUpload.setMinimumSize(new java.awt.Dimension(590, 70));
+        pnlUpload.setPreferredSize(new java.awt.Dimension(590, 70));
+        pnlUpload.setLayout(null);
 
         btnUpload.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnUpload.setText("Upload");
+        btnUpload.setMaximumSize(new java.awt.Dimension(72, 50));
+        btnUpload.setMinimumSize(new java.awt.Dimension(72, 50));
+        btnUpload.setPreferredSize(new java.awt.Dimension(72, 50));
         btnUpload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUploadActionPerformed(evt);
             }
         });
-        jPanel2.add(btnUpload);
-        btnUpload.setBounds(20, 30, 120, 24);
+        pnlUpload.add(btnUpload);
+        btnUpload.setBounds(20, 30, 120, 40);
 
-        add(jPanel2);
-        jPanel2.setBounds(450, 450, 160, 70);
+        add(pnlUpload);
+        pnlUpload.setBounds(450, 440, 160, 80);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayActionPerformed
@@ -505,8 +526,8 @@ public class InfoMedia extends javax.swing.JPanel {
     private javax.swing.JButton btnUpload;
     private javax.swing.JComboBox<String> cbbxTypeFilter;
     private javax.swing.JList<FolderItem> folderList;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel pnlDownload;
+    private javax.swing.JPanel pnlUpload;
     private javax.swing.JScrollPane scrFolderList;
     private javax.swing.JScrollPane scrTableMedia;
     private javax.swing.JTable tblMedia;
