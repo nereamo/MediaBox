@@ -1,6 +1,5 @@
 package montoya.mediabox.panels;
 
-import java.awt.Color;
 import java.io.*;
 import javax.swing.*;
 import montoya.mediabox.MainFrame;
@@ -40,7 +39,7 @@ public class Preferences extends javax.swing.JPanel {
     private void configPanel(){
         this.setLayout(new MigLayout("center, insets 20", "[grow][right][shrink 100, grow 0][pref][grow]", "[][][][][]push[]"));
         this.setBounds(0, 0, 1300, 770);
-        this.setBackground(StyleConfig.PANEL_COLOR);
+        this.setBackground(StyleConfig.PANEL_COLOR_AZULOSCURO);
     }
     
     //Configuracion de la posicion de los componentes
@@ -57,7 +56,7 @@ public class Preferences extends javax.swing.JPanel {
         
         add(lblYtDlp, "cell 0 3, alignx right, gaptop 20"); 
         add(StyleConfig.createFieldWrapper(txtYtDlp), "cell 1 3,alignx left, growx, wmin 200, w 300, wmax 300, gaptop 20"); 
-        add(btnYtDlp, "cell 2 3");
+        add(btnYtDlp, "cell 2 3, gaptop 20");
         
         add(btnSave, "cell 1 4, split 2, alignx center, gaptop 30"); 
         add(btnCancel, "gaptop 30");
@@ -67,10 +66,10 @@ public class Preferences extends javax.swing.JPanel {
     
     //Configuracion de JLabel
     private void styleLabel(){
-        StyleConfig.styleLabel(lblPath, "Temp Path: ", Color.BLACK);
-        StyleConfig.styleLabel(lblM3u, "File .m3u: ", Color.BLACK);
-        StyleConfig.styleLabel(lblSpeed, "Speed (MB/s): ", Color.BLACK);
-        StyleConfig.styleLabel(lblYtDlp, "Location yt-dlp: ", Color.BLACK);
+        StyleConfig.styleLabel(lblPath, "Temp Path: ");
+        StyleConfig.styleLabel(lblM3u, "File .m3u: ");
+        StyleConfig.styleLabel(lblSpeed, "Speed (MB/s): ");
+        StyleConfig.styleLabel(lblYtDlp, "Location yt-dlp: ");
     }
     
     //Configuracion de botones y checkBox
@@ -91,6 +90,7 @@ public class Preferences extends javax.swing.JPanel {
         sldSpeed.setSnapToTicks(true);
         sldSpeed.setOpaque(false);
         sldSpeed.setFont(StyleConfig.FONT_PLAIN);
+        sldSpeed.setForeground(StyleConfig.SELECTION_COLOR);
     }
 
     @SuppressWarnings("unchecked")
@@ -187,9 +187,9 @@ public class Preferences extends javax.swing.JPanel {
         add(lblPath);
         lblPath.setBounds(80, 90, 80, 20);
 
-        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/big_logo2.png"))); // NOI18N
+        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo_2_2.png"))); // NOI18N
         add(logoLabel);
-        logoLabel.setBounds(1120, 670, 150, 40);
+        logoLabel.setBounds(1110, 640, 80, 70);
     }// </editor-fold>//GEN-END:initComponents
 
     //Directorio para archivos temporales

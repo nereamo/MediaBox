@@ -25,7 +25,7 @@ public class StyleConfig {
     public static final Color SELECTION_COLOR = new Color(181, 182, 189);
     
     public static final Color PANEL_COLOR_AZULCLARO = new Color(77, 82, 150);
-    public static final Color PANEL_COLOR_AZULCLARO2 = new Color(84, 93, 171);
+    //public static final Color PANEL_COLOR_AZULCLARO2 = new Color(84, 93, 171);
     public static final Color PANEL_COLOR_AZULOSCURO = new Color(46, 51, 94);
     
     //Border
@@ -38,13 +38,13 @@ public class StyleConfig {
         
         panel.setOpaque(false);
         panel.setBorder(titBorder);
-        panel.setBackground(PANEL_COLOR_AZULCLARO2);
+        panel.setBackground(PANEL_COLOR_AZULCLARO);
     }
     
     //Labels
-    public static void styleLabel(JLabel label, String text, Color colorText){
+    public static void styleLabel(JLabel label, String text){
         label.setText(text);
-        label.setForeground(colorText);
+        label.setForeground(SELECTION_COLOR);
         label.setFont(FONT_PLAIN);
     }
     

@@ -1,6 +1,5 @@
 package montoya.mediabox.panels;
 
-import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import montoya.mediabox.MainFrame;
@@ -63,7 +62,7 @@ public class Login extends JPanel{
         JPanel emailRow = StyleConfig.createLoginField("/images/email.png", txtEmail);
         this.add(emailRow, "cell 0 2 3 1, growx, align center, wmin 200, w 300, wmax 300");
         
-        JPanel passwordRow = StyleConfig.createLoginField("/images/password2.png", txtPassword);
+        JPanel passwordRow = StyleConfig.createLoginField("/images/password.png", txtPassword);
         this.add(passwordRow, "cell 0 3 3 1, growx, align center, wmin 200, w 300, wmax 300");
 
         JPanel showPasswordRow = StyleConfig.createLoginField("", showPassword);

@@ -89,10 +89,11 @@ public class MainFrame extends JFrame {
     
     //Visibilidad del JMenu
     public void setMenuVisible(boolean visible) {
-    menuBar.setVisible(visible);
-    this.revalidate();
-    this.repaint();
-}
+        menuBar.setBackground(StyleConfig.PANEL_COLOR_AZULCLARO);
+        menuBar.setVisible(visible);
+        this.revalidate();
+        this.repaint();
+    }
 
     //Método que inicializa el componente
     public void initializePolling(String token) {

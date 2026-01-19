@@ -19,7 +19,8 @@ public class DialogAbout extends JDialog {
         initComponents();
         setSize(400,350);
         setLocationRelativeTo(this);
-        pnlAbout.setBackground(StyleConfig.PANEL_COLOR);
+        pnlAbout.setBackground(StyleConfig.PANEL_COLOR_AZULOSCURO);
+        lblAbout.setForeground(StyleConfig.SELECTION_COLOR);
         setTitle("About");
         
         //Texto mostrado en About
