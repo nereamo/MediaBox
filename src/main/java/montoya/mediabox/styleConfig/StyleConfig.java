@@ -16,42 +16,39 @@ import net.miginfocom.swing.MigLayout;
 public class StyleConfig {
     
     //Fonts
-    public static final Font FONT_BOLD = new Font("Arial", Font.BOLD, 14);
-    public static final Font FONT_PLAIN = new Font("Arial", Font.PLAIN, 14);
+    public static final Font FONT_BOLD = new Font("Arial", Font.BOLD, 16);
+    public static final Font FONT_PLAIN = new Font("Arial", Font.PLAIN, 16);
 
     //Colors
-    //public static final Color PANEL_LOGIN_COLOR = new Color(61, 61, 64);
-    public static final Color PANEL_COLOR = new Color(177, 178, 189);
-    public static final Color SELECTION_COLOR = new Color(181, 182, 189);
-    
-    public static final Color PANEL_COLOR_AZULCLARO = new Color(77, 82, 150);
-    //public static final Color PANEL_COLOR_AZULCLARO2 = new Color(84, 93, 171);
-    public static final Color PANEL_COLOR_AZULOSCURO = new Color(46, 51, 94);
+    public static final Color GREY_COLOR = new Color(181, 182, 189);
+    public static final Color WHITE_COLOR = new Color (255,255,255);
+    public static final Color LIGHT_BLUE_COLOR = new Color (135,139,222);
+    public static final Color DARK_BLUE_COLOR = new Color(46, 51, 94);
     
     //Border
     public static void createTitleBorder(JPanel panel, String title){
-        Border border = BorderFactory.createLineBorder(SELECTION_COLOR);
+        Border border = BorderFactory.createLineBorder(LIGHT_BLUE_COLOR);
         TitledBorder titBorder = BorderFactory.createTitledBorder(border, title);
         
-        titBorder.setTitleColor(SELECTION_COLOR);
+        titBorder.setTitleColor(LIGHT_BLUE_COLOR);
         titBorder.setTitleFont(FONT_BOLD);
         
         panel.setOpaque(false);
         panel.setBorder(titBorder);
-        panel.setBackground(PANEL_COLOR_AZULCLARO);
+        //panel.setBackground(PANEL_COLOR_AZULCLARO);
     }
     
     //Labels
     public static void styleLabel(JLabel label, String text){
         label.setText(text);
-        label.setForeground(SELECTION_COLOR);
+        label.setForeground(GREY_COLOR);
         label.setFont(FONT_PLAIN);
     }
     
     //CheckBox
     public static void styleCheckBox(JCheckBox check, String text, String toolTip){
         check.setOpaque(false);
-        check.setForeground(SELECTION_COLOR);
+        check.setForeground(GREY_COLOR);
         check.setFont(FONT_PLAIN);
         check.setFocusPainted(false);
         check.setText(text);
@@ -61,7 +58,7 @@ public class StyleConfig {
     //Textfiles Login
     public static void styleTextFieldAndPasswordLogin(JTextField txtField, String toolTip){
         txtField.setFont(FONT_PLAIN);
-        txtField.setPreferredSize(new Dimension(300, 40));
+        txtField.setPreferredSize(new Dimension(300, 25));
         txtField.setToolTipText(toolTip);
     }
     
@@ -103,7 +100,7 @@ public class StyleConfig {
     
     //Muestra mensajes en jlabels de la app
     public static void showMessage(JLabel lbl, String text) { 
-        lbl.setForeground(StyleConfig.SELECTION_COLOR); 
+        lbl.setForeground(StyleConfig.DARK_BLUE_COLOR); 
         lbl.setFont(StyleConfig.FONT_BOLD);
         lbl.setText(text); 
     }
@@ -117,7 +114,7 @@ public class StyleConfig {
     //Panel login
     public static JPanel createLoginField(String iconPath, JComponent field) {
         JPanel panel = new JPanel(new MigLayout("insets 0", "[]10[grow]", "[]"));
-        panel.setBackground(StyleConfig.PANEL_COLOR_AZULOSCURO);
+        panel.setBackground(StyleConfig.DARK_BLUE_COLOR);
         
         JLabel lblIcon = new JLabel(new ImageIcon(StyleConfig.class.getResource(iconPath)));
         panel.add(lblIcon);
@@ -144,13 +141,15 @@ public class StyleConfig {
     //Color seleccion en tabla
     public static void selectionColorTable(JTable table){
         
-        table.setSelectionBackground(PANEL_COLOR); 
+        table.setSelectionBackground(LIGHT_BLUE_COLOR); 
+        table.setSelectionForeground(WHITE_COLOR);
 
     }
     
     //Color seleccion en lista
     public static void selectionColorList(JList<?> list){
-        list.setSelectionBackground(PANEL_COLOR); 
+        list.setSelectionBackground(LIGHT_BLUE_COLOR); 
+        list.setSelectionForeground(WHITE_COLOR);
     }
     
     //Color seleccion en comboBox
@@ -164,7 +163,8 @@ public class StyleConfig {
                 super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
                if (isSelected) {
-                    setBackground(Color.WHITE);
+                    setBackground(LIGHT_BLUE_COLOR);
+                    setForeground(WHITE_COLOR);
                 }
                 return this;
             }
@@ -172,6 +172,6 @@ public class StyleConfig {
         
         combo.setEditable(true);
         Component editor = combo.getEditor().getEditorComponent();
-        editor.setBackground(StyleConfig.SELECTION_COLOR);
+        editor.setBackground(WHITE_COLOR);
     }
 }

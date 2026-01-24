@@ -89,7 +89,7 @@ public class InfoMedia extends javax.swing.JPanel {
     
     //Aplica estilos a los componentes
     private void styleComponents(){
-        setBackground(StyleConfig.PANEL_COLOR_AZULCLARO);
+        //setBackground(StyleConfig.PANEL_COLOR_AZULCLARO);
         StyleConfig.handCursor(tblMedia, folderList, cbbxTypeFilter);
         StyleConfig.styleButton(btnPlay, "/images/play.png", "Play file");
         StyleConfig.styleButton(btnDelete, "/images/delete.png", "Delete this file");

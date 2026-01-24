@@ -64,7 +64,7 @@ public class Downloads extends javax.swing.JPanel {
         configRadioButtons(btnGroup, radioMp4, radioMkv, radioWebm, radioMp3, radioWav, radioM4a);
         
         infoMedia.setBounds(640, 40, 630, 540);
-        setBackground(StyleConfig.PANEL_COLOR_AZULOSCURO);
+        setBackground(StyleConfig.DARK_BLUE_COLOR);
         this.add(infoMedia);
         
         

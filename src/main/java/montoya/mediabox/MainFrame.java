@@ -76,7 +76,7 @@ public class MainFrame extends JFrame {
     //Iconos de los botones
     private void configIconMenu(){
         StyleConfig.styleMenuItems(mnuEdit, "/images/edit.png",null, "Settings");
-        StyleConfig.styleMenuItems(mnuFile, "/images/logout_exit.png",null, "Logout or Exit");
+        StyleConfig.styleMenuItems(mnuFile, "/images/logout_exit_2.png",null, "Logout or Exit");
         StyleConfig.styleMenuItems(mnuHelp, "/images/help.png",null, "Information MediaBox");
     }
     
@@ -90,10 +90,10 @@ public class MainFrame extends JFrame {
     
     //Visibilidad del JMenu
     public void setMenuVisible(boolean visible) {
-        menuBar.setBackground(StyleConfig.PANEL_COLOR_AZULCLARO);
+        menuBar.setBackground(StyleConfig.LIGHT_BLUE_COLOR);
         menuBar.setVisible(visible);
         menuBar.add(Box.createHorizontalGlue());
-        lblMessage.setForeground(StyleConfig.SELECTION_COLOR);
+        lblMessage.setForeground(StyleConfig.DARK_BLUE_COLOR);
         lblMessage.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15)); 
         menuBar.add(lblMessage);
         

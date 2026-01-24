@@ -37,9 +37,9 @@ public class Preferences extends javax.swing.JPanel {
     
     //Configuración del panel
     private void configPanel(){
-        this.setLayout(new MigLayout("center, insets 20", "[grow][right][shrink 100, grow 0][pref][grow]", "[][][][][]push[]"));
+        this.setLayout(new MigLayout("center, insets 20, gapy 20", "[grow][right][shrink 100, grow 0][pref][grow]", "push[][][][][]push[]"));
         this.setBounds(0, 0, 1300, 770);
-        this.setBackground(StyleConfig.PANEL_COLOR_AZULOSCURO);
+        this.setBackground(StyleConfig.DARK_BLUE_COLOR);
     }
     
     //Configuracion de la posicion de los componentes
@@ -54,8 +54,8 @@ public class Preferences extends javax.swing.JPanel {
         add(lblSpeed, "cell 0 2, alignx right, aligny center, gaptop 15");
         add(sldSpeed, "cell 1 2, growx, wmin 200, w 300, wmax 300, gaptop 15");
         
-        add(lblYtDlp, "cell 0 3, alignx right, gaptop 20"); 
-        add(StyleConfig.createFieldWrapper(txtYtDlp), "cell 1 3,alignx left, growx, wmin 200, w 300, wmax 300, gaptop 20"); 
+        add(lblYtDlp, "cell 0 3, alignx right, gaptop 15"); 
+        add(StyleConfig.createFieldWrapper(txtYtDlp), "cell 1 3,alignx left, growx, wmin 200, w 300, wmax 300, gaptop 15"); 
         add(btnYtDlp, "cell 2 3, gaptop 20");
         
         add(btnSave, "cell 1 4, split 2, alignx center, gaptop 30"); 
@@ -77,7 +77,7 @@ public class Preferences extends javax.swing.JPanel {
         StyleConfig.styleButton(btnBrowseTemp, "/images/folder.png", "Select Folder");
         StyleConfig.styleButton(btnYtDlp, "/images/folder.png", "Automatic search");
         StyleConfig.styleButton(btnSave, "/images/save.png", "Save changes");
-        StyleConfig.styleButton(btnCancel, "/images/cancel.png", "Discard changes");
+        StyleConfig.styleButton(btnCancel, "/images/return.png", "Discard changes");
         StyleConfig.styleCheckBox(chkCreate,"Create", "Create files .M3U");
     }
     
@@ -90,7 +90,7 @@ public class Preferences extends javax.swing.JPanel {
         sldSpeed.setSnapToTicks(true);
         sldSpeed.setOpaque(false);
         sldSpeed.setFont(StyleConfig.FONT_PLAIN);
-        sldSpeed.setForeground(StyleConfig.SELECTION_COLOR);
+        sldSpeed.setForeground(StyleConfig.GREY_COLOR);
     }
 
     @SuppressWarnings("unchecked")

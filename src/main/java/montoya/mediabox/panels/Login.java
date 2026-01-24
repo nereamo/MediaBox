@@ -40,7 +40,7 @@ public class Login extends JPanel{
         
         this.setBounds(0, 0, 1300, 770);
         this.setLayout(new MigLayout("center", "[][grow][]", "100[]10[]20[]"));
-        this.setBackground(StyleConfig.PANEL_COLOR_AZULOSCURO);
+        this.setBackground(StyleConfig.DARK_BLUE_COLOR);
         
         configComponents(); //Configuracion de componentes
         configKeyActions();
@@ -65,9 +65,11 @@ public class Login extends JPanel{
         this.add(lblIcon, "cell 0 0 3 1, align center"); 
         
         JPanel emailRow = StyleConfig.createLoginField("/images/email.png", txtEmail);
+        StyleConfig.styleTextFieldAndPasswordLogin(txtEmail, "Enter your email");
         this.add(emailRow, "cell 0 2 3 1, growx, align center, wmin 200, w 300, wmax 300");
         
         JPanel passwordRow = StyleConfig.createLoginField("/images/password.png", txtPassword);
+        StyleConfig.styleTextFieldAndPasswordLogin(txtPassword, "Enter your password");
         this.add(passwordRow, "cell 0 3 3 1, growx, align center, wmin 200, w 300, wmax 300");
 
         JPanel showPasswordRow = StyleConfig.createLoginField("", showPassword);
@@ -81,14 +83,14 @@ public class Login extends JPanel{
         this.add(pnlButtons, "cell 0 6 3 1, align center");
         
         pnlButtons.setLayout(new MigLayout("center", "[grow]", "[]"));
-        pnlButtons.setBackground(StyleConfig.PANEL_COLOR_AZULOSCURO);
+        pnlButtons.setBackground(StyleConfig.DARK_BLUE_COLOR);
 
         pnlButtons.add(btnClean, "split 2, align center");
         pnlButtons.add(btnLogin);
         
         StyleConfig.styleButton(btnLogin, "/images/login.png", "Login user");
         
-        lblMessage.setForeground(StyleConfig.SELECTION_COLOR); // o el color que prefieras 
+        lblMessage.setForeground(StyleConfig.GREY_COLOR); // o el color que prefieras 
         lblMessage.setHorizontalAlignment(SwingConstants.CENTER); 
         this.add(lblMessage, "cell 0 7 3 1, growx, align center, gaptop 10");
     }
@@ -130,8 +132,8 @@ public class Login extends JPanel{
     
     //CheckBox que permite ver la contraseña introducida
     private void showPassword() {
-        showPassword.setBackground(StyleConfig.PANEL_COLOR_AZULOSCURO);
-        showPassword.setForeground(StyleConfig.SELECTION_COLOR);
+        showPassword.setBackground(StyleConfig.DARK_BLUE_COLOR);
+        showPassword.setForeground(StyleConfig.GREY_COLOR);
         showPassword.setToolTipText("Show password");
         
         showPassword.addActionListener(new ActionListener() {
@@ -145,12 +147,6 @@ public class Login extends JPanel{
             }
         });
     }
-    
-//    //Muestra muestra mensajes en el panel login
-//    public void showMessage(String text) { 
-//        lblMessage.setForeground(StyleConfig.SELECTION_COLOR); 
-//        lblMessage.setText(text); 
-//    }
 
     //Loguea usuario al pulsar boton Login y guarda token
     private void loginUser() {
@@ -188,7 +184,7 @@ public class Login extends JPanel{
                         frame.initializePolling(token);
                         
                         frame.lblMessage.setText("Welcome: " + email);
-                        frame.lblMessage.setForeground(StyleConfig.SELECTION_COLOR); //Usuario loggeado en label menuBar
+                        frame.lblMessage.setForeground(StyleConfig.GREY_COLOR); //Usuario loggeado en label menuBar
                         cardManager.showCard("downloads");
 
                         if (remember.isSelected()) {
