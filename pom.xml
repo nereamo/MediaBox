@@ -24,14 +24,23 @@
             <version>11.0</version>
         </dependency>
         <dependency>
-            <groupId>tools.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-        <dependency>
             <groupId>unknown.binary</groupId>
             <artifactId>MediaPollingComponent-1.0-SNAPSHOT</artifactId>
             <version>SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-annotations</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>tools.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>tools.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
     <properties>

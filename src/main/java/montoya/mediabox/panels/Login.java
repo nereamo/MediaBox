@@ -26,6 +26,7 @@ public class Login extends JPanel{
     private JButton btnClean = new JButton();
     private JCheckBox showPassword = new JCheckBox();
     private JCheckBox remember = new JCheckBox();
+    private JLabel lblMessage = new JLabel();
     private static final String API_BASE_URL = "https://difreenet9.azurewebsites.net";
     private static String token;
     private static final String FOLDER_NAME = System.getProperty("user.home") + "/AppData/Local/MediaBox";
@@ -82,6 +83,10 @@ public class Login extends JPanel{
         pnlButtons.add(btnLogin);
         
         StyleConfig.styleButton(btnLogin, "/images/login.png", "Login user");
+        
+        lblMessage.setForeground(StyleConfig.SELECTION_COLOR); // o el color que prefieras 
+        lblMessage.setHorizontalAlignment(SwingConstants.CENTER); 
+        this.add(lblMessage, "cell 0 7 3 1, growx, align center, gaptop 10");
     }
 
     
@@ -97,6 +102,7 @@ public class Login extends JPanel{
                 txtPassword.setEchoChar('•');
                 showPassword.setSelected(false);
                 remember.setSelected(false);
+                lblMessage.setText("");
             }
         });
     }
@@ -135,6 +141,12 @@ public class Login extends JPanel{
             }
         });
     }
+    
+    //Muestra muestra mensajes en el panel login
+    public void showMessage(String text) { 
+        lblMessage.setForeground(StyleConfig.SELECTION_COLOR); 
+        lblMessage.setText(text); 
+    }
 
     //Loguea usuario al pulsar boton Login y guarda token
     private void loginUser() {
@@ -147,19 +159,29 @@ public class Login extends JPanel{
 
                 if (email == null || email.trim().equals("")
                         || password == null || password.trim().equals("")) {
-                    JOptionPane.showMessageDialog(Login.this,"Please, enter an Email and Password","Login error",JOptionPane.ERROR_MESSAGE);
+                    showMessage("Please, enter an Email and Password");
                     return;
                 }
 
                 try {
                     mediaPollingComponent.setApiUrl(API_BASE_URL);
-                    token = mediaPollingComponent.login(email, password);
+                    String newToken = mediaPollingComponent.login(email, password);
 
-                    if (token != null) {
+                    if (newToken != null) {
+
+                        try {
+                            mediaPollingComponent.getAllMedia(newToken);
+                        } catch (Exception ex) {
+                            showMessage("User logged out. Please log in again.");
+                            return;
+                        }
+                        token = newToken;
                         mediaPollingComponent.setToken(token);
-                        frame.setMenuVisible(true); 
                         TokenController.saveToken(token);
+                        
+                        frame.setMenuVisible(true); 
                         frame.initializePolling(token);
+                        
                         JOptionPane.showMessageDialog(Login.this,"Login successful: " + email,"Success",JOptionPane.INFORMATION_MESSAGE);
                         cardManager.showCard("downloads");
 
@@ -180,25 +202,25 @@ public class Login extends JPanel{
             TokenUser save = TokenController.readToken();
             
             if(save != null){
-                token = save.getToken();
+                String savedToken = save.getToken();
                 mediaPollingComponent.setApiUrl(API_BASE_URL);
-                mediaPollingComponent.setToken(token);
                 
                 try{
-                    mediaPollingComponent.getAllMedia(token);
-                    frame.initializePolling(token);
-                    System.out.println("Auto login exitoso.");
-                    frame.setMenuVisible(true);
-                    cardManager.showCard("downloads");
-                    return;
+                    mediaPollingComponent.getAllMedia(savedToken); //Llamada a api para comprobar si el token es correcto
+                    
                 }catch(Exception e){
-                    System.out.println("Token inválido o expirado. Mostrando login.");
+                    showMessage("User logged out. Please log in again.");
+                    token = null; 
+                    cardManager.showCard("login"); 
+                    return;
                 }
-//                frame.initializePolling(token);
-//                System.out.println("Login Exitoso.");
-//                frame.setMenuVisible(true);
-//                cardManager.showCard("downloads");
-//                return;
+                token = savedToken;
+                mediaPollingComponent.setToken(token);
+                frame.initializePolling(token);
+                frame.setMenuVisible(true);
+                cardManager.showCard("downloads");
+                System.out.println("Login successful.");
+                return;
             }
         } catch (Exception ex) {
             System.getLogger(Login.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
