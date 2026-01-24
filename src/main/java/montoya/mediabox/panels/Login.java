@@ -27,6 +27,7 @@ public class Login extends JPanel{
     private JCheckBox showPassword = new JCheckBox();
     private JCheckBox remember = new JCheckBox();
     private JLabel lblMessage = new JLabel();
+    private String loggedEmail;
     private static final String API_BASE_URL = "https://difreenet9.azurewebsites.net";
     private static String token;
     private static final String FOLDER_NAME = System.getProperty("user.home") + "/AppData/Local/MediaBox";
@@ -50,8 +51,11 @@ public class Login extends JPanel{
         showPassword();
         
         loginUser(); //Configuracion de login
-        
     } 
+    
+    public String getLoggedEmail(){ //Devuelve el email loggeado
+        return loggedEmail;
+    }
     
     //Establece posicion para los componentes
     private void configComponents(){
@@ -142,11 +146,11 @@ public class Login extends JPanel{
         });
     }
     
-    //Muestra muestra mensajes en el panel login
-    public void showMessage(String text) { 
-        lblMessage.setForeground(StyleConfig.SELECTION_COLOR); 
-        lblMessage.setText(text); 
-    }
+//    //Muestra muestra mensajes en el panel login
+//    public void showMessage(String text) { 
+//        lblMessage.setForeground(StyleConfig.SELECTION_COLOR); 
+//        lblMessage.setText(text); 
+//    }
 
     //Loguea usuario al pulsar boton Login y guarda token
     private void loginUser() {
@@ -155,11 +159,12 @@ public class Login extends JPanel{
             public void actionPerformed(ActionEvent e) {
 
                 String email = txtEmail.getText();
+                loggedEmail = email;
                 String password = String.valueOf(txtPassword.getPassword());
 
                 if (email == null || email.trim().equals("")
                         || password == null || password.trim().equals("")) {
-                    showMessage("Please, enter an Email and Password");
+                    StyleConfig.showMessage(lblMessage, "Please, enter an Email and Password");
                     return;
                 }
 
@@ -172,21 +177,22 @@ public class Login extends JPanel{
                         try {
                             mediaPollingComponent.getAllMedia(newToken);
                         } catch (Exception ex) {
-                            showMessage("User logged out. Please log in again.");
+                            StyleConfig.showMessage(lblMessage, "User logged out. Please log in again.");
                             return;
                         }
                         token = newToken;
                         mediaPollingComponent.setToken(token);
-                        TokenController.saveToken(token);
+                        TokenController.saveToken(token, email);
                         
                         frame.setMenuVisible(true); 
                         frame.initializePolling(token);
                         
-                        JOptionPane.showMessageDialog(Login.this,"Login successful: " + email,"Success",JOptionPane.INFORMATION_MESSAGE);
+                        frame.lblMessage.setText("Welcome: " + email);
+                        frame.lblMessage.setForeground(StyleConfig.SELECTION_COLOR); //Usuario loggeado en label menuBar
                         cardManager.showCard("downloads");
 
                         if (remember.isSelected()) {
-                            TokenController.saveToken(token);
+                            TokenController.saveToken(token, email);
                         }
                     }
                 } catch (Exception ex) {
@@ -200,6 +206,7 @@ public class Login extends JPanel{
     public void autoLogin(){
         try{
             TokenUser save = TokenController.readToken();
+            String emailUser = save.getEmail();
             
             if(save != null){
                 String savedToken = save.getToken();
@@ -209,7 +216,7 @@ public class Login extends JPanel{
                     mediaPollingComponent.getAllMedia(savedToken); //Llamada a api para comprobar si el token es correcto
                     
                 }catch(Exception e){
-                    showMessage("User logged out. Please log in again.");
+                    StyleConfig.showMessage(lblMessage, "User logged out. Please log in again.");
                     token = null; 
                     cardManager.showCard("login"); 
                     return;
@@ -218,6 +225,7 @@ public class Login extends JPanel{
                 mediaPollingComponent.setToken(token);
                 frame.initializePolling(token);
                 frame.setMenuVisible(true);
+                frame.lblMessage.setText("Welcome: " + emailUser); //Usuario loggeado en label menuBar
                 cardManager.showCard("downloads");
                 System.out.println("Login successful.");
                 return;

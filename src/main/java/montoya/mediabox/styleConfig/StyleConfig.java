@@ -101,6 +101,13 @@ public class StyleConfig {
         item.setToolTipText(toolTip);
     }
     
+    //Muestra mensajes en jlabels de la app
+    public static void showMessage(JLabel lbl, String text) { 
+        lbl.setForeground(StyleConfig.SELECTION_COLOR); 
+        lbl.setFont(StyleConfig.FONT_BOLD);
+        lbl.setText(text); 
+    }
+    
     //Logo
     public static void setLogo(JLabel lblLogo, String logoPath){
         lblLogo.setPreferredSize(new Dimension(150, 40));
@@ -166,6 +173,5 @@ public class StyleConfig {
         combo.setEditable(true);
         Component editor = combo.getEditor().getEditorComponent();
         editor.setBackground(StyleConfig.SELECTION_COLOR);
-
     }
 }

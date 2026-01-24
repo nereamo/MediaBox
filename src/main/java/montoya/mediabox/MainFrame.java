@@ -32,6 +32,7 @@ public class MainFrame extends JFrame {
     private CardManager cardManager;
     private CardLayout layout;
     private JPanel container;
+    public JLabel lblMessage = new JLabel();
     private final Set<String> folderPaths = new HashSet<>();
     private boolean isLoggedIn = false;
 
@@ -73,14 +74,14 @@ public class MainFrame extends JFrame {
     }
     
     //Iconos de los botones
-    public void configIconMenu(){
+    private void configIconMenu(){
         StyleConfig.styleMenuItems(mnuEdit, "/images/edit.png",null, "Settings");
         StyleConfig.styleMenuItems(mnuFile, "/images/logout_exit.png",null, "Logout or Exit");
         StyleConfig.styleMenuItems(mnuHelp, "/images/help.png",null, "Information MediaBox");
     }
     
     //Iconos de los botones
-    public void configIconMenuItems(){
+    private void configIconMenuItems(){
         StyleConfig.styleMenuItems(itemExit, "/images/exit.png", "Exit", "Close App");
         StyleConfig.styleMenuItems(itemLogout, "/images/logout.png", "Logout", "Return to login");
         StyleConfig.styleMenuItems(itemPreferences, "/images/settings.png", "Settings", "Edit settings");
@@ -91,6 +92,11 @@ public class MainFrame extends JFrame {
     public void setMenuVisible(boolean visible) {
         menuBar.setBackground(StyleConfig.PANEL_COLOR_AZULCLARO);
         menuBar.setVisible(visible);
+        menuBar.add(Box.createHorizontalGlue());
+        lblMessage.setForeground(StyleConfig.SELECTION_COLOR);
+        lblMessage.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15)); 
+        menuBar.add(lblMessage);
+        
         this.revalidate();
         this.repaint();
     }
@@ -231,11 +237,10 @@ public class MainFrame extends JFrame {
     }//GEN-LAST:event_itemExitActionPerformed
 
     private void itemLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemLogoutActionPerformed
-        
-            setMenuVisible(false);
-            this.isLoggedIn = false;
-            cardManager.showCard("login");
-            pnlLogin.showMessage("Closed sesion.");
+        setMenuVisible(false);
+        this.isLoggedIn = false;
+        cardManager.showCard("login");
+        StyleConfig.showMessage(lblMessage, "Closed sesion.");
     }//GEN-LAST:event_itemLogoutActionPerformed
 
     public static void main(String args[]) {

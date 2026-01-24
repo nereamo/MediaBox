@@ -18,10 +18,10 @@ public class TokenController {
     private static final ObjectMapper mapper = new ObjectMapper();
     
     //Guarar el TOKEN en archivo token.json
-    public static void saveToken(String token) throws IOException {
+    public static void saveToken(String token, String email) throws IOException {
         
         Files.createDirectories(FOLDER_PATH);
-        TokenUser tu = new TokenUser(token);
+        TokenUser tu = new TokenUser(token, email);
         mapper.writeValue(JSON_PATH.toFile(), tu);
         System.out.println("Token guardado en: " + JSON_PATH.toAbsolutePath());
     }
