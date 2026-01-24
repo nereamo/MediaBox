@@ -102,7 +102,7 @@ public class MainFrame extends JFrame {
         mediaPollingComponent.addMediaListener(new MediaListener() {
             @Override
             public void newMediaFound(MediaEvent me) {
-                System.out.println("Nuevos medios encontrados: " + me.getMediaList().size() + " " + me.getMediaList());
+                System.out.println("Files found uploaded successfully");
             }
         });
     }

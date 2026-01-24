@@ -181,16 +181,29 @@ public class Login extends JPanel{
             
             if(save != null){
                 token = save.getToken();
+                mediaPollingComponent.setApiUrl(API_BASE_URL);
                 mediaPollingComponent.setToken(token);
-                frame.initializePolling(token);
-                System.out.println("Login Exitoso.");
-                frame.setMenuVisible(true);
-                cardManager.showCard("downloads");
-                return;
+                
+                try{
+                    mediaPollingComponent.getAllMedia(token);
+                    frame.initializePolling(token);
+                    System.out.println("Auto login exitoso.");
+                    frame.setMenuVisible(true);
+                    cardManager.showCard("downloads");
+                    return;
+                }catch(Exception e){
+                    System.out.println("Token inválido o expirado. Mostrando login.");
+                }
+//                frame.initializePolling(token);
+//                System.out.println("Login Exitoso.");
+//                frame.setMenuVisible(true);
+//                cardManager.showCard("downloads");
+//                return;
             }
         } catch (Exception ex) {
             System.getLogger(Login.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
         token = null;
+        cardManager.showCard("login");
     }
 }
