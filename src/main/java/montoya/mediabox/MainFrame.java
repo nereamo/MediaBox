@@ -76,7 +76,7 @@ public class MainFrame extends JFrame {
     //Iconos de los botones
     private void configIconMenu(){
         StyleConfig.styleMenuItems(mnuEdit, "/images/edit.png",null, "Settings");
-        StyleConfig.styleMenuItems(mnuFile, "/images/logout_exit_2.png",null, "Logout or Exit");
+        StyleConfig.styleMenuItems(mnuFile, "/images/logout_exit.png",null, "Logout or Exit");
         StyleConfig.styleMenuItems(mnuHelp, "/images/help.png",null, "Information MediaBox");
     }
     

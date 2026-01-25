@@ -29,6 +29,7 @@ public class Downloads extends javax.swing.JPanel {
     
     private MainFrame frame;
     private InfoMedia infoMedia;
+    private ApiFiles apiPnl;
     private DownloadManager downloadManager;
     private TypeFilter typeFilter;
     private FileTableModel tblModel;
@@ -41,10 +42,7 @@ public class Downloads extends javax.swing.JPanel {
     private List<FileInformation> allFiles = new ArrayList<>();
 
     public Downloads(MainFrame frame, Set<String> folderPaths, DownloadManager downloadManager, MediaPollingComponent mediaPollingComponent) {
-        initComponents();
-        
-        this.setBounds(0, 0, 1300, 770);
-        
+
         this.frame = frame;
         this.typeFilter = new TypeFilter();
         this.downloadManager = downloadManager;
@@ -56,19 +54,37 @@ public class Downloads extends javax.swing.JPanel {
         btnGroup = new ButtonGroup();
         infoMedia = new InfoMedia(fileProperties,typeFilter, allFiles, folderPaths, mediaPollingComponent);
         tblModel = infoMedia.getTableModel();
+        apiPnl = new ApiFiles(infoMedia, mediaPollingComponent, fileProperties);
         
-        //Aplica filtro de calidad 
-        qualityOptions(cbbxQualityFilter);
+        initComponents();
+        configPanel();
+        qualityOptions(cbbxQualityFilter);//Aplica filtro de calidad
+        styleComponents(); //Estilo de los componentes
+        configRadioButtons(btnGroup, radioMp4, radioMkv, radioWebm, radioMp3, radioWav, radioM4a);//Configura como se ven los botones
         
-        //Configura como se ven los botones
-        configRadioButtons(btnGroup, radioMp4, radioMkv, radioWebm, radioMp3, radioWav, radioM4a);
+        //Panels InfoMedia y ApiFiles añadidos
+        infoMedia.setBounds(640, 40, 630, 400);
+        this.add(infoMedia); 
         
-        infoMedia.setBounds(640, 40, 630, 540);
-        setBackground(StyleConfig.DARK_BLUE_COLOR);
-        this.add(infoMedia);
+        apiPnl.setBounds(640, 500, 630, 100);
+        this.add(apiPnl);
+    }
+    
+    private void configPanel(){
+        setBounds(0, 0, 1300, 770);
+        setBackground(StyleConfig.DARK_BLUE_COLOR);  
+    }
+    
+    //Aplica estilos a los componentes
+    private void styleComponents(){
+        StyleConfig.styleLabel(lblUrl, "URL");
+        StyleConfig.styleTextFieldAndPasswordLogin(txtUrl, "Paste the URL of the file to download");
+        StyleConfig.styleButton(btnPaste, "/images/paste.png", "Paste URL");
+        StyleConfig.styleButton(btnClear, "/images/clear.png", "Clean up the text");
         
-        
-        
+        StyleConfig.styleLabel(lblFolder, "LOCATION");
+        StyleConfig.styleTextFieldAndPasswordLogin(txtFolder, "Select download destination");
+        StyleConfig.styleButton(btnFolder, "/images/folder.png", "Select destination folder");
     }
     
     //Aplicar la calidad de video
@@ -121,52 +137,56 @@ public class Downloads extends javax.swing.JPanel {
         setLayout(null);
 
         lblUrl.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lblUrl.setText("URL");
         add(lblUrl);
-        lblUrl.setBounds(50, 20, 37, 20);
+        lblUrl.setBounds(50, 60, 70, 20);
 
         btnPaste.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnPaste.setText("Paste");
+        btnPaste.setMaximumSize(new java.awt.Dimension(72, 50));
+        btnPaste.setMinimumSize(new java.awt.Dimension(72, 50));
+        btnPaste.setPreferredSize(new java.awt.Dimension(72, 50));
         btnPaste.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPasteActionPerformed(evt);
             }
         });
         add(btnPaste);
-        btnPaste.setBounds(50, 50, 90, 24);
+        btnPaste.setBounds(410, 50, 72, 50);
 
         txtUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(txtUrl);
-        txtUrl.setBounds(150, 50, 250, 23);
+        txtUrl.setBounds(140, 60, 250, 23);
 
         btnClear.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnClear.setText("Clear");
+        btnClear.setMaximumSize(new java.awt.Dimension(72, 50));
+        btnClear.setMinimumSize(new java.awt.Dimension(72, 50));
+        btnClear.setPreferredSize(new java.awt.Dimension(72, 50));
         btnClear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClearActionPerformed(evt);
             }
         });
         add(btnClear);
-        btnClear.setBounds(410, 50, 100, 24);
+        btnClear.setBounds(490, 50, 72, 50);
 
         lblFolder.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lblFolder.setText("Folder");
         add(lblFolder);
-        lblFolder.setBounds(50, 100, 50, 20);
+        lblFolder.setBounds(50, 140, 80, 20);
 
         btnFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnFolder.setText("Folder");
+        btnFolder.setMaximumSize(new java.awt.Dimension(72, 50));
+        btnFolder.setMinimumSize(new java.awt.Dimension(72, 50));
+        btnFolder.setPreferredSize(new java.awt.Dimension(72, 50));
         btnFolder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFolderActionPerformed(evt);
             }
         });
         add(btnFolder);
-        btnFolder.setBounds(50, 130, 90, 24);
+        btnFolder.setBounds(410, 120, 72, 50);
 
         txtFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(txtFolder);
-        txtFolder.setBounds(150, 130, 250, 23);
+        txtFolder.setBounds(140, 140, 250, 23);
 
         pnlVideo.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Video", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14))); // NOI18N
 
@@ -340,7 +360,6 @@ public class Downloads extends javax.swing.JPanel {
     }//GEN-LAST:event_btnFolderActionPerformed
 
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
-
         String url = txtUrl.getText().trim();
         String folder = txtFolder.getText().trim();
         String format = btnGroup.getSelection().getActionCommand();
@@ -356,15 +375,13 @@ public class Downloads extends javax.swing.JPanel {
 
                 if (folderPaths.add(folder)) {
                     SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        
-                        tblModel.fireTableDataChanged();
-                        
-                        DefaultListModel<FolderItem> listModel = (DefaultListModel<FolderItem>) foldersList.getModel();
-                        listModel.addElement(new FolderItem(folder, false, false));
-                        
-                     }
+                        @Override
+                        public void run() {
+
+                            tblModel.fireTableDataChanged();
+                            DefaultListModel<FolderItem> listModel = (DefaultListModel<FolderItem>) foldersList.getModel();
+                            listModel.addElement(new FolderItem(folder, false, false));
+                        }
                     });
                 }
             }

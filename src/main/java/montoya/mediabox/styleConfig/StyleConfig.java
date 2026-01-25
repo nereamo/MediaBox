@@ -68,7 +68,7 @@ public class StyleConfig {
         btn.setFocusPainted(false);
         btn.setContentAreaFilled(false);
         btn.setBorderPainted(false);
-        btn.setPreferredSize(new Dimension(100, 50));
+        btn.setPreferredSize(new Dimension(50, 50));
         btn.setIcon(new ImageIcon(StyleConfig.class.getResource(iconPath)));
         btn.setToolTipText(tootlTip);
         
