@@ -3,9 +3,6 @@ package montoya.mediabox.panels;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -19,7 +16,6 @@ import montoya.mediabox.fileInformation.FileTableModel;
 import montoya.mediabox.fileInformation.FolderItem;
 import montoya.mediabox.styleConfig.StyleConfig;
 import montoya.mediapollingcomponent.MediaPollingComponent;
-import montoya.mediapollingcomponent.apiclient.Media;
 
 /**
  * Panel que muestra las descargas realizadas y su información, permitiendo eliminar o reproducir archivos
@@ -38,26 +34,26 @@ public class InfoMedia extends javax.swing.JPanel {
     private Set<String> folderPaths = new HashSet<>();
 
     public InfoMedia(FileProperties fileProperties, TypeFilter typeFilter, List<FileInformation> allFiles, Set<String> folderPaths, MediaPollingComponent mediaPollingComponent) {
-
+        initComponents();
+        
         this.typeFilter = typeFilter;
         this.fileProperties = fileProperties;
         this.mediaPollingComponent = mediaPollingComponent;
+        
         this.allData = fileProperties.loadDownloads();
         this.fileManager = new FileManager(allData, typeFilter, mediaPollingComponent);
         this.allFiles = allData.fileList;
-        
         folderPaths.addAll(allData.folderPaths);
+        
         tblModel = new FileTableModel(allFiles);
         tblMedia.setModel(tblModel);
 
-        initComponents();
         filterOptions(cbbxTypeFilter); //Aplica el filtro según tipo de archivo
         styleComponents(); //Estilo de los componentes
         initDirectoryList(); //Inicia la lista de directorios
         configDownloadList(folderList, cbbxTypeFilter); //Muestra las descargas pertenecientes a un directorio
 
-        //Mostrar archivos al iniciar la app
-        SwingUtilities.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() { //Mostrar archivos al iniciar la app
             @Override
             public void run() {
                 if (folderList.getModel().getSize() > 0) {

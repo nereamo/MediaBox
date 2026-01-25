@@ -32,11 +32,13 @@ public class ApiFiles extends javax.swing.JPanel {
 
     public ApiFiles(InfoMedia infoMedia, MediaPollingComponent mediaPollingComponent, FileProperties fileProperties) {
         
+        initComponents();
+        
         this.infoMedia = infoMedia;
         this.mediaPollingComponent = mediaPollingComponent;
         this.fileProperties = fileProperties;
         
-        initComponents();
+        
         configPanel();
         configButtons();
         buttonsActions();

@@ -1,10 +1,13 @@
 package montoya.mediabox.panels;
 
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,49 +46,48 @@ public class Downloads extends javax.swing.JPanel {
 
     public Downloads(MainFrame frame, Set<String> folderPaths, DownloadManager downloadManager, MediaPollingComponent mediaPollingComponent) {
 
+        initComponents();
+        configPanel();
+
         this.frame = frame;
         this.typeFilter = new TypeFilter();
         this.downloadManager = downloadManager;
         this.folderPaths = folderPaths;
         this.fileProperties = new FileProperties();
         this.mediaPollingComponent = mediaPollingComponent;
-       
-        foldersList = new JList<>(new DefaultListModel<>()); 
+
+        foldersList = new JList<>(new DefaultListModel<>());
         btnGroup = new ButtonGroup();
-        infoMedia = new InfoMedia(fileProperties,typeFilter, allFiles, folderPaths, mediaPollingComponent);
+        infoMedia = new InfoMedia(fileProperties, typeFilter, allFiles, folderPaths, mediaPollingComponent);
         tblModel = infoMedia.getTableModel();
         apiPnl = new ApiFiles(infoMedia, mediaPollingComponent, fileProperties);
-        
-        initComponents();
-        configPanel();
+
         qualityOptions(cbbxQualityFilter);//Aplica filtro de calidad
         styleComponents(); //Estilo de los componentes
+        styleTxtUrl();
         configRadioButtons(btnGroup, radioMp4, radioMkv, radioWebm, radioMp3, radioWav, radioM4a);//Configura como se ven los botones
-        
+
         //Panels InfoMedia y ApiFiles añadidos
         infoMedia.setBounds(640, 40, 630, 400);
-        this.add(infoMedia); 
-        
+        this.add(infoMedia);
+
         apiPnl.setBounds(640, 500, 630, 100);
         this.add(apiPnl);
     }
-    
+
     private void configPanel(){
         setBounds(0, 0, 1300, 770);
         setBackground(StyleConfig.DARK_BLUE_COLOR);  
     }
     
     //Aplica estilos a los componentes
-    private void styleComponents(){
-        StyleConfig.styleLabel(lblUrl, "URL");
-        StyleConfig.styleTextFieldAndPasswordLogin(txtUrl, "Paste the URL of the file to download");
-        StyleConfig.styleButton(btnPaste, "/images/paste.png", "Paste URL");
-        StyleConfig.styleButton(btnClear, "/images/clear.png", "Clean up the text");
-        
+    private void styleComponents(){       
         StyleConfig.styleLabel(lblFolder, "LOCATION");
         StyleConfig.styleTextFieldAndPasswordLogin(txtFolder, "Select download destination");
         StyleConfig.styleButton(btnFolder, "/images/folder.png", "Select destination folder");
     }
+    
+    
     
     //Aplicar la calidad de video
     private void qualityOptions(JComboBox cbbxQuality){
@@ -104,15 +106,61 @@ public class Downloads extends javax.swing.JPanel {
         }
         buttons[0].setSelected(true);
     }
+    
+    
+    private void styleTxtUrl() {
+        //StyleConfig.styleTextFieldAndPasswordLogin(txtUrl, "Paste the URL of the file to download");
+        StyleConfig.styleLabel(lblUrl, "Download file");
+        StyleConfig.addIconsTextField(txtUrl, "/images/url.png", "/images/delete_url.png", "Paste the URL of the file to download");
+
+        txtUrl.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int width = txtUrl.getWidth();
+
+                if (e.getX() <= 30) {
+                    pasteUrl();
+                }else if (e.getX() >= width -30){
+                    txtUrl.setText("");
+                }
+            }
+        });
+
+        txtUrl.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                int width = txtUrl.getWidth();
+
+                if (e.getX() <= 30 || e.getX() >= width -30) {
+                    txtUrl.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                } else {
+                    txtUrl.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+                }
+            }
+        });
+    }
+        
+    private void pasteUrl() {
+        Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
+        DataFlavor df = DataFlavor.stringFlavor;
+
+        if (cb.isDataFlavorAvailable(df)) {
+            try {
+                String clipboardContent = (String) cb.getData(df);
+                txtUrl.setText(clipboardContent);
+            } catch (UnsupportedFlavorException | IOException ex) {
+
+                System.getLogger(MainFrame.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
+        }
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         lblUrl = new javax.swing.JLabel();
-        btnPaste = new javax.swing.JButton();
         txtUrl = new javax.swing.JTextField();
-        btnClear = new javax.swing.JButton();
         lblFolder = new javax.swing.JLabel();
         btnFolder = new javax.swing.JButton();
         txtFolder = new javax.swing.JTextField();
@@ -138,35 +186,11 @@ public class Downloads extends javax.swing.JPanel {
 
         lblUrl.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         add(lblUrl);
-        lblUrl.setBounds(50, 60, 70, 20);
-
-        btnPaste.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnPaste.setMaximumSize(new java.awt.Dimension(72, 50));
-        btnPaste.setMinimumSize(new java.awt.Dimension(72, 50));
-        btnPaste.setPreferredSize(new java.awt.Dimension(72, 50));
-        btnPaste.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPasteActionPerformed(evt);
-            }
-        });
-        add(btnPaste);
-        btnPaste.setBounds(410, 50, 72, 50);
+        lblUrl.setBounds(50, 30, 340, 20);
 
         txtUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(txtUrl);
-        txtUrl.setBounds(140, 60, 250, 23);
-
-        btnClear.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnClear.setMaximumSize(new java.awt.Dimension(72, 50));
-        btnClear.setMinimumSize(new java.awt.Dimension(72, 50));
-        btnClear.setPreferredSize(new java.awt.Dimension(72, 50));
-        btnClear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnClearActionPerformed(evt);
-            }
-        });
-        add(btnClear);
-        btnClear.setBounds(490, 50, 72, 50);
+        txtUrl.setBounds(50, 60, 450, 23);
 
         lblFolder.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         add(lblFolder);
@@ -315,28 +339,6 @@ public class Downloads extends javax.swing.JPanel {
         logoLabel.setBounds(1120, 630, 81, 80);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnPasteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPasteActionPerformed
-
-        Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
-        DataFlavor df = DataFlavor.stringFlavor;
-
-        if (cb.isDataFlavorAvailable(df)) {
-
-            try {
-                String clipboardContent = (String) cb.getData(df);
-                txtUrl.setText(clipboardContent);
-            } catch (UnsupportedFlavorException ex) {
-                System.getLogger(MainFrame.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-            } catch (IOException ex) {
-                System.getLogger(MainFrame.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-            }
-        }
-    }//GEN-LAST:event_btnPasteActionPerformed
-
-    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        txtUrl.setText("");
-    }//GEN-LAST:event_btnClearActionPerformed
-
     private void btnFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFolderActionPerformed
         JFileChooser directory = new JFileChooser();
         directory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -405,11 +407,9 @@ public class Downloads extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea areaInfo;
-    private javax.swing.JButton btnClear;
     private javax.swing.JButton btnDownload;
     private javax.swing.JButton btnFolder;
     private javax.swing.JButton btnOpenLast;
-    private javax.swing.JButton btnPaste;
     private javax.swing.JComboBox<String> cbbxQualityFilter;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblFolder;

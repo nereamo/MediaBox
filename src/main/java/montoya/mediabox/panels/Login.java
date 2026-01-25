@@ -1,5 +1,6 @@
 package montoya.mediabox.panels;
 
+import java.awt.Cursor;
 import java.awt.event.*;
 import javax.swing.*;
 import montoya.mediabox.MainFrame;
@@ -23,14 +24,13 @@ public class Login extends JPanel{
     private JPasswordField txtPassword = new JPasswordField();
     private JPanel pnlButtons = new JPanel();
     private JButton btnLogin = new JButton();
-    private JButton btnClean = new JButton();
-    private JCheckBox showPassword = new JCheckBox();
     private JCheckBox remember = new JCheckBox();
     private JLabel lblMessage = new JLabel();
     private String loggedEmail;
     private static final String API_BASE_URL = "https://difreenet9.azurewebsites.net";
     private static String token;
     private static final String FOLDER_NAME = System.getProperty("user.home") + "/AppData/Local/MediaBox";
+    private boolean isPasswordVisible = false;
     
     public Login(MainFrame frame, CardManager cardManager, MediaPollingComponent mediaPollingComponent){
         
@@ -39,16 +39,14 @@ public class Login extends JPanel{
         this.mediaPollingComponent = mediaPollingComponent;
         
         this.setBounds(0, 0, 1300, 770);
-        this.setLayout(new MigLayout("center", "[][grow][]", "100[]10[]20[]"));
+        this.setLayout(new MigLayout("wrap, center", "[grow]", "100[]20[]10[]10[]20[]10[]"));
+        //this.setLayout(new MigLayout("center", "[][grow][]", "100[]10[]20[]"));
         this.setBackground(StyleConfig.DARK_BLUE_COLOR);
         
         configComponents(); //Configuracion de componentes
         configKeyActions();
         
-        cleanButton(); //Limpia los campos
-        
         txtPassword.setEchoChar('•'); //Configuracion de visibilidad de contraseña
-        showPassword();
         
         loginUser(); //Configuracion de login
     } 
@@ -56,61 +54,94 @@ public class Login extends JPanel{
     public String getLoggedEmail(){ //Devuelve el email loggeado
         return loggedEmail;
     }
-    
-    //Establece posicion para los componentes
-    private void configComponents(){
+
+    private void configComponents() {
         
         ImageIcon icon = new ImageIcon(getClass().getResource("/images/logo.png"));
         JLabel lblIcon = new JLabel(icon);
-        this.add(lblIcon, "cell 0 0 3 1, align center"); 
+        this.add(lblIcon, "align center, gapbottom 20");
         
-        JPanel emailRow = StyleConfig.createLoginField("/images/email.png", txtEmail);
-        StyleConfig.styleTextFieldAndPasswordLogin(txtEmail, "Enter your email");
-        this.add(emailRow, "cell 0 2 3 1, growx, align center, wmin 200, w 300, wmax 300");
+        styleTxtEmail();
+        this.add(txtEmail, "align center, w 300!, h 30!");
         
-        JPanel passwordRow = StyleConfig.createLoginField("/images/password.png", txtPassword);
-        StyleConfig.styleTextFieldAndPasswordLogin(txtPassword, "Enter your password");
-        this.add(passwordRow, "cell 0 3 3 1, growx, align center, wmin 200, w 300, wmax 300");
+        styleTxtPassword();
+        this.add(txtPassword, "align center, w 300!, h 30!, gaptop 10");
+        
+        StyleConfig.styleCheckBox(remember, "Remember me", "Remember credentials");
+        this.add(remember, "align center, gaptop 10");
 
-        JPanel showPasswordRow = StyleConfig.createLoginField("", showPassword);
-        this.add(showPasswordRow, "cell 0 4 3 1, growx, align center, wmin 200, w 300, wmax 300");
-        StyleConfig.styleCheckBox(showPassword,"Show Password", "Show password");
-        
-        JPanel rememberRow = StyleConfig.createLoginField("", remember);
-        this.add(rememberRow, "cell 0 5 3 1, growx, align center, wmin 200, w 300, wmax 300");
-        StyleConfig.styleCheckBox(remember,"Remember me", "Remember credentials");
-        
-        this.add(pnlButtons, "cell 0 6 3 1, align center");
-        
-        pnlButtons.setLayout(new MigLayout("center", "[grow]", "[]"));
-        pnlButtons.setBackground(StyleConfig.DARK_BLUE_COLOR);
-
-        pnlButtons.add(btnClean, "split 2, align center");
-        pnlButtons.add(btnLogin);
-        
         StyleConfig.styleButton(btnLogin, "/images/login.png", "Login user");
-        
-        lblMessage.setForeground(StyleConfig.GREY_COLOR); // o el color que prefieras 
-        lblMessage.setHorizontalAlignment(SwingConstants.CENTER); 
-        this.add(lblMessage, "cell 0 7 3 1, growx, align center, gaptop 10");
+        this.add(btnLogin, "align center, w 200!, h 40!, gaptop 20");
+
+        lblMessage.setHorizontalAlignment(SwingConstants.CENTER);
+        this.add(lblMessage, "align center, gaptop 20, growx");
     }
 
-    
-    //Boton clean limpia los campos
-    private void cleanButton() {
-        StyleConfig.styleButton(btnClean, "/images/clear.png", "Clear fields");
+    private void styleTxtEmail() {
+        StyleConfig.addIconsTextField(txtEmail, "/images/email2.png", "/images/delete_url.png", "Enter email");
 
-        btnClean.addActionListener(new ActionListener() {
+        txtEmail.addMouseListener(new MouseAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                txtEmail.setText("");
-                txtPassword.setText("");
-                txtPassword.setEchoChar('•');
-                showPassword.setSelected(false);
-                remember.setSelected(false);
-                lblMessage.setText("");
+            public void mouseClicked(MouseEvent e) {
+                int width = txtEmail.getWidth();
+
+                if (e.getX() >= width -30){
+                    txtEmail.setText("");
+                }
             }
         });
+
+        txtEmail.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                int width = txtEmail.getWidth();
+
+                if (e.getX() >= width -30) {
+                    txtEmail.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                } else {
+                    txtEmail.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+                }
+            }
+        });
+    }
+    
+    private void styleTxtPassword() {
+        StyleConfig.addIconsPasswordField(txtPassword, "/images/pss.png", "/images/show.png", "Enter password");
+        
+        txtPassword.setEchoChar('•');
+        isPasswordVisible = false;
+
+        txtPassword.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int width = txtPassword.getWidth();
+                
+
+                if (e.getX() >= width -30){
+                    
+                    isPasswordVisible = !isPasswordVisible;
+                    
+                    if(isPasswordVisible){
+                        txtPassword.setEchoChar((char) 0);
+                    } else {
+                    txtPassword.setEchoChar('•');
+                }
+                }
+            }
+        });
+
+        txtPassword.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                int width = txtPassword.getWidth();
+
+                if (e.getX() >= width -30) {
+                    txtPassword.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                } else {
+                    txtPassword.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+                }
+            }
+        }); 
     }
     
     //Al pulsar ENTER hace login
@@ -128,24 +159,6 @@ public class Login extends JPanel{
                 btnLogin.doClick();
             }
         }); 
-    }
-    
-    //CheckBox que permite ver la contraseña introducida
-    private void showPassword() {
-        showPassword.setBackground(StyleConfig.DARK_BLUE_COLOR);
-        showPassword.setForeground(StyleConfig.GREY_COLOR);
-        showPassword.setToolTipText("Show password");
-        
-        showPassword.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (showPassword.isSelected()) {
-                    txtPassword.setEchoChar((char) 0);
-                } else {
-                    txtPassword.setEchoChar('•');
-                }
-            }
-        });
     }
 
     //Loguea usuario al pulsar boton Login y guarda token

@@ -7,6 +7,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import javax.swing.plaf.basic.BasicPasswordFieldUI;
+import javax.swing.text.JTextComponent;
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -40,8 +42,10 @@ public class StyleConfig {
     
     //Labels
     public static void styleLabel(JLabel label, String text){
+        label.setOpaque(true);
         label.setText(text);
-        label.setForeground(GREY_COLOR);
+        label.setForeground(WHITE_COLOR);
+        label.setBackground(StyleConfig.DARK_BLUE_COLOR);
         label.setFont(FONT_PLAIN);
     }
     
@@ -58,7 +62,7 @@ public class StyleConfig {
     //Textfiles Login
     public static void styleTextFieldAndPasswordLogin(JTextField txtField, String toolTip){
         txtField.setFont(FONT_PLAIN);
-        txtField.setPreferredSize(new Dimension(300, 25));
+        txtField.setPreferredSize(new Dimension(300, 30));
         txtField.setToolTipText(toolTip);
     }
     
@@ -100,8 +104,8 @@ public class StyleConfig {
     
     //Muestra mensajes en jlabels de la app
     public static void showMessage(JLabel lbl, String text) { 
-        lbl.setForeground(StyleConfig.DARK_BLUE_COLOR); 
-        lbl.setFont(StyleConfig.FONT_BOLD);
+        lbl.setForeground(GREY_COLOR); 
+        lbl.setFont(FONT_BOLD);
         lbl.setText(text); 
     }
     
@@ -174,4 +178,78 @@ public class StyleConfig {
         Component editor = combo.getEditor().getEditorComponent();
         editor.setBackground(WHITE_COLOR);
     }
+    
+    public static void addIconsTextField(JTextField txtField, String leftIconPath, String rightIconPath, String toolTip) {
+        ImageIcon leftIcon = new ImageIcon(StyleConfig.class.getResource(leftIconPath));
+        ImageIcon rightIcon = new ImageIcon(StyleConfig.class.getResource(rightIconPath));
+
+        txtField.setBorder(BorderFactory.createCompoundBorder(txtField.getBorder(), BorderFactory.createEmptyBorder(0, 30, 0, 30)));
+        txtField.setFont(FONT_PLAIN);
+        txtField.setPreferredSize(new Dimension(300, 30));
+        txtField.setToolTipText(toolTip);
+
+        txtField.setUI(new javax.swing.plaf.basic.BasicTextFieldUI() {
+            @Override
+            protected void paintBackground(java.awt.Graphics g) {
+                super.paintBackground(g);
+
+                // Icono Izquierdo (Pegar)
+                int yLeft = (txtField.getHeight() - leftIcon.getIconHeight()) / 2;
+                leftIcon.paintIcon(txtField, g, 2, yLeft);
+
+                // Icono Derecho (Borrar)
+                int yRight = (txtField.getHeight() - rightIcon.getIconHeight()) / 2;
+                int xRight = txtField.getWidth() - rightIcon.getIconWidth() - 2;
+                rightIcon.paintIcon(txtField, g, xRight, yRight);
+            }
+        });
+    }
+
+    public static void addIconsPasswordField(JPasswordField pwdField, String leftIconPath, String rightIconPath, String toolTip) {
+        ImageIcon leftIcon = new ImageIcon(StyleConfig.class.getResource(leftIconPath));
+        ImageIcon rightIcon = new ImageIcon(StyleConfig.class.getResource(rightIconPath));
+
+        pwdField.setBorder(BorderFactory.createCompoundBorder(pwdField.getBorder(), BorderFactory.createEmptyBorder(0, 30, 0, 30)));
+        pwdField.setFont(FONT_PLAIN);
+        pwdField.setPreferredSize(new Dimension(300, 30));
+        pwdField.setToolTipText(toolTip);
+
+        pwdField.setUI(new BasicPasswordFieldUI() {
+            @Override
+            protected void paintBackground(Graphics g) {
+                super.paintBackground(g);
+                int yLeft = (pwdField.getHeight() - leftIcon.getIconHeight()) / 2;
+                leftIcon.paintIcon(pwdField, g, 2, yLeft);
+
+                int yRight = (pwdField.getHeight() - rightIcon.getIconHeight()) / 2;
+                int xRight = pwdField.getWidth() - rightIcon.getIconWidth() - 2;
+                rightIcon.paintIcon(pwdField, g, xRight, yRight);
+            }
+        });
+    }
+    
+//    //Configuración TextFields con icons
+//    public static void addIconToTextField(JTextField textField, String iconPath) {
+//        ImageIcon icon = new ImageIcon(StyleConfig.class.getResource(iconPath));
+//
+//        // Creamos un margen izquierdo para que el texto no empiece sobre el icono
+//        textField.setBorder(BorderFactory.createCompoundBorder(
+//                textField.getBorder(),
+//                BorderFactory.createEmptyBorder(0, 25, 0, 0) // 25px de espacio para el icono
+//        ));
+//
+//        // Dibujamos el icono manualmente
+//        textField.setUI(new javax.swing.plaf.basic.BasicTextFieldUI() {
+//            @Override
+//            protected void paintBackground(java.awt.Graphics g) {
+//                super.paintBackground(g);
+//                int y = (textField.getHeight() - icon.getIconHeight()) / 2;
+//                icon.paintIcon(textField, g, 5, y); // Dibujar a 5px del borde izquierdo
+//                
+//                
+//                
+//            }
+//            
+//        });
+//    }
 }
