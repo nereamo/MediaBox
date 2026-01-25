@@ -45,7 +45,7 @@ public class Preferences extends javax.swing.JPanel {
     //Configuracion de la posicion de los componentes
     private void configLayout(){
         add(lblPath, "cell 0 0, alignx right");
-        add(StyleConfig.createFieldWrapper(txtPathTemp), "cell 1 0, alignx left, growx, wmin 200, w 300, wmax 300");
+        add(txtPathTemp, "cell 1 0, alignx left, growx, wmin 200, w 300, wmax 300");
         add(btnBrowseTemp, "cell 2 0");
         
         add(lblM3u, "cell 0 1, alignx right, gaptop 15"); 
@@ -55,7 +55,7 @@ public class Preferences extends javax.swing.JPanel {
         add(sldSpeed, "cell 1 2, growx, wmin 200, w 300, wmax 300, gaptop 15");
         
         add(lblYtDlp, "cell 0 3, alignx right, gaptop 15"); 
-        add(StyleConfig.createFieldWrapper(txtYtDlp), "cell 1 3,alignx left, growx, wmin 200, w 300, wmax 300, gaptop 15"); 
+        add(txtYtDlp, "cell 1 3,alignx left, growx, wmin 200, w 300, wmax 300, gaptop 15"); 
         add(btnYtDlp, "cell 2 3, gaptop 20");
         
         add(btnSave, "cell 1 4, split 2, alignx center, gaptop 30"); 

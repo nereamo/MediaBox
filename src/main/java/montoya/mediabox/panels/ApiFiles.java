@@ -84,10 +84,13 @@ public class ApiFiles extends javax.swing.JPanel {
 
             // Obtener archivo de API
             List<Media> mediaList = mediaPollingComponent.getAllMedia(mediaPollingComponent.getToken());
-            montoya.mediapollingcomponent.apiclient.Media mediaFile = mediaList.stream()
-                    .filter(m -> m.mediaFileName.equals(info.name))
-                    .findFirst()
-                    .orElse(null);
+            Media mediaFile = null;
+            for (Media m : mediaList) {
+                if (m.mediaFileName.equals(info.name)) {
+                    mediaFile = m;
+                    break;
+                }
+            }
 
             if (mediaFile == null) {
                 JOptionPane.showMessageDialog(this, "Cannot find the selected media in API.");

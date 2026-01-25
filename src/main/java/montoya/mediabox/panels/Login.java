@@ -22,10 +22,9 @@ public class Login extends JPanel{
     private MediaPollingComponent mediaPollingComponent;
     private JTextField txtEmail = new JTextField();
     private JPasswordField txtPassword = new JPasswordField();
-    private JPanel pnlButtons = new JPanel();
     private JButton btnLogin = new JButton();
     private JCheckBox remember = new JCheckBox();
-    private JLabel lblMessage = new JLabel();
+    public JLabel lblMessage = new JLabel();
     private String loggedEmail;
     private static final String API_BASE_URL = "https://difreenet9.azurewebsites.net";
     private static String token;
@@ -40,7 +39,6 @@ public class Login extends JPanel{
         
         this.setBounds(0, 0, 1300, 770);
         this.setLayout(new MigLayout("wrap, center", "[grow]", "100[]20[]10[]10[]20[]10[]"));
-        //this.setLayout(new MigLayout("center", "[][grow][]", "100[]10[]20[]"));
         this.setBackground(StyleConfig.DARK_BLUE_COLOR);
         
         configComponents(); //Configuracion de componentes
@@ -77,6 +75,7 @@ public class Login extends JPanel{
         this.add(lblMessage, "align center, gaptop 20, growx");
     }
 
+    //Estilo del JTextField email
     private void styleTxtEmail() {
         StyleConfig.addIconsTextField(txtEmail, "/images/email2.png", "/images/delete_url.png", "Enter email");
 
@@ -97,7 +96,7 @@ public class Login extends JPanel{
                 int width = txtEmail.getWidth();
 
                 if (e.getX() >= width -30) {
-                    txtEmail.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                    StyleConfig.handCursor(txtEmail);
                 } else {
                     txtEmail.setCursor(new Cursor(Cursor.TEXT_CURSOR));
                 }
@@ -105,6 +104,7 @@ public class Login extends JPanel{
         });
     }
     
+    //Estilo del JPasswordField password
     private void styleTxtPassword() {
         StyleConfig.addIconsPasswordField(txtPassword, "/images/pss.png", "/images/show.png", "Enter password");
         
@@ -136,7 +136,7 @@ public class Login extends JPanel{
                 int width = txtPassword.getWidth();
 
                 if (e.getX() >= width -30) {
-                    txtPassword.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                    StyleConfig.handCursor(txtEmail);
                 } else {
                     txtPassword.setCursor(new Cursor(Cursor.TEXT_CURSOR));
                 }

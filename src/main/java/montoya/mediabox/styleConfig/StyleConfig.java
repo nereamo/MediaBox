@@ -8,8 +8,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.plaf.basic.BasicPasswordFieldUI;
-import javax.swing.text.JTextComponent;
-import net.miginfocom.swing.MigLayout;
 
 /**
  *
@@ -37,14 +35,13 @@ public class StyleConfig {
         
         panel.setOpaque(false);
         panel.setBorder(titBorder);
-        //panel.setBackground(PANEL_COLOR_AZULCLARO);
     }
     
     //Labels
     public static void styleLabel(JLabel label, String text){
         label.setOpaque(true);
         label.setText(text);
-        label.setForeground(WHITE_COLOR);
+        label.setForeground(LIGHT_BLUE_COLOR);
         label.setBackground(StyleConfig.DARK_BLUE_COLOR);
         label.setFont(FONT_PLAIN);
     }
@@ -59,13 +56,17 @@ public class StyleConfig {
         check.setToolTipText(toolTip);
     }
     
-    //Textfiles Login
-    public static void styleTextFieldAndPasswordLogin(JTextField txtField, String toolTip){
-        txtField.setFont(FONT_PLAIN);
-        txtField.setPreferredSize(new Dimension(300, 30));
-        txtField.setToolTipText(toolTip);
+    //Buttongroup
+    public static void styleButtonGroup(String toolTip, JRadioButton... radio) {
+        for (JRadioButton rb : radio) {
+            rb.setOpaque(false);
+            rb.setForeground(GREY_COLOR);
+            rb.setFont(FONT_PLAIN);
+            rb.setFocusPainted(false);
+            rb.setToolTipText(toolTip);
+        }
     }
-    
+
     //Buttons
     public static void styleButton(JButton btn, String iconPath, String tootlTip) {
         btn.setOpaque(false);
@@ -113,26 +114,6 @@ public class StyleConfig {
     public static void setLogo(JLabel lblLogo, String logoPath){
         lblLogo.setPreferredSize(new Dimension(150, 40));
         lblLogo.setIcon(new ImageIcon(StyleConfig.class.getResource(logoPath)));
-    }
-    
-    //Panel login
-    public static JPanel createLoginField(String iconPath, JComponent field) {
-        JPanel panel = new JPanel(new MigLayout("insets 0", "[]10[grow]", "[]"));
-        panel.setBackground(StyleConfig.DARK_BLUE_COLOR);
-        
-        JLabel lblIcon = new JLabel(new ImageIcon(StyleConfig.class.getResource(iconPath)));
-        panel.add(lblIcon);
-        panel.add(field, "growx");
-        
-        return panel;
-    }
-    
-    //Panel preferences
-    public static JPanel createFieldWrapper(JComponent field) {
-        JPanel panel = new JPanel(new MigLayout("insets 0", "[grow]", "[]"));
-        panel.setOpaque(false);
-        panel.add(field, "growx");
-        return panel;
     }
     
     //Cambio de cursor en componente
@@ -227,29 +208,4 @@ public class StyleConfig {
             }
         });
     }
-    
-//    //Configuración TextFields con icons
-//    public static void addIconToTextField(JTextField textField, String iconPath) {
-//        ImageIcon icon = new ImageIcon(StyleConfig.class.getResource(iconPath));
-//
-//        // Creamos un margen izquierdo para que el texto no empiece sobre el icono
-//        textField.setBorder(BorderFactory.createCompoundBorder(
-//                textField.getBorder(),
-//                BorderFactory.createEmptyBorder(0, 25, 0, 0) // 25px de espacio para el icono
-//        ));
-//
-//        // Dibujamos el icono manualmente
-//        textField.setUI(new javax.swing.plaf.basic.BasicTextFieldUI() {
-//            @Override
-//            protected void paintBackground(java.awt.Graphics g) {
-//                super.paintBackground(g);
-//                int y = (textField.getHeight() - icon.getIconHeight()) / 2;
-//                icon.paintIcon(textField, g, 5, y); // Dibujar a 5px del borde izquierdo
-//                
-//                
-//                
-//            }
-//            
-//        });
-//    }
 }

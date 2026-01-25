@@ -69,7 +69,7 @@ public class MainFrame extends JFrame {
     private void configurationFrame() {
         this.setTitle("MediaBox");
         this.setResizable(false);
-        this.setSize(1300, 800);
+        this.setSize(1500, 800);
         this.setLocationRelativeTo(this);
     }
     
@@ -240,7 +240,7 @@ public class MainFrame extends JFrame {
         setMenuVisible(false);
         this.isLoggedIn = false;
         cardManager.showCard("login");
-        StyleConfig.showMessage(lblMessage, "Closed sesion.");
+        StyleConfig.showMessage(pnlLogin.lblMessage, "Closed sesion.");
     }//GEN-LAST:event_itemLogoutActionPerformed
 
     public static void main(String args[]) {
