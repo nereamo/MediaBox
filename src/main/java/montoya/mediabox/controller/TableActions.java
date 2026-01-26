@@ -1,87 +1,45 @@
 
 package montoya.mediabox.controller;
 
-import java.awt.Component;
-import java.awt.Desktop;
-import java.awt.FlowLayout;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import javax.swing.AbstractCellEditor;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import montoya.mediabox.fileInformation.FileInformation;
-import montoya.mediabox.fileInformation.FileTableModel;
+import montoya.mediabox.fileInformation.*;
 import montoya.mediabox.panels.InfoMedia;
 
 /**
+ * Clase encargada de la interacción con los botones de la columna actions
  *
  * @author Nerea
  */
-public class TableActions extends AbstractCellEditor implements TableCellRenderer, TableCellEditor, ActionListener{
-    
+public class TableActions extends AbstractCellEditor implements TableCellRenderer, TableCellEditor {
+
     private final JPanel panel;
     private final JButton btnPlay, btnDelete, btnDownload;
     private final JTable table;
     private final FileTableModel model;
-    private final InfoMedia infoMedia; // Necesario para llamar a la lógica de borrar
+    private final InfoMedia infoMedia;
 
     public TableActions(JTable table, int column, FileTableModel model, InfoMedia infoMedia) {
         this.table = table;
         this.model = model;
         this.infoMedia = infoMedia;
-        
-        // Creamos un panel contenedor transparente
-        this.panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 2, 0));
+
+        this.panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 2, 0)); //Panel que contiene los botones de la columna
         this.panel.setOpaque(false);
 
-        // Inicializamos los botones
         this.btnPlay = createButton("/images/play2.png", "Reproduce");
         this.btnDelete = createButton("/images/delete.png", "Delete file");
         this.btnDownload = createButton("/images/download2.png", "Download");
 
-        // Añadimos acciones directamente
-        btnPlay.addActionListener(e -> {
-            int row = table.convertRowIndexToModel(table.getEditingRow());
-            fireEditingStopped();
-            reproducir(row);
-        });
-
-        btnDelete.addActionListener(e -> {
-            // Detenemos la edición antes de lanzar el diálogo de borrar
-            fireEditingStopped();
-            // Llamamos al método que ya tienes en InfoMedia
-            infoMedia.deleteSelectedFile();
-        });
-        
-        btnDownload.addActionListener(e -> {
-    // 1. Intentamos obtener la fila actual de edición
-    int row = table.getEditingRow();
-    
-    // 2. Si es -1 (porque perdió el foco), usamos la posición del panel
-    if (row == -1) {
-        row = table.rowAtPoint(panel.getLocation());
-    }
-
-    // 3. Verificamos que sea una fila válida antes de actuar
-    if (row != -1) {
-        fireEditingStopped(); 
-        
-        // Seleccionamos la fila para que InfoMedia sepa qué archivo descargar
-        table.setRowSelectionInterval(row, row);
-        
-        // Llamamos a la descarga
-        infoMedia.downloadFile();
-    }
-
-});
+        actionPlay(btnPlay);
+        actionDelete(btnDelete);
+        actionDownload(btnDownload);
 
         panel.add(btnPlay);
         panel.add(btnDelete);
@@ -92,15 +50,60 @@ public class TableActions extends AbstractCellEditor implements TableCellRendere
         tableColumn.setCellEditor(this);
     }
     
+    //Establecer acción al botón play de la columna
+    private void actionPlay(JButton btn){
+        
+        btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                infoMedia.playSelectedFile();
+                fireEditingStopped();
+            }
+        });
+    }
+    
+    //Establecer acción al botón delete de la columna
+    private void actionDelete(JButton btn) {
+
+        btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fireEditingStopped();
+                infoMedia.deleteSelectedFile();
+            }
+        });
+    }
+    
+    //Establecer acción al botón download de la columna
+    private void actionDownload(JButton btn) {
+
+        btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int row = table.getEditingRow();
+
+                if (row == -1) {
+                    row = table.rowAtPoint(panel.getLocation());
+                }
+
+                if (row != -1) {
+                    fireEditingStopped();
+                    table.setRowSelectionInterval(row, row);
+                    infoMedia.downloadFile();
+                }
+            }
+        });
+    }
+
+    //Controla que botones mostrar dependiendo de la carpeta seleccionada
     private void updateActionVisibility() {
         boolean isNetwork = infoMedia.isNetworkFileSelected();
-        // Si es red: mostramos descargar, ocultamos play/delete
         btnDownload.setVisible(isNetwork);
         btnPlay.setVisible(!isNetwork);
         btnDelete.setVisible(!isNetwork);
     }
 
-    // Método auxiliar para crear botones con icono (limpia tu constructor)
+    //Método auxiliar para crear botones con icono (limpia tu constructor)
     private JButton createButton(String iconPath, String toolTip) {
         JButton btn = new JButton();
         try {
@@ -119,36 +122,24 @@ public class TableActions extends AbstractCellEditor implements TableCellRendere
         return btn;
     }
 
-    private void reproducir(int row) {
-        FileInformation info = model.getFileAt(row);
-        File file = new File(info.getFolderPath(), info.getName());
-        if (file.exists()) {
-            try { Desktop.getDesktop().open(file); } 
-            catch (Exception ex) { JOptionPane.showMessageDialog(table, "Error opening file."); }
-        } else {
-            JOptionPane.showMessageDialog(table, "File not found.");
-        }
-    }
-
+    //Dibuja celda mostrando los botones dependiendo de la carpeta seleccionada
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         updateActionVisibility();
         panel.setToolTipText(infoMedia.isNetworkFileSelected() ? "Download file" : "Play / Delete");
-    return panel;
+        return panel;
     }
 
+    //Botones interactivos
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         updateActionVisibility();
-    return panel;
+        return panel;
     }
 
+    //Deveulve valor de la celda
     @Override
-    public Object getCellEditorValue() { return ""; }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Object getCellEditorValue() {
+        return "";
     }
-
 }

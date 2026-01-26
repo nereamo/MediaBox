@@ -1,5 +1,6 @@
 package montoya.mediabox.panels;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.nio.file.Files;
 import java.time.*;
@@ -157,7 +158,7 @@ public class InfoMedia extends javax.swing.JPanel {
         });
     }
 
-    // Retorna el archivo seleccionado en la tabla
+    //Retorna el archivo seleccionado en la tabla
     public FileInformation getSelectedFile() {
         int row = tblMedia.getSelectedRow();
         if (row < 0) {
@@ -180,6 +181,33 @@ public class InfoMedia extends javax.swing.JPanel {
         tblModel.setFileList(allFiles);
         tblModel.fireTableDataChanged();
         initDirectoryList();
+    }
+    
+    public void playSelectedFile() {
+        FileInformation info = getSelectedFile();
+
+        if (info == null) {
+            JOptionPane.showMessageDialog(this, "Please select a file.");
+            return;
+        }
+
+        if (isNetworkFileSelected()) {
+            JOptionPane.showMessageDialog(this, "Network files cannot be played directly.");
+            return;
+        }
+
+        File file = new File(info.getFolderPath(), info.getName());
+
+        if (!file.exists()) {
+            JOptionPane.showMessageDialog(this, "File not found.");
+            return;
+        }
+
+        try {
+            Desktop.getDesktop().open(file);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error opening file.");
+        }
     }
 
     // Este método será el "cerebro" del borrado, independiente del botón
