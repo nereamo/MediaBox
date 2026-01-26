@@ -10,7 +10,7 @@ import javax.swing.table.AbstractTableModel;
  */
 public class FileTableModel extends AbstractTableModel {
 
-    private final String[] column = {"Name", "Size (MB)", "Type", "Date"};
+    private final String[] column = {"Name", "Size (MB)", "Type", "Date", "Actions"};
     private List<FileInformation> fileList;
 
     public FileTableModel(List<FileInformation> allFiles) { //Recibe lista del archivo .json
@@ -34,6 +34,11 @@ public class FileTableModel extends AbstractTableModel {
     public String getColumnName(int columns) {
         return column[columns];
     }
+    
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return columnIndex == 4;
+    }
 
     //Valores asociados a las celdas
     @Override
@@ -41,17 +46,21 @@ public class FileTableModel extends AbstractTableModel {
         FileInformation file = fileList.get(rowIndex);
         switch (columnIndex) {
             case 0:
-                return file.name;
+                return file.getName();
             case 1:
-                return String.format("%.2f", file.size / (1024.0 * 1024.0)); // MB
+                return String.format("%.2f", file.getSize() / (1024.0 * 1024.0)); // MB
             case 2:
-                return file.type;
+                return file.getType();
             case 3:
-                return file.date;
+                return file.getDate();
+            case 4:
+                return "PlayOrDelete";
             default:
                 return null;
         }
     }
+    
+    
 
     //Devuelve fila seleccionada
     public FileInformation getFileAt(int rowIndex) {

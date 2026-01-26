@@ -92,7 +92,7 @@ public class DownloadWorker extends SwingWorker<Void, String> {
                 });
 
                 fileProperties.addDownload(info); //Guarda el archivo .json 
-                folderPaths.add(info.folderPath);
+                folderPaths.add(info.getFolderPath()); //--------
 
                 //Refresca la lista de directorios
                 SwingUtilities.invokeLater(new Runnable() {

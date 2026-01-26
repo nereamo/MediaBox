@@ -17,7 +17,7 @@ public class TypeFilter {
 
         for (FileInformation fi : allFiles) {
             
-            if (fi.folderPath.equals(folderPath)) {
+            if (fi.getFolderPath().equals(folderPath)) {
                 filter.add(fi);
             }
         }
@@ -37,32 +37,32 @@ public class TypeFilter {
             } else {
                 switch (filter) {
                     case "MP4":
-                        if (fi.type.contains("mp4")) {
+                        if (fi.getType().contains("mp4")) {
                             applyFilter.add(fi);
                         }
                         break;
                     case "MKV":
-                        if (fi.type.contains("x-matroska")) {
+                        if (fi.getType().contains("x-matroska")) {
                             applyFilter.add(fi);
                         }
                         break;
                     case "WEBM":
-                        if (fi.type.contains("webm")) {
+                        if (fi.getType().contains("webm")) {
                             applyFilter.add(fi);
                         }
                         break;
                     case "MP3":
-                        if (fi.type.contains("mpeg")) {
+                        if (fi.getType().contains("mpeg")) {
                             applyFilter.add(fi);
                         }
                         break;
                     case "WAV":
-                        if (fi.type.contains("wav")) {
+                        if (fi.getType().contains("wav")) {
                             applyFilter.add(fi);
                         }
                         break;
                     case "M4A":
-                        if (fi.type.contains("m4a")) {
+                        if (fi.getType().contains("m4a")) {
                             applyFilter.add(fi);
                         }
                         break;

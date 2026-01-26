@@ -30,11 +30,11 @@ public class FileProperties {
                 DirectoryInformation data = (DirectoryInformation) in.readObject();
 
                 Set<String> rebuiltPaths = new HashSet<>();
-                for (FileInformation fi : data.fileList) {
-                    rebuiltPaths.add(fi.folderPath);
+                for (FileInformation fi : data.getFileList()) {
+                    rebuiltPaths.add(fi.getFolderPath());
                 }
-                data.folderPaths.clear();
-                data.folderPaths.addAll(rebuiltPaths);
+                data.getFolderPaths().clear();
+                data.getFolderPaths().addAll(rebuiltPaths);
 
                 return data;
             }
@@ -52,8 +52,8 @@ public class FileProperties {
 
             DirectoryInformation data = loadDownloads();
 
-            data.fileList.add(newFile);
-            data.folderPaths.add(newFile.folderPath);
+            data.getFileList().add(newFile);
+            data.getFolderPaths().add(newFile.getFolderPath());
 
             saveAllDownloads(data);
 
@@ -66,14 +66,14 @@ public class FileProperties {
     public void deleteDownload(FileInformation fileInfo, List<FileInformation> allFiles, Set<String> allDirs) {
 
         //Borra archivo fisico
-        File f = new File(fileInfo.folderPath, fileInfo.name);
+        File f = new File(fileInfo.getFolderPath(), fileInfo.getName());
         if (f.exists()) {
             f.delete();
         }
 
         for(int i = 0; i <allFiles.size(); i++){
             FileInformation fi = allFiles.get(i);
-            if(fi.name.equals(fileInfo.name) && fi.folderPath.equals(fileInfo.folderPath)){
+            if(fi.getName().equals(fileInfo.getName()) && fi.getFolderPath().equals(fileInfo.getFolderPath())){
                 allFiles.remove(i);
                 break;
             }
@@ -82,14 +82,14 @@ public class FileProperties {
         boolean emptyFolder = true;
         for(int i = 0; i < allFiles.size(); i++){
             FileInformation fi = allFiles.get(i);
-            if(fi.folderPath.equals(fileInfo.folderPath)){
+            if(fi.getFolderPath().equals(fileInfo.getFolderPath())){
                 emptyFolder = false;
                 break;
             }
         }
         
         if(emptyFolder){
-            allDirs.remove(fileInfo.folderPath);
+            allDirs.remove(fileInfo.getFolderPath());
         }
         
         saveAllDownloads(new DirectoryInformation(allFiles, allDirs));

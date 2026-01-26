@@ -37,14 +37,7 @@ public class StyleConfig {
         panel.setBorder(titBorder);
     }
     
-    //Labels
-    public static void styleLabel(JLabel label, String text){
-        label.setOpaque(true);
-        label.setText(text);
-        label.setForeground(LIGHT_BLUE_COLOR);
-        label.setBackground(StyleConfig.DARK_BLUE_COLOR);
-        label.setFont(FONT_PLAIN);
-    }
+    
     
     //CheckBox
     public static void styleCheckBox(JCheckBox check, String text, String toolTip){
@@ -105,9 +98,18 @@ public class StyleConfig {
     
     //Muestra mensajes en jlabels de la app
     public static void showMessage(JLabel lbl, String text) { 
-        lbl.setForeground(GREY_COLOR); 
+        lbl.setForeground(LIGHT_BLUE_COLOR); 
         lbl.setFont(FONT_BOLD);
         lbl.setText(text); 
+    }
+    
+    //Labels
+    public static void styleLabel(JLabel label, String text){
+        label.setOpaque(true);
+        label.setText(text);
+        label.setForeground(LIGHT_BLUE_COLOR);
+        label.setBackground(StyleConfig.DARK_BLUE_COLOR);
+        label.setFont(FONT_PLAIN);
     }
     
     //Logo

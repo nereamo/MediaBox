@@ -197,7 +197,7 @@ public class Login extends JPanel{
                         frame.initializePolling(token);
                         
                         frame.lblMessage.setText("Welcome: " + email);
-                        frame.lblMessage.setForeground(StyleConfig.GREY_COLOR); //Usuario loggeado en label menuBar
+                        frame.lblMessage.setForeground(StyleConfig.DARK_BLUE_COLOR); //Usuario loggeado en label menuBar
                         cardManager.showCard("downloads");
 
                         if (remember.isSelected()) {
@@ -235,6 +235,7 @@ public class Login extends JPanel{
                 frame.initializePolling(token);
                 frame.setMenuVisible(true);
                 frame.lblMessage.setText("Welcome: " + emailUser); //Usuario loggeado en label menuBar
+                frame.lblMessage.setForeground(StyleConfig.DARK_BLUE_COLOR);
                 cardManager.showCard("downloads");
                 System.out.println("Login successful.");
                 return;

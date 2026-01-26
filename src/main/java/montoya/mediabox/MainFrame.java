@@ -69,7 +69,7 @@ public class MainFrame extends JFrame {
     private void configurationFrame() {
         this.setTitle("MediaBox");
         this.setResizable(false);
-        this.setSize(1500, 800);
+        this.setSize(940, 1200);
         this.setLocationRelativeTo(this);
     }
     

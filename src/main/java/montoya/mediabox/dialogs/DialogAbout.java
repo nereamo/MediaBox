@@ -19,13 +19,15 @@ public class DialogAbout extends JDialog {
         initComponents();
         setSize(400,350);
         setLocationRelativeTo(this);
-        pnlAbout.setBackground(StyleConfig.DARK_BLUE_COLOR);
-        lblAbout.setForeground(StyleConfig.GREY_COLOR);
         setTitle("About");
         
         //Texto mostrado en About
         String aboutText =  """
                             <html>
+                                <style>
+                                    body { margin-left: 20px; }
+                                </style>
+                            
                                 <h2>Nerea Montoya</h2>
                                 <p>Course: 2025/2026</p> 
                                 <p>Module: Interface Development</p>
@@ -44,6 +46,7 @@ public class DialogAbout extends JDialog {
         
         lblAbout.setText(aboutText);
         lblAbout.setVerticalAlignment(JLabel.TOP);
+        StyleConfig.styleLabel(lblAbout, aboutText);
     }
     
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -60,7 +63,7 @@ public class DialogAbout extends JDialog {
         lblAbout.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblAbout.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         pnlAbout.add(lblAbout);
-        lblAbout.setBounds(10, 10, 380, 270);
+        lblAbout.setBounds(0, 0, 400, 350);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

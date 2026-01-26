@@ -32,7 +32,7 @@ public class FileManager {
         List<FileInformation> bothFiles = new ArrayList<>();
 
         //Obtener archivos locales
-        List<FileInformation> localFiles = typeFilter.filterByType(directoryInfo.fileList, filter);
+        List<FileInformation> localFiles = typeFilter.filterByType(directoryInfo.getFileList(), filter);
 
         //Obtener archivos de API
         List<FileInformation> networkFiles = getNetworkFiles(filter);
@@ -40,7 +40,7 @@ public class FileManager {
         //Compara las dos listas en busca de la concidencia
         for (FileInformation netFi : networkFiles) {
             for (FileInformation localFi : localFiles) {
-                if (netFi.name.equalsIgnoreCase(localFi.name)) {
+                if (netFi.getName().equalsIgnoreCase(localFi.getName())) {
                     bothFiles.add(localFi);
                 }
             }
@@ -83,7 +83,7 @@ public class FileManager {
     
     //Obtiene los archivos locales dependiendo del directorio seleccionado
     public List<FileInformation> getLocalFiles(String folderPath, String filter) {
-        List<FileInformation> localFiles = typeFilter.filterByDirectory(directoryInfo.fileList, folderPath);
+        List<FileInformation> localFiles = typeFilter.filterByDirectory(directoryInfo.getFileList(), folderPath);
 
         return typeFilter.filterByType(localFiles, filter);
     }
