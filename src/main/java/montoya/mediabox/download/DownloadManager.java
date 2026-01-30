@@ -7,11 +7,10 @@ import java.util.Set;
 import javax.swing.*;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
-import montoya.mediabox.fileInformation.FolderItem;
+import montoya.mediabox.panels.InfoMedia;
 
 /**
- * Contiene los parametros necesarios para la configuracion de la descarga.
- * Se usa junto con {@link DownloadWorker}.
+ * Contiene los parametros necesarios para la configuracion de la descarga. Se usa junto con {@link DownloadWorker}.
  *
  * @author Nerea
  */
@@ -19,14 +18,16 @@ public class DownloadManager {
 
     private DownloadWorker downloadWorker;
     private FileProperties fileProperties;
-    
+    private InfoMedia infoMedia;
+
     private String tempPath;
     private String ytDlpLocation;
     private boolean createM3u;
     private double maxSpeed;
 
-    public DownloadManager() {}
-    
+    public DownloadManager() {
+    }
+
     public DownloadManager(FileProperties fileProperties) {
         this.fileProperties = fileProperties;
     }
@@ -72,9 +73,8 @@ public class DownloadManager {
         return null;
     }
 
-    
     //Verifica si los campos de preferences se han completado
-    public void download(String url, String folder, String format, String quality, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, JList<FolderItem> foldersList, Set<String> folderPaths) {
+    public void download(String url, String folder, String format, String quality, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, Set<String> folderPaths, JLabel lblInfoDownload) {
         if (url.isEmpty() || folder.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter a URL and select a folder.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -90,7 +90,7 @@ public class DownloadManager {
         progressBar.setVisible(true);
         progressBar.setIndeterminate(true);
 
-        downloadWorker = new DownloadWorker(pb, folder, outputArea, progressBar, tblModel, fileProperties, foldersList, folderPaths);
+        downloadWorker = new DownloadWorker(pb, folder, outputArea, progressBar, tblModel, fileProperties, folderPaths, lblInfoDownload, infoMedia);
         DownloadWorker task = downloadWorker;
 
         task.addPropertyChangeListener(evt -> {
@@ -102,15 +102,15 @@ public class DownloadManager {
 
         task.execute();
     }
-    
+
     //Devuelve ProcessBuilder con configuración para yt-dlp
     private ProcessBuilder buildCommand(String url, String folder, String format, String quality) {
         List<String> cmd = new ArrayList<>();
-        
+
         cmd.add(ytDlpLocation);
         cmd.add("-o");
         cmd.add(folder + File.separator + "%(title)s.%(ext)s"); //Añade a carpeta el archivo con nombre
-        
+
         if ("mp3".equals(format) || "wav".equals(format) || "m4a".equals(format)) {
             cmd.add("-o");
             cmd.add(folder + File.separator + "%(title)s_audio.%(ext)s");
@@ -118,11 +118,11 @@ public class DownloadManager {
             cmd.add("-o");
             cmd.add(folder + File.separator + "%(title)s.%(ext)s");
         }
-        
+
         String qualityFilter = "";
-        
+
         //Ajustar calidad de video
-        switch (quality){
+        switch (quality) {
             case "1080":
                 qualityFilter = "[height<=1080]";
                 break;
@@ -134,7 +134,7 @@ public class DownloadManager {
                 break;
             default:
                 JOptionPane.showMessageDialog(null, "Unknown quality selected: " + quality, "Error", JOptionPane.ERROR_MESSAGE);
-            return null;
+                return null;
         }
 
         //Ajustar descarga según formato
@@ -176,9 +176,9 @@ public class DownloadManager {
                 break;
             default:
                 JOptionPane.showMessageDialog(null, "Unknown format selected: " + format, "Error", JOptionPane.ERROR_MESSAGE);
-            return null;
+                return null;
         }
-        
+
         //Archivo .m3u
         if (createM3u) {
             cmd.add("--write-info-json");
@@ -191,7 +191,7 @@ public class DownloadManager {
         }
 
         cmd.add(url); //url del archivo
-        
+
         ProcessBuilder pb = new ProcessBuilder(cmd);
         pb.redirectErrorStream(true);
         return pb;
@@ -207,5 +207,9 @@ public class DownloadManager {
                 progressBar.setString("Downloading... " + percent + "%");
             }
         });
+    }
+
+    public void setInfoMedia(InfoMedia infoMedia) {
+        this.infoMedia = infoMedia;
     }
 }

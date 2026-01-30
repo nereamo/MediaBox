@@ -2,7 +2,6 @@ package montoya.mediabox.panels;
 
 import java.awt.Cursor;
 import java.awt.Desktop;
-import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -24,7 +23,6 @@ import montoya.mediabox.fileInformation.FileTableModel;
 import montoya.mediabox.fileInformation.FolderItem;
 import montoya.mediabox.styleConfig.StyleConfig;
 import montoya.mediapollingcomponent.MediaPollingComponent;
-import net.miginfocom.swing.MigLayout;
 
 /**
  * Panel que gestiona las descargas de medios en la aplicación MediaBox. 
@@ -41,14 +39,12 @@ public class Downloads extends javax.swing.JPanel {
     private final MediaPollingComponent mediaPollingComponent;
     private final ButtonGroup btnGroup;
     private final Set<String> folderPaths;
-    private JList<FolderItem> foldersList;
     private List<FileInformation> allFiles = new ArrayList<>();
     private String folderPath = "";
 
     public Downloads(MainFrame frame, Set<String> folderPaths, DownloadManager downloadManager, MediaPollingComponent mediaPollingComponent) {
 
         initComponents();
-        configPanel();
 
         this.frame = frame;
         this.typeFilter = new TypeFilter();
@@ -57,27 +53,26 @@ public class Downloads extends javax.swing.JPanel {
         this.fileProperties = new FileProperties();
         this.mediaPollingComponent = mediaPollingComponent;
 
-        foldersList = new JList<>(new DefaultListModel<>());
         btnGroup = new ButtonGroup();
         infoMedia = new InfoMedia(fileProperties, typeFilter, allFiles, folderPaths, mediaPollingComponent);
+        downloadManager.setInfoMedia(infoMedia);
         tblModel = infoMedia.getTableModel();
 
+        configPanels();
         qualityOptions(cbbxQualityFilter);//Aplica filtro de calidad
         //configComponents();
         styleComponents(); //Estilo de los componentes
         styleTxtUrl();
         configRadioButtons(btnGroup, radioMp4, radioMkv, radioWebm, radioMp3, radioWav, radioM4a);//Configura como se ven los botones
-        
-        downloadFilePnl.setBounds(40, 30, 840, 470);
 
-        //Panels InfoMedia y ApiFiles añadidos
-        infoMedia.setBounds(40, 560, 840, 460);
-        this.add(infoMedia);
     }
 
-    private void configPanel(){
-        setBounds(0, 0, 1300, 770);
-        setBackground(StyleConfig.DARK_BLUE_COLOR);  
+    private void configPanels(){
+        setBounds(0, 0, 1300, 770); //panel general
+        setBackground(StyleConfig.DARK_BLUE_COLOR);
+        downloadFilePnl.setBounds(40, 30, 840, 550); //Panel Download File
+        infoMedia.setBounds(40, 590, 840, 460); //Panel InfoMedia
+        this.add(infoMedia);
     }
     
     private void configComponents() {
@@ -109,23 +104,16 @@ public class Downloads extends javax.swing.JPanel {
     //Aplica estilos a los componentes
     private void styleComponents() {
         StyleConfig.createTitleBorder(downloadFilePnl, "DOWNLOAD FILE");
-        StyleConfig.styleButton(btnFolder, "/images/folder.png", "Select destination folder");
+        StyleConfig.styleIconButton(btnFolder, "/images/folder.png", "Select destination folder");
         StyleConfig.createTitleBorder(pnlVideo, "VIDEO");
         StyleConfig.createTitleBorder(pnlAudio, "AUDIO");
         StyleConfig.styleButtonGroup("Select format", radioM4a, radioMkv, radioMp3, radioMp4, radioWav, radioWebm);
-        StyleConfig.renderComboBox(cbbxQualityFilter);
-        btnDownload.setBackground(StyleConfig.LIGHT_BLUE_COLOR);
-        btnDownload.setForeground(StyleConfig.DARK_BLUE_COLOR);
-        btnDownload.setText("DOWNLOAD");
-        btnDownload.setPreferredSize(new Dimension(120, 70));
-        
-        btnOpenLast.setBackground(StyleConfig.GREY_COLOR);
-        btnOpenLast.setForeground(StyleConfig.DARK_BLUE_COLOR);
-        btnOpenLast.setText("OPEN LAST");
-        btnOpenLast.setPreferredSize(new Dimension(120, 50));
+        StyleConfig.selectionColorComboBox(cbbxQualityFilter);
+        StyleConfig.styleSimpleButton(btnDownload, "DOWNLOAD", "Download file", 120, 70, StyleConfig.LIGHT_BLUE_COLOR, StyleConfig.DARK_BLUE_COLOR);
+        StyleConfig.styleSimpleButton(btnOpenLast, "OPEN LAST", "Reproduce last file", 120, 50, StyleConfig.GREY_COLOR, StyleConfig.DARK_BLUE_COLOR);
         
         progressBar.setBackground(StyleConfig.LIGHT_BLUE_COLOR);
-        progressBar.setForeground(StyleConfig.GREY_COLOR);
+        progressBar.setForeground(StyleConfig.DARK_BLUE_COLOR);
         
     }
     
@@ -202,10 +190,6 @@ public class Downloads extends javax.swing.JPanel {
         txtUrl = new javax.swing.JTextField();
         lblUrl = new javax.swing.JLabel();
         btnFolder = new javax.swing.JButton();
-        pnlAudio = new javax.swing.JPanel();
-        radioMp3 = new javax.swing.JRadioButton();
-        radioWav = new javax.swing.JRadioButton();
-        radioM4a = new javax.swing.JRadioButton();
         pnlVideo = new javax.swing.JPanel();
         radioMp4 = new javax.swing.JRadioButton();
         radioMkv = new javax.swing.JRadioButton();
@@ -216,23 +200,28 @@ public class Downloads extends javax.swing.JPanel {
         progressBar = new javax.swing.JProgressBar();
         jScrollPane1 = new javax.swing.JScrollPane();
         areaInfo = new javax.swing.JTextArea();
+        pnlAudio = new javax.swing.JPanel();
+        radioWav = new javax.swing.JRadioButton();
+        radioM4a = new javax.swing.JRadioButton();
+        radioMp3 = new javax.swing.JRadioButton();
+        lblInfoDownload = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(1500, 770));
         setPreferredSize(new java.awt.Dimension(1300, 770));
         setLayout(null);
 
-        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo.png"))); // NOI18N
+        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo3.png"))); // NOI18N
         add(logoLabel);
-        logoLabel.setBounds(270, 1030, 360, 90);
+        logoLabel.setBounds(700, 1060, 180, 50);
 
-        downloadFilePnl.setMaximumSize(new java.awt.Dimension(630, 670));
-        downloadFilePnl.setMinimumSize(new java.awt.Dimension(630, 670));
-        downloadFilePnl.setPreferredSize(new java.awt.Dimension(630, 670));
+        downloadFilePnl.setMaximumSize(new java.awt.Dimension(600, 670));
+        downloadFilePnl.setMinimumSize(new java.awt.Dimension(600, 670));
+        downloadFilePnl.setPreferredSize(new java.awt.Dimension(600, 670));
         downloadFilePnl.setLayout(null);
 
         txtUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         downloadFilePnl.add(txtUrl);
-        txtUrl.setBounds(50, 50, 690, 23);
+        txtUrl.setBounds(50, 40, 690, 23);
 
         lblUrl.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         downloadFilePnl.add(lblUrl);
@@ -248,90 +237,33 @@ public class Downloads extends javax.swing.JPanel {
             }
         });
         downloadFilePnl.add(btnFolder);
-        btnFolder.setBounds(750, 40, 72, 50);
-
-        pnlAudio.setMaximumSize(new java.awt.Dimension(200, 210));
-
-        radioMp3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        radioMp3.setText("MP3");
-
-        radioWav.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        radioWav.setText("WAV");
-
-        radioM4a.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        radioM4a.setText("M4A");
-
-        javax.swing.GroupLayout pnlAudioLayout = new javax.swing.GroupLayout(pnlAudio);
-        pnlAudio.setLayout(pnlAudioLayout);
-        pnlAudioLayout.setHorizontalGroup(
-            pnlAudioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlAudioLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(pnlAudioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(radioWav, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
-                    .addComponent(radioM4a, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(radioMp3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(15, Short.MAX_VALUE))
-        );
-        pnlAudioLayout.setVerticalGroup(
-            pnlAudioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlAudioLayout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(radioMp3)
-                .addGap(18, 18, 18)
-                .addComponent(radioWav)
-                .addGap(18, 18, 18)
-                .addComponent(radioM4a)
-                .addContainerGap(57, Short.MAX_VALUE))
-        );
-
-        downloadFilePnl.add(pnlAudio);
-        pnlAudio.setBounds(370, 110, 180, 180);
+        btnFolder.setBounds(750, 30, 72, 50);
 
         pnlVideo.setMaximumSize(new java.awt.Dimension(200, 210));
+        pnlVideo.setLayout(null);
 
         radioMp4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         radioMp4.setText("MP4");
+        pnlVideo.add(radioMp4);
+        radioMp4.setBounds(20, 30, 70, 22);
 
         radioMkv.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         radioMkv.setText("MKV");
+        pnlVideo.add(radioMkv);
+        radioMkv.setBounds(140, 30, 70, 22);
 
         radioWebm.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         radioWebm.setText("WEBM");
+        pnlVideo.add(radioWebm);
+        radioWebm.setBounds(260, 30, 90, 22);
 
         cbbxQualityFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         cbbxQualityFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Quality" }));
-
-        javax.swing.GroupLayout pnlVideoLayout = new javax.swing.GroupLayout(pnlVideo);
-        pnlVideo.setLayout(pnlVideoLayout);
-        pnlVideoLayout.setHorizontalGroup(
-            pnlVideoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlVideoLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(pnlVideoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbbxQualityFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(radioWebm, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnlVideoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(radioMkv, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(radioMp4, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(26, Short.MAX_VALUE))
-        );
-        pnlVideoLayout.setVerticalGroup(
-            pnlVideoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlVideoLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(radioMp4)
-                .addGap(18, 18, 18)
-                .addComponent(radioMkv)
-                .addGap(18, 18, 18)
-                .addComponent(radioWebm)
-                .addGap(18, 18, 18)
-                .addComponent(cbbxQualityFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(39, Short.MAX_VALUE))
-        );
+        pnlVideo.add(cbbxQualityFilter);
+        cbbxQualityFilter.setBounds(400, 30, 139, 23);
 
         downloadFilePnl.add(pnlVideo);
-        pnlVideo.setBounds(50, 100, 180, 200);
+        pnlVideo.setBounds(50, 90, 560, 80);
 
         btnDownload.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnDownload.setMaximumSize(new java.awt.Dimension(120, 60));
@@ -343,7 +275,7 @@ public class Downloads extends javax.swing.JPanel {
             }
         });
         downloadFilePnl.add(btnDownload);
-        btnDownload.setBounds(590, 190, 120, 60);
+        btnDownload.setBounds(630, 170, 150, 60);
 
         btnOpenLast.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnOpenLast.setText("Open Last");
@@ -353,12 +285,12 @@ public class Downloads extends javax.swing.JPanel {
             }
         });
         downloadFilePnl.add(btnOpenLast);
-        btnOpenLast.setBounds(590, 260, 120, 24);
+        btnOpenLast.setBounds(630, 240, 150, 24);
 
         progressBar.setBackground(new java.awt.Color(204, 204, 204));
         progressBar.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         downloadFilePnl.add(progressBar);
-        progressBar.setBounds(50, 320, 730, 10);
+        progressBar.setBounds(50, 300, 730, 10);
 
         areaInfo.setColumns(20);
         areaInfo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -366,10 +298,35 @@ public class Downloads extends javax.swing.JPanel {
         jScrollPane1.setViewportView(areaInfo);
 
         downloadFilePnl.add(jScrollPane1);
-        jScrollPane1.setBounds(50, 340, 730, 100);
+        jScrollPane1.setBounds(50, 320, 730, 180);
+
+        pnlAudio.setMaximumSize(new java.awt.Dimension(200, 210));
+        pnlAudio.setLayout(null);
+
+        radioWav.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        radioWav.setText("WAV");
+        pnlAudio.add(radioWav);
+        radioWav.setBounds(120, 30, 70, 22);
+
+        radioM4a.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        radioM4a.setText("M4A");
+        pnlAudio.add(radioM4a);
+        radioM4a.setBounds(210, 30, 151, 22);
+
+        radioMp3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        radioMp3.setText("MP3");
+        pnlAudio.add(radioMp3);
+        radioMp3.setBounds(30, 30, 80, 22);
+
+        downloadFilePnl.add(pnlAudio);
+        pnlAudio.setBounds(50, 190, 560, 80);
+
+        lblInfoDownload.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        downloadFilePnl.add(lblInfoDownload);
+        lblInfoDownload.setBounds(220, 510, 340, 20);
 
         add(downloadFilePnl);
-        downloadFilePnl.setBounds(30, 30, 890, 520);
+        downloadFilePnl.setBounds(30, 30, 900, 700);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFolderActionPerformed
@@ -383,16 +340,27 @@ public class Downloads extends javax.swing.JPanel {
             File selectedFolder = directory.getSelectedFile();
 
             if (selectedFolder != null && selectedFolder.isDirectory()) {
-                //String folderPath = selectedFolder.getAbsolutePath();
-                //txtFolder.setText(selectedFolder.getAbsolutePath());
-                
+
                 this.folderPath = selectedFolder.getAbsolutePath();
 
-                // Añadir el directorio a la lista si no está ya
-                if (folderPaths.add(folderPath)) {
-                    DefaultListModel<FolderItem> listModel = (DefaultListModel<FolderItem>) infoMedia.getListDirectories().getModel();
+                DefaultListModel<FolderItem> listModel = (DefaultListModel<FolderItem>) infoMedia.getListDirectories().getModel();
+
+                boolean exists = false;
+                for (int i = 0; i < listModel.size(); i++) {
+                    if (listModel.getElementAt(i).getFullPath().equals(folderPath)) {
+                        exists = true;
+                        break;
+                    }
+                }
+
+                // Si no existe, añadirlo
+                if (!exists) {
                     listModel.addElement(new FolderItem(folderPath, false, false));
                 }
+
+                // Seleccionar automáticamente el directorio añadido
+                FolderItem toSelect = new FolderItem(folderPath, false, false);
+                infoMedia.getListDirectories().setSelectedValue(toSelect, true);
             }
         }
     }//GEN-LAST:event_btnFolderActionPerformed
@@ -408,25 +376,12 @@ public class Downloads extends javax.swing.JPanel {
             return;
         }
 
-        downloadManager.setTempPath(folder);
         areaInfo.setText("");
 
         Thread th = new Thread() {
             @Override
             public void run() {
-                downloadManager.download(url, folder, format, quality, areaInfo, progressBar, tblModel, foldersList, folderPaths);
-
-                if (folderPaths.add(folder)) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            tblModel.fireTableDataChanged();
-                            DefaultListModel<FolderItem> listModel = (DefaultListModel<FolderItem>) foldersList.getModel();
-                            listModel.addElement(new FolderItem(folder, false, false));
-                        }
-                    });
-                }
+                downloadManager.download(url, folder, format, quality, areaInfo, progressBar, tblModel, folderPaths, lblInfoDownload);
             }
         };
         th.start();
@@ -454,6 +409,7 @@ public class Downloads extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> cbbxQualityFilter;
     private javax.swing.JPanel downloadFilePnl;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblInfoDownload;
     private javax.swing.JLabel lblUrl;
     private javax.swing.JLabel logoLabel;
     private javax.swing.JPanel pnlAudio;

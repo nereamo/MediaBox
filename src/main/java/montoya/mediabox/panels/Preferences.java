@@ -66,18 +66,18 @@ public class Preferences extends javax.swing.JPanel {
     
     //Configuracion de JLabel
     private void styleLabel(){
-        StyleConfig.styleLabel(lblPath, "Temp Path: ");
-        StyleConfig.styleLabel(lblM3u, "File .m3u: ");
-        StyleConfig.styleLabel(lblSpeed, "Speed (MB/s): ");
-        StyleConfig.styleLabel(lblYtDlp, "Location yt-dlp: ");
+        StyleConfig.styleFixLabel(lblPath, "Temp Path: ");
+        StyleConfig.styleFixLabel(lblM3u, "File .m3u: ");
+        StyleConfig.styleFixLabel(lblSpeed, "Speed (MB/s): ");
+        StyleConfig.styleFixLabel(lblYtDlp, "Location yt-dlp: ");
     }
     
     //Configuracion de botones y checkBox
     private void styleComponents(){
-        StyleConfig.styleButton(btnBrowseTemp, "/images/folder.png", "Select Folder");
-        StyleConfig.styleButton(btnYtDlp, "/images/folder.png", "Automatic search");
-        StyleConfig.styleButton(btnSave, "/images/save.png", "Save changes");
-        StyleConfig.styleButton(btnCancel, "/images/return.png", "Discard changes");
+        StyleConfig.styleIconButton(btnBrowseTemp, "/images/folder.png", "Select Folder");
+        StyleConfig.styleIconButton(btnYtDlp, "/images/search.png", "Automatic search");
+        StyleConfig.styleIconButton(btnSave, "/images/save.png", "Save changes");
+        StyleConfig.styleIconButton(btnCancel, "/images/return.png", "Discard changes");
         StyleConfig.styleCheckBox(chkCreate,"Create", "Create files .M3U");
     }
     

@@ -45,16 +45,29 @@ public class FileProperties {
         }
     }
     
+    //Sobrescribe el fichero .json con toda la lista actual
+    public void saveAllDownloads(DirectoryInformation dirInfo) {
+        
+        try {
+            
+            Files.createDirectories(Paths.get(FOLDER_NAME));
+            try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(JSON_PATH.toFile()))) {
+                out.writeObject(dirInfo);
+            }
+        
+        } catch (IOException e) {
+            System.err.println("Error saving all download data: " + e.getMessage());
+        }
+    }
+    
     public void addDownload(FileInformation newFile) {
 
         try {
             Files.createDirectories(Paths.get(FOLDER_NAME));
-
+            
             DirectoryInformation data = loadDownloads();
-
             data.getFileList().add(newFile);
             data.getFolderPaths().add(newFile.getFolderPath());
-
             saveAllDownloads(data);
 
         } catch (Exception e) {
@@ -93,20 +106,5 @@ public class FileProperties {
         }
         
         saveAllDownloads(new DirectoryInformation(allFiles, allDirs));
-    }
-    
-    //Sobrescribe el fichero .json con toda la lista actual
-    public void saveAllDownloads(DirectoryInformation dirInfo) {
-        
-        try {
-            
-            Files.createDirectories(Paths.get(FOLDER_NAME));
-            try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(JSON_PATH.toFile()))) {
-                out.writeObject(dirInfo);
-            }
-        
-        } catch (IOException e) {
-            System.err.println("Error saving all download data: " + e.getMessage());
-        }
     }
 }

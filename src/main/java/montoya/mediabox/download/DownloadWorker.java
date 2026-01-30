@@ -10,7 +10,8 @@ import java.text.SimpleDateFormat;
 import montoya.mediabox.fileInformation.FileInformation;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
-import montoya.mediabox.fileInformation.FolderItem;
+import montoya.mediabox.panels.InfoMedia;
+import montoya.mediabox.styleConfig.StyleConfig;
 
 /**
  * Clase creada con ayuda de Copilot para entender como funciona SwingWorker y que metodos utilizar. SwingWorker ejecuta tareas en segundo plano impidiendo que no se bloquee la GUI. Contiene metodos para descaragar archivos en segundo plano
@@ -21,25 +22,26 @@ public class DownloadWorker extends SwingWorker<Void, String> {
 
     private File lastDownloadFile;
     private final FileTableModel tblModel;
-    //private InfoMedia infoMedia;
+    private InfoMedia infoMedia;
     private final FileProperties fileProperties;
 
     private final ProcessBuilder pb;
     private final String folder;
     private final JTextArea outputArea;
     private final JProgressBar barProgress;
-    private JList<FolderItem> foldersList;
+    private final JLabel lblInfoDownload;
     private final Set<String> folderPaths;
 
-    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, FileProperties fileProperties, JList<FolderItem> foldersList, Set<String> folderPaths) {
+    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, FileProperties fileProperties, Set<String> folderPaths, JLabel lblInfoDownload, InfoMedia infoMedia) {
         this.pb = pb;
         this.folder = folder;
         this.outputArea = outputArea;
         this.barProgress = progressBar;
         this.tblModel = tblModel;
         this.fileProperties = fileProperties;
-        this.foldersList = foldersList;
         this.folderPaths = folderPaths;
+        this.lblInfoDownload = lblInfoDownload;
+        this.infoMedia = infoMedia;
     }
 
     //Devuelve ultimo archivo descargado
@@ -72,37 +74,22 @@ public class DownloadWorker extends SwingWorker<Void, String> {
             File[] files = dir.listFiles();
 
             if (files != null && files.length > 0) {
-                File latest = files[0]; //Archivo mas reciente
+                File latest = files[0];
                 for (File f : files) {
                     if (f.lastModified() > latest.lastModified()) {
                         latest = f;
                     }
                 }
 
-                //Para la tabla
                 lastDownloadFile = latest;
-                FileInformation info = fileInfo(lastDownloadFile); //Crea objeto FileInfo con los datos
+                FileInformation info = fileInfo(latest);
 
-                SwingUtilities.invokeLater(new Runnable() { //Añade el objeto a la tabla
-                    @Override
-                    public void run() {
-                        tblModel.addFile(info);
-                        tblModel.fireTableDataChanged();
-                    }
-                });
+                fileProperties.addDownload(info);
 
-                fileProperties.addDownload(info); //Guarda el archivo .json 
-                folderPaths.add(info.getFolderPath()); //--------
-
-                //Refresca la lista de directorios
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        DefaultListModel<FolderItem> model = new DefaultListModel<>();
-                        for (String folderPath : folderPaths) {
-                            model.addElement(new FolderItem(folderPath, false, false));
-                        }
-                        foldersList.setModel(model);
+                        infoMedia.refreshFiles();// Refrescar archivos
                     }
                 });
             }
@@ -126,7 +113,7 @@ public class DownloadWorker extends SwingWorker<Void, String> {
         barProgress.setIndeterminate(false);
         barProgress.setValue(100);
         barProgress.setString("Download completed!");
-        JOptionPane.showMessageDialog(null, "Download completed!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        StyleConfig.showMessageInfo(lblInfoDownload, "Download completed!");
     }
 
     //Extrae el % de cada linea de la descarga

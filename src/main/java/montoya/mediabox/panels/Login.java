@@ -68,7 +68,7 @@ public class Login extends JPanel{
         StyleConfig.styleCheckBox(remember, "Remember me", "Remember credentials");
         this.add(remember, "align center, gaptop 10");
 
-        StyleConfig.styleButton(btnLogin, "/images/login.png", "Login user");
+        StyleConfig.styleIconButton(btnLogin, "/images/login.png", "Login user");
         this.add(btnLogin, "align center, w 200!, h 40!, gaptop 20");
 
         lblMessage.setHorizontalAlignment(SwingConstants.CENTER);
@@ -173,7 +173,7 @@ public class Login extends JPanel{
 
                 if (email == null || email.trim().equals("")
                         || password == null || password.trim().equals("")) {
-                    StyleConfig.showMessage(lblMessage, "Please, enter an Email and Password");
+                    StyleConfig.showMessageInfo(lblMessage, "Please, enter an Email and Password");
                     return;
                 }
 
@@ -186,7 +186,7 @@ public class Login extends JPanel{
                         try {
                             mediaPollingComponent.getAllMedia(newToken);
                         } catch (Exception ex) {
-                            StyleConfig.showMessage(lblMessage, "User logged out. Please log in again.");
+                            StyleConfig.showMessageInfo(lblMessage, "User logged out. Please log in again.");
                             return;
                         }
                         token = newToken;
@@ -225,7 +225,7 @@ public class Login extends JPanel{
                     mediaPollingComponent.getAllMedia(savedToken); //Llamada a api para comprobar si el token es correcto
                     
                 }catch(Exception e){
-                    StyleConfig.showMessage(lblMessage, "User logged out. Please log in again.");
+                    StyleConfig.showMessageInfo(lblMessage, "User logged out. Please log in again.");
                     token = null; 
                     cardManager.showCard("login"); 
                     return;

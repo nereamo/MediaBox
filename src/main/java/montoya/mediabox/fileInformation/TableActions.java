@@ -1,5 +1,5 @@
 
-package montoya.mediabox.controller;
+package montoya.mediabox.fileInformation;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,7 +9,6 @@ import javax.swing.*;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import montoya.mediabox.fileInformation.*;
 import montoya.mediabox.panels.InfoMedia;
 
 /**

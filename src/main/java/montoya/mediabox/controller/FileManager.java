@@ -1,5 +1,9 @@
 package montoya.mediabox.controller;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -19,13 +23,23 @@ public class FileManager {
     private DirectoryInformation directoryInfo;
     private TypeFilter typeFilter;
     private MediaPollingComponent mediaPollingComponent;
+    private FileProperties fileProperties;
     
-    public FileManager(DirectoryInformation directoryInfo,TypeFilter typeFilter, MediaPollingComponent mediaPollingComponent){
+    public FileManager(DirectoryInformation directoryInfo,TypeFilter typeFilter, MediaPollingComponent mediaPollingComponent, FileProperties fileProperties){
         
         this.directoryInfo = directoryInfo;
         this.typeFilter = typeFilter;
         this.mediaPollingComponent = mediaPollingComponent;
+        this.fileProperties = fileProperties;
     }
+    
+    //Obtiene los archivos locales dependiendo del directorio seleccionado
+    public List<FileInformation> getLocalFiles(String folderPath, String filter) {
+        List<FileInformation> localFiles = typeFilter.filterByDirectory(directoryInfo.getFileList(), folderPath);
+
+        return typeFilter.filterByType(localFiles, filter);
+    }
+    
     
     //Obtiene los archivos de API y local
     public List<FileInformation> getBothFiles(String filter) {
@@ -81,15 +95,41 @@ public class FileManager {
         return networkFiles;
     }
     
-    //Obtiene los archivos locales dependiendo del directorio seleccionado
-    public List<FileInformation> getLocalFiles(String folderPath, String filter) {
-        List<FileInformation> localFiles = typeFilter.filterByDirectory(directoryInfo.getFileList(), folderPath);
-
-        return typeFilter.filterByType(localFiles, filter);
+    public void playFile(FileInformation  file) throws IOException{
+        
+        File f = new File(file.getFolderPath(), file.getName());
+        if(!f.exists()){
+            throw new IOException("File not found: " + file.getName());
+        }
+        Desktop.getDesktop().open(f);
     }
     
-    //Refresca la lista de archivos
-    public void refreshFiles(FileProperties fileProperties){
+    public void deleteFile(FileInformation fileInfo) {
+        fileProperties.deleteDownload(fileInfo, directoryInfo.getFileList(), directoryInfo.getFolderPaths());
+    }
+    
+    public void downloadFile(FileInformation fileInfo, File folder) throws Exception {
+        List<Media> mediaList = mediaPollingComponent.getAllMedia(mediaPollingComponent.getToken());
+        Media mediaFile = mediaList.stream()
+                .filter(m -> m.mediaFileName.equals(fileInfo.getName()))
+                .findFirst()
+                .orElseThrow(() -> new Exception("Cannot find media in API"));
+
+        File file = new File(folder, fileInfo.getName());
+        mediaPollingComponent.download(mediaFile.id, file, mediaPollingComponent.getToken());
+
+        FileInformation newFile = new FileInformation(mediaFile.mediaFileName, file.length(),
+                mediaFile.mediaMimeType, LocalDate.now().toString(), folder.getAbsolutePath());
+
+        fileProperties.addDownload(newFile);
+        
         this.directoryInfo = fileProperties.loadDownloads();
     }
+    
+    
+    //Refresca la lista de archivos
+    public void refreshFiles(){
+        this.directoryInfo = fileProperties.loadDownloads();
+    }
+
 }

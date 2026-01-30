@@ -240,7 +240,7 @@ public class MainFrame extends JFrame {
         setMenuVisible(false);
         this.isLoggedIn = false;
         cardManager.showCard("login");
-        StyleConfig.showMessage(pnlLogin.lblMessage, "Closed sesion.");
+        StyleConfig.showMessageInfo(pnlLogin.lblMessage, "Closed sesion.");
     }//GEN-LAST:event_itemLogoutActionPerformed
 
     public static void main(String args[]) {

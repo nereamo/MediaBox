@@ -25,7 +25,7 @@ public class StyleConfig {
     public static final Color LIGHT_BLUE_COLOR = new Color (135,139,222);
     public static final Color DARK_BLUE_COLOR = new Color(46, 51, 94);
     
-    //Border
+    //Estilo para los titleBorders
     public static void createTitleBorder(JPanel panel, String title){
         Border border = BorderFactory.createLineBorder(LIGHT_BLUE_COLOR);
         TitledBorder titBorder = BorderFactory.createTitledBorder(border, title);
@@ -36,32 +36,31 @@ public class StyleConfig {
         panel.setOpaque(false);
         panel.setBorder(titBorder);
     }
-    
-    
-    
-    //CheckBox
+
+    //Estilo para CheckBox
     public static void styleCheckBox(JCheckBox check, String text, String toolTip){
         check.setOpaque(false);
-        check.setForeground(GREY_COLOR);
+        check.setForeground(LIGHT_BLUE_COLOR);
         check.setFont(FONT_PLAIN);
         check.setFocusPainted(false);
         check.setText(text);
         check.setToolTipText(toolTip);
     }
     
-    //Buttongroup
+    //Estilo para Buttongroup
     public static void styleButtonGroup(String toolTip, JRadioButton... radio) {
         for (JRadioButton rb : radio) {
-            rb.setOpaque(false);
-            rb.setForeground(GREY_COLOR);
-            rb.setFont(FONT_PLAIN);
+            rb.setOpaque(true);
             rb.setFocusPainted(false);
-            rb.setToolTipText(toolTip);
+            rb.setForeground(LIGHT_BLUE_COLOR);
+            rb.setBackground(DARK_BLUE_COLOR);
+            rb.setFont(FONT_PLAIN);
+            rb.setToolTipText(toolTip); 
         }
     }
 
-    //Buttons
-    public static void styleButton(JButton btn, String iconPath, String tootlTip) {
+    //Estilo para los botones que SI tienen icono
+    public static void styleIconButton(JButton btn, String iconPath, String tootlTip) {
         btn.setOpaque(false);
         btn.setFocusPainted(false);
         btn.setContentAreaFilled(false);
@@ -85,7 +84,34 @@ public class StyleConfig {
         });
     }
     
-    //Items menu
+    //Estilo para los botones que NO tienen icono
+    public static void styleSimpleButton(JButton btn, String txt, String tootlTip, int width, int height, Color fondo, Color letras) {
+        btn.setOpaque(true);
+        btn.setContentAreaFilled(true);
+        btn.setBorderPainted(false);
+        btn.setText(txt);
+        btn.setBackground(fondo);
+        btn.setForeground(letras);
+        btn.setFont(FONT_BOLD);
+        btn.setToolTipText(tootlTip);
+        btn.setPreferredSize(new Dimension(width, height));
+        
+        btn.addMouseListener(new MouseAdapter (){
+            @Override
+            public void mouseEntered(MouseEvent e){
+                btn.setBorderPainted(true);
+                btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                btn.setBorder(BorderFactory.createBevelBorder(1));
+            }
+            
+            @Override 
+            public void mouseExited(MouseEvent e){
+                btn.setBorderPainted(false);
+            }
+        });
+    }
+    
+    //Estilo de los items del MenuBar
     public static void styleMenuItems(JMenuItem item, String iconPath, String text, String toolTip) {
         item.setText(text == null ? "" : text);
         item.setOpaque(false);
@@ -96,15 +122,15 @@ public class StyleConfig {
         item.setToolTipText(toolTip);
     }
     
-    //Muestra mensajes en jlabels de la app
-    public static void showMessage(JLabel lbl, String text) { 
+    //Estilo de los mensajes mostrados en aplicación
+    public static void showMessageInfo(JLabel lbl, String text) { 
         lbl.setForeground(LIGHT_BLUE_COLOR); 
         lbl.setFont(FONT_BOLD);
         lbl.setText(text); 
     }
     
-    //Labels
-    public static void styleLabel(JLabel label, String text){
+    //Estilo de los Labels
+    public static void styleFixLabel(JLabel label, String text){
         label.setOpaque(true);
         label.setText(text);
         label.setForeground(LIGHT_BLUE_COLOR);
@@ -112,13 +138,13 @@ public class StyleConfig {
         label.setFont(FONT_PLAIN);
     }
     
-    //Logo
+    //Estilo del Logo
     public static void setLogo(JLabel lblLogo, String logoPath){
         lblLogo.setPreferredSize(new Dimension(150, 40));
         lblLogo.setIcon(new ImageIcon(StyleConfig.class.getResource(logoPath)));
     }
     
-    //Cambio de cursor en componente
+    //Estilo del cursor sobre componentes
     public static void handCursor(JComponent... components) {
         for (JComponent component : components) {
             component.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -127,10 +153,8 @@ public class StyleConfig {
     
     //Color seleccion en tabla
     public static void selectionColorTable(JTable table){
-        
         table.setSelectionBackground(LIGHT_BLUE_COLOR); 
         table.setSelectionForeground(WHITE_COLOR);
-
     }
     
     //Color seleccion en lista
@@ -140,7 +164,7 @@ public class StyleConfig {
     }
     
     //Color seleccion en comboBox
-    public static void renderComboBox(JComboBox combo) {
+    public static void selectionColorComboBox(JComboBox combo) {
         combo.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(
@@ -162,6 +186,7 @@ public class StyleConfig {
         editor.setBackground(WHITE_COLOR);
     }
     
+    //Iconos en JTextFields
     public static void addIconsTextField(JTextField txtField, String leftIconPath, String rightIconPath, String toolTip) {
         ImageIcon leftIcon = new ImageIcon(StyleConfig.class.getResource(leftIconPath));
         ImageIcon rightIcon = new ImageIcon(StyleConfig.class.getResource(rightIconPath));
@@ -188,6 +213,7 @@ public class StyleConfig {
         });
     }
 
+    //Iconos en JPasswordFields
     public static void addIconsPasswordField(JPasswordField pwdField, String leftIconPath, String rightIconPath, String toolTip) {
         ImageIcon leftIcon = new ImageIcon(StyleConfig.class.getResource(leftIconPath));
         ImageIcon rightIcon = new ImageIcon(StyleConfig.class.getResource(rightIconPath));

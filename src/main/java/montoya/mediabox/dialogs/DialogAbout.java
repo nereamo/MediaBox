@@ -46,7 +46,7 @@ public class DialogAbout extends JDialog {
         
         lblAbout.setText(aboutText);
         lblAbout.setVerticalAlignment(JLabel.TOP);
-        StyleConfig.styleLabel(lblAbout, aboutText);
+        StyleConfig.styleFixLabel(lblAbout, aboutText);
     }
     
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
