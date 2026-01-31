@@ -129,7 +129,7 @@ public class StyleConfig {
         lbl.setText(text); 
     }
     
-    //Estilo de los Labels
+    //Estilo de los Labels estáticos como los del Panel Preferences
     public static void styleFixLabel(JLabel label, String text){
         label.setOpaque(true);
         label.setText(text);

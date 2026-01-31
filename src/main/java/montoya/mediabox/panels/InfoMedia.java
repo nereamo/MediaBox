@@ -171,9 +171,9 @@ public class InfoMedia extends javax.swing.JPanel {
 
         FileInformation info = getSelectedFile();
 
-       if(info == null){
-           return;
-       }
+        if (info == null) {
+            return;
+        }
 
         int confirm = JOptionPane.showConfirmDialog(this,
                 "Do you want to delete: " + info.getName() + "?", "Delete", JOptionPane.YES_NO_OPTION);
@@ -262,8 +262,9 @@ public class InfoMedia extends javax.swing.JPanel {
 
         setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Downloads", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14))); // NOI18N
         setFocusCycleRoot(true);
-        setMinimumSize(new java.awt.Dimension(700, 540));
-        setPreferredSize(new java.awt.Dimension(700, 540));
+        setMaximumSize(new java.awt.Dimension(840, 450));
+        setMinimumSize(new java.awt.Dimension(840, 450));
+        setPreferredSize(new java.awt.Dimension(840, 450));
         setLayout(null);
 
         folderList.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -272,7 +273,7 @@ public class InfoMedia extends javax.swing.JPanel {
         scrFolderList.setViewportView(folderList);
 
         add(scrFolderList);
-        scrFolderList.setBounds(16, 80, 130, 350);
+        scrFolderList.setBounds(20, 70, 130, 350);
 
         tblMedia.setAutoCreateRowSorter(true);
         tblMedia.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -299,7 +300,7 @@ public class InfoMedia extends javax.swing.JPanel {
         scrTableMedia.setViewportView(tblMedia);
 
         add(scrTableMedia);
-        scrTableMedia.setBounds(150, 80, 670, 350);
+        scrTableMedia.setBounds(150, 70, 670, 350);
 
         cbbxTypeFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         cbbxTypeFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Filter" }));
@@ -309,7 +310,7 @@ public class InfoMedia extends javax.swing.JPanel {
             }
         });
         add(cbbxTypeFilter);
-        cbbxTypeFilter.setBounds(440, 50, 250, 23);
+        cbbxTypeFilter.setBounds(440, 40, 250, 23);
 
         btnUpload.setMaximumSize(new java.awt.Dimension(120, 25));
         btnUpload.setMinimumSize(new java.awt.Dimension(120, 25));
@@ -320,7 +321,7 @@ public class InfoMedia extends javax.swing.JPanel {
             }
         });
         add(btnUpload);
-        btnUpload.setBounds(700, 50, 120, 25);
+        btnUpload.setBounds(700, 40, 120, 25);
     }// </editor-fold>//GEN-END:initComponents
 
     private void cbbxTypeFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbxTypeFilterActionPerformed
