@@ -1,9 +1,6 @@
 package montoya.mediabox.panels;
 
 import montoya.mediabox.fileInformation.TableActions;
-import java.io.File;
-import java.nio.file.Files;
-import java.time.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -12,6 +9,7 @@ import montoya.mediabox.controller.*;
 import montoya.mediabox.fileInformation.*;
 import montoya.mediabox.styleConfig.StyleConfig;
 import montoya.mediapollingcomponent.MediaPollingComponent;
+import net.miginfocom.swing.MigLayout;
 
 /**
  * Panel que muestra las descargas realizadas y su información, permitiendo eliminar o reproducir archivos
@@ -31,13 +29,14 @@ public class InfoMedia extends javax.swing.JPanel {
 
     public InfoMedia(FileProperties fileProperties, TypeFilter typeFilter, List<FileInformation> allFiles, Set<String> folderPaths, MediaPollingComponent mediaPollingComponent) {
         initComponents();
+        setLayout(new MigLayout("fill, insets 20", "[150!]10[grow]", "[][grow]"));
 
         this.typeFilter = typeFilter;
         this.fileProperties = fileProperties;
         this.mediaPollingComponent = mediaPollingComponent;
         this.allData = fileProperties.loadDownloads();
         this.fileManager = new FileManager(allData, typeFilter, mediaPollingComponent, fileProperties);
-        
+
         this.allFiles = allData.getFileList(); //Archivos locales
         folderPaths.addAll(allData.getFolderPaths());
 
@@ -45,13 +44,14 @@ public class InfoMedia extends javax.swing.JPanel {
         tblMedia.setModel(tblModel);
         tblMedia.setRowHeight(25);
         ToolTipManager.sharedInstance().registerComponent(tblMedia);
-        
+
         new TableActions(tblMedia, 4, tblModel, this); //Botones de acción
- 
+
         filterOptions(cbbxTypeFilter); //Aplica el filtro según tipo de archivo
         styleComponents(); //Estilo de los componentes
         initDirectoryList(); //Inicia la lista de directorios
-        configDownloadList(folderList, cbbxTypeFilter); //Muestra las descargas pertenecientes a un directorio
+        configDownloadList(folderList); //Muestra las descargas pertenecientes a un directorio
+        configComponents();
 
         SwingUtilities.invokeLater(new Runnable() { //Mostrar archivos al iniciar la app
             @Override
@@ -61,6 +61,16 @@ public class InfoMedia extends javax.swing.JPanel {
                 }
             }
         });
+    }
+    
+    private void configComponents() {
+        removeAll();
+
+        add(cbbxTypeFilter, "cell 1 0, split 2, right, width 200!");
+        add(btnUpload, "width 120!");
+
+        add(scrFolderList, "cell 0 1, growy, width 150!");
+        add(scrTableMedia, "cell 1 1, grow");
     }
 
     //Aplica estilos a los componentes
@@ -106,35 +116,18 @@ public class InfoMedia extends javax.swing.JPanel {
     }
 
     //Configuración de JList, al seleccionar un directorio muestra las descargas.
-    private void configDownloadList(JList<FolderItem> folderList, JComboBox<String> cbbxFilter) {
+    private void configDownloadList(JList<FolderItem> folderList) {
 
         folderList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
-                    FolderItem folder = folderList.getSelectedValue();
-                    if (folder != null) {
-
-                        String selectedFilter = (String) cbbxFilter.getSelectedItem();
-                        fileManager.refreshFiles(); //Refresca los archivos de la tabla 
-                        
-                        List<FileInformation> resultFiles;
-                        if (folder.isIsNetwork()) {
-                            resultFiles = fileManager.getNetworkFiles(selectedFilter); //archivos de api
-                        } else if (folder.isIsBoth()) {
-                            resultFiles = fileManager.getBothFiles(selectedFilter); //archivos api y local
-                        } else {
-                            resultFiles = fileManager.getLocalFiles(folder.getFullPath(), selectedFilter); //archivos locales
-                        }
-                        
-                        tblModel.setFileList(resultFiles);
-                        tblModel.fireTableDataChanged();
-                    }
+                    updateTableData();
                 }
             }
         });
     }
-    
+
     //Retorna el archivo seleccionado en la tabla
     public FileInformation getSelectedFile() {
         int row = tblMedia.getSelectedRow();
@@ -144,13 +137,13 @@ public class InfoMedia extends javax.swing.JPanel {
         int modelRow = tblMedia.convertRowIndexToModel(row);
         return tblModel.getFileAt(modelRow);
     }
-    
+
     //Indica si el directorio seleccionado es de la API
     public boolean isNetworkFileSelected() {
         FolderItem folder = folderList.getSelectedValue();
         return folder != null && folder.isIsNetwork();
     }
-    
+
     //Reproduce el archivo cuando se pulsa el boton play
     public void playSelectedFile() {
         FileInformation info = getSelectedFile();
@@ -168,23 +161,18 @@ public class InfoMedia extends javax.swing.JPanel {
     
     //Borra archivo seleccionado
     public void deleteSelectedFile() {
-
         FileInformation info = getSelectedFile();
-
         if (info == null) {
             return;
         }
 
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "Do you want to delete: " + info.getName() + "?", "Delete", JOptionPane.YES_NO_OPTION);
-
+        int confirm = JOptionPane.showConfirmDialog(this, "¿Borrar " + info.getName() + "?", "Confirmar", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             fileManager.deleteFile(info);
             refreshFiles();
-            JOptionPane.showMessageDialog(this, "File deleted.");
         }
     }
-    
+
     //Refresca la tabla de archivos después de descargar/subir
     public void refreshFiles() {
 
@@ -222,29 +210,25 @@ public class InfoMedia extends javax.swing.JPanel {
             }
         }
     }
-    
+
+    //Gestiona donde se guarad el archivo ha descargar
     public void downloadFile() {
-        
-        FileInformation info = this.getSelectedFile();
+        FileInformation info = getSelectedFile();
         if (info == null) {
-            JOptionPane.showMessageDialog(this, "Please select a file in the table.");
             return;
         }
 
-        // Elegir directorio local
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        if (fileChooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) {
-            return;
-        }
-        
-        File folder = fileChooser.getSelectedFile();
-        try {
-            fileManager.downloadFile(info, folder);
-            refreshFiles();
-            JOptionPane.showMessageDialog(this, "Download completed.");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Download failed:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        JFileChooser fc = new JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+        if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            try {
+                fileManager.downloadFile(info, fc.getSelectedFile());
+                refreshFiles();
+                JOptionPane.showMessageDialog(this, "Descarga completada");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+            }
         }
     }
 
@@ -265,15 +249,14 @@ public class InfoMedia extends javax.swing.JPanel {
         setMaximumSize(new java.awt.Dimension(840, 450));
         setMinimumSize(new java.awt.Dimension(840, 450));
         setPreferredSize(new java.awt.Dimension(840, 450));
-        setLayout(null);
+        setLayout(new java.awt.BorderLayout());
 
         folderList.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         folderList.setPreferredSize(new java.awt.Dimension(40, 60));
         folderList.setSelectionBackground(new java.awt.Color(255, 204, 153));
         scrFolderList.setViewportView(folderList);
 
-        add(scrFolderList);
-        scrFolderList.setBounds(20, 60, 130, 330);
+        add(scrFolderList, java.awt.BorderLayout.CENTER);
 
         tblMedia.setAutoCreateRowSorter(true);
         tblMedia.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -300,8 +283,7 @@ public class InfoMedia extends javax.swing.JPanel {
         tblMedia.setSelectionBackground(new java.awt.Color(255, 204, 153));
         scrTableMedia.setViewportView(tblMedia);
 
-        add(scrTableMedia);
-        scrTableMedia.setBounds(150, 60, 670, 330);
+        add(scrTableMedia, java.awt.BorderLayout.PAGE_START);
 
         cbbxTypeFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         cbbxTypeFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Filter" }));
@@ -310,8 +292,7 @@ public class InfoMedia extends javax.swing.JPanel {
                 cbbxTypeFilterActionPerformed(evt);
             }
         });
-        add(cbbxTypeFilter);
-        cbbxTypeFilter.setBounds(440, 30, 250, 23);
+        add(cbbxTypeFilter, java.awt.BorderLayout.PAGE_END);
 
         btnUpload.setMaximumSize(new java.awt.Dimension(120, 25));
         btnUpload.setMinimumSize(new java.awt.Dimension(120, 25));
@@ -321,57 +302,26 @@ public class InfoMedia extends javax.swing.JPanel {
                 btnUploadActionPerformed(evt);
             }
         });
-        add(btnUpload);
-        btnUpload.setBounds(700, 30, 120, 25);
+        add(btnUpload, java.awt.BorderLayout.LINE_END);
     }// </editor-fold>//GEN-END:initComponents
 
     private void cbbxTypeFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbxTypeFilterActionPerformed
-
-        FolderItem folder = folderList.getSelectedValue();
-
-        if (folder != null) {
-
-            String selectedFilter = (String) cbbxTypeFilter.getSelectedItem();
-            List<FileInformation> filesToShow;
-
-            if (folder.isIsNetwork()) {
-                filesToShow = fileManager.getNetworkFiles(selectedFilter); //Obtiene los archivos de la API
-            } else if (folder.isIsBoth()) {
-                filesToShow = fileManager.getBothFiles(selectedFilter); //Obtiene los archivos de la API y local
-            } else {
-                filesToShow = fileManager.getLocalFiles(folder.getFullPath(), selectedFilter); //Obtiene los archivos locales
-            }
-
-            //Actualizar tabla con los elementos filtrados
-            tblModel.setFileList(filesToShow);
-            tblModel.fireTableDataChanged();
-        }
+        updateTableData();
     }//GEN-LAST:event_cbbxTypeFilterActionPerformed
 
+    //Botón que inicia la descarga
     private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed
-        try {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            if (fileChooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) {
-                return;
+        JFileChooser fc = new JFileChooser();
+        if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            try {
+                fileManager.uploadFile(fc.getSelectedFile());
+                refreshFiles();
+                JOptionPane.showMessageDialog(this, "Subida completada");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
             }
-
-            File file = fileChooser.getSelectedFile();
-            if (file == null || !file.exists()) {
-                JOptionPane.showMessageDialog(this, "Cannot find the selected file.");
-                return;
-            }
-
-            String mimeType = Files.probeContentType(file.toPath());
-            mediaPollingComponent.uploadFileMultipart(file, mimeType, mediaPollingComponent.getToken());
-            mediaPollingComponent.setLastChecked(OffsetDateTime.now().minusMinutes(1).toString());
-
-            this.refreshFiles();
-
-            JOptionPane.showMessageDialog(this, "Upload completed.");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Upload failed:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+
     }//GEN-LAST:event_btnUploadActionPerformed
 
     //Getters
@@ -389,6 +339,29 @@ public class InfoMedia extends javax.swing.JPanel {
 
     public JComboBox<String> getTypeFilter() {
         return cbbxTypeFilter;
+    }
+    
+    //Actualizar tabla según carpeta y filtro aplicado
+    private void updateTableData() {
+        FolderItem folder = folderList.getSelectedValue();
+        if (folder == null) {
+            return;
+        }
+
+        String selectedFilter = (String) cbbxTypeFilter.getSelectedItem();
+
+        List<FileInformation> resultFiles;
+
+        if (folder.isIsNetwork()) {
+            resultFiles = fileManager.getNetworkFiles(selectedFilter);
+        } else if (folder.isIsBoth()) {
+            resultFiles = fileManager.getBothFiles(selectedFilter);
+        } else {
+            resultFiles = fileManager.getLocalFiles(folder.getFullPath(), selectedFilter);
+        }
+
+        tblModel.setFileList(resultFiles);
+        tblModel.fireTableDataChanged();
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

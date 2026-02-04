@@ -3,7 +3,9 @@ package montoya.mediabox.controller;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -124,6 +126,16 @@ public class FileManager {
         fileProperties.addDownload(newFile);
         
         this.directoryInfo = fileProperties.loadDownloads();
+    }
+
+    public void uploadFile(File file) throws Exception {
+        if (file == null || !file.exists()) {
+            throw new Exception("File not found");
+        }
+        String mimeType = Files.probeContentType(file.toPath());
+        mediaPollingComponent.uploadFileMultipart(file, mimeType, mediaPollingComponent.getToken());
+        mediaPollingComponent.setLastChecked(OffsetDateTime.now().minusMinutes(1).toString());
+        refreshFiles(); // Actualizamos los datos internos
     }
     
     

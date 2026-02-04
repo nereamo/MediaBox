@@ -1,14 +1,10 @@
 package montoya.mediabox.panels;
 
-import java.awt.Cursor;
-import java.awt.Desktop;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -223,11 +219,10 @@ public class Downloads extends javax.swing.JPanel {
         downloadFilePnl.setMaximumSize(new java.awt.Dimension(840, 580));
         downloadFilePnl.setMinimumSize(new java.awt.Dimension(840, 580));
         downloadFilePnl.setPreferredSize(new java.awt.Dimension(840, 580));
-        downloadFilePnl.setLayout(null);
+        downloadFilePnl.setLayout(new java.awt.BorderLayout());
 
         txtUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        downloadFilePnl.add(txtUrl);
-        txtUrl.setBounds(50, 40, 690, 23);
+        downloadFilePnl.add(txtUrl, java.awt.BorderLayout.CENTER);
 
         btnFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnFolder.setMaximumSize(new java.awt.Dimension(72, 50));
@@ -238,8 +233,7 @@ public class Downloads extends javax.swing.JPanel {
                 btnFolderActionPerformed(evt);
             }
         });
-        downloadFilePnl.add(btnFolder);
-        btnFolder.setBounds(750, 30, 72, 50);
+        downloadFilePnl.add(btnFolder, java.awt.BorderLayout.PAGE_START);
 
         pnlVideo.setMaximumSize(new java.awt.Dimension(200, 210));
         pnlVideo.setLayout(null);
@@ -264,8 +258,7 @@ public class Downloads extends javax.swing.JPanel {
         pnlVideo.add(cbbxQualityFilter);
         cbbxQualityFilter.setBounds(400, 30, 139, 23);
 
-        downloadFilePnl.add(pnlVideo);
-        pnlVideo.setBounds(50, 90, 560, 80);
+        downloadFilePnl.add(pnlVideo, java.awt.BorderLayout.PAGE_END);
 
         btnDownload.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnDownload.setMaximumSize(new java.awt.Dimension(150, 70));
@@ -276,8 +269,7 @@ public class Downloads extends javax.swing.JPanel {
                 btnDownloadActionPerformed(evt);
             }
         });
-        downloadFilePnl.add(btnDownload);
-        btnDownload.setBounds(630, 170, 150, 70);
+        downloadFilePnl.add(btnDownload, java.awt.BorderLayout.LINE_END);
 
         btnOpenLast.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnOpenLast.setText("Open Last");
@@ -289,21 +281,18 @@ public class Downloads extends javax.swing.JPanel {
                 btnOpenLastActionPerformed(evt);
             }
         });
-        downloadFilePnl.add(btnOpenLast);
-        btnOpenLast.setBounds(630, 250, 150, 30);
+        downloadFilePnl.add(btnOpenLast, java.awt.BorderLayout.LINE_START);
 
         progressBar.setBackground(new java.awt.Color(204, 204, 204));
         progressBar.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        downloadFilePnl.add(progressBar);
-        progressBar.setBounds(50, 300, 730, 10);
+        downloadFilePnl.add(progressBar, java.awt.BorderLayout.CENTER);
 
         areaInfo.setColumns(20);
         areaInfo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         areaInfo.setRows(5);
         jScrollPane1.setViewportView(areaInfo);
 
-        downloadFilePnl.add(jScrollPane1);
-        jScrollPane1.setBounds(50, 320, 730, 180);
+        downloadFilePnl.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         pnlAudio.setMaximumSize(new java.awt.Dimension(200, 210));
         pnlAudio.setLayout(null);
@@ -323,12 +312,10 @@ public class Downloads extends javax.swing.JPanel {
         pnlAudio.add(radioMp3);
         radioMp3.setBounds(30, 30, 80, 22);
 
-        downloadFilePnl.add(pnlAudio);
-        pnlAudio.setBounds(50, 190, 560, 80);
+        downloadFilePnl.add(pnlAudio, java.awt.BorderLayout.CENTER);
 
         lblInfoDownload.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        downloadFilePnl.add(lblInfoDownload);
-        lblInfoDownload.setBounds(220, 510, 340, 20);
+        downloadFilePnl.add(lblInfoDownload, java.awt.BorderLayout.CENTER);
 
         add(downloadFilePnl);
         downloadFilePnl.setBounds(30, 30, 880, 600);
