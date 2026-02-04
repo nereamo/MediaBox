@@ -186,7 +186,7 @@ public class Login extends JPanel{
                         try {
                             mediaPollingComponent.getAllMedia(newToken);
                         } catch (Exception ex) {
-                            StyleConfig.showMessageInfo(lblMessage, "User logged out. Please log in again.");
+                            StyleConfig.showMessageInfo(lblMessage, "User logged out. Please login again.");
                             return;
                         }
                         token = newToken;
@@ -199,6 +199,7 @@ public class Login extends JPanel{
                         frame.lblMessage.setText("Welcome: " + email);
                         frame.lblMessage.setForeground(StyleConfig.DARK_BLUE_COLOR); //Usuario loggeado en label menuBar
                         cardManager.showCard("downloads");
+                        frame.pnlDownload.infoMedia.refreshFiles(); //Refresca la tabla al hacer login
 
                         if (remember.isSelected()) {
                             TokenController.saveToken(token, email);

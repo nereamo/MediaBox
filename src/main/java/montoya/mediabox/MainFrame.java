@@ -24,7 +24,7 @@ public class MainFrame extends JFrame {
 
     private static final Logger logger = Logger.getLogger(MainFrame.class.getName());
     
-    private Downloads pnlDownload;
+    public Downloads pnlDownload;
     private Preferences pnlPreferences;
     private Login pnlLogin;
     private DownloadManager downloadManager;

@@ -273,7 +273,7 @@ public class InfoMedia extends javax.swing.JPanel {
         scrFolderList.setViewportView(folderList);
 
         add(scrFolderList);
-        scrFolderList.setBounds(20, 70, 130, 350);
+        scrFolderList.setBounds(20, 60, 130, 330);
 
         tblMedia.setAutoCreateRowSorter(true);
         tblMedia.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -296,11 +296,12 @@ public class InfoMedia extends javax.swing.JPanel {
                 return types [columnIndex];
             }
         });
+        tblMedia.setPreferredSize(null);
         tblMedia.setSelectionBackground(new java.awt.Color(255, 204, 153));
         scrTableMedia.setViewportView(tblMedia);
 
         add(scrTableMedia);
-        scrTableMedia.setBounds(150, 70, 670, 350);
+        scrTableMedia.setBounds(150, 60, 670, 330);
 
         cbbxTypeFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         cbbxTypeFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Filter" }));
@@ -310,7 +311,7 @@ public class InfoMedia extends javax.swing.JPanel {
             }
         });
         add(cbbxTypeFilter);
-        cbbxTypeFilter.setBounds(440, 40, 250, 23);
+        cbbxTypeFilter.setBounds(440, 30, 250, 23);
 
         btnUpload.setMaximumSize(new java.awt.Dimension(120, 25));
         btnUpload.setMinimumSize(new java.awt.Dimension(120, 25));
@@ -321,7 +322,7 @@ public class InfoMedia extends javax.swing.JPanel {
             }
         });
         add(btnUpload);
-        btnUpload.setBounds(700, 40, 120, 25);
+        btnUpload.setBounds(700, 30, 120, 25);
     }// </editor-fold>//GEN-END:initComponents
 
     private void cbbxTypeFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbxTypeFilterActionPerformed

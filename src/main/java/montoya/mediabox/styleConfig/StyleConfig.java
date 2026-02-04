@@ -134,7 +134,7 @@ public class StyleConfig {
         label.setOpaque(true);
         label.setText(text);
         label.setForeground(LIGHT_BLUE_COLOR);
-        label.setBackground(StyleConfig.DARK_BLUE_COLOR);
+        label.setBackground(DARK_BLUE_COLOR);
         label.setFont(FONT_PLAIN);
     }
     
@@ -181,9 +181,7 @@ public class StyleConfig {
             }
         });
         
-        combo.setEditable(true);
-        Component editor = combo.getEditor().getEditorComponent();
-        editor.setBackground(WHITE_COLOR);
+        combo.setEditable(true); 
     }
     
     //Iconos en JTextFields
@@ -211,6 +209,7 @@ public class StyleConfig {
                 rightIcon.paintIcon(txtField, g, xRight, yRight);
             }
         });
+        addPlaceholder(txtField, toolTip);
     }
 
     //Iconos en JPasswordFields
@@ -235,5 +234,32 @@ public class StyleConfig {
                 rightIcon.paintIcon(pwdField, g, xRight, yRight);
             }
         });
+        
+        addPlaceholder(pwdField, toolTip);
     }
+    
+    private static void addPlaceholder(JTextField field, String placeholder) {
+    field.setText(placeholder);
+    field.setForeground(java.awt.Color.GRAY); // Color del texto fantasma
+
+    field.addFocusListener(new java.awt.event.FocusAdapter() {
+        @Override
+        public void focusGained(java.awt.event.FocusEvent e) {
+            // Si el texto es el placeholder, lo borramos para que el usuario escriba
+            if (field.getText().equals(placeholder)) {
+                field.setText("");
+                field.setForeground(java.awt.Color.BLACK); // O el color que uses
+            }
+        }
+
+        @Override
+        public void focusLost(java.awt.event.FocusEvent e) {
+            // Si el usuario no escribió nada, restauramos el placeholder
+            if (field.getText().isEmpty()) {
+                field.setText(placeholder);
+                field.setForeground(java.awt.Color.GRAY);
+            }
+        }
+    });
+}
 }

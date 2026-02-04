@@ -23,14 +23,14 @@ public class TokenController {
         Files.createDirectories(FOLDER_PATH);
         TokenUser tu = new TokenUser(token, email);
         mapper.writeValue(JSON_PATH.toFile(), tu);
-        System.out.println("Token guardado en: " + JSON_PATH.toAbsolutePath());
+        System.out.println("Saved token in: " + JSON_PATH.toAbsolutePath());
     }
     
     //Leer archivo token.json
     public static TokenUser readToken() throws IOException  {
         
         if(!Files.exists(JSON_PATH)){
-            System.out.println("Archivo token.json no encontrado en: " + JSON_PATH.toAbsolutePath());
+            System.out.println("token.json file not found in: " + JSON_PATH.toAbsolutePath());
             return null;
         }
         
@@ -42,10 +42,10 @@ public class TokenController {
         try {
             if (Files.exists(JSON_PATH)) {
                 Files.delete(JSON_PATH);
-                System.out.println("Token eliminado correctamente.");
+                System.out.println("Token successfully deleted.");
             }
         } catch (IOException e) {
-            System.err.println("No se pudo eliminar el token: " + e.getMessage());
+            System.err.println("The token could not be deleted: " + e.getMessage());
         }
     }
 }

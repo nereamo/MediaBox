@@ -33,7 +33,7 @@ import net.miginfocom.swing.MigLayout;
 public class Downloads extends javax.swing.JPanel {
     
     private MainFrame frame;
-    private InfoMedia infoMedia;
+    public InfoMedia infoMedia;
     private DownloadManager downloadManager;
     private TypeFilter typeFilter;
     private FileTableModel tblModel;
@@ -48,8 +48,7 @@ public class Downloads extends javax.swing.JPanel {
 
         initComponents();
         setLayout(new MigLayout("fill, insets 30, wrap 1", "[grow,center]", "[]20[]push[]"));
-        downloadFilePnl.setLayout(new MigLayout("fillx, insets 20", "[grow][20!][180!]", "[]15[]10[]0[]10[grow]"));
-
+        downloadFilePnl.setLayout(new MigLayout("fillx, insets 20, wrap 1", "[center, grow]"));
         
         this.frame = frame;
         this.typeFilter = new TypeFilter();
@@ -69,46 +68,45 @@ public class Downloads extends javax.swing.JPanel {
         styleComponents(); //Estilo de los componentes
         styleTxtUrl();
         configRadioButtons(btnGroup, radioMp4, radioMkv, radioWebm, radioMp3, radioWav, radioM4a);//Configura como se ven los botones
-
     }
 
     private void configPanels() {
         setBounds(0, 0, 1300, 770); //panel general
         setBackground(StyleConfig.DARK_BLUE_COLOR); //Color del panel
-        downloadFilePnl.setPreferredSize(new Dimension(840, 550)); //tamaño del panel Download
-        downloadFilePnl.setMinimumSize(new Dimension(640, 550));
-        infoMedia.setPreferredSize(new Dimension(840, 450)); //tamaño del panel InfoMedia
-        infoMedia.setMinimumSize(new Dimension(640, 450));
+        downloadFilePnl.setPreferredSize(new Dimension(840, 580)); //tamaño del panel Download
+        downloadFilePnl.setMinimumSize(new Dimension(640, 580));
+        infoMedia.setPreferredSize(new Dimension(840, 410)); //tamaño del panel InfoMedia
+        infoMedia.setMinimumSize(new Dimension(640, 410));
         add(downloadFilePnl, "center, growx, shrinkx");
         add(infoMedia, "center, growx, shrinkx");
         add(logoLabel, "align center");
-
     }
     
-    private void configComponents() {
- 
-    downloadFilePnl.add(txtUrl, "cell 0 0, growx, width 730!, height 26!");
-    downloadFilePnl.add(btnFolder, "cell 1 0, left, width 50!, height 50!, wrap");
-
-    pnlVideo.setLayout(new MigLayout("fillx, insets 15 10 10 10", "[]15[]15[]15[]", "[]"));
-    pnlVideo.add(radioMp4);
-    pnlVideo.add(radioMkv);
-    pnlVideo.add(radioWebm);
-    pnlVideo.add(cbbxQualityFilter, "width 139!");
-    downloadFilePnl.add(pnlVideo, "width 560!, height 80!, growx"); 
-
-    pnlAudio.setLayout(new MigLayout("fillx, insets 15 10 10 10", "[]15[]15[]", "[]"));
-    pnlAudio.add(radioMp3);
-    pnlAudio.add(radioWav);
-    pnlAudio.add(radioM4a);
-    downloadFilePnl.add(pnlAudio, "cell 0 2, width 560!, height 80!, growx");
     
-    downloadFilePnl.add(btnDownload, "cell 0 1,left, growx, height 60!, wrap");
-    downloadFilePnl.add(btnOpenLast, "cell 2 2, growx, height 35!, gaptop 5, wrap");
+    private void configComponents() {
+        downloadFilePnl.add(txtUrl, "split 2, growx, height 30!, gapleft 30, gaptop -20");
+        downloadFilePnl.add(btnFolder, "width 50!, height 50!, gapright 20");
 
-    downloadFilePnl.add(progressBar, "span 3, growx,width 790!, height 15!,gapy 40, wrap");
-    downloadFilePnl.add(jScrollPane1, "span 3, grow, push,width 790!, height 160!");
-}
+        pnlVideo.setLayout(new MigLayout("fillx, insets 10", "[]push[]push[]push[]", "[]"));
+        pnlVideo.add(radioMp4);
+        pnlVideo.add(radioMkv);
+        pnlVideo.add(radioWebm);
+        pnlVideo.add(cbbxQualityFilter, "width 120!");
+        downloadFilePnl.add(pnlVideo, "width 730!, height 80!, gaptop 5");
+
+        pnlAudio.setLayout(new MigLayout("fillx, insets 10", "[]15[]15[]15[]", "[]"));
+        pnlAudio.add(radioMp3);
+        pnlAudio.add(radioWav);
+        pnlAudio.add(radioM4a);
+        downloadFilePnl.add(pnlAudio, "width 730!, height 80!");
+
+        downloadFilePnl.add(btnDownload, "split 2, width 180!, height 50!, gaptop 10");
+        downloadFilePnl.add(btnOpenLast, "width 180!, height 50!, gaptop 10, gapleft 20");
+
+        downloadFilePnl.add(progressBar, "width 730!, height 15!, gapy 15");
+        downloadFilePnl.add(jScrollPane1, "width 730!, height 160!, growy");
+        downloadFilePnl.add(lblInfoDownload, "growx, height 20!");
+    }
 
     //Aplica estilos a los componentes
     private void styleComponents() {
@@ -121,7 +119,9 @@ public class Downloads extends javax.swing.JPanel {
         StyleConfig.styleSimpleButton(btnDownload, "DOWNLOAD", "Download file", 150, 70, StyleConfig.LIGHT_BLUE_COLOR, StyleConfig.DARK_BLUE_COLOR);
         StyleConfig.styleSimpleButton(btnOpenLast, "OPEN LAST", "Reproduce last file", 150, 30, StyleConfig.GREY_COLOR, StyleConfig.DARK_BLUE_COLOR);
         progressBar.setBackground(StyleConfig.LIGHT_BLUE_COLOR);
-        progressBar.setForeground(StyleConfig.DARK_BLUE_COLOR);  
+        progressBar.setForeground(StyleConfig.DARK_BLUE_COLOR);
+        areaInfo.setBackground(StyleConfig.DARK_BLUE_COLOR);
+        areaInfo.setForeground(StyleConfig.LIGHT_BLUE_COLOR);
     }
     
     //Aplicar la calidad de video
@@ -220,8 +220,9 @@ public class Downloads extends javax.swing.JPanel {
         add(logoLabel);
         logoLabel.setBounds(700, 1060, 180, 50);
 
-        downloadFilePnl.setMaximumSize(new java.awt.Dimension(840, 550));
-        downloadFilePnl.setMinimumSize(new java.awt.Dimension(840, 550));
+        downloadFilePnl.setMaximumSize(new java.awt.Dimension(840, 580));
+        downloadFilePnl.setMinimumSize(new java.awt.Dimension(840, 580));
+        downloadFilePnl.setPreferredSize(new java.awt.Dimension(840, 580));
         downloadFilePnl.setLayout(null);
 
         txtUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
