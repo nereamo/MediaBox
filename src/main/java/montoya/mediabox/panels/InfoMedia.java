@@ -7,7 +7,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import montoya.mediabox.controller.*;
 import montoya.mediabox.fileInformation.*;
-import montoya.mediabox.styleConfig.StyleConfig;
+import montoya.mediabox.configUI.SwingStyleUtils;
 import montoya.mediapollingcomponent.MediaPollingComponent;
 import net.miginfocom.swing.MigLayout;
 
@@ -29,11 +29,11 @@ public class InfoMedia extends javax.swing.JPanel {
 
     public InfoMedia(FileProperties fileProperties, TypeFilter typeFilter, List<FileInformation> allFiles, Set<String> folderPaths, MediaPollingComponent mediaPollingComponent) {
         initComponents();
-        setLayout(new MigLayout("fill, insets 20", "[150!]10[grow]", "[][grow]"));
-
+        
         this.typeFilter = typeFilter;
         this.fileProperties = fileProperties;
         this.mediaPollingComponent = mediaPollingComponent;
+        
         this.allData = fileProperties.loadDownloads();
         this.fileManager = new FileManager(allData, typeFilter, mediaPollingComponent, fileProperties);
 
@@ -46,12 +46,14 @@ public class InfoMedia extends javax.swing.JPanel {
         ToolTipManager.sharedInstance().registerComponent(tblMedia);
 
         new TableActions(tblMedia, 4, tblModel, this); //Botones de acción
+        
+        setupLayout();
+        applyStylesComponent(); //Estilo de los componentes
 
-        filterOptions(cbbxTypeFilter); //Aplica el filtro según tipo de archivo
-        styleComponents(); //Estilo de los componentes
+        configFilterOptions(cbbxTypeFilter); //Aplica el filtro según tipo de archivo
         initDirectoryList(); //Inicia la lista de directorios
         configDownloadList(folderList); //Muestra las descargas pertenecientes a un directorio
-        configComponents();
+        
 
         SwingUtilities.invokeLater(new Runnable() { //Mostrar archivos al iniciar la app
             @Override
@@ -63,8 +65,8 @@ public class InfoMedia extends javax.swing.JPanel {
         });
     }
     
-    private void configComponents() {
-        removeAll();
+    private void setupLayout() {
+        this.setLayout(new MigLayout("fill, insets 20", "[150!]10[grow]", "[][grow]"));
 
         add(cbbxTypeFilter, "cell 1 0, split 2, right, width 200!");
         add(btnUpload, "width 120!");
@@ -74,18 +76,18 @@ public class InfoMedia extends javax.swing.JPanel {
     }
 
     //Aplica estilos a los componentes
-    private void styleComponents() {
-        StyleConfig.handCursor(tblMedia, folderList, cbbxTypeFilter);
-        StyleConfig.createTitleBorder(this, "DOWNLOAD INFORMATION");
-        StyleConfig.selectionColorList(folderList);
-        StyleConfig.selectionColorTable(tblMedia);
-        StyleConfig.selectionColorComboBox(cbbxTypeFilter);
+    private void applyStylesComponent() {
+        SwingStyleUtils.handCursor(tblMedia, folderList, cbbxTypeFilter);
+        SwingStyleUtils.createTitleBorder(this, "DOWNLOAD INFORMATION");
+        SwingStyleUtils.selectionColorList(folderList);
+        SwingStyleUtils.selectionColorTable(tblMedia);
+        SwingStyleUtils.selectionColorComboBox(cbbxTypeFilter);
         cbbxTypeFilter.setEditable(true);
-        StyleConfig.styleSimpleButton(btnUpload, "UPLOAD", "Upload file to API", 70, 23, StyleConfig.LIGHT_BLUE_COLOR, StyleConfig.DARK_BLUE_COLOR);
+        SwingStyleUtils.styleSimpleButton(btnUpload, "UPLOAD", "Upload file to API", 70, 23, SwingStyleUtils.LIGHT_BLUE_COLOR, SwingStyleUtils.DARK_BLUE_COLOR);
     }
 
     //Añade los filtros a JComboBox
-    private void filterOptions(JComboBox cbbxFilter) {
+    private void configFilterOptions(JComboBox cbbxFilter) {
         cbbxFilter.removeAllItems();
         cbbxFilter.addItem("All");
         cbbxFilter.addItem("MP4");

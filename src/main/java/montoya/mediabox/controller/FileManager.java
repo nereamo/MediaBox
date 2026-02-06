@@ -143,5 +143,4 @@ public class FileManager {
     public void refreshFiles(){
         this.directoryInfo = fileProperties.loadDownloads();
     }
-
 }

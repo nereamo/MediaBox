@@ -5,7 +5,7 @@ import javax.swing.*;
 import montoya.mediabox.MainFrame;
 import montoya.mediabox.controller.CardManager;
 import montoya.mediabox.download.DownloadManager;
-import montoya.mediabox.styleConfig.StyleConfig;
+import montoya.mediabox.configUI.SwingStyleUtils;
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -28,22 +28,17 @@ public class Preferences extends javax.swing.JPanel {
         this.downloadManager = downloadManager;
         this.cardManager = cardManager;
         
-        configPanel();
-        configLayout();
-        styleLabel();
-        styleComponents();
+        setupLayout();
+        applyStylesComponent();
         configSliderSpeed();
     }
     
-    //Configuración del panel
-    private void configPanel(){
+    //Configuracion de la posición de los componentes
+    private void setupLayout(){
+        
         this.setLayout(new MigLayout("center, insets 20, gapy 20", "[grow][right][shrink 100, grow 0][pref][grow]", "push[][][][][]push[]"));
-        this.setBounds(0, 0, 1300, 770);
-        this.setBackground(StyleConfig.DARK_BLUE_COLOR);
-    }
-    
-    //Configuracion de la posicion de los componentes
-    private void configLayout(){
+        this.setBackground(SwingStyleUtils.DARK_BLUE_COLOR);
+        
         add(lblPath, "cell 0 0, alignx right");
         add(txtPathTemp, "cell 1 0, alignx left, growx, wmin 200, w 300, wmax 300");
         add(btnBrowseTemp, "cell 2 0");
@@ -64,21 +59,18 @@ public class Preferences extends javax.swing.JPanel {
         add(logoLabel, "cell 4 6, alignx right, aligny bottom"); 
     }
     
-    //Configuracion de JLabel
-    private void styleLabel(){
-        StyleConfig.styleFixLabel(lblPath, "Temp Path: ");
-        StyleConfig.styleFixLabel(lblM3u, "File .m3u: ");
-        StyleConfig.styleFixLabel(lblSpeed, "Speed (MB/s): ");
-        StyleConfig.styleFixLabel(lblYtDlp, "Location yt-dlp: ");
-    }
-    
-    //Configuracion de botones y checkBox
-    private void styleComponents(){
-        StyleConfig.styleIconButton(btnBrowseTemp, "/images/folder.png", "Select Folder");
-        StyleConfig.styleIconButton(btnYtDlp, "/images/search.png", "Automatic search");
-        StyleConfig.styleIconButton(btnSave, "/images/save.png", "Save changes");
-        StyleConfig.styleIconButton(btnCancel, "/images/return.png", "Discard changes");
-        StyleConfig.styleCheckBox(chkCreate,"Create", "Create files .M3U");
+    //Configuracion del estilo de los componentes
+    private void applyStylesComponent(){
+        SwingStyleUtils.styleFixLabel(lblPath, "Temp Path: ");
+        SwingStyleUtils.styleFixLabel(lblM3u, "File .m3u: ");
+        SwingStyleUtils.styleFixLabel(lblSpeed, "Speed (MB/s): ");
+        SwingStyleUtils.styleFixLabel(lblYtDlp, "Location yt-dlp: ");
+        
+        SwingStyleUtils.styleIconButton(btnBrowseTemp, "/images/folder.png", "Select Folder");
+        SwingStyleUtils.styleIconButton(btnYtDlp, "/images/search.png", "Automatic search");
+        SwingStyleUtils.styleIconButton(btnSave, "/images/save.png", "Save changes");
+        SwingStyleUtils.styleIconButton(btnCancel, "/images/return.png", "Discard changes");
+        SwingStyleUtils.styleCheckBox(chkCreate,"Create", "Create files .M3U");
     }
     
     //configuracion del Slider para la velocidad de descarga
@@ -89,8 +81,8 @@ public class Preferences extends javax.swing.JPanel {
         sldSpeed.setPaintLabels(true);
         sldSpeed.setSnapToTicks(true);
         sldSpeed.setOpaque(false);
-        sldSpeed.setFont(StyleConfig.FONT_PLAIN);
-        sldSpeed.setForeground(StyleConfig.GREY_COLOR);
+        sldSpeed.setFont(SwingStyleUtils.FONT_PLAIN);
+        sldSpeed.setForeground(SwingStyleUtils.GREY_COLOR);
     }
 
     @SuppressWarnings("unchecked")

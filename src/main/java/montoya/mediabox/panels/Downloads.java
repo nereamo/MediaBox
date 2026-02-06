@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.*;
+import java.awt.event.*; 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import montoya.mediabox.fileInformation.FileInformation;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
 import montoya.mediabox.fileInformation.FolderItem;
-import montoya.mediabox.styleConfig.StyleConfig;
+import montoya.mediabox.configUI.SwingStyleUtils;
 import montoya.mediapollingcomponent.MediaPollingComponent;
 import net.miginfocom.swing.MigLayout;
 
@@ -41,10 +41,7 @@ public class Downloads extends javax.swing.JPanel {
     private String folderPath = "";
 
     public Downloads(MainFrame frame, Set<String> folderPaths, DownloadManager downloadManager, MediaPollingComponent mediaPollingComponent) {
-
         initComponents();
-        setLayout(new MigLayout("fill, insets 30, wrap 1", "[grow,center]", "[]20[]push[]"));
-        downloadFilePnl.setLayout(new MigLayout("fillx, insets 20, wrap 1", "[center, grow]"));
         
         this.frame = frame;
         this.typeFilter = new TypeFilter();
@@ -58,66 +55,70 @@ public class Downloads extends javax.swing.JPanel {
         downloadManager.setInfoMedia(infoMedia);
         tblModel = infoMedia.getTableModel();
 
-        configPanels();
+        configPanelSizes();
+        setupLayout();
         qualityOptions(cbbxQualityFilter);//Aplica filtro de calidad
-        configComponents();
-        styleComponents(); //Estilo de los componentes
+        applyStylesComponent(); //Estilo de los componentes
         styleTxtUrl();
-        configRadioButtons(btnGroup, radioMp4, radioMkv, radioWebm, radioMp3, radioWav, radioM4a);//Configura como se ven los botones
+        configRadioButtons(btnGroup, radioMp4, radioMkv, radioWebm, radioMp3, radioWav, radioM4a);//Configura como se ven los botones 
     }
 
-    private void configPanels() {
-        setBounds(0, 0, 1300, 770); //panel general
-        setBackground(StyleConfig.DARK_BLUE_COLOR); //Color del panel
-        downloadFilePnl.setPreferredSize(new Dimension(840, 580)); //tamaño del panel Download
-        downloadFilePnl.setMinimumSize(new Dimension(640, 580));
-        infoMedia.setPreferredSize(new Dimension(840, 410)); //tamaño del panel InfoMedia
-        infoMedia.setMinimumSize(new Dimension(640, 410));
+    private void setupLayout() {
+        
+        this.setLayout(new MigLayout("fill, insets 30, wrap 1", "[grow,center]", "[]20[]push[]"));
+        
         add(downloadFilePnl, "center, growx, shrinkx");
         add(infoMedia, "center, growx, shrinkx");
         add(logoLabel, "align center");
-    }
-    
-    
-    private void configComponents() {
-        downloadFilePnl.add(txtUrl, "split 2, growx, height 30!, gapleft 30, gaptop -20");
-        downloadFilePnl.add(btnFolder, "width 50!, height 50!, gapright 20");
+        
+        downloadFilePnl.setLayout(new MigLayout("fillx, insets 20, wrap 1", "[center, grow]"));
+        
+        downloadFilePnl.add(txtUrl, "split 2, growx, h 30!, gapleft 30, gaptop -20");
+        downloadFilePnl.add(btnFolder, "w 50!, h 50!, gapright 20");
 
         pnlVideo.setLayout(new MigLayout("fillx, insets 10", "[]push[]push[]push[]", "[]"));
         pnlVideo.add(radioMp4);
         pnlVideo.add(radioMkv);
         pnlVideo.add(radioWebm);
-        pnlVideo.add(cbbxQualityFilter, "width 120!");
-        downloadFilePnl.add(pnlVideo, "width 730!, height 80!, gaptop 5");
+        pnlVideo.add(cbbxQualityFilter, "w 120!");
+        downloadFilePnl.add(pnlVideo, "w 730!, h 80!, gaptop 5");
 
         pnlAudio.setLayout(new MigLayout("fillx, insets 10", "[]15[]15[]15[]", "[]"));
         pnlAudio.add(radioMp3);
         pnlAudio.add(radioWav);
         pnlAudio.add(radioM4a);
-        downloadFilePnl.add(pnlAudio, "width 730!, height 80!");
+        downloadFilePnl.add(pnlAudio, "width 730!, h 80!");
 
-        downloadFilePnl.add(btnDownload, "split 2, width 180!, height 50!, gaptop 10");
-        downloadFilePnl.add(btnOpenLast, "width 180!, height 50!, gaptop 10, gapleft 20");
+        downloadFilePnl.add(btnDownload, "split 2, w 180!, height 50!, gaptop 10");
+        downloadFilePnl.add(btnOpenLast, "w 180!, h 50!, gaptop 10, gapleft 20");
 
-        downloadFilePnl.add(progressBar, "width 730!, height 15!, gapy 15");
-        downloadFilePnl.add(jScrollPane1, "width 730!, height 160!, growy");
-        downloadFilePnl.add(lblInfoDownload, "growx, height 20!");
+        downloadFilePnl.add(progressBar, "w 730!, h 15!, gapy 15");
+        downloadFilePnl.add(jScrollPane1, "w 730!, h 160!, growy");
+        downloadFilePnl.add(lblInfoDownload, "growx, h 20!");
+    }
+    
+    private void configPanelSizes() {
+        setBackground(SwingStyleUtils.DARK_BLUE_COLOR); //Color del panel
+        downloadFilePnl.setPreferredSize(new Dimension(840, 580)); //tamaño del panel Download
+        downloadFilePnl.setMinimumSize(new Dimension(640, 580));
+        infoMedia.setPreferredSize(new Dimension(840, 410)); //tamaño del panel InfoMedia
+        infoMedia.setMinimumSize(new Dimension(640, 410));
     }
 
     //Aplica estilos a los componentes
-    private void styleComponents() {
-        StyleConfig.createTitleBorder(downloadFilePnl, "DOWNLOAD FILE");
-        StyleConfig.styleIconButton(btnFolder, "/images/folder.png", "Select destination folder");
-        StyleConfig.createTitleBorder(pnlVideo, "VIDEO");
-        StyleConfig.createTitleBorder(pnlAudio, "AUDIO");
-        StyleConfig.styleButtonGroup("Select format", radioM4a, radioMkv, radioMp3, radioMp4, radioWav, radioWebm);
-        StyleConfig.selectionColorComboBox(cbbxQualityFilter);
-        StyleConfig.styleSimpleButton(btnDownload, "DOWNLOAD", "Download file", 150, 70, StyleConfig.LIGHT_BLUE_COLOR, StyleConfig.DARK_BLUE_COLOR);
-        StyleConfig.styleSimpleButton(btnOpenLast, "OPEN LAST", "Reproduce last file", 150, 30, StyleConfig.GREY_COLOR, StyleConfig.DARK_BLUE_COLOR);
-        progressBar.setBackground(StyleConfig.LIGHT_BLUE_COLOR);
-        progressBar.setForeground(StyleConfig.DARK_BLUE_COLOR);
-        areaInfo.setBackground(StyleConfig.DARK_BLUE_COLOR);
-        areaInfo.setForeground(StyleConfig.LIGHT_BLUE_COLOR);
+    private void applyStylesComponent() {
+        SwingStyleUtils.createTitleBorder(downloadFilePnl, "DOWNLOAD FILE");
+        SwingStyleUtils.styleIconButton(btnFolder, "/images/folder.png", "Select destination folder");
+        SwingStyleUtils.createTitleBorder(pnlVideo, "VIDEO");
+        SwingStyleUtils.createTitleBorder(pnlAudio, "AUDIO");
+        SwingStyleUtils.styleButtonGroup("Select format", radioM4a, radioMkv, radioMp3, radioMp4, radioWav, radioWebm);
+        SwingStyleUtils.selectionColorComboBox(cbbxQualityFilter);
+        SwingStyleUtils.styleSimpleButton(btnDownload, "DOWNLOAD", "Download file", 150, 70, SwingStyleUtils.LIGHT_BLUE_COLOR, SwingStyleUtils.DARK_BLUE_COLOR);
+        SwingStyleUtils.styleSimpleButton(btnOpenLast, "OPEN LAST", "Reproduce last file", 150, 30, SwingStyleUtils.GREY_COLOR, SwingStyleUtils.DARK_BLUE_COLOR);
+        progressBar.setBackground(SwingStyleUtils.LIGHT_BLUE_COLOR);
+        progressBar.setForeground(SwingStyleUtils.DARK_BLUE_COLOR);
+        areaInfo.setBackground(SwingStyleUtils.DARK_BLUE_COLOR);
+        areaInfo.setForeground(SwingStyleUtils.LIGHT_BLUE_COLOR);
     }
     
     //Aplicar la calidad de video
@@ -140,7 +141,7 @@ public class Downloads extends javax.swing.JPanel {
     
     
     private void styleTxtUrl() {
-        StyleConfig.addIconsTextField(txtUrl, "/images/url.png", "/images/delete_url.png", "Paste the URL of the file to download");
+        SwingStyleUtils.addIconsTextField(txtUrl, "/images/url.png", "/images/delete_url.png", "Paste the URL of the file to download");
 
         txtUrl.addMouseListener(new MouseAdapter() {
             @Override
@@ -210,11 +211,9 @@ public class Downloads extends javax.swing.JPanel {
 
         setMinimumSize(new java.awt.Dimension(1500, 770));
         setPreferredSize(new java.awt.Dimension(1300, 770));
-        setLayout(null);
 
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo3.png"))); // NOI18N
         add(logoLabel);
-        logoLabel.setBounds(700, 1060, 180, 50);
 
         downloadFilePnl.setMaximumSize(new java.awt.Dimension(840, 580));
         downloadFilePnl.setMinimumSize(new java.awt.Dimension(840, 580));
@@ -318,7 +317,6 @@ public class Downloads extends javax.swing.JPanel {
         downloadFilePnl.add(lblInfoDownload, java.awt.BorderLayout.CENTER);
 
         add(downloadFilePnl);
-        downloadFilePnl.setBounds(30, 30, 880, 600);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFolderActionPerformed
