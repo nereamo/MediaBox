@@ -187,7 +187,7 @@ public class Login extends JPanel{
                         }
                         token = newToken;
                         mediaPollingComponent.setToken(token);
-                        TokenController.saveToken(token, email);
+                        //TokenController.saveToken(token, email);
                         
                         frame.setMenuVisible(true); 
                         frame.initializePolling(token);

@@ -64,45 +64,43 @@ public class Downloads extends javax.swing.JPanel {
     }
 
     private void setupLayout() {
-        
-        this.setLayout(new MigLayout("fill, insets 30, wrap 1", "[grow,center]", "[]20[]push[]"));
-        
-        add(downloadFilePnl, "center, growx, shrinkx");
-        add(infoMedia, "center, growx, shrinkx");
+        this.setLayout(new MigLayout("fill, insets 30, wrap 1", "[grow, center]", "push[]push[]push"));
+        add(downloadFilePnl, "center, growx");
+        add(infoMedia, "center, growx");
         add(logoLabel, "align center");
-        
-        downloadFilePnl.setLayout(new MigLayout("fillx, insets 20, wrap 1", "[center, grow]"));
-        
-        downloadFilePnl.add(txtUrl, "split 2, growx, h 30!, gapleft 30, gaptop -20");
-        downloadFilePnl.add(btnFolder, "w 50!, h 50!, gapright 20");
+
+        downloadFilePnl.setLayout(new MigLayout("fillx, insets 20, wrap 1", "[grow]"));
+        downloadFilePnl.add(txtUrl, "split 2, growx, h 35!, gapright 10");
+        downloadFilePnl.add(btnFolder, "w 50!, h 50!");
 
         pnlVideo.setLayout(new MigLayout("fillx, insets 10", "[]push[]push[]push[]", "[]"));
         pnlVideo.add(radioMp4);
         pnlVideo.add(radioMkv);
         pnlVideo.add(radioWebm);
         pnlVideo.add(cbbxQualityFilter, "w 120!");
-        downloadFilePnl.add(pnlVideo, "w 730!, h 80!, gaptop 5");
+        downloadFilePnl.add(pnlVideo, "growx, h 80!");
 
-        pnlAudio.setLayout(new MigLayout("fillx, insets 10", "[]15[]15[]15[]", "[]"));
+        pnlAudio.setLayout(new MigLayout("fillx, insets 10", "[]15[]15[]", "[]"));
         pnlAudio.add(radioMp3);
         pnlAudio.add(radioWav);
         pnlAudio.add(radioM4a);
-        downloadFilePnl.add(pnlAudio, "width 730!, h 80!");
+        downloadFilePnl.add(pnlAudio, "growx, h 80!");
 
-        downloadFilePnl.add(btnDownload, "split 2, w 180!, height 50!, gaptop 10");
+        downloadFilePnl.add(btnDownload, "split 2, w 180!, h 50!, gaptop 10, align center");
         downloadFilePnl.add(btnOpenLast, "w 180!, h 50!, gaptop 10, gapleft 20");
 
-        downloadFilePnl.add(progressBar, "w 730!, h 15!, gapy 15");
-        downloadFilePnl.add(jScrollPane1, "w 730!, h 160!, growy");
+        downloadFilePnl.add(progressBar, "growx, h 15!, gapy 15");
+        downloadFilePnl.add(jScrollPane1, "grow, h 160!");
         downloadFilePnl.add(lblInfoDownload, "growx, h 20!");
     }
-    
+
+    //Configura el tamaño de los paneles
     private void configPanelSizes() {
         setBackground(SwingStyleUtils.DARK_BLUE_COLOR); //Color del panel
         downloadFilePnl.setPreferredSize(new Dimension(840, 580)); //tamaño del panel Download
-        downloadFilePnl.setMinimumSize(new Dimension(640, 580));
+        downloadFilePnl.setMinimumSize(new Dimension(540, 580));
         infoMedia.setPreferredSize(new Dimension(840, 410)); //tamaño del panel InfoMedia
-        infoMedia.setMinimumSize(new Dimension(640, 410));
+        infoMedia.setMinimumSize(new Dimension(540, 410));
     }
 
     //Aplica estilos a los componentes
@@ -131,15 +129,15 @@ public class Downloads extends javax.swing.JPanel {
     
     //Configuración de ButtonGroup
     private void configRadioButtons(ButtonGroup bg, JRadioButton... buttons) {
-        String[] commands = {"mp4", "mkv", "webm", "mp3", "wav", "m4a"};
+        String[] options = {"mp4", "mkv", "webm", "mp3", "wav", "m4a"};
         for (int i = 0; i < buttons.length; i++) {
             bg.add(buttons[i]);
-            buttons[i].setActionCommand(commands[i]);
+            buttons[i].setActionCommand(options[i]);
         }
         buttons[0].setSelected(true);
     }
     
-    
+    //Configura de JTextField de URL
     private void styleTxtUrl() {
         SwingStyleUtils.addIconsTextField(txtUrl, "/images/url.png", "/images/delete_url.png", "Paste the URL of the file to download");
 
@@ -169,7 +167,8 @@ public class Downloads extends javax.swing.JPanel {
             }
         });
     }
-        
+    
+    //Configuración de pegar URL a JTextField    
     private void pasteUrl() {
         Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
         DataFlavor df = DataFlavor.stringFlavor;
@@ -221,6 +220,8 @@ public class Downloads extends javax.swing.JPanel {
         downloadFilePnl.setLayout(new java.awt.BorderLayout());
 
         txtUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        txtUrl.setMinimumSize(new java.awt.Dimension(70, 23));
+        txtUrl.setPreferredSize(new java.awt.Dimension(70, 23));
         downloadFilePnl.add(txtUrl, java.awt.BorderLayout.CENTER);
 
         btnFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -234,28 +235,23 @@ public class Downloads extends javax.swing.JPanel {
         });
         downloadFilePnl.add(btnFolder, java.awt.BorderLayout.PAGE_START);
 
-        pnlVideo.setMaximumSize(new java.awt.Dimension(200, 210));
-        pnlVideo.setLayout(null);
+        pnlVideo.setMaximumSize(null);
 
         radioMp4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         radioMp4.setText("MP4");
         pnlVideo.add(radioMp4);
-        radioMp4.setBounds(20, 30, 70, 22);
 
         radioMkv.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         radioMkv.setText("MKV");
         pnlVideo.add(radioMkv);
-        radioMkv.setBounds(140, 30, 70, 22);
 
         radioWebm.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         radioWebm.setText("WEBM");
         pnlVideo.add(radioWebm);
-        radioWebm.setBounds(260, 30, 90, 22);
 
         cbbxQualityFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         cbbxQualityFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Quality" }));
         pnlVideo.add(cbbxQualityFilter);
-        cbbxQualityFilter.setBounds(400, 30, 139, 23);
 
         downloadFilePnl.add(pnlVideo, java.awt.BorderLayout.PAGE_END);
 
@@ -293,23 +289,19 @@ public class Downloads extends javax.swing.JPanel {
 
         downloadFilePnl.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        pnlAudio.setMaximumSize(new java.awt.Dimension(200, 210));
-        pnlAudio.setLayout(null);
+        pnlAudio.setMaximumSize(null);
 
         radioWav.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         radioWav.setText("WAV");
         pnlAudio.add(radioWav);
-        radioWav.setBounds(120, 30, 70, 22);
 
         radioM4a.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         radioM4a.setText("M4A");
         pnlAudio.add(radioM4a);
-        radioM4a.setBounds(210, 30, 151, 22);
 
         radioMp3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         radioMp3.setText("MP3");
         pnlAudio.add(radioMp3);
-        radioMp3.setBounds(30, 30, 80, 22);
 
         downloadFilePnl.add(pnlAudio, java.awt.BorderLayout.CENTER);
 

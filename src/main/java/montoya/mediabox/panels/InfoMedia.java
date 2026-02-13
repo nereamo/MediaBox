@@ -227,7 +227,7 @@ public class InfoMedia extends javax.swing.JPanel {
             try {
                 fileManager.downloadFile(info, fc.getSelectedFile());
                 refreshFiles();
-                JOptionPane.showMessageDialog(this, "Descarga completada");
+                JOptionPane.showMessageDialog(this, "Download completed!");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
             }
@@ -318,7 +318,7 @@ public class InfoMedia extends javax.swing.JPanel {
             try {
                 fileManager.uploadFile(fc.getSelectedFile());
                 refreshFiles();
-                JOptionPane.showMessageDialog(this, "Subida completada");
+                JOptionPane.showMessageDialog(this, "Uplodad completed");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
             }

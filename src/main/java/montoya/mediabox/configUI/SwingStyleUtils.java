@@ -261,4 +261,21 @@ public class SwingStyleUtils {
             }
         });
     }
+    
+    //Estilo para el spinner
+    public static void styleSpinner(JSpinner spinner) {
+        spinner.setFont(FONT_PLAIN);
+        spinner.setOpaque(false);
+
+        JComponent editor = spinner.getEditor();
+        if (editor instanceof JSpinner.DefaultEditor) {
+            JFormattedTextField textField = ((JSpinner.DefaultEditor) editor).getTextField();
+            textField.setBackground(WHITE_COLOR);
+            textField.setForeground(DARK_BLUE_COLOR);
+            textField.setCaretColor(WHITE_COLOR); // Color del cursor al escribir
+            textField.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+        }
+
+        spinner.setBorder(BorderFactory.createLineBorder(LIGHT_BLUE_COLOR, 1));
+    }
 }

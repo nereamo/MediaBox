@@ -28,7 +28,6 @@ public class MainFrame extends JFrame {
     private Preferences pnlPreferences;
     private Login pnlLogin;
     private DownloadManager downloadManager;
-    
     private CardManager cardManager;
     private CardLayout layout;
     private JPanel container;

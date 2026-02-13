@@ -19,7 +19,6 @@ public class Preferences extends javax.swing.JPanel {
     private final DownloadManager downloadManager;
     private final CardManager cardManager;
     public static final String CARD_DOWN = "downloads";
-    private JSlider sldSpeed = new JSlider(0,100,50);
 
     public Preferences(MainFrame frame, DownloadManager downloadManager, CardManager cardManager) {
         initComponents();
@@ -30,7 +29,7 @@ public class Preferences extends javax.swing.JPanel {
         
         setupLayout();
         applyStylesComponent();
-        configSliderSpeed();
+        mbSpeedSpinner();
     }
     
     //Configuracion de la posición de los componentes
@@ -47,7 +46,8 @@ public class Preferences extends javax.swing.JPanel {
         add(chkCreate, "cell 1 1, alignx left, gaptop 15");
 
         add(lblSpeed, "cell 0 2, alignx right, aligny center, gaptop 15");
-        add(sldSpeed, "cell 1 2, growx, wmin 200, w 300, wmax 300, gaptop 15");
+        add(spnSpeed, "cell 1 2, split 2, alignx left, gaptop 15, w 70!");
+        add(lblSpeedValue, "gapleft 20, alignx left, gaptop 15");
         
         add(lblYtDlp, "cell 0 3, alignx right, gaptop 15"); 
         add(txtYtDlp, "cell 1 3,alignx left, growx, wmin 200, w 300, wmax 300, gaptop 15"); 
@@ -56,7 +56,7 @@ public class Preferences extends javax.swing.JPanel {
         add(btnSave, "cell 1 4, split 2, alignx center, gaptop 30"); 
         add(btnCancel, "gaptop 30");
         
-        add(logoLabel, "cell 4 6, alignx right, aligny bottom"); 
+        add(logoLabel, "cell 1 6, alignx center, aligny bottom"); 
     }
     
     //Configuracion del estilo de los componentes
@@ -64,25 +64,31 @@ public class Preferences extends javax.swing.JPanel {
         SwingStyleUtils.styleFixLabel(lblPath, "Temp Path: ");
         SwingStyleUtils.styleFixLabel(lblM3u, "File .m3u: ");
         SwingStyleUtils.styleFixLabel(lblSpeed, "Speed (MB/s): ");
+        SwingStyleUtils.styleFixLabel(lblSpeedValue, "" + spnSpeed.getValue() + " MB/s");
         SwingStyleUtils.styleFixLabel(lblYtDlp, "Location yt-dlp: ");
         
         SwingStyleUtils.styleIconButton(btnBrowseTemp, "/images/folder.png", "Select Folder");
         SwingStyleUtils.styleIconButton(btnYtDlp, "/images/search.png", "Automatic search");
+        SwingStyleUtils.styleCheckBox(chkCreate,"Create", "Create files .M3U");
+        SwingStyleUtils.styleSpinner(spnSpeed);
         SwingStyleUtils.styleIconButton(btnSave, "/images/save.png", "Save changes");
         SwingStyleUtils.styleIconButton(btnCancel, "/images/return.png", "Discard changes");
-        SwingStyleUtils.styleCheckBox(chkCreate,"Create", "Create files .M3U");
     }
     
-    //configuracion del Slider para la velocidad de descarga
-    private void configSliderSpeed(){
-        sldSpeed.setMajorTickSpacing(10);
-        sldSpeed.setMinorTickSpacing(10);
-        sldSpeed.setPaintTicks(true);
-        sldSpeed.setPaintLabels(true);
-        sldSpeed.setSnapToTicks(true);
-        sldSpeed.setOpaque(false);
-        sldSpeed.setFont(SwingStyleUtils.FONT_PLAIN);
-        sldSpeed.setForeground(SwingStyleUtils.GREY_COLOR);
+    //Velocidad de descarga hasta un max de 100MB/s
+    public void mbSpeedSpinner() {
+        SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0.0, 0.0, 100.0, 5.0);
+        spnSpeed.setModel(spinnerModel);
+
+        JSpinner.NumberEditor numberFormat = new JSpinner.NumberEditor(spnSpeed, "0.0");
+        spnSpeed.setEditor(numberFormat);
+
+        spnSpeed.addChangeListener(new javax.swing.event.ChangeListener() {
+            @Override
+            public void stateChanged(javax.swing.event.ChangeEvent e) {
+                lblSpeedValue.setText(spnSpeed.getValue().toString()+ " MB/s");
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -101,6 +107,8 @@ public class Preferences extends javax.swing.JPanel {
         btnBrowseTemp = new javax.swing.JButton();
         lblPath = new javax.swing.JLabel();
         logoLabel = new javax.swing.JLabel();
+        spnSpeed = new javax.swing.JSpinner();
+        lblSpeedValue = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(1300, 770));
         setPreferredSize(new java.awt.Dimension(1300, 770));
@@ -179,9 +187,13 @@ public class Preferences extends javax.swing.JPanel {
         add(lblPath);
         lblPath.setBounds(80, 90, 80, 20);
 
-        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo_2_2.png"))); // NOI18N
+        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo2png.png"))); // NOI18N
         add(logoLabel);
-        logoLabel.setBounds(1110, 640, 80, 70);
+        logoLabel.setBounds(310, 630, 240, 70);
+        add(spnSpeed);
+        spnSpeed.setBounds(280, 250, 64, 22);
+        add(lblSpeedValue);
+        lblSpeedValue.setBounds(390, 250, 0, 0);
     }// </editor-fold>//GEN-END:initComponents
 
     //Directorio para archivos temporales
@@ -235,7 +247,7 @@ public class Preferences extends javax.swing.JPanel {
         downloadManager.setTempPath(txtPathTemp.getText().trim());
         downloadManager.setYtDlpLocation(txtYtDlp.getText().trim());
         downloadManager.setCreateM3u(chkCreate.isSelected());
-        downloadManager.setMaxSpeed(sldSpeed.getValue());
+        downloadManager.setMaxSpeed(((Number) spnSpeed.getValue()).doubleValue());
 
         JOptionPane.showMessageDialog(this, "Preferences saved!", "Saved", JOptionPane.INFORMATION_MESSAGE);
         cardManager.showCard(CARD_DOWN);
@@ -246,7 +258,7 @@ public class Preferences extends javax.swing.JPanel {
         if (JOptionPane.showConfirmDialog(null, "Changes will not be saved. Do you want to continue?", "Cancel", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             txtPathTemp.setText("");
             chkCreate.setSelected(false);
-            sldSpeed.setValue(50);
+            spnSpeed.setValue(0.0);
             txtYtDlp.setText("");
             cardManager.showCard(CARD_DOWN);
         }
@@ -261,8 +273,10 @@ public class Preferences extends javax.swing.JPanel {
     private javax.swing.JLabel lblM3u;
     private javax.swing.JLabel lblPath;
     private javax.swing.JLabel lblSpeed;
+    private javax.swing.JLabel lblSpeedValue;
     private javax.swing.JLabel lblYtDlp;
     private javax.swing.JLabel logoLabel;
+    private javax.swing.JSpinner spnSpeed;
     private javax.swing.JTextField txtPathTemp;
     private javax.swing.JTextField txtYtDlp;
     // End of variables declaration//GEN-END:variables
