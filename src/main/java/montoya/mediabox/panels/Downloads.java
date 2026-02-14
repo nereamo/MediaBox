@@ -110,7 +110,15 @@ public class Downloads extends javax.swing.JPanel {
         SwingStyleUtils.selectionColorComboBox(cbbxQualityFilter);
         SwingStyleUtils.styleTextButton(btnDownload, "DOWNLOAD", "Download file", 150, 70, SwingStyleUtils.LIGHT_PURPLE, SwingStyleUtils.DARK_GREY_COLOR);
         SwingStyleUtils.styleTextButton(btnOpenLast, "OPEN LAST", "Reproduce last file", 150, 30, SwingStyleUtils.MEDIUM_GREY_COLOR, SwingStyleUtils.LIGHT_GREY_COLOR);
+        btnOpenLast.setVisible(false);
         SwingStyleUtils.styleProgressBar(progressBar);
+    }
+    
+    //Botón visible cuando la descarga ha finalizado
+    public void showOpenLastButton() {
+        btnOpenLast.setVisible(true);
+        this.revalidate();
+        this.repaint();
     }
     
     //Aplicar la calidad de video
@@ -176,6 +184,8 @@ public class Downloads extends javax.swing.JPanel {
                 System.getLogger(MainFrame.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
         }
+        
+        btnOpenLast.setVisible(false); //Desactiva el botón OpenLast al copiar otra url
     }
 
     @SuppressWarnings("unchecked")
@@ -339,7 +349,7 @@ public class Downloads extends javax.swing.JPanel {
         Thread th = new Thread() {
             @Override
             public void run() {
-                downloadManager.download(url, folder, format, quality, progressBar, tblModel, folderPaths);
+                downloadManager.download(url, folder, format, quality, progressBar, tblModel, folderPaths, Downloads.this);
             }
         };
         th.start();

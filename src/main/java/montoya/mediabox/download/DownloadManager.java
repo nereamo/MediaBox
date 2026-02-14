@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.swing.*;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
+import montoya.mediabox.panels.Downloads;
 import montoya.mediabox.panels.InfoMedia;
 
 /**
@@ -74,7 +75,7 @@ public class DownloadManager {
     }
 
     //Verifica si los campos de preferences se han completado
-    public void download(String url, String folder, String format, String quality, JProgressBar progressBar, FileTableModel tblModel, Set<String> folderPaths) {
+    public void download(String url, String folder, String format, String quality, JProgressBar progressBar, FileTableModel tblModel, Set<String> folderPaths, Downloads downloadsPanel) {
         if (url.isEmpty() || folder.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter a URL and select a folder.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -90,7 +91,7 @@ public class DownloadManager {
         progressBar.setVisible(true);
         progressBar.setIndeterminate(true);
 
-        downloadWorker = new DownloadWorker(pb, folder, progressBar, tblModel, fileProperties, folderPaths, infoMedia);
+        downloadWorker = new DownloadWorker(pb, folder, progressBar, tblModel, fileProperties, folderPaths, infoMedia, downloadsPanel);
         DownloadWorker task = downloadWorker;
 
         task.addPropertyChangeListener(evt -> {

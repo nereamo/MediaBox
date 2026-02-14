@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import montoya.mediabox.fileInformation.FileInformation;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
+import montoya.mediabox.panels.Downloads;
 import montoya.mediabox.panels.InfoMedia;
 
 /**
@@ -22,13 +23,14 @@ public class DownloadWorker extends SwingWorker<Void, String> {
     private final FileTableModel tblModel;
     private InfoMedia infoMedia;
     private final FileProperties fileProperties;
+    private final Downloads downloadsPanel;
 
     private final ProcessBuilder pb;
     private final String folder;
     private final JProgressBar barProgress;
     private final Set<String> folderPaths;
 
-    public DownloadWorker(ProcessBuilder pb, String folder, JProgressBar progressBar, FileTableModel tblModel, FileProperties fileProperties, Set<String> folderPaths, InfoMedia infoMedia) {
+    public DownloadWorker(ProcessBuilder pb, String folder, JProgressBar progressBar, FileTableModel tblModel, FileProperties fileProperties, Set<String> folderPaths, InfoMedia infoMedia, Downloads downloadsPanel) {
         this.pb = pb;
         this.folder = folder;
         this.barProgress = progressBar;
@@ -36,6 +38,7 @@ public class DownloadWorker extends SwingWorker<Void, String> {
         this.fileProperties = fileProperties;
         this.folderPaths = folderPaths;
         this.infoMedia = infoMedia;
+        this.downloadsPanel = downloadsPanel;
     }
 
     //Devuelve ultimo archivo descargado
@@ -46,6 +49,16 @@ public class DownloadWorker extends SwingWorker<Void, String> {
     //Metodo principal para ejecucion en segundo plano
     @Override
     protected Void doInBackground() throws Exception {
+
+        SwingUtilities.invokeLater(new Runnable() { //Hilo secundario para progressBar
+            @Override
+            public void run() {
+                barProgress.setValue(0);
+                barProgress.setString(null);
+                barProgress.setIndeterminate(true);
+            }
+        });
+
         Process p = pb.start();
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream(), "UTF-8"))) {
@@ -109,11 +122,20 @@ public class DownloadWorker extends SwingWorker<Void, String> {
             get();
             barProgress.setIndeterminate(false);
             barProgress.setValue(100);
-            barProgress.setString("Download completed!");
+            barProgress.setString("Download completed!"); //Mensage si se completó la descarga correctamente
+
+            SwingUtilities.invokeLater(new Runnable() { //Hilo secundario para progressBar
+                @Override
+                public void run() {
+                    downloadsPanel.showOpenLastButton();
+                }
+            });
+        
+        
         } catch (Exception e) {
             barProgress.setIndeterminate(false);
             barProgress.setValue(0);
-            barProgress.setString("Error in download");
+            barProgress.setString("Error in download"); //Mensage de error si hubo algún problema durante la descarga
         }
     }
 

@@ -85,6 +85,8 @@ public class SwingStyleUtils {
         btn.setOpaque(true);
         btn.setContentAreaFilled(true);
         btn.setBorderPainted(false);
+        btn.setFocusPainted(false);
+        UIManager.put("Button.select", fondo);
         btn.setText(txt);
         btn.setBackground(fondo);
         btn.setForeground(letras);
