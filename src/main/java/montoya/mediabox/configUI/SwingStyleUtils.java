@@ -137,6 +137,41 @@ public class SwingStyleUtils {
             }
         });
     }
+    
+    public static void styleGhostButton(JButton btn, String txt, String toolTip, int width, int height, Color fondo, Color letras) {
+    // 1. Reutilizamos el estilo base (o lo configuramos manualmente aquí)
+    styleTextButton(btn, txt, toolTip, width, height, fondo, letras);
+    
+    // 2. Configuramos la transparencia especial
+    btn.setOpaque(false);
+    btn.setContentAreaFilled(false);
+    
+    btn.setUI(new javax.swing.plaf.basic.BasicButtonUI() {
+        @Override
+        public void update(Graphics g, JComponent c) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            
+            if (c.isEnabled()) {
+                // Estado activo: sólido
+                g2.setColor(c.getBackground()); 
+                btn.setForeground(letras);
+            } else {
+                // Estado inactivo: transparencia sutil
+                Color bg = c.getBackground();
+                g2.setColor(new Color(bg.getRed(), bg.getGreen(), bg.getBlue(), 60)); // Fondo transparente
+                btn.setForeground(new Color(letras.getRed(), letras.getGreen(), letras.getBlue(), 40)); // Texto transparente
+            }
+            
+            g2.fillRect(0, 0, c.getWidth(), c.getHeight());
+            g2.dispose();
+            super.update(g, c);
+        }
+    });
+
+    btn.setEnabled(false); // Por defecto nace desactivado
+    btn.setVisible(true);
+}
 
     //Estilo de los items del MenuBar
     public static void styleMenuItems(JMenuItem item, String iconPath, String text, String toolTip) {

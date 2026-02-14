@@ -109,15 +109,13 @@ public class Downloads extends javax.swing.JPanel {
         SwingStyleUtils.styleButtonGroup("Select format", radioM4a, radioMkv, radioMp3, radioMp4, radioWav, radioWebm);
         SwingStyleUtils.selectionColorComboBox(cbbxQualityFilter);
         SwingStyleUtils.styleTextButton(btnDownload, "DOWNLOAD", "Download file", 150, 70, SwingStyleUtils.LIGHT_PURPLE, SwingStyleUtils.DARK_GREY_COLOR);
-        SwingStyleUtils.styleTextButton(btnOpenLast, "OPEN LAST", "Reproduce last file", 150, 30, SwingStyleUtils.MEDIUM_GREY_COLOR, SwingStyleUtils.LIGHT_GREY_COLOR);
-        btnOpenLast.setVisible(false);
+        SwingStyleUtils.styleGhostButton( btnOpenLast,"OPEN LAST","Reproduce last file",180, 50,SwingStyleUtils.MEDIUM_GREY_COLOR,SwingStyleUtils.LIGHT_GREY_COLOR);
         SwingStyleUtils.styleProgressBar(progressBar);
     }
     
     //Botón visible cuando la descarga ha finalizado
     public void showOpenLastButton() {
-        btnOpenLast.setVisible(true);
-        this.revalidate();
+        btnOpenLast.setEnabled(true); // Aquí recupera el color sólido automáticamente
         this.repaint();
     }
     
@@ -184,8 +182,7 @@ public class Downloads extends javax.swing.JPanel {
                 System.getLogger(MainFrame.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
         }
-        
-        btnOpenLast.setVisible(false); //Desactiva el botón OpenLast al copiar otra url
+        btnOpenLast.setEnabled(false);
     }
 
     @SuppressWarnings("unchecked")
