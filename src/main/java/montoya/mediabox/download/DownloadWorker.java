@@ -3,7 +3,6 @@ package montoya.mediabox.download;
 import java.io.*;
 import javax.swing.*;
 import java.util.Set;
-import java.util.List;
 import java.util.Date;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
@@ -11,7 +10,6 @@ import montoya.mediabox.fileInformation.FileInformation;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
 import montoya.mediabox.panels.InfoMedia;
-import montoya.mediabox.configUI.SwingStyleUtils;
 
 /**
  * Clase creada con ayuda de Copilot para entender como funciona SwingWorker y que metodos utilizar. SwingWorker ejecuta tareas en segundo plano impidiendo que no se bloquee la GUI. Contiene metodos para descaragar archivos en segundo plano
@@ -27,20 +25,16 @@ public class DownloadWorker extends SwingWorker<Void, String> {
 
     private final ProcessBuilder pb;
     private final String folder;
-    private final JTextArea outputArea;
     private final JProgressBar barProgress;
-    private final JLabel lblInfoDownload;
     private final Set<String> folderPaths;
 
-    public DownloadWorker(ProcessBuilder pb, String folder, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, FileProperties fileProperties, Set<String> folderPaths, JLabel lblInfoDownload, InfoMedia infoMedia) {
+    public DownloadWorker(ProcessBuilder pb, String folder, JProgressBar progressBar, FileTableModel tblModel, FileProperties fileProperties, Set<String> folderPaths, InfoMedia infoMedia) {
         this.pb = pb;
         this.folder = folder;
-        this.outputArea = outputArea;
         this.barProgress = progressBar;
         this.tblModel = tblModel;
         this.fileProperties = fileProperties;
         this.folderPaths = folderPaths;
-        this.lblInfoDownload = lblInfoDownload;
         this.infoMedia = infoMedia;
     }
 
@@ -99,21 +93,28 @@ public class DownloadWorker extends SwingWorker<Void, String> {
         return null;
     }
 
-    //Recibe el texto enviado de publish y lo muestra en JTextArea
-    @Override
-    protected void process(List<String> chunks) {
-        for (String line : chunks) {
-            outputArea.append(line + "\n");
-        }
-    }
+//    //Recibe el texto enviado de publish y lo muestra en JTextArea
+//    @Override
+//    protected void process(List<String> chunks) {
+//        for (String line : chunks) {
+//            outputArea.append(line + "\n");
+//        }
+//    }
 
     //Se ejecuta cuando doInBackground ha terminado, muestra mensaje de finalización
     @Override
     protected void done() {
-        barProgress.setIndeterminate(false);
-        barProgress.setValue(100);
-        barProgress.setString("Download completed!");
-        SwingStyleUtils.showMessageInfo(lblInfoDownload, "Download completed!");
+
+        try {
+            get();
+            barProgress.setIndeterminate(false);
+            barProgress.setValue(100);
+            barProgress.setString("Download completed!");
+        } catch (Exception e) {
+            barProgress.setIndeterminate(false);
+            barProgress.setValue(0);
+            barProgress.setString("Error in download");
+        }
     }
 
     //Extrae el % de cada linea de la descarga

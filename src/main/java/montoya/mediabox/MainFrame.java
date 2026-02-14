@@ -36,6 +36,9 @@ public class MainFrame extends JFrame {
     private boolean isLoggedIn = false;
 
     public MainFrame() {
+        UIManager.put("MenuItem.selectionBackground", SwingStyleUtils.MEDIUM_GREY_COLOR);
+        UIManager.put("Menu.selectionBackground", SwingStyleUtils.MEDIUM_GREY_COLOR);
+        UIManager.put("MenuItem.selectionForeground", SwingStyleUtils.WHITE_COLOR);
         initComponents();
         
         configurationFrame();
@@ -43,7 +46,7 @@ public class MainFrame extends JFrame {
         configIconMenuItems();
         setMenuVisible(false);
         
-        Image icon = new ImageIcon(getClass().getResource("/images/small_logo.png")).getImage();
+        Image icon = new ImageIcon(getClass().getResource("/images/icon.png")).getImage();
         this.setIconImage(icon);
         
         layout = new CardLayout();
@@ -81,6 +84,7 @@ public class MainFrame extends JFrame {
     
     //Iconos de los botones
     private void configIconMenuItems(){
+        
         SwingStyleUtils.styleMenuItems(itemExit, "/images/exit.png", "Exit", "Close App");
         SwingStyleUtils.styleMenuItems(itemLogout, "/images/logout.png", "Logout", "Return to login");
         SwingStyleUtils.styleMenuItems(itemPreferences, "/images/settings.png", "Settings", "Edit settings");
@@ -89,10 +93,10 @@ public class MainFrame extends JFrame {
     
     //Visibilidad del JMenu
     public void setMenuVisible(boolean visible) {
-        menuBar.setBackground(SwingStyleUtils.LIGHT_BLUE_COLOR);
+        menuBar.setBackground(SwingStyleUtils.DARK_GREY_COLOR);
         menuBar.setVisible(visible);
         menuBar.add(Box.createHorizontalGlue());
-        lblMessage.setForeground(SwingStyleUtils.DARK_BLUE_COLOR);
+        lblMessage.setForeground(SwingStyleUtils.DARK_GREY_COLOR);
         lblMessage.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15)); 
         menuBar.add(lblMessage);
         

@@ -32,7 +32,7 @@ public class TableActions extends AbstractCellEditor implements TableCellRendere
         this.panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 2, 0)); //Panel que contiene los botones de la columna
         this.panel.setOpaque(false);
 
-        this.btnPlay = createButton("/images/play2.png", "Reproduce");
+        this.btnPlay = createButton("/images/play.png", "Reproduce");
         this.btnDelete = createButton("/images/delete.png", "Delete file");
         this.btnDownload = createButton("/images/download2.png", "Download");
 
@@ -125,6 +125,14 @@ public class TableActions extends AbstractCellEditor implements TableCellRendere
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         updateActionVisibility();
+        if (isSelected) {
+            panel.setBackground(table.getSelectionBackground());
+            panel.setOpaque(true);
+        } else {
+            panel.setBackground(table.getBackground());
+            panel.setOpaque(false);
+        }
+
         panel.setToolTipText(infoMedia.isNetworkFileSelected() ? "Download file" : "Play / Delete");
         return panel;
     }

@@ -74,7 +74,7 @@ public class DownloadManager {
     }
 
     //Verifica si los campos de preferences se han completado
-    public void download(String url, String folder, String format, String quality, JTextArea outputArea, JProgressBar progressBar, FileTableModel tblModel, Set<String> folderPaths, JLabel lblInfoDownload) {
+    public void download(String url, String folder, String format, String quality, JProgressBar progressBar, FileTableModel tblModel, Set<String> folderPaths) {
         if (url.isEmpty() || folder.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter a URL and select a folder.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -90,7 +90,7 @@ public class DownloadManager {
         progressBar.setVisible(true);
         progressBar.setIndeterminate(true);
 
-        downloadWorker = new DownloadWorker(pb, folder, outputArea, progressBar, tblModel, fileProperties, folderPaths, lblInfoDownload, infoMedia);
+        downloadWorker = new DownloadWorker(pb, folder, progressBar, tblModel, fileProperties, folderPaths, infoMedia);
         DownloadWorker task = downloadWorker;
 
         task.addPropertyChangeListener(evt -> {
@@ -99,7 +99,8 @@ public class DownloadManager {
                 updateProgressBar(progressBar, percent);
             }
         });
-
+        
+        progressBar.setValue(0);
         task.execute();
     }
 

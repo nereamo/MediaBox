@@ -37,21 +37,22 @@ public class Login extends JPanel{
         this.cardManager = cardManager;
         this.mediaPollingComponent = mediaPollingComponent;
  
-        setupLayout(); //Configuracion de componentes
+        setupLayout(); 
         configKeyActions();
-        initialLoginUser(); //Configuracion de login
+        initialLoginUser();
     } 
     
     public String getLoggedEmail(){ //Devuelve el email loggeado
         return loggedEmail;
     }
 
+    //Configuracion de la posición de los componentes
     private void setupLayout() {
         
         this.setLayout(new MigLayout("wrap, center", "[grow]", "push[]20[]10[]10[]20[]10[]push"));
-        this.setBackground(SwingStyleUtils.DARK_BLUE_COLOR);
+        this.setBackground(SwingStyleUtils.DARK_GREY_COLOR);
         
-        ImageIcon icon = new ImageIcon(getClass().getResource("/images/logo.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/images/logo_login.png"));
         JLabel lblIcon = new JLabel(icon);
         this.add(lblIcon, "align center, gapbottom 20");
         
@@ -68,7 +69,7 @@ public class Login extends JPanel{
         this.add(btnLogin, "align center, w 200!, h 40!, gaptop 20");
 
         lblMessage.setHorizontalAlignment(SwingConstants.CENTER);
-        this.add(lblMessage, "align center, gaptop 20, growx");
+        this.add(lblMessage, "align center, gaptop 180, growx");
     }
 
     //Estilo del JTextField email
@@ -192,8 +193,9 @@ public class Login extends JPanel{
                         frame.setMenuVisible(true); 
                         frame.initializePolling(token);
                         
-                        frame.lblMessage.setText("Welcome: " + email);
-                        frame.lblMessage.setForeground(SwingStyleUtils.DARK_BLUE_COLOR); //Usuario loggeado en label menuBar
+                        frame.lblMessage.setText(email);
+                        frame.lblMessage.setFont(SwingStyleUtils.FONT_BOLD);
+                        frame.lblMessage.setForeground(SwingStyleUtils.WHITE_COLOR); //Usuario loggeado en label menuBar
                         cardManager.showCard("downloads");
                         frame.pnlDownload.infoMedia.refreshFiles(); //Refresca la tabla al hacer login
 
@@ -231,8 +233,9 @@ public class Login extends JPanel{
                 mediaPollingComponent.setToken(token);
                 frame.initializePolling(token);
                 frame.setMenuVisible(true);
-                frame.lblMessage.setText("Welcome: " + emailUser); //Usuario loggeado en label menuBar
-                frame.lblMessage.setForeground(SwingStyleUtils.DARK_BLUE_COLOR);
+                frame.lblMessage.setText(emailUser); //Usuario loggeado en label menuBar
+                frame.lblMessage.setFont(SwingStyleUtils.FONT_BOLD);
+                frame.lblMessage.setForeground(SwingStyleUtils.WHITE_COLOR);
                 cardManager.showCard("downloads");
                 System.out.println("Login successful.");
                 return;

@@ -1,10 +1,12 @@
 package montoya.mediabox.panels;
 
+import java.awt.Dimension;
 import montoya.mediabox.fileInformation.TableActions;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.JTableHeader;
 import montoya.mediabox.controller.*;
 import montoya.mediabox.fileInformation.*;
 import montoya.mediabox.configUI.SwingStyleUtils;
@@ -48,13 +50,12 @@ public class InfoMedia extends javax.swing.JPanel {
         new TableActions(tblMedia, 4, tblModel, this); //Botones de acción
         
         setupLayout();
-        applyStylesComponent(); //Estilo de los componentes
+        applyStylesComponent();
 
-        configFilterOptions(cbbxTypeFilter); //Aplica el filtro según tipo de archivo
-        initDirectoryList(); //Inicia la lista de directorios
-        configDownloadList(folderList); //Muestra las descargas pertenecientes a un directorio
+        configFilterOptions(cbbxTypeFilter);
+        initDirectoryList();
+        configDownloadList(folderList);
         
-
         SwingUtilities.invokeLater(new Runnable() { //Mostrar archivos al iniciar la app
             @Override
             public void run() {
@@ -66,30 +67,33 @@ public class InfoMedia extends javax.swing.JPanel {
     }
     
     private void setupLayout() {
-        this.setLayout(new MigLayout("fill, insets 20", "[150!]10[grow]", "[][grow]"));
+        this.setLayout(new MigLayout("fill, insets 20", "[50:150:200]10[grow]", "[][grow]"));
 
-        add(cbbxTypeFilter, "cell 1 0, split 2, right, width 200!");
-        add(btnUpload, "width 120!");
+        this.add(cbbxTypeFilter, "cell 1 0, split 2, right, width 200!");
+        this.add(btnUpload, "width 120!");
 
-        add(scrFolderList, "cell 0 1, growy, width 150!");
-        add(scrTableMedia, "cell 1 1, grow");
+        this.add(scrFolderList, "cell 0 1, grow");
+        this.add(scrTableMedia, "cell 1 1, grow");
     }
 
     //Aplica estilos a los componentes
     private void applyStylesComponent() {
         SwingStyleUtils.handCursor(tblMedia, folderList, cbbxTypeFilter);
-        SwingStyleUtils.createTitleBorder(this, "DOWNLOAD INFORMATION");
+        SwingStyleUtils.createTitleBorder(this, SwingStyleUtils.DARK_GREY_COLOR);
         SwingStyleUtils.selectionColorList(folderList);
         SwingStyleUtils.selectionColorTable(tblMedia);
+        JTableHeader header = tblMedia.getTableHeader();
+        header.setPreferredSize(new Dimension(header.getWidth(), 30));
+        header.setFont(SwingStyleUtils.FONT_BOLD);
         SwingStyleUtils.selectionColorComboBox(cbbxTypeFilter);
         cbbxTypeFilter.setEditable(true);
-        SwingStyleUtils.styleSimpleButton(btnUpload, "UPLOAD", "Upload file to API", 70, 23, SwingStyleUtils.LIGHT_BLUE_COLOR, SwingStyleUtils.DARK_BLUE_COLOR);
+        SwingStyleUtils.styleTextButton(btnUpload, "UPLOAD", "Upload file to API", 70, 25, SwingStyleUtils.LIGHT_PURPLE, SwingStyleUtils.DARK_GREY_COLOR);
     }
 
     //Añade los filtros a JComboBox
     private void configFilterOptions(JComboBox cbbxFilter) {
         cbbxFilter.removeAllItems();
-        cbbxFilter.addItem("All");
+        cbbxFilter.addItem("ALL");
         cbbxFilter.addItem("MP4");
         cbbxFilter.addItem("MKV");
         cbbxFilter.addItem("WEBM");
@@ -249,8 +253,8 @@ public class InfoMedia extends javax.swing.JPanel {
         setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Downloads", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14))); // NOI18N
         setFocusCycleRoot(true);
         setMaximumSize(new java.awt.Dimension(840, 450));
-        setMinimumSize(new java.awt.Dimension(840, 450));
-        setPreferredSize(new java.awt.Dimension(840, 450));
+        setMinimumSize(null);
+        setPreferredSize(null);
         setLayout(new java.awt.BorderLayout());
 
         folderList.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N

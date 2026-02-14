@@ -32,7 +32,7 @@ public class TypeFilter {
         
         for (FileInformation fi : allFiles) {
 
-            if (filter == null || filter.equals("All")) {
+            if (filter == null || filter.equals("ALL")) {
                 applyFilter.add(fi);
             } else {
                 switch (filter) {

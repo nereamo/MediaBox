@@ -5,7 +5,6 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 import javax.swing.plaf.basic.BasicPasswordFieldUI;
 
 /**
@@ -19,27 +18,25 @@ public class SwingStyleUtils {
     public static final Font FONT_PLAIN = new Font("Arial", Font.PLAIN, 16);
 
     //Colors
-    public static final Color GREY_COLOR = new Color(181, 182, 189);
     public static final Color WHITE_COLOR = new Color(255, 255, 255);
-    public static final Color LIGHT_BLUE_COLOR = new Color(135, 139, 222);
-    public static final Color DARK_BLUE_COLOR = new Color(46, 51, 94);
-
-    //Estilo para los titleBorders
-    public static void createTitleBorder(JPanel panel, String title) {
-        Border border = BorderFactory.createLineBorder(LIGHT_BLUE_COLOR);
-        TitledBorder titBorder = BorderFactory.createTitledBorder(border, title);
-
-        titBorder.setTitleColor(LIGHT_BLUE_COLOR);
-        titBorder.setTitleFont(FONT_BOLD);
-
-        panel.setOpaque(false);
-        panel.setBorder(titBorder);
+    public static final Color LIGHT_PURPLE = new Color(126, 134, 204);
+    public static final Color LIGHT_GREY_COLOR = new Color(220, 220, 222);
+    public static final Color MEDIUM_GREY_COLOR = new Color(72, 72, 74);
+    public static final Color DARK_GREY_COLOR = new Color(37, 37, 38);
+    public static final Color BLACK_COLOR = new Color(15, 15, 15);
+    
+    //Estilo de los bordes
+    public static void createTitleBorder(JPanel panel, Color color) {
+        Border border = BorderFactory.createLineBorder(color, 2, true);
+        panel.setBackground(color);
+        panel.setOpaque(true);
+        panel.setBorder(border);
     }
 
     //Estilo para CheckBox
     public static void styleCheckBox(JCheckBox check, String text, String toolTip) {
         check.setOpaque(false);
-        check.setForeground(LIGHT_BLUE_COLOR);
+        check.setForeground(LIGHT_GREY_COLOR);
         check.setFont(FONT_PLAIN);
         check.setFocusPainted(false);
         check.setText(text);
@@ -51,8 +48,8 @@ public class SwingStyleUtils {
         for (JRadioButton rb : radio) {
             rb.setOpaque(true);
             rb.setFocusPainted(false);
-            rb.setForeground(LIGHT_BLUE_COLOR);
-            rb.setBackground(DARK_BLUE_COLOR);
+            rb.setForeground(LIGHT_GREY_COLOR);
+            rb.setBackground(MEDIUM_GREY_COLOR);
             rb.setFont(FONT_PLAIN);
             rb.setToolTipText(toolTip);
         }
@@ -84,7 +81,7 @@ public class SwingStyleUtils {
     }
 
     //Estilo para los botones que NO tienen icono
-    public static void styleSimpleButton(JButton btn, String txt, String tootlTip, int width, int height, Color fondo, Color letras) {
+    public static void styleTextButton(JButton btn, String txt, String tootlTip, int width, int height, Color fondo, Color letras) {
         btn.setOpaque(true);
         btn.setContentAreaFilled(true);
         btn.setBorderPainted(false);
@@ -94,6 +91,35 @@ public class SwingStyleUtils {
         btn.setFont(FONT_BOLD);
         btn.setToolTipText(tootlTip);
         btn.setPreferredSize(new Dimension(width, height));
+
+        btn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btn.setBorderPainted(true);
+                btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                btn.setBorder(BorderFactory.createBevelBorder(1));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btn.setBorderPainted(false);
+            }
+        });
+    }
+    
+    //Estilo para los botones que SI tienen icono
+    public static void styleIconAndTextButton(JButton btn, String iconPath, String Text, String tootlTip, Color fondo, Color letras) {
+        btn.setOpaque(true);
+        btn.setFocusPainted(false);
+        btn.setContentAreaFilled(true);
+        btn.setBorderPainted(false);
+        btn.setPreferredSize(new Dimension(50, 50));
+        btn.setIcon(new ImageIcon(SwingStyleUtils.class.getResource(iconPath)));
+        btn.setText(Text);
+        btn.setFont(FONT_BOLD);
+        btn.setToolTipText(tootlTip);
+        btn.setBackground(fondo);
+        btn.setForeground(letras);
 
         btn.addMouseListener(new MouseAdapter() {
             @Override
@@ -123,7 +149,7 @@ public class SwingStyleUtils {
 
     //Estilo de los mensajes mostrados en aplicación
     public static void showMessageInfo(JLabel lbl, String text) {
-        lbl.setForeground(LIGHT_BLUE_COLOR);
+        lbl.setForeground(LIGHT_PURPLE);
         lbl.setFont(FONT_BOLD);
         lbl.setText(text);
     }
@@ -132,8 +158,8 @@ public class SwingStyleUtils {
     public static void styleFixLabel(JLabel label, String text) {
         label.setOpaque(true);
         label.setText(text);
-        label.setForeground(LIGHT_BLUE_COLOR);
-        label.setBackground(DARK_BLUE_COLOR);
+        label.setForeground(LIGHT_GREY_COLOR);
+        label.setBackground(DARK_GREY_COLOR);
         label.setFont(FONT_PLAIN);
     }
 
@@ -152,14 +178,17 @@ public class SwingStyleUtils {
 
     //Color seleccion en tabla
     public static void selectionColorTable(JTable table) {
-        table.setSelectionBackground(LIGHT_BLUE_COLOR);
+        table.setSelectionBackground(LIGHT_PURPLE);
         table.setSelectionForeground(WHITE_COLOR);
+        table.setBackground(LIGHT_GREY_COLOR);
     }
 
     //Color seleccion en lista
     public static void selectionColorList(JList<?> list) {
-        list.setSelectionBackground(LIGHT_BLUE_COLOR);
+        list.setBackground(LIGHT_GREY_COLOR);
+        list.setSelectionBackground(LIGHT_PURPLE);
         list.setSelectionForeground(WHITE_COLOR);
+        list.setFont(FONT_PLAIN);
     }
 
     //Color seleccion en comboBox
@@ -173,23 +202,43 @@ public class SwingStyleUtils {
                 super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
                 if (isSelected) {
-                    setBackground(LIGHT_BLUE_COLOR);
+                    setBackground(LIGHT_PURPLE);
                     setForeground(WHITE_COLOR);
                 }
                 return this;
             }
         });
 
-        combo.setEditable(true);
+        combo.setBackground(LIGHT_GREY_COLOR);
+        combo.setFont(FONT_PLAIN);
+        combo.setEditable(false);
+    }
+    
+    //Estilo de los JTextFields que no tienen botones
+    public static void styleTextFields(JTextField txtField, String toolTip){
+        txtField.setBackground(MEDIUM_GREY_COLOR);
+        txtField.setForeground(WHITE_COLOR);
+        txtField.setFont(FONT_PLAIN);
+        
+        Border line = BorderFactory.createLineBorder(new Color(100, 100, 100), 1); // Gris más discreto
+        Border margin = BorderFactory.createEmptyBorder(0, 30, 0, 30);
+        txtField.setBorder(BorderFactory.createCompoundBorder(line, margin));
+        
+        addPlaceholder(txtField, toolTip);
     }
 
     //Iconos en JTextFields
     public static void addIconsTextField(JTextField txtField, String leftIconPath, String rightIconPath, String toolTip) {
         ImageIcon leftIcon = new ImageIcon(SwingStyleUtils.class.getResource(leftIconPath));
         ImageIcon rightIcon = new ImageIcon(SwingStyleUtils.class.getResource(rightIconPath));
+        
+        Border line = BorderFactory.createLineBorder(new Color(100, 100, 100), 1); // Gris más discreto
+        Border margin = BorderFactory.createEmptyBorder(0, 30, 0, 30);
+        txtField.setBorder(BorderFactory.createCompoundBorder(line, margin));
 
         txtField.setBorder(BorderFactory.createCompoundBorder(txtField.getBorder(), BorderFactory.createEmptyBorder(0, 30, 0, 30)));
         txtField.setFont(FONT_PLAIN);
+        txtField.setBackground(MEDIUM_GREY_COLOR);
         txtField.setPreferredSize(new Dimension(300, 30));
         txtField.setToolTipText(toolTip);
 
@@ -215,9 +264,14 @@ public class SwingStyleUtils {
     public static void addIconsPasswordField(JPasswordField pwdField, String leftIconPath, String rightIconPath, String toolTip) {
         ImageIcon leftIcon = new ImageIcon(SwingStyleUtils.class.getResource(leftIconPath));
         ImageIcon rightIcon = new ImageIcon(SwingStyleUtils.class.getResource(rightIconPath));
+        
+        Border line = BorderFactory.createLineBorder(new Color(100, 100, 100), 1); // Gris más discreto
+        Border margin = BorderFactory.createEmptyBorder(0, 30, 0, 30);
+        pwdField.setBorder(BorderFactory.createCompoundBorder(line, margin));
 
         pwdField.setBorder(BorderFactory.createCompoundBorder(pwdField.getBorder(), BorderFactory.createEmptyBorder(0, 30, 0, 30)));
         pwdField.setFont(FONT_PLAIN);
+        pwdField.setBackground(MEDIUM_GREY_COLOR);
         pwdField.setPreferredSize(new Dimension(300, 30));
         pwdField.setToolTipText(toolTip);
 
@@ -239,24 +293,23 @@ public class SwingStyleUtils {
 
     private static void addPlaceholder(JTextField field, String placeholder) {
         field.setText(placeholder);
-        field.setForeground(java.awt.Color.GRAY); // Color del texto fantasma
+        field.setForeground(java.awt.Color.GRAY);
 
         field.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent e) {
-                // Si el texto es el placeholder, lo borramos para que el usuario escriba
                 if (field.getText().equals(placeholder)) {
+                    field.setFont(FONT_PLAIN);
                     field.setText("");
-                    field.setForeground(java.awt.Color.BLACK); // O el color que uses
+                    field.setForeground(WHITE_COLOR);
                 }
             }
 
             @Override
             public void focusLost(java.awt.event.FocusEvent e) {
-                // Si el usuario no escribió nada, restauramos el placeholder
                 if (field.getText().isEmpty()) {
                     field.setText(placeholder);
-                    field.setForeground(java.awt.Color.GRAY);
+                    field.setForeground(LIGHT_GREY_COLOR);
                 }
             }
         });
@@ -266,16 +319,31 @@ public class SwingStyleUtils {
     public static void styleSpinner(JSpinner spinner) {
         spinner.setFont(FONT_PLAIN);
         spinner.setOpaque(false);
+        spinner.setFont(FONT_PLAIN);
 
         JComponent editor = spinner.getEditor();
         if (editor instanceof JSpinner.DefaultEditor) {
             JFormattedTextField textField = ((JSpinner.DefaultEditor) editor).getTextField();
-            textField.setBackground(WHITE_COLOR);
-            textField.setForeground(DARK_BLUE_COLOR);
-            textField.setCaretColor(WHITE_COLOR); // Color del cursor al escribir
+            textField.setFont(FONT_PLAIN);
+            textField.setBackground(LIGHT_GREY_COLOR);
+            textField.setForeground(DARK_GREY_COLOR);
+            textField.setCaretColor(LIGHT_GREY_COLOR);
             textField.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
         }
+        spinner.setBorder(BorderFactory.createLineBorder(DARK_GREY_COLOR, 1));
+    }
+    
+    //Estilo para progressBar
+    public static void styleProgressBar(JProgressBar bar) {
+        bar.setBackground(MEDIUM_GREY_COLOR);
+        bar.setForeground(LIGHT_PURPLE);
+        bar.setFont(FONT_BOLD);
+        bar.setStringPainted(true);
 
-        spinner.setBorder(BorderFactory.createLineBorder(LIGHT_BLUE_COLOR, 1));
+        Border line = BorderFactory.createLineBorder(new Color(100, 100, 100), 1);
+        bar.setBorder(line);
+        bar.setBorderPainted(true);
+        bar.setUI(new javax.swing.plaf.basic.BasicProgressBarUI());
+        bar.setUI(new javax.swing.plaf.basic.BasicProgressBarUI());
     }
 }

@@ -1,5 +1,6 @@
 package montoya.mediabox.panels;
 
+import java.awt.Dimension;
 import java.io.*;
 import javax.swing.*;
 import montoya.mediabox.MainFrame;
@@ -19,6 +20,7 @@ public class Preferences extends javax.swing.JPanel {
     private final DownloadManager downloadManager;
     private final CardManager cardManager;
     public static final String CARD_DOWN = "downloads";
+    private String detectedYtDlpPath = "";
 
     public Preferences(MainFrame frame, DownloadManager downloadManager, CardManager cardManager) {
         initComponents();
@@ -34,45 +36,53 @@ public class Preferences extends javax.swing.JPanel {
     
     //Configuracion de la posición de los componentes
     private void setupLayout(){
+        this.setLayout(new MigLayout("fill, insets 40, wrap 1", "[grow, center]", "[grow, center]"));
         
-        this.setLayout(new MigLayout("center, insets 20, gapy 20", "[grow][right][shrink 100, grow 0][pref][grow]", "push[][][][][]push[]"));
-        this.setBackground(SwingStyleUtils.DARK_BLUE_COLOR);
+        pnlPref.setLayout(new MigLayout("insets 30 15 30 15, gapy 15, align center center", "[right][left][pref]", "push[][][][][]push"));
+        this.add(pnlPref, "center, w 200:740:740, h 300:880:880");
         
-        add(lblPath, "cell 0 0, alignx right");
-        add(txtPathTemp, "cell 1 0, alignx left, growx, wmin 200, w 300, wmax 300");
-        add(btnBrowseTemp, "cell 2 0");
+        pnlPref.add(lblPath, "cell 0 0, alignx right");
+        pnlPref.add(txtPathTemp, "cell 1 0, alignx left, growx, w 30:400:400, h 30!");
+        pnlPref.add(btnBrowseTemp, "cell 2 0, w 50!, h 50!");
         
-        add(lblM3u, "cell 0 1, alignx right, gaptop 15"); 
-        add(chkCreate, "cell 1 1, alignx left, gaptop 15");
+        pnlPref.add(lblM3u, "cell 0 1, alignx right, gaptop 15"); 
+        pnlPref.add(chkCreate, "cell 1 1, alignx left, gaptop 15");
 
-        add(lblSpeed, "cell 0 2, alignx right, aligny center, gaptop 15");
-        add(spnSpeed, "cell 1 2, split 2, alignx left, gaptop 15, w 70!");
-        add(lblSpeedValue, "gapleft 20, alignx left, gaptop 15");
+        pnlPref.add(lblSpeed, "cell 0 2, alignx right, aligny center, gaptop 15");
+        pnlPref.add(spnSpeed, "cell 1 2, split 2, alignx left, gaptop 15, w 70!, h 30!");
+        pnlPref.add(lblSpeedValue, "gapleft 20, alignx left, gaptop 15");
         
-        add(lblYtDlp, "cell 0 3, alignx right, gaptop 15"); 
-        add(txtYtDlp, "cell 1 3,alignx left, growx, wmin 200, w 300, wmax 300, gaptop 15"); 
-        add(btnYtDlp, "cell 2 3, gaptop 20");
+        pnlPref.add(lblYtDlp, "cell 0 3, alignx right, gaptop 15"); 
+        pnlPref.add(btnYtDlp, "cell 1 3, alignx left, gaptop 20, w 50:250:300, h 35!");
+        pnlPref.add(lblInfo, "cell 0 4, span, align center, gaptop 10, hidemode 3");
         
-        add(btnSave, "cell 1 4, split 2, alignx center, gaptop 30"); 
-        add(btnCancel, "gaptop 30");
+        pnlPref.add(btnSave, "cell 1 5, split 2, alignx center, gaptop 30, w 100:120:150, h 40!"); 
+        pnlPref.add(btnCancel, "gaptop 30, gapleft 20, w 100:120:150, h 40!");
         
-        add(logoLabel, "cell 1 6, alignx center, aligny bottom"); 
+        this.add(logoLabel, "align center, shrink"); 
     }
     
     //Configuracion del estilo de los componentes
     private void applyStylesComponent(){
+        this.setBackground(SwingStyleUtils.BLACK_COLOR);
+        pnlPref.setBackground(SwingStyleUtils.DARK_GREY_COLOR);
+        
         SwingStyleUtils.styleFixLabel(lblPath, "Temp Path: ");
+        SwingStyleUtils.styleTextFields(txtPathTemp, "Select folder for temporary files...");
+        SwingStyleUtils.styleIconButton(btnBrowseTemp, "/images/folder.png", "Select Folder");
+        
         SwingStyleUtils.styleFixLabel(lblM3u, "File .m3u: ");
+        SwingStyleUtils.styleCheckBox(chkCreate,"Create", "Create files .M3U");
+        
         SwingStyleUtils.styleFixLabel(lblSpeed, "Speed (MB/s): ");
         SwingStyleUtils.styleFixLabel(lblSpeedValue, "" + spnSpeed.getValue() + " MB/s");
-        SwingStyleUtils.styleFixLabel(lblYtDlp, "Location yt-dlp: ");
-        
-        SwingStyleUtils.styleIconButton(btnBrowseTemp, "/images/folder.png", "Select Folder");
-        SwingStyleUtils.styleIconButton(btnYtDlp, "/images/search.png", "Automatic search");
-        SwingStyleUtils.styleCheckBox(chkCreate,"Create", "Create files .M3U");
         SwingStyleUtils.styleSpinner(spnSpeed);
-        SwingStyleUtils.styleIconButton(btnSave, "/images/save.png", "Save changes");
-        SwingStyleUtils.styleIconButton(btnCancel, "/images/return.png", "Discard changes");
+        
+        SwingStyleUtils.styleFixLabel(lblYtDlp, "Location yt-dlp: ");
+        SwingStyleUtils.styleTextButton(btnYtDlp, "Automatic search yt-dlp", "Automatic search yt-dlp", 250, 30, SwingStyleUtils.LIGHT_PURPLE, SwingStyleUtils.DARK_GREY_COLOR);
+        
+        SwingStyleUtils.styleIconAndTextButton(btnSave, "/images/save.png", "Save", "Save changes", SwingStyleUtils.LIGHT_PURPLE, SwingStyleUtils.DARK_GREY_COLOR);
+        SwingStyleUtils.styleIconAndTextButton(btnCancel, "/images/return.png", "Return", "Discard changes", SwingStyleUtils.LIGHT_GREY_COLOR, SwingStyleUtils.DARK_GREY_COLOR);
     }
     
     //Velocidad de descarga hasta un max de 100MB/s
@@ -99,7 +109,6 @@ public class Preferences extends javax.swing.JPanel {
         chkCreate = new javax.swing.JCheckBox();
         lblSpeed = new javax.swing.JLabel();
         lblYtDlp = new javax.swing.JLabel();
-        txtYtDlp = new javax.swing.JTextField();
         btnYtDlp = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
@@ -109,69 +118,62 @@ public class Preferences extends javax.swing.JPanel {
         logoLabel = new javax.swing.JLabel();
         spnSpeed = new javax.swing.JSpinner();
         lblSpeedValue = new javax.swing.JLabel();
-
-        setMinimumSize(new java.awt.Dimension(1300, 770));
-        setPreferredSize(new java.awt.Dimension(1300, 770));
-        setLayout(null);
+        pnlPref = new javax.swing.JPanel();
+        lblInfo = new javax.swing.JLabel();
 
         lblM3u.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(lblM3u);
-        lblM3u.setBounds(80, 170, 90, 20);
 
         chkCreate.setBackground(new java.awt.Color(61, 61, 64));
         chkCreate.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         chkCreate.setForeground(new java.awt.Color(255, 255, 255));
         chkCreate.setToolTipText("");
         add(chkCreate);
-        chkCreate.setBounds(180, 170, 80, 19);
 
         lblSpeed.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(lblSpeed);
-        lblSpeed.setBounds(100, 240, 50, 20);
 
         lblYtDlp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(lblYtDlp);
-        lblYtDlp.setBounds(60, 320, 110, 20);
-
-        txtYtDlp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        add(txtYtDlp);
-        txtYtDlp.setBounds(270, 320, 330, 23);
 
         btnYtDlp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnYtDlp.setToolTipText("");
+        btnYtDlp.setMaximumSize(null);
+        btnYtDlp.setMinimumSize(new java.awt.Dimension(120, 25));
+        btnYtDlp.setPreferredSize(null);
         btnYtDlp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnYtDlpActionPerformed(evt);
             }
         });
         add(btnYtDlp);
-        btnYtDlp.setBounds(170, 320, 90, 20);
 
         btnSave.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnSave.setToolTipText("");
-        btnSave.setPreferredSize(new java.awt.Dimension(100, 50));
+        btnSave.setMaximumSize(null);
+        btnSave.setPreferredSize(null);
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
             }
         });
         add(btnSave);
-        btnSave.setBounds(250, 430, 100, 50);
 
         btnCancel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnCancel.setToolTipText("");
-        btnCancel.setPreferredSize(new java.awt.Dimension(100, 50));
+        btnCancel.setMaximumSize(null);
+        btnCancel.setPreferredSize(null);
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
             }
         });
         add(btnCancel);
-        btnCancel.setBounds(370, 430, 100, 50);
 
         txtPathTemp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        txtPathTemp.setMinimumSize(null);
+        txtPathTemp.setPreferredSize(null);
         add(txtPathTemp);
-        txtPathTemp.setBounds(270, 90, 330, 23);
 
         btnBrowseTemp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnBrowseTemp.setToolTipText("");
@@ -181,19 +183,19 @@ public class Preferences extends javax.swing.JPanel {
             }
         });
         add(btnBrowseTemp);
-        btnBrowseTemp.setBounds(170, 90, 90, 20);
 
         lblPath.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(lblPath);
-        lblPath.setBounds(80, 90, 80, 20);
 
-        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo2png.png"))); // NOI18N
+        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo.png"))); // NOI18N
         add(logoLabel);
-        logoLabel.setBounds(310, 630, 240, 70);
         add(spnSpeed);
-        spnSpeed.setBounds(280, 250, 64, 22);
         add(lblSpeedValue);
-        lblSpeedValue.setBounds(390, 250, 0, 0);
+
+        pnlPref.setMinimumSize(null);
+        pnlPref.setPreferredSize(null);
+        add(pnlPref);
+        add(lblInfo);
     }// </editor-fold>//GEN-END:initComponents
 
     //Directorio para archivos temporales
@@ -205,6 +207,7 @@ public class Preferences extends javax.swing.JPanel {
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFolder = directory.getSelectedFile();
             txtPathTemp.setText(selectedFolder.getAbsolutePath());
+            txtPathTemp.setForeground(SwingStyleUtils.WHITE_COLOR);
         }
     }//GEN-LAST:event_btnBrowseTempActionPerformed
 
@@ -225,14 +228,12 @@ public class Preferences extends javax.swing.JPanel {
             if (p.waitFor() == 0) {
 
                 String path = sb.toString().trim();
-                String firstPath = path.split("\n")[0];
+                detectedYtDlpPath = path.split("\n")[0];
 
-                txtYtDlp.setText(firstPath);
-                JOptionPane.showMessageDialog(this, "yt-dlp.exe found!", "Found", JOptionPane.INFORMATION_MESSAGE);
-
+                SwingStyleUtils.showMessageInfo(lblInfo, "yt-dlp.exe found!");
             } else {
-                txtYtDlp.setText("");
-                JOptionPane.showMessageDialog(this, "yt-dlp.exe not found!", "Not Found", JOptionPane.ERROR_MESSAGE);
+                detectedYtDlpPath = "";
+                SwingStyleUtils.showMessageInfo(lblInfo, "yt-dlp.exe not found!");
             }
 
         } catch (IOException ex) {
@@ -245,7 +246,7 @@ public class Preferences extends javax.swing.JPanel {
     //Boton save llama a metodo save
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         downloadManager.setTempPath(txtPathTemp.getText().trim());
-        downloadManager.setYtDlpLocation(txtYtDlp.getText().trim());
+        downloadManager.setYtDlpLocation(detectedYtDlpPath);
         downloadManager.setCreateM3u(chkCreate.isSelected());
         downloadManager.setMaxSpeed(((Number) spnSpeed.getValue()).doubleValue());
 
@@ -259,7 +260,6 @@ public class Preferences extends javax.swing.JPanel {
             txtPathTemp.setText("");
             chkCreate.setSelected(false);
             spnSpeed.setValue(0.0);
-            txtYtDlp.setText("");
             cardManager.showCard(CARD_DOWN);
         }
     }//GEN-LAST:event_btnCancelActionPerformed
@@ -270,14 +270,15 @@ public class Preferences extends javax.swing.JPanel {
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnYtDlp;
     private javax.swing.JCheckBox chkCreate;
+    private javax.swing.JLabel lblInfo;
     private javax.swing.JLabel lblM3u;
     private javax.swing.JLabel lblPath;
     private javax.swing.JLabel lblSpeed;
     private javax.swing.JLabel lblSpeedValue;
     private javax.swing.JLabel lblYtDlp;
     private javax.swing.JLabel logoLabel;
+    private javax.swing.JPanel pnlPref;
     private javax.swing.JSpinner spnSpeed;
     private javax.swing.JTextField txtPathTemp;
-    private javax.swing.JTextField txtYtDlp;
     // End of variables declaration//GEN-END:variables
 }
