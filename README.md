@@ -85,5 +85,13 @@ Creación de JSON con libreria Jackson.
 
     - Cambiar el Layout(null) a CardLayout, añadiendo todos los JPanels a CardLayout y alternar entre ellos.
         
-    
+# 🎨 Usabilidad y Experiencia de Usuario
+
+* **Feedback Visual e Interactividad:** En elementos clicables se ha usado "Hand Cursor" y efecto borde para resaltarlos.
+* **Placeholders:** Los campos de texto utilizan "sugerencias" para guiar al usuario.
+* **Color y Consistencia:** Uso de paleta de colores personalizada (Púrpuras y Grises oscuros) para diferenciar acciones principales de información secundaria con bordes redondeados.
+* **Mensajes de Ayuda:** Uso de *Tooltips* en botones y componentes para proporcionar más información.
+* **Tamaño de ventana:** Los Paneles y componentes se adaptan a la maximización y minimación de la ventana.
+* **Iconos:** Uso de iconos en campos de texto, botones y tabla.
+* **Tabla:** Contiene una columna "Acciones" que permite descargar, reproducir o eliminar dependiendo de la ubicación del archivo.    
 
