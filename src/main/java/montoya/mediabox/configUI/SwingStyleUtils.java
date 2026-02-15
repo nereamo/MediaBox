@@ -381,6 +381,6 @@ public class SwingStyleUtils {
         bar.setBorder(line);
         bar.setBorderPainted(true);
         bar.setUI(new javax.swing.plaf.basic.BasicProgressBarUI());
-        bar.setUI(new javax.swing.plaf.basic.BasicProgressBarUI());
+        //bar.setUI(new javax.swing.plaf.basic.BasicProgressBarUI());
     }
 }

@@ -14,6 +14,7 @@ import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.configUI.SwingStyleUtils;
 import montoya.mediapollingcomponent.MediaEvent;
 import montoya.mediapollingcomponent.MediaListener;
+import montoya.mediapollingcomponent.apiclient.Media;
 
 /**
  * Class principal
@@ -109,9 +110,20 @@ public class MainFrame extends JFrame {
 
         mediaPollingComponent.setToken(token);
         mediaPollingComponent.addMediaListener(new MediaListener() {
+            private boolean isFirstRun = true;
+
             @Override
             public void newMediaFound(MediaEvent me) {
-                System.out.println("Files found uploaded successfully");
+                List<Media> listaMedios = me.getMediaList();
+                if (listaMedios != null && !listaMedios.isEmpty()) {
+                    if (isFirstRun) {
+                        isFirstRun = false;
+                        return;
+                    }
+
+                    Media ultimoMedia = listaMedios.get(listaMedios.size() - 1);
+                    System.out.println("New media: " + ultimoMedia.mediaFileName);
+                }
             }
         });
     }
