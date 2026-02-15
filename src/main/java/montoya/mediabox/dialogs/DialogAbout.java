@@ -3,7 +3,7 @@ package montoya.mediabox.dialogs;
 import java.awt.*;
 import javax.swing.*;
 import java.util.logging.Logger;
-import montoya.mediabox.configUI.SwingStyleUtils;
+import montoya.mediabox.configUI.UIStyles;
 
 /**
  * Dialog que contiene la información de alumno, curso y los recursos para la tarea
@@ -46,7 +46,7 @@ public class DialogAbout extends JDialog {
         
         lblAbout.setText(aboutText);
         lblAbout.setVerticalAlignment(JLabel.TOP);
-        SwingStyleUtils.styleFixLabel(lblAbout, aboutText, "");
+        UIStyles.styleFixLabel(lblAbout, aboutText, "");
     }
     
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

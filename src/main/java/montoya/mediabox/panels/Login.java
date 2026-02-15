@@ -6,7 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import montoya.mediabox.MainFrame;
 import montoya.mediabox.controller.CardManager;
-import montoya.mediabox.configUI.SwingStyleUtils;
+import montoya.mediabox.configUI.UIStyles;
 import montoya.mediabox.tokenuser.TokenController;
 import montoya.mediabox.tokenuser.TokenUser;
 import montoya.mediapollingcomponent.MediaPollingComponent;
@@ -51,7 +51,7 @@ public class Login extends JPanel{
     private void setupLayout() {
         
         this.setLayout(new MigLayout("fill, wrap, center", "[grow]", "push[]20[]10[]10[]20[]10[]push"));
-        this.setBackground(SwingStyleUtils.DARK_GREY_COLOR);
+        this.setBackground(UIStyles.DARK_GREY_COLOR);
         
         ImageIcon icon = new ImageIcon(getClass().getResource("/images/logo_login.png"));
         JLabel lblIcon = new JLabel(icon);
@@ -63,10 +63,10 @@ public class Login extends JPanel{
         configPasswordField();
         this.add(txtPassword, "align center, w 400!, h 35!, gaptop 10");
         
-        SwingStyleUtils.styleCheckBox(remember, "Remember me", "Remember credentials");
+        UIStyles.styleCheckBox(remember, "Remember me", "Remember credentials");
         this.add(remember, "align center, gaptop 10");
 
-        SwingStyleUtils.styleButtons(btnLogin, "/images/login.png","", "Login user", SwingStyleUtils.DARK_GREY_COLOR, new Color(0, 0, 0, 0), true);
+        UIStyles.styleButtons(btnLogin, "/images/login.png","", "Login user", UIStyles.DARK_GREY_COLOR, new Color(0, 0, 0, 0), true);
         this.add(btnLogin, "align center, w 200!, h 40!, gaptop 20");
 
         lblMessage.setHorizontalAlignment(SwingConstants.CENTER);
@@ -75,7 +75,7 @@ public class Login extends JPanel{
 
     //Estilo del JTextField email
     private void configemailField() {
-        SwingStyleUtils.addIconsTextField(txtEmail, "/images/email2.png", "/images/delete_url.png", "Enter email");
+        UIStyles.addIconsTextField(txtEmail, "/images/email2.png", "/images/delete_url.png", "Enter email");
 
         txtEmail.addMouseListener(new MouseAdapter() {
             @Override
@@ -94,7 +94,7 @@ public class Login extends JPanel{
                 int width = txtEmail.getWidth();
 
                 if (e.getX() >= width -30) {
-                    SwingStyleUtils.handCursor(txtEmail);
+                    UIStyles.handCursor(txtEmail);
                 } else {
                     txtEmail.setCursor(new Cursor(Cursor.TEXT_CURSOR));
                 }
@@ -104,7 +104,7 @@ public class Login extends JPanel{
     
     //Estilo del JPasswordField password
     private void configPasswordField() {
-        SwingStyleUtils.addIconsTextField(txtPassword, "/images/pss.png", "/images/show.png", "Enter password");
+        UIStyles.addIconsTextField(txtPassword, "/images/pss.png", "/images/show.png", "Enter password");
         
         txtPassword.setEchoChar('•');
         isPasswordVisible = false;
@@ -134,7 +134,7 @@ public class Login extends JPanel{
                 int width = txtPassword.getWidth();
 
                 if (e.getX() >= width -30) {
-                    SwingStyleUtils.handCursor(txtPassword);
+                    UIStyles.handCursor(txtPassword);
                 } else {
                     txtPassword.setCursor(new Cursor(Cursor.TEXT_CURSOR));
                 }
@@ -171,7 +171,7 @@ public class Login extends JPanel{
 
                 if (email == null || email.trim().equals("")
                         || password == null || password.trim().equals("")) {
-                    SwingStyleUtils.showMessageInfo(lblMessage, "Please, enter an Email and Password");
+                    UIStyles.showMessageInfo(lblMessage, "Please, enter an Email and Password");
                     return;
                 }
 
@@ -184,7 +184,7 @@ public class Login extends JPanel{
                         try {
                             mediaPollingComponent.getAllMedia(newToken);
                         } catch (Exception ex) {
-                            SwingStyleUtils.showMessageInfo(lblMessage, "User logged out. Please login again.");
+                            UIStyles.showMessageInfo(lblMessage, "User logged out. Please login again.");
                             return;
                         }
                         token = newToken;
@@ -195,8 +195,8 @@ public class Login extends JPanel{
                         frame.initializePolling(token);
                         
                         frame.lblMessage.setText(email);
-                        frame.lblMessage.setFont(SwingStyleUtils.FONT_BOLD);
-                        frame.lblMessage.setForeground(SwingStyleUtils.WHITE_COLOR); //Usuario loggeado en label menuBar
+                        frame.lblMessage.setFont(UIStyles.FONT_BOLD);
+                        frame.lblMessage.setForeground(UIStyles.WHITE_COLOR); //Usuario loggeado en label menuBar
                         cardManager.showCard("downloads");
                         frame.pnlDownload.infoMedia.refreshFiles(); //Refresca la tabla al hacer login
 
@@ -225,7 +225,7 @@ public class Login extends JPanel{
                     mediaPollingComponent.getAllMedia(savedToken); //Llamada a api para comprobar si el token es correcto
                     
                 }catch(Exception e){
-                    SwingStyleUtils.showMessageInfo(lblMessage, "User logged out. Please log in again.");
+                    UIStyles.showMessageInfo(lblMessage, "User logged out. Please log in again.");
                     token = null; 
                     cardManager.showCard("login"); 
                     return;
@@ -235,8 +235,8 @@ public class Login extends JPanel{
                 frame.initializePolling(token);
                 frame.setMenuVisible(true);
                 frame.lblMessage.setText(emailUser); //Usuario loggeado en label menuBar
-                frame.lblMessage.setFont(SwingStyleUtils.FONT_BOLD);
-                frame.lblMessage.setForeground(SwingStyleUtils.WHITE_COLOR);
+                frame.lblMessage.setFont(UIStyles.FONT_BOLD);
+                frame.lblMessage.setForeground(UIStyles.WHITE_COLOR);
                 cardManager.showCard("downloads");
                 System.out.println("Login successful.");
                 return;

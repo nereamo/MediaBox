@@ -9,7 +9,7 @@ import javax.swing.table.JTableHeader;
  *
  * @author Nerea
  */
-public class SwingStyleUtils {
+public class UIStyles {
 
     //Fonts
     public static final Font FONT_BOLD = new Font("Arial", Font.BOLD, 16);
@@ -148,8 +148,8 @@ public class SwingStyleUtils {
 
         JTableHeader header = table.getTableHeader();
         header.setPreferredSize(new Dimension(header.getWidth(), 30));
-        header.setFont(SwingStyleUtils.FONT_BOLD);
-        header.setBackground(SwingStyleUtils.LIGHT_GREY_COLOR);
+        header.setFont(UIStyles.FONT_BOLD);
+        header.setBackground(UIStyles.LIGHT_GREY_COLOR);
 
         styleViewScroll(scroll);
         handCursor(table);
@@ -210,8 +210,8 @@ public class SwingStyleUtils {
 
     //================== TEXT Y PASSWORD ==================
     public static void addIconsTextField(JTextField txtField, String leftIconPath, String rightIconPath, String text) {
-        ImageIcon leftIcon = new ImageIcon(SwingStyleUtils.class.getResource(leftIconPath));
-        ImageIcon rightIcon = new ImageIcon(SwingStyleUtils.class.getResource(rightIconPath));
+        ImageIcon leftIcon = new ImageIcon(UIStyles.class.getResource(leftIconPath));
+        ImageIcon rightIcon = new ImageIcon(UIStyles.class.getResource(rightIconPath));
         configureCommonTextFieldProps(txtField, text);
 
         if (txtField instanceof JPasswordField) {
@@ -316,7 +316,7 @@ public class SwingStyleUtils {
         if (path == null || path.isEmpty()) {
             return null;
         }
-        return new ImageIcon(SwingStyleUtils.class.getResource(path));
+        return new ImageIcon(UIStyles.class.getResource(path));
     }
 
     private static void styleViewScroll(JScrollPane scroll) {

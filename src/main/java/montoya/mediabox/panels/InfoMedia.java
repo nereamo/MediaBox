@@ -7,7 +7,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import montoya.mediabox.controller.*;
 import montoya.mediabox.fileInformation.*;
-import montoya.mediabox.configUI.SwingStyleUtils;
+import montoya.mediabox.configUI.UIStyles;
 import montoya.mediapollingcomponent.MediaPollingComponent;
 import net.miginfocom.swing.MigLayout;
 
@@ -74,14 +74,14 @@ public class InfoMedia extends javax.swing.JPanel {
 
     //Aplica estilos a los componentes
     private void applyStylesComponent() {
-        SwingStyleUtils.panelsBorders(this, SwingStyleUtils.DARK_GREY_COLOR, 30);
-        SwingStyleUtils.selectionColorList(folderList, scrFolderList);
-        SwingStyleUtils.selectionColorTable(tblMedia, scrTableMedia);
-        SwingStyleUtils.selectionColorComboBox(cbbxTypeFilter);
-        SwingStyleUtils.styleRoundedScroll(scrFolderList, 20, SwingStyleUtils.LIGHT_GREY_COLOR);
-        SwingStyleUtils.styleRoundedScroll(scrTableMedia, 20, SwingStyleUtils.LIGHT_GREY_COLOR);
+        UIStyles.panelsBorders(this, UIStyles.DARK_GREY_COLOR, 30);
+        UIStyles.selectionColorList(folderList, scrFolderList);
+        UIStyles.selectionColorTable(tblMedia, scrTableMedia);
+        UIStyles.selectionColorComboBox(cbbxTypeFilter);
+        UIStyles.styleRoundedScroll(scrFolderList, 20, UIStyles.LIGHT_GREY_COLOR);
+        UIStyles.styleRoundedScroll(scrTableMedia, 20, UIStyles.LIGHT_GREY_COLOR);
         cbbxTypeFilter.setEditable(true);
-        SwingStyleUtils.styleButtons(btnUpload,"/images/upload.png", "UPLOAD", "Upload file to API", SwingStyleUtils.LIGHT_PURPLE, SwingStyleUtils.DARK_GREY_COLOR, true);
+        UIStyles.styleButtons(btnUpload,"/images/upload.png", "UPLOAD", "Upload file to API", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true);
     }
 
     //Añade los filtros a JComboBox

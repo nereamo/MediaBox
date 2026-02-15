@@ -18,7 +18,7 @@ import montoya.mediabox.fileInformation.FileInformation;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
 import montoya.mediabox.fileInformation.FolderItem;
-import montoya.mediabox.configUI.SwingStyleUtils;
+import montoya.mediabox.configUI.UIStyles;
 import montoya.mediapollingcomponent.MediaPollingComponent;
 import net.miginfocom.swing.MigLayout;
 
@@ -101,16 +101,16 @@ public class Downloads extends javax.swing.JPanel {
 
     //Aplica estilos a los componentes
     private void applyStylesComponent() {
-        setBackground(SwingStyleUtils.BLACK_COLOR); //Color del panel
-        SwingStyleUtils.panelsBorders(downloadFilePnl, SwingStyleUtils.DARK_GREY_COLOR, 30);
-        SwingStyleUtils.styleButtons(btnFolder, "/images/folder.png","", "Select destination folder", SwingStyleUtils.DARK_GREY_COLOR, new Color(0, 0, 0, 0), true);
-        SwingStyleUtils.panelsBorders(pnlVideo, SwingStyleUtils.MEDIUM_GREY_COLOR, 15);
-        SwingStyleUtils.panelsBorders(pnlAudio, SwingStyleUtils.MEDIUM_GREY_COLOR, 15);
-        SwingStyleUtils.styleButtonGroup("Select format", radioM4a, radioMkv, radioMp3, radioMp4, radioWav, radioWebm);
-        SwingStyleUtils.selectionColorComboBox(cbbxQualityFilter);
-        SwingStyleUtils.styleButtons(btnDownload,"/images/download2.png", "DOWNLOAD", "Download file", SwingStyleUtils.LIGHT_PURPLE, SwingStyleUtils.DARK_GREY_COLOR, true);
-        SwingStyleUtils.styleButtons(btnOpenLast,"/images/play2.png", "OPEN LAST","Reproduce last file",SwingStyleUtils.MEDIUM_GREY_COLOR,SwingStyleUtils.LIGHT_GREY_COLOR, false);
-        SwingStyleUtils.styleProgressBar(progressBar);
+        setBackground(UIStyles.BLACK_COLOR); //Color del panel
+        UIStyles.panelsBorders(downloadFilePnl, UIStyles.DARK_GREY_COLOR, 30);
+        UIStyles.styleButtons(btnFolder, "/images/folder.png","", "Select destination folder", UIStyles.DARK_GREY_COLOR, new Color(0, 0, 0, 0), true);
+        UIStyles.panelsBorders(pnlVideo, UIStyles.MEDIUM_GREY_COLOR, 15);
+        UIStyles.panelsBorders(pnlAudio, UIStyles.MEDIUM_GREY_COLOR, 15);
+        UIStyles.styleButtonGroup("Select format", radioM4a, radioMkv, radioMp3, radioMp4, radioWav, radioWebm);
+        UIStyles.selectionColorComboBox(cbbxQualityFilter);
+        UIStyles.styleButtons(btnDownload,"/images/download2.png", "DOWNLOAD", "Download file", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true);
+        UIStyles.styleButtons(btnOpenLast,"/images/play2.png", "OPEN LAST","Reproduce last file",UIStyles.MEDIUM_GREY_COLOR,UIStyles.LIGHT_GREY_COLOR, false);
+        UIStyles.styleProgressBar(progressBar);
     }
     
     //Botón visible cuando la descarga ha finalizado
@@ -139,7 +139,7 @@ public class Downloads extends javax.swing.JPanel {
     
     //Configura de JTextField de URL
     private void styleTxtUrl() {
-        SwingStyleUtils.addIconsTextField(txtUrl, "/images/url.png", "/images/delete_url.png", "Paste the URL of the file to download");
+        UIStyles.addIconsTextField(txtUrl, "/images/url.png", "/images/delete_url.png", "Paste the URL of the file to download");
 
         txtUrl.addMouseListener(new MouseAdapter() {
             @Override

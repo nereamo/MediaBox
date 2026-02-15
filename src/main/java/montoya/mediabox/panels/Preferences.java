@@ -6,7 +6,7 @@ import javax.swing.*;
 import montoya.mediabox.MainFrame;
 import montoya.mediabox.controller.CardManager;
 import montoya.mediabox.download.DownloadManager;
-import montoya.mediabox.configUI.SwingStyleUtils;
+import montoya.mediabox.configUI.UIStyles;
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -64,25 +64,25 @@ public class Preferences extends javax.swing.JPanel {
     
     //Configuracion del estilo de los componentes
     private void applyStylesComponent(){
-        this.setBackground(SwingStyleUtils.BLACK_COLOR);
-        SwingStyleUtils.panelsBorders(pnlPref, SwingStyleUtils.DARK_GREY_COLOR, 30);
+        this.setBackground(UIStyles.BLACK_COLOR);
+        UIStyles.panelsBorders(pnlPref, UIStyles.DARK_GREY_COLOR, 30);
         
-        SwingStyleUtils.styleFixLabel(lblPath, "Temp Path: ", "");
-        SwingStyleUtils.addIconsTextField(txtPathTemp,"","", "Select folder for temporary files...");
-        SwingStyleUtils.styleButtons(btnBrowseTemp, "/images/folder.png","", "Select Folder", SwingStyleUtils.DARK_GREY_COLOR, new Color (0,0,0), true);
+        UIStyles.styleFixLabel(lblPath, "Temp Path: ", "");
+        UIStyles.addIconsTextField(txtPathTemp,"","", "Select folder for temporary files...");
+        UIStyles.styleButtons(btnBrowseTemp, "/images/folder.png","", "Select Folder", UIStyles.DARK_GREY_COLOR, new Color (0,0,0), true);
         
-        SwingStyleUtils.styleFixLabel(lblM3u, "File .m3u: ", "");
-        SwingStyleUtils.styleCheckBox(chkCreate,"Create", "Create files .M3U");
+        UIStyles.styleFixLabel(lblM3u, "File .m3u: ", "");
+        UIStyles.styleCheckBox(chkCreate,"Create", "Create files .M3U");
         
-        SwingStyleUtils.styleFixLabel(lblSpeed, "Speed (MB/s): ", "");
-        SwingStyleUtils.styleFixLabel(lblSpeedValue, "" + spnSpeed.getValue() + " MB/s", "");
-        SwingStyleUtils.styleSpinner(spnSpeed);
+        UIStyles.styleFixLabel(lblSpeed, "Speed (MB/s): ", "");
+        UIStyles.styleFixLabel(lblSpeedValue, "" + spnSpeed.getValue() + " MB/s", "");
+        UIStyles.styleSpinner(spnSpeed);
         
-        SwingStyleUtils.styleFixLabel(lblYtDlp, "Location yt-dlp: ", "");
-        SwingStyleUtils.styleButtons(btnYtDlp,"/images/search.png", "Automatic search yt-dlp", "Automatic search yt-dlp", SwingStyleUtils.LIGHT_PURPLE, SwingStyleUtils.DARK_GREY_COLOR, true);
+        UIStyles.styleFixLabel(lblYtDlp, "Location yt-dlp: ", "");
+        UIStyles.styleButtons(btnYtDlp,"/images/search.png", "Automatic search yt-dlp", "Automatic search yt-dlp", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true);
         
-        SwingStyleUtils.styleButtons(btnSave, "/images/save.png", "Save", "Save changes", SwingStyleUtils.LIGHT_PURPLE, SwingStyleUtils.DARK_GREY_COLOR, true);
-        SwingStyleUtils.styleButtons(btnCancel, "/images/return.png", "Return", "Discard changes", SwingStyleUtils.LIGHT_GREY_COLOR, SwingStyleUtils.DARK_GREY_COLOR, true);
+        UIStyles.styleButtons(btnSave, "/images/save.png", "Save", "Save changes", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true);
+        UIStyles.styleButtons(btnCancel, "/images/return.png", "Return", "Discard changes", UIStyles.LIGHT_GREY_COLOR, UIStyles.DARK_GREY_COLOR, true);
     }
     
     //Velocidad de descarga hasta un max de 100MB/s
@@ -208,7 +208,7 @@ public class Preferences extends javax.swing.JPanel {
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFolder = directory.getSelectedFile();
             txtPathTemp.setText(selectedFolder.getAbsolutePath());
-            txtPathTemp.setForeground(SwingStyleUtils.WHITE_COLOR);
+            txtPathTemp.setForeground(UIStyles.WHITE_COLOR);
         }
     }//GEN-LAST:event_btnBrowseTempActionPerformed
 
@@ -231,10 +231,10 @@ public class Preferences extends javax.swing.JPanel {
                 String path = sb.toString().trim();
                 detectedYtDlpPath = path.split("\n")[0];
 
-                SwingStyleUtils.showMessageInfo(lblInfo, "yt-dlp.exe found!");
+                UIStyles.showMessageInfo(lblInfo, "yt-dlp.exe found!");
             } else {
                 detectedYtDlpPath = "";
-                SwingStyleUtils.showMessageInfo(lblInfo, "yt-dlp.exe not found!");
+                UIStyles.showMessageInfo(lblInfo, "yt-dlp.exe not found!");
             }
 
         } catch (IOException ex) {

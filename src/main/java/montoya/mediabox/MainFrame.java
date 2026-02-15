@@ -11,7 +11,7 @@ import montoya.mediabox.controller.*;
 import montoya.mediabox.dialogs.DialogAbout;
 import montoya.mediabox.download.DownloadManager;
 import montoya.mediabox.fileInformation.FileProperties;
-import montoya.mediabox.configUI.SwingStyleUtils;
+import montoya.mediabox.configUI.UIStyles;
 import montoya.mediapollingcomponent.MediaEvent;
 import montoya.mediapollingcomponent.MediaListener;
 import montoya.mediapollingcomponent.apiclient.Media;
@@ -37,9 +37,9 @@ public class MainFrame extends JFrame {
     private boolean isLoggedIn = false;
 
     public MainFrame() {
-        UIManager.put("MenuItem.selectionBackground", SwingStyleUtils.MEDIUM_GREY_COLOR);
-        UIManager.put("Menu.selectionBackground", SwingStyleUtils.MEDIUM_GREY_COLOR);
-        UIManager.put("MenuItem.selectionForeground", SwingStyleUtils.WHITE_COLOR);
+        UIManager.put("MenuItem.selectionBackground", UIStyles.MEDIUM_GREY_COLOR);
+        UIManager.put("Menu.selectionBackground", UIStyles.MEDIUM_GREY_COLOR);
+        UIManager.put("MenuItem.selectionForeground", UIStyles.WHITE_COLOR);
         initComponents();
         
         configurationFrame();
@@ -77,26 +77,26 @@ public class MainFrame extends JFrame {
     
     //Iconos de los botones
     private void configIconMenu(){
-        SwingStyleUtils.styleMenuItems(mnuEdit, "/images/edit.png",null, "Settings");
-        SwingStyleUtils.styleMenuItems(mnuFile, "/images/logout_exit.png",null, "Logout or Exit");
-        SwingStyleUtils.styleMenuItems(mnuHelp, "/images/help.png",null, "Information MediaBox");
+        UIStyles.styleMenuItems(mnuEdit, "/images/edit.png",null, "Settings");
+        UIStyles.styleMenuItems(mnuFile, "/images/logout_exit.png",null, "Logout or Exit");
+        UIStyles.styleMenuItems(mnuHelp, "/images/help.png",null, "Information MediaBox");
     }
     
     //Iconos de los botones
     private void configIconMenuItems(){
         
-        SwingStyleUtils.styleMenuItems(itemExit, "/images/exit.png", "Exit", "Close App");
-        SwingStyleUtils.styleMenuItems(itemLogout, "/images/logout.png", "Logout", "Return to login");
-        SwingStyleUtils.styleMenuItems(itemPreferences, "/images/settings.png", "Settings", "Edit settings");
-        SwingStyleUtils.styleMenuItems(itemAbout, "/images/information.png", "About", "Information MediaBox");
+        UIStyles.styleMenuItems(itemExit, "/images/exit.png", "Exit", "Close App");
+        UIStyles.styleMenuItems(itemLogout, "/images/logout.png", "Logout", "Return to login");
+        UIStyles.styleMenuItems(itemPreferences, "/images/settings.png", "Settings", "Edit settings");
+        UIStyles.styleMenuItems(itemAbout, "/images/information.png", "About", "Information MediaBox");
     }
     
     //Visibilidad del JMenu
     public void setMenuVisible(boolean visible) {
-        menuBar.setBackground(SwingStyleUtils.DARK_GREY_COLOR);
+        menuBar.setBackground(UIStyles.DARK_GREY_COLOR);
         menuBar.setVisible(visible);
         menuBar.add(Box.createHorizontalGlue());
-        lblMessage.setForeground(SwingStyleUtils.DARK_GREY_COLOR);
+        lblMessage.setForeground(UIStyles.DARK_GREY_COLOR);
         lblMessage.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15)); 
         menuBar.add(lblMessage);
         
@@ -251,7 +251,7 @@ public class MainFrame extends JFrame {
         setMenuVisible(false);
         this.isLoggedIn = false;
         cardManager.showCard("login");
-        SwingStyleUtils.showMessageInfo(pnlLogin.lblMessage, "Closed sesion.");
+        UIStyles.showMessageInfo(pnlLogin.lblMessage, "Closed sesion.");
     }//GEN-LAST:event_itemLogoutActionPerformed
 
     public static void main(String args[]) {
