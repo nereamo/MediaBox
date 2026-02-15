@@ -1,12 +1,10 @@
 package montoya.mediabox.panels;
 
-import java.awt.Dimension;
 import montoya.mediabox.fileInformation.TableActions;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.JTableHeader;
 import montoya.mediabox.controller.*;
 import montoya.mediabox.fileInformation.*;
 import montoya.mediabox.configUI.SwingStyleUtils;
@@ -68,26 +66,22 @@ public class InfoMedia extends javax.swing.JPanel {
     
     private void setupLayout() {
         this.setLayout(new MigLayout("fill, insets 20", "[50:150:200]10[grow]", "[][grow]"));
-
         this.add(cbbxTypeFilter, "cell 1 0, split 2, right, width 200!");
-        this.add(btnUpload, "width 120!");
-
+        this.add(btnUpload, "width 140!, height 35!");
         this.add(scrFolderList, "cell 0 1, grow");
         this.add(scrTableMedia, "cell 1 1, grow");
     }
 
     //Aplica estilos a los componentes
     private void applyStylesComponent() {
-        SwingStyleUtils.handCursor(tblMedia, folderList, cbbxTypeFilter);
-        SwingStyleUtils.createTitleBorder(this, SwingStyleUtils.DARK_GREY_COLOR);
-        SwingStyleUtils.selectionColorList(folderList);
-        SwingStyleUtils.selectionColorTable(tblMedia);
-        JTableHeader header = tblMedia.getTableHeader();
-        header.setPreferredSize(new Dimension(header.getWidth(), 30));
-        header.setFont(SwingStyleUtils.FONT_BOLD);
+        SwingStyleUtils.panelsBorders(this, SwingStyleUtils.DARK_GREY_COLOR, 30);
+        SwingStyleUtils.selectionColorList(folderList, scrFolderList);
+        SwingStyleUtils.selectionColorTable(tblMedia, scrTableMedia);
         SwingStyleUtils.selectionColorComboBox(cbbxTypeFilter);
+        SwingStyleUtils.styleRoundedScroll(scrFolderList, 20, SwingStyleUtils.LIGHT_GREY_COLOR);
+        SwingStyleUtils.styleRoundedScroll(scrTableMedia, 20, SwingStyleUtils.LIGHT_GREY_COLOR);
         cbbxTypeFilter.setEditable(true);
-        SwingStyleUtils.styleTextButton(btnUpload, "UPLOAD", "Upload file to API", 70, 25, SwingStyleUtils.LIGHT_PURPLE, SwingStyleUtils.DARK_GREY_COLOR);
+        SwingStyleUtils.styleButtons(btnUpload,"/images/upload.png", "UPLOAD", "Upload file to API", SwingStyleUtils.LIGHT_PURPLE, SwingStyleUtils.DARK_GREY_COLOR, true);
     }
 
     //Añade los filtros a JComboBox
@@ -238,7 +232,6 @@ public class InfoMedia extends javax.swing.JPanel {
         }
     }
 
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -252,8 +245,7 @@ public class InfoMedia extends javax.swing.JPanel {
 
         setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Downloads", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14))); // NOI18N
         setFocusCycleRoot(true);
-        setMaximumSize(new java.awt.Dimension(840, 450));
-        setMinimumSize(null);
+        setMaximumSize(null);
         setPreferredSize(null);
         setLayout(new java.awt.BorderLayout());
 
@@ -369,7 +361,6 @@ public class InfoMedia extends javax.swing.JPanel {
         tblModel.setFileList(resultFiles);
         tblModel.fireTableDataChanged();
     }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnUpload;
     private javax.swing.JComboBox<String> cbbxTypeFilter;

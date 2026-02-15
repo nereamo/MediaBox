@@ -71,10 +71,10 @@ public class Downloads extends javax.swing.JPanel {
 
     //Posición d elos componentes del panel
     private void setupLayout() {
-        this.setLayout(new MigLayout("fill, insets 30, wrap 1", "[grow, center]", "push[]push[]push"));
-        this.add(downloadFilePnl, "center, w 200:840:840, h 150:465:465");
-        this.add(infoMedia, "center, w 200:840:840, h 150:430:430");
-        this.add(logoLabel, "align center");
+        this.setLayout(new MigLayout("fill, insets 30, wrap 1", "[grow, center]", "push[grow]50![grow]push"));
+        this.add(downloadFilePnl, "grow, center, w 200:840:n, h 150:465:n, gaptop 40");
+        this.add(infoMedia, "grow, center, w 200:840:n, h 150:430:n");
+        this.add(logoLabel, "align center, gapbottom 40");
 
         downloadFilePnl.setLayout(new MigLayout("fillx, insets 20, wrap 1", "[grow]"));
         downloadFilePnl.add(txtUrl, "split 2, growx, h 35!, gapright 10");
@@ -96,20 +96,20 @@ public class Downloads extends javax.swing.JPanel {
         downloadFilePnl.add(btnDownload, "split 2, w 180!, h 50!, gaptop 40, align center");
         downloadFilePnl.add(btnOpenLast, "w 180!, h 50!, gaptop 40, gapleft 20");
 
-        downloadFilePnl.add(progressBar, "growx, h 25!, gapy 50");
+        downloadFilePnl.add(progressBar, "growx, h 25!, gaptop 50, gapbottom 10, pushy, aligny bottom");
     }
 
     //Aplica estilos a los componentes
     private void applyStylesComponent() {
         setBackground(SwingStyleUtils.BLACK_COLOR); //Color del panel
-        SwingStyleUtils.createTitleBorder(downloadFilePnl, SwingStyleUtils.DARK_GREY_COLOR);
-        SwingStyleUtils.styleIconButton(btnFolder, "/images/folder.png", "Select destination folder");
-        SwingStyleUtils.createTitleBorder(pnlVideo, SwingStyleUtils.MEDIUM_GREY_COLOR);
-        SwingStyleUtils.createTitleBorder(pnlAudio, SwingStyleUtils.MEDIUM_GREY_COLOR);
+        SwingStyleUtils.panelsBorders(downloadFilePnl, SwingStyleUtils.DARK_GREY_COLOR, 30);
+        SwingStyleUtils.styleButtons(btnFolder, "/images/folder.png","", "Select destination folder", SwingStyleUtils.DARK_GREY_COLOR, new Color(0, 0, 0, 0), true);
+        SwingStyleUtils.panelsBorders(pnlVideo, SwingStyleUtils.MEDIUM_GREY_COLOR, 15);
+        SwingStyleUtils.panelsBorders(pnlAudio, SwingStyleUtils.MEDIUM_GREY_COLOR, 15);
         SwingStyleUtils.styleButtonGroup("Select format", radioM4a, radioMkv, radioMp3, radioMp4, radioWav, radioWebm);
         SwingStyleUtils.selectionColorComboBox(cbbxQualityFilter);
-        SwingStyleUtils.styleTextButton(btnDownload, "DOWNLOAD", "Download file", 150, 70, SwingStyleUtils.LIGHT_PURPLE, SwingStyleUtils.DARK_GREY_COLOR);
-        SwingStyleUtils.styleGhostButton( btnOpenLast,"OPEN LAST","Reproduce last file",180, 50,SwingStyleUtils.MEDIUM_GREY_COLOR,SwingStyleUtils.LIGHT_GREY_COLOR);
+        SwingStyleUtils.styleButtons(btnDownload,"/images/download2.png", "DOWNLOAD", "Download file", SwingStyleUtils.LIGHT_PURPLE, SwingStyleUtils.DARK_GREY_COLOR, true);
+        SwingStyleUtils.styleButtons(btnOpenLast,"/images/play2.png", "OPEN LAST","Reproduce last file",SwingStyleUtils.MEDIUM_GREY_COLOR,SwingStyleUtils.LIGHT_GREY_COLOR, false);
         SwingStyleUtils.styleProgressBar(progressBar);
     }
     
@@ -209,9 +209,9 @@ public class Downloads extends javax.swing.JPanel {
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo.png"))); // NOI18N
         add(logoLabel);
 
-        downloadFilePnl.setMaximumSize(new java.awt.Dimension(840, 580));
+        downloadFilePnl.setMaximumSize(null);
         downloadFilePnl.setMinimumSize(new java.awt.Dimension(840, 580));
-        downloadFilePnl.setPreferredSize(new java.awt.Dimension(840, 580));
+        downloadFilePnl.setPreferredSize(null);
         downloadFilePnl.setLayout(new java.awt.BorderLayout());
 
         txtUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N

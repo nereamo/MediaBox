@@ -1,5 +1,6 @@
 package montoya.mediabox.panels;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.*;
 import javax.swing.*;
@@ -49,7 +50,7 @@ public class Login extends JPanel{
     //Configuracion de la posición de los componentes
     private void setupLayout() {
         
-        this.setLayout(new MigLayout("wrap, center", "[grow]", "push[]20[]10[]10[]20[]10[]push"));
+        this.setLayout(new MigLayout("fill, wrap, center", "[grow]", "push[]20[]10[]10[]20[]10[]push"));
         this.setBackground(SwingStyleUtils.DARK_GREY_COLOR);
         
         ImageIcon icon = new ImageIcon(getClass().getResource("/images/logo_login.png"));
@@ -57,19 +58,19 @@ public class Login extends JPanel{
         this.add(lblIcon, "align center, gapbottom 20");
         
         configemailField();
-        this.add(txtEmail, "align center, w 300!, h 30!");
+        this.add(txtEmail, "align center, w 400!, h 35!");
         
         configPasswordField();
-        this.add(txtPassword, "align center, w 300!, h 30!, gaptop 10");
+        this.add(txtPassword, "align center, w 400!, h 35!, gaptop 10");
         
         SwingStyleUtils.styleCheckBox(remember, "Remember me", "Remember credentials");
         this.add(remember, "align center, gaptop 10");
 
-        SwingStyleUtils.styleIconButton(btnLogin, "/images/login.png", "Login user");
+        SwingStyleUtils.styleButtons(btnLogin, "/images/login.png","", "Login user", SwingStyleUtils.DARK_GREY_COLOR, new Color(0, 0, 0, 0), true);
         this.add(btnLogin, "align center, w 200!, h 40!, gaptop 20");
 
         lblMessage.setHorizontalAlignment(SwingConstants.CENTER);
-        this.add(lblMessage, "align center, gaptop 180, growx");
+        this.add(lblMessage, "align center, gaptop 100, growx");
     }
 
     //Estilo del JTextField email
@@ -103,7 +104,7 @@ public class Login extends JPanel{
     
     //Estilo del JPasswordField password
     private void configPasswordField() {
-        SwingStyleUtils.addIconsPasswordField(txtPassword, "/images/pss.png", "/images/show.png", "Enter password");
+        SwingStyleUtils.addIconsTextField(txtPassword, "/images/pss.png", "/images/show.png", "Enter password");
         
         txtPassword.setEchoChar('•');
         isPasswordVisible = false;
@@ -133,7 +134,7 @@ public class Login extends JPanel{
                 int width = txtPassword.getWidth();
 
                 if (e.getX() >= width -30) {
-                    SwingStyleUtils.handCursor(txtEmail);
+                    SwingStyleUtils.handCursor(txtPassword);
                 } else {
                     txtPassword.setCursor(new Cursor(Cursor.TEXT_CURSOR));
                 }

@@ -34,7 +34,7 @@ public class TableActions extends AbstractCellEditor implements TableCellRendere
 
         this.btnPlay = createButton("/images/play.png", "Reproduce");
         this.btnDelete = createButton("/images/delete.png", "Delete file");
-        this.btnDownload = createButton("/images/download2.png", "Download");
+        this.btnDownload = createButton("/images/download.png", "Download");
 
         actionPlay(btnPlay);
         actionDelete(btnDelete);

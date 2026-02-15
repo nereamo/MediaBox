@@ -1,6 +1,6 @@
 package montoya.mediabox.panels;
 
-import java.awt.Dimension;
+import java.awt.Color;
 import java.io.*;
 import javax.swing.*;
 import montoya.mediabox.MainFrame;
@@ -39,10 +39,10 @@ public class Preferences extends javax.swing.JPanel {
         this.setLayout(new MigLayout("fill, insets 40, wrap 1", "[grow, center]", "[grow, center]"));
         
         pnlPref.setLayout(new MigLayout("insets 30 15 30 15, gapy 15, align center center", "[right][left][pref]", "push[][][][][]push"));
-        this.add(pnlPref, "center, w 200:740:740, h 300:880:880");
+        this.add(pnlPref, "grow, center, w 200:740:n, h 300:880:n");
         
         pnlPref.add(lblPath, "cell 0 0, alignx right");
-        pnlPref.add(txtPathTemp, "cell 1 0, alignx left, growx, w 30:400:400, h 30!");
+        pnlPref.add(txtPathTemp, "cell 1 0, alignx left, growx, w 30:400:800, h 30!");
         pnlPref.add(btnBrowseTemp, "cell 2 0, w 50!, h 50!");
         
         pnlPref.add(lblM3u, "cell 0 1, alignx right, gaptop 15"); 
@@ -56,8 +56,8 @@ public class Preferences extends javax.swing.JPanel {
         pnlPref.add(btnYtDlp, "cell 1 3, alignx left, gaptop 20, w 50:250:300, h 35!");
         pnlPref.add(lblInfo, "cell 0 4, span, align center, gaptop 10, hidemode 3");
         
-        pnlPref.add(btnSave, "cell 1 5, split 2, alignx center, gaptop 30, w 100:120:150, h 40!"); 
-        pnlPref.add(btnCancel, "gaptop 30, gapleft 20, w 100:120:150, h 40!");
+        pnlPref.add(btnSave, "cell 1 5, split 2, alignx center, gaptop 30, w 100:120:200, h 40!"); 
+        pnlPref.add(btnCancel, "gaptop 30, gapleft 20, w 100:120:200, h 40!");
         
         this.add(logoLabel, "align center, shrink"); 
     }
@@ -65,24 +65,24 @@ public class Preferences extends javax.swing.JPanel {
     //Configuracion del estilo de los componentes
     private void applyStylesComponent(){
         this.setBackground(SwingStyleUtils.BLACK_COLOR);
-        pnlPref.setBackground(SwingStyleUtils.DARK_GREY_COLOR);
+        SwingStyleUtils.panelsBorders(pnlPref, SwingStyleUtils.DARK_GREY_COLOR, 30);
         
-        SwingStyleUtils.styleFixLabel(lblPath, "Temp Path: ");
-        SwingStyleUtils.styleTextFields(txtPathTemp, "Select folder for temporary files...");
-        SwingStyleUtils.styleIconButton(btnBrowseTemp, "/images/folder.png", "Select Folder");
+        SwingStyleUtils.styleFixLabel(lblPath, "Temp Path: ", "");
+        SwingStyleUtils.addIconsTextField(txtPathTemp,"","", "Select folder for temporary files...");
+        SwingStyleUtils.styleButtons(btnBrowseTemp, "/images/folder.png","", "Select Folder", SwingStyleUtils.DARK_GREY_COLOR, new Color (0,0,0), true);
         
-        SwingStyleUtils.styleFixLabel(lblM3u, "File .m3u: ");
+        SwingStyleUtils.styleFixLabel(lblM3u, "File .m3u: ", "");
         SwingStyleUtils.styleCheckBox(chkCreate,"Create", "Create files .M3U");
         
-        SwingStyleUtils.styleFixLabel(lblSpeed, "Speed (MB/s): ");
-        SwingStyleUtils.styleFixLabel(lblSpeedValue, "" + spnSpeed.getValue() + " MB/s");
+        SwingStyleUtils.styleFixLabel(lblSpeed, "Speed (MB/s): ", "");
+        SwingStyleUtils.styleFixLabel(lblSpeedValue, "" + spnSpeed.getValue() + " MB/s", "");
         SwingStyleUtils.styleSpinner(spnSpeed);
         
-        SwingStyleUtils.styleFixLabel(lblYtDlp, "Location yt-dlp: ");
-        SwingStyleUtils.styleTextButton(btnYtDlp, "Automatic search yt-dlp", "Automatic search yt-dlp", 250, 30, SwingStyleUtils.LIGHT_PURPLE, SwingStyleUtils.DARK_GREY_COLOR);
+        SwingStyleUtils.styleFixLabel(lblYtDlp, "Location yt-dlp: ", "");
+        SwingStyleUtils.styleButtons(btnYtDlp,"/images/search.png", "Automatic search yt-dlp", "Automatic search yt-dlp", SwingStyleUtils.LIGHT_PURPLE, SwingStyleUtils.DARK_GREY_COLOR, true);
         
-        SwingStyleUtils.styleIconAndTextButton(btnSave, "/images/save.png", "Save", "Save changes", SwingStyleUtils.LIGHT_PURPLE, SwingStyleUtils.DARK_GREY_COLOR);
-        SwingStyleUtils.styleIconAndTextButton(btnCancel, "/images/return.png", "Return", "Discard changes", SwingStyleUtils.LIGHT_GREY_COLOR, SwingStyleUtils.DARK_GREY_COLOR);
+        SwingStyleUtils.styleButtons(btnSave, "/images/save.png", "Save", "Save changes", SwingStyleUtils.LIGHT_PURPLE, SwingStyleUtils.DARK_GREY_COLOR, true);
+        SwingStyleUtils.styleButtons(btnCancel, "/images/return.png", "Return", "Discard changes", SwingStyleUtils.LIGHT_GREY_COLOR, SwingStyleUtils.DARK_GREY_COLOR, true);
     }
     
     //Velocidad de descarga hasta un max de 100MB/s
@@ -192,7 +192,8 @@ public class Preferences extends javax.swing.JPanel {
         add(spnSpeed);
         add(lblSpeedValue);
 
-        pnlPref.setMinimumSize(null);
+        pnlPref.setMaximumSize(null);
+        pnlPref.setMinimumSize(new java.awt.Dimension(200, 300));
         pnlPref.setPreferredSize(null);
         add(pnlPref);
         add(lblInfo);

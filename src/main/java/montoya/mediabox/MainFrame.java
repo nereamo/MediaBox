@@ -71,7 +71,6 @@ public class MainFrame extends JFrame {
     //Configuración del frame
     private void configurationFrame() {
         this.setTitle("MediaBox");
-        this.setResizable(false);
         this.setSize(940, 1200);
         this.setLocationRelativeTo(this);
     }
@@ -142,14 +141,11 @@ public class MainFrame extends JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("mainFrame"); // NOI18N
-        setResizable(false);
-        getContentPane().setLayout(null);
 
         mediaPollingComponent.setApiUrl("https://difreenet9.azurewebsites.net");
         mediaPollingComponent.setPollingInterval(10);
         mediaPollingComponent.setRunning(true);
-        getContentPane().add(mediaPollingComponent);
-        mediaPollingComponent.setBounds(1230, 680, 35, 35);
+        getContentPane().add(mediaPollingComponent, java.awt.BorderLayout.CENTER);
 
         menuBar.setBackground(new java.awt.Color(0, 0, 0));
         menuBar.setBorder(new javax.swing.border.MatteBorder(null));
