@@ -87,11 +87,35 @@ Creación de JSON con libreria Jackson.
         
 # 🎨 Usabilidad y Experiencia de Usuario
 
-* **Feedback Visual e Interactividad:** En elementos clicables se ha usado "Hand Cursor" y efecto borde para resaltarlos.
-* **Placeholders:** Los campos de texto utilizan "sugerencias" para guiar al usuario.
-* **Color y Consistencia:** Uso de paleta de colores personalizada (Púrpuras y Grises oscuros) para diferenciar acciones principales de información secundaria con bordes redondeados.
-* **Mensajes de Ayuda:** Uso de *Tooltips* en botones y componentes para proporcionar más información.
-* **Tamaño de ventana:** Los Paneles y componentes se adaptan a la maximización y minimación de la ventana.
-* **Iconos:** Uso de iconos en campos de texto, botones y tabla.
-* **Tabla:** Contiene una columna "Acciones" que permite descargar, reproducir o eliminar dependiendo de la ubicación del archivo.    
+Feedback Visual e Interactividad:
+        
+        Los botones han sido resaltados con un borde y el cursor "Hand Cursor".
+
+Placeholders: 
+
+    Los campos de texto utilizan "sugerencias" para guiar al usuario.
+
+Color y Consistencia: 
+
+    Uso de colores (Púrpuras y Grises oscuros) para diferenciar acciones principales de información secundaria con bordes redondeados asi como seleccionar un elemento del JComboBox, JList, JTable y elementos de la barra de menú.
+    
+Mensajes de Ayuda:
+
+    Uso de *Tooltips* en botones y componentes para proporcionar más información.
+
+Notificación de acciones:
+
+    Uso de mensajes emergentes al realizar una acción como guardar las preferencias o volver sin guardar los cambios o cerrar la aplicación o acciones previas que deba realizar antes de una descarga.
+    
+Tamaño de ventana: 
+
+    Los Paneles y componentes se adaptan a la maximización y minimación de la ventana.
+    
+Iconos: 
+
+    Uso de iconos en campos de texto para realizar acciones, en botones para facilitar la visibilidad y en la tabla para realizar acciones.
+
+Información de progreso:
+
+    Uso de JProgressBar para informar al usuario del estado de la descarga.
 
