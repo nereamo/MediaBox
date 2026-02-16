@@ -66,8 +66,8 @@ public class Login extends JPanel{
         UIStyles.styleCheckBox(remember, "Remember me", "Remember credentials");
         this.add(remember, "align center, gaptop 10");
 
-        UIStyles.styleButtons(btnLogin, "/images/login.png","", "Login user", UIStyles.DARK_GREY_COLOR, new Color(0, 0, 0, 0), true);
-        this.add(btnLogin, "align center, w 200!, h 40!, gaptop 20");
+        UIStyles.styleButtons(btnLogin, "/images/login.png","", "Login user", UIStyles.LIGHT_PURPLE, new Color(0, 0, 0, 0), true);
+        this.add(btnLogin, "align center, w 70!, h 70!, gaptop 20");
 
         lblMessage.setHorizontalAlignment(SwingConstants.CENTER);
         this.add(lblMessage, "align center, gaptop 100, growx");
@@ -196,7 +196,7 @@ public class Login extends JPanel{
                         
                         frame.lblMessage.setText(email);
                         frame.lblMessage.setFont(UIStyles.FONT_BOLD);
-                        frame.lblMessage.setForeground(UIStyles.WHITE_COLOR); //Usuario loggeado en label menuBar
+                        frame.lblMessage.setForeground(UIStyles.LIGHT_PURPLE); //Usuario loggeado en label menuBar
                         cardManager.showCard("downloads");
                         frame.pnlDownload.infoMedia.refreshFiles(); //Refresca la tabla al hacer login
 
@@ -236,7 +236,7 @@ public class Login extends JPanel{
                 frame.setMenuVisible(true);
                 frame.lblMessage.setText(emailUser); //Usuario loggeado en label menuBar
                 frame.lblMessage.setFont(UIStyles.FONT_BOLD);
-                frame.lblMessage.setForeground(UIStyles.WHITE_COLOR);
+                frame.lblMessage.setForeground(UIStyles.LIGHT_PURPLE);
                 cardManager.showCard("downloads");
                 System.out.println("Login successful.");
                 return;

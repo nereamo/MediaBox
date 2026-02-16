@@ -42,22 +42,22 @@ public class Preferences extends javax.swing.JPanel {
         this.add(pnlPref, "grow, center, w 200:740:n, h 300:880:n");
         
         pnlPref.add(lblPath, "cell 0 0, alignx right");
-        pnlPref.add(txtPathTemp, "cell 1 0, alignx left, growx, w 30:400:800, h 30!");
+        pnlPref.add(txtPathTemp, "cell 1 0, alignx left, growx, w 30:400:800, h 35!");
         pnlPref.add(btnBrowseTemp, "cell 2 0, w 50!, h 50!");
         
         pnlPref.add(lblM3u, "cell 0 1, alignx right, gaptop 15"); 
         pnlPref.add(chkCreate, "cell 1 1, alignx left, gaptop 15");
 
         pnlPref.add(lblSpeed, "cell 0 2, alignx right, aligny center, gaptop 15");
-        pnlPref.add(spnSpeed, "cell 1 2, split 2, alignx left, gaptop 15, w 70!, h 30!");
+        pnlPref.add(spnSpeed, "cell 1 2, split 2, alignx left, gaptop 15, w 70!, h 35!");
         pnlPref.add(lblSpeedValue, "gapleft 20, alignx left, gaptop 15");
         
         pnlPref.add(lblYtDlp, "cell 0 3, alignx right, gaptop 15"); 
         pnlPref.add(btnYtDlp, "cell 1 3, alignx left, gaptop 20, w 50:250:300, h 35!");
-        pnlPref.add(lblInfo, "cell 0 4, span, align center, gaptop 10, hidemode 3");
+        pnlPref.add(lblInfo, "cell 1 4, span, align left, gaptop 10, hidemode 3");
         
         pnlPref.add(btnSave, "cell 1 5, split 2, alignx center, gaptop 30, w 100:120:200, h 40!"); 
-        pnlPref.add(btnCancel, "gaptop 30, gapleft 20, w 100:120:200, h 40!");
+        pnlPref.add(btnReturn, "gaptop 30, gapleft 20, w 100:120:200, h 40!");
         
         this.add(logoLabel, "align center, shrink"); 
     }
@@ -69,7 +69,7 @@ public class Preferences extends javax.swing.JPanel {
         
         UIStyles.styleFixLabel(lblPath, "Temp Path: ", "");
         UIStyles.addIconsTextField(txtPathTemp,"","", "Select folder for temporary files...");
-        UIStyles.styleButtons(btnBrowseTemp, "/images/folder.png","", "Select Folder", UIStyles.DARK_GREY_COLOR, new Color (0,0,0), true);
+        UIStyles.styleButtons(btnBrowseTemp, "/images/folder.png","", "Select Folder", UIStyles.LIGHT_PURPLE, new Color (0,0,0), true);
         
         UIStyles.styleFixLabel(lblM3u, "File .m3u: ", "");
         UIStyles.styleCheckBox(chkCreate,"Create", "Create files .M3U");
@@ -82,7 +82,7 @@ public class Preferences extends javax.swing.JPanel {
         UIStyles.styleButtons(btnYtDlp,"/images/search.png", "Automatic search yt-dlp", "Automatic search yt-dlp", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true);
         
         UIStyles.styleButtons(btnSave, "/images/save.png", "Save", "Save changes", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true);
-        UIStyles.styleButtons(btnCancel, "/images/return.png", "Return", "Discard changes", UIStyles.LIGHT_GREY_COLOR, UIStyles.DARK_GREY_COLOR, true);
+        UIStyles.styleButtons(btnReturn, "/images/return.png", "Return", "Discard changes", UIStyles.LIGHT_GREY_COLOR, UIStyles.DARK_GREY_COLOR, true);
     }
     
     //Velocidad de descarga hasta un max de 100MB/s
@@ -111,7 +111,7 @@ public class Preferences extends javax.swing.JPanel {
         lblYtDlp = new javax.swing.JLabel();
         btnYtDlp = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
-        btnCancel = new javax.swing.JButton();
+        btnReturn = new javax.swing.JButton();
         txtPathTemp = new javax.swing.JTextField();
         btnBrowseTemp = new javax.swing.JButton();
         lblPath = new javax.swing.JLabel();
@@ -159,16 +159,16 @@ public class Preferences extends javax.swing.JPanel {
         });
         add(btnSave);
 
-        btnCancel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnCancel.setToolTipText("");
-        btnCancel.setMaximumSize(null);
-        btnCancel.setPreferredSize(null);
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+        btnReturn.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnReturn.setToolTipText("");
+        btnReturn.setMaximumSize(null);
+        btnReturn.setPreferredSize(null);
+        btnReturn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelActionPerformed(evt);
+                btnReturnActionPerformed(evt);
             }
         });
-        add(btnCancel);
+        add(btnReturn);
 
         txtPathTemp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         txtPathTemp.setMinimumSize(null);
@@ -256,18 +256,20 @@ public class Preferences extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     //Cancelar preferencias
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+    private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
         if (JOptionPane.showConfirmDialog(null, "Changes will not be saved. Do you want to continue?", "Cancel", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            txtPathTemp.setText("");
+            UIStyles.resetPlaceholder(txtPathTemp, "Select folder for temporary files...");
             chkCreate.setSelected(false);
             spnSpeed.setValue(0.0);
             cardManager.showCard(CARD_DOWN);
+            lblInfo.setText("");
+
         }
-    }//GEN-LAST:event_btnCancelActionPerformed
+    }//GEN-LAST:event_btnReturnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowseTemp;
-    private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnReturn;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnYtDlp;
     private javax.swing.JCheckBox chkCreate;

@@ -31,9 +31,9 @@ public class UIStyles {
 
         panel.setUI(new javax.swing.plaf.basic.BasicPanelUI() {
             @Override
-            public void update(Graphics g, JComponent c) {
+            public void paint(Graphics g, JComponent c) {
                 paintRounded(g, c, radius);
-                super.update(g, c);
+                super.paint(g, c);
             }
         });
     }
@@ -84,7 +84,9 @@ public class UIStyles {
         btn.setText(Text);
         btn.setFont(FONT_BOLD);
 
-        btn.setIcon(createIcon(iconPath));
+        ImageIcon normalIcon = createIcon(iconPath);
+        btn.setIcon(normalIcon);
+        btn.setDisabledIcon(normalIcon);
 
         btn.setBackground(fondo);
         btn.setForeground(letras);
@@ -113,19 +115,19 @@ public class UIStyles {
 
         btn.setUI(new javax.swing.plaf.basic.BasicButtonUI() {
             @Override
-            public void update(Graphics g, JComponent c) {
+            public void paint(Graphics g, JComponent c) {
+
+                Graphics2D g2 = (Graphics2D) g.create();
+
                 if (!c.isEnabled()) {
-                    Graphics2D g2 = (Graphics2D) g.create();
-                    g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-                    paintRounded(g2, c, 20);
-                    g2.dispose();
-                } else {
-                    paintRounded(g, c, 20);
+                    g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.20f));
                 }
-                super.update(g, c);
+
+                paintRounded(g2, c, 20);
+                super.paint(g2, c);
+                g2.dispose();
             }
         });
-
         handCursor(btn);
     }
 
@@ -195,7 +197,7 @@ public class UIStyles {
 
         scroll.setUI(new javax.swing.plaf.basic.BasicScrollPaneUI() {
             @Override
-            public void update(Graphics g, JComponent c) {
+            public void paint(Graphics g, JComponent c) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -203,7 +205,7 @@ public class UIStyles {
                 g2.fillRoundRect(0, 0, c.getWidth(), c.getHeight(), radius, radius);
 
                 g2.dispose();
-                super.update(g, c);
+                super.paint(g, c);
             }
         });
     }
@@ -266,6 +268,9 @@ public class UIStyles {
 
     //================== PROGRESSBAR ==================
     public static void styleProgressBar(JProgressBar bar) {
+        
+        UIManager.put("ProgressBar.selectionBackground", BLACK_COLOR);
+        UIManager.put("ProgressBar.selectionForeground", BLACK_COLOR);
         bar.setBackground(MEDIUM_GREY_COLOR);
         bar.setForeground(LIGHT_PURPLE);
         bar.setFont(FONT_BOLD);
@@ -278,25 +283,21 @@ public class UIStyles {
             @Override
             protected void paintDeterminate(Graphics g, JComponent c) {
                 Graphics2D g2 = (Graphics2D) g.create();
-
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
                 int width = c.getWidth();
                 int height = c.getHeight();
                 int arc = height;
 
-                g2.setColor(c.getBackground());
-                g2.fillRoundRect(0, 0, width, height, arc, arc);
-
                 double percent = bar.getPercentComplete();
                 if (percent > 0) {
                     int progressWidth = (int) (width * percent);
-                    g2.setColor(c.getForeground());
+                    g2.setColor(LIGHT_PURPLE);
                     g2.fillRoundRect(0, 0, progressWidth, height, arc, arc);
                 }
 
                 if (bar.isStringPainted()) {
-                    g2.setColor(WHITE_COLOR);
+                    g2.setColor(BLACK_COLOR);
                     paintString(g, 0, 0, width, height, 0, c.getInsets());
                 }
                 g2.dispose();
@@ -331,13 +332,14 @@ public class UIStyles {
         field.setBackground(MEDIUM_GREY_COLOR);
         field.setForeground(WHITE_COLOR);
         field.setCaretColor(WHITE_COLOR);
+        field.setFont(FONT_PLAIN);
         field.setToolTipText(text);
     }
 
     //Texto mostrado en txtFiels y PasswordFields
     private static void addPlaceholder(JTextField field, String placeholder) {
         field.setText(placeholder);
-        field.setForeground(java.awt.Color.GRAY);
+        field.setForeground(Color.GRAY);
 
         field.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
@@ -353,10 +355,18 @@ public class UIStyles {
             public void focusLost(java.awt.event.FocusEvent e) {
                 if (field.getText().isEmpty()) {
                     field.setText(placeholder);
-                    field.setForeground(LIGHT_GREY_COLOR);
+                    field.setForeground(Color.GRAY);
+                } else {
+                    field.setForeground(WHITE_COLOR); // Si hay una URL, se queda BLANCO
                 }
             }
         });
+    }
+    
+    public static void resetPlaceholder(JTextField field, String placeholder) {
+        field.setText(placeholder);
+        field.setForeground(java.awt.Color.GRAY);
+        field.getParent().requestFocusInWindow();
     }
 
     // Método centralizado para pintar los iconos

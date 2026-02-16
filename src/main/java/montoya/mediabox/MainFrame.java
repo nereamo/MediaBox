@@ -37,9 +37,9 @@ public class MainFrame extends JFrame {
     private boolean isLoggedIn = false;
 
     public MainFrame() {
-        UIManager.put("MenuItem.selectionBackground", UIStyles.MEDIUM_GREY_COLOR);
+        UIManager.put("MenuItem.selectionBackground", UIStyles.LIGHT_PURPLE);
         UIManager.put("Menu.selectionBackground", UIStyles.MEDIUM_GREY_COLOR);
-        UIManager.put("MenuItem.selectionForeground", UIStyles.WHITE_COLOR);
+        UIManager.put("MenuItem.selectionForeground", UIStyles.BLACK_COLOR);
         initComponents();
         
         configurationFrame();

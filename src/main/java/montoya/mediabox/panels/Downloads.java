@@ -41,9 +41,6 @@ public class Downloads extends javax.swing.JPanel {
     private String folderPath = "";
 
     public Downloads(MainFrame frame, Set<String> folderPaths, DownloadManager downloadManager, MediaPollingComponent mediaPollingComponent) {
-
-        UIManager.put("ProgressBar.selectionBackground", Color.WHITE);
-        UIManager.put("ProgressBar.selectionForeground", Color.BLACK);
        
         initComponents();
 
@@ -72,7 +69,7 @@ public class Downloads extends javax.swing.JPanel {
     //Posición d elos componentes del panel
     private void setupLayout() {
         this.setLayout(new MigLayout("fill, insets 30, wrap 1", "[grow, center]", "push[grow]50![grow]push"));
-        this.add(downloadFilePnl, "grow, center, w 200:840:n, h 150:465:n, gaptop 40");
+        this.add(downloadFilePnl, "grow, center, w 200:840:n, h 150:500:n, gaptop 40");
         this.add(infoMedia, "grow, center, w 200:840:n, h 150:430:n");
         this.add(logoLabel, "align center, gapbottom 40");
 
@@ -80,21 +77,21 @@ public class Downloads extends javax.swing.JPanel {
         downloadFilePnl.add(txtUrl, "split 2, growx, h 35!, gapright 10");
         downloadFilePnl.add(btnFolder, "w 50!, h 50!");
 
-        pnlVideo.setLayout(new MigLayout("fillx, insets 25", "[]push[]push[]push[]", "[]"));
+        pnlVideo.setLayout(new MigLayout("fillx, insets 17", "[]push[]push[]push[]", "[]"));
         pnlVideo.add(radioMp4);
         pnlVideo.add(radioMkv);
         pnlVideo.add(radioWebm);
         pnlVideo.add(cbbxQualityFilter, "w 120!");
-        downloadFilePnl.add(pnlVideo, "growx, h 80!, gaptop 20");
+        downloadFilePnl.add(pnlVideo, "growx, h 70!, gaptop 30");
 
-        pnlAudio.setLayout(new MigLayout("fillx, insets 25", "[]15[]15[]", "[]"));
+        pnlAudio.setLayout(new MigLayout("fillx, insets 17", "[]15[]15[]", "[]"));
         pnlAudio.add(radioMp3);
         pnlAudio.add(radioWav);
         pnlAudio.add(radioM4a);
-        downloadFilePnl.add(pnlAudio, "growx, h 80!");
+        downloadFilePnl.add(pnlAudio, "growx, h 70!");
 
         downloadFilePnl.add(btnDownload, "split 2, w 180!, h 50!, gaptop 40, align center");
-        downloadFilePnl.add(btnOpenLast, "w 180!, h 50!, gaptop 40, gapleft 20");
+        downloadFilePnl.add(btnOpenLast, "w 180!, h 50!, gaptop 30, gapleft 20");
 
         downloadFilePnl.add(progressBar, "growx, h 25!, gaptop 50, gapbottom 10, pushy, aligny bottom");
     }
@@ -103,7 +100,7 @@ public class Downloads extends javax.swing.JPanel {
     private void applyStylesComponent() {
         setBackground(UIStyles.BLACK_COLOR); //Color del panel
         UIStyles.panelsBorders(downloadFilePnl, UIStyles.DARK_GREY_COLOR, 30);
-        UIStyles.styleButtons(btnFolder, "/images/folder.png","", "Select destination folder", UIStyles.DARK_GREY_COLOR, new Color(0, 0, 0, 0), true);
+        UIStyles.styleButtons(btnFolder, "/images/folder.png","", "Select destination folder", UIStyles.LIGHT_PURPLE, new Color(0, 0, 0, 0), true);
         UIStyles.panelsBorders(pnlVideo, UIStyles.MEDIUM_GREY_COLOR, 15);
         UIStyles.panelsBorders(pnlAudio, UIStyles.MEDIUM_GREY_COLOR, 15);
         UIStyles.styleButtonGroup("Select format", radioM4a, radioMkv, radioMp3, radioMp4, radioWav, radioWebm);
