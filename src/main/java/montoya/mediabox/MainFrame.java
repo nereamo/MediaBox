@@ -5,7 +5,6 @@ import javax.swing.*;
 import java.awt.EventQueue;
 import java.awt.CardLayout;
 import java.awt.Image;
-import java.util.logging.Logger;
 import montoya.mediabox.panels.*;
 import montoya.mediabox.controller.*;
 import montoya.mediabox.dialogs.DialogAbout;
@@ -17,73 +16,93 @@ import montoya.mediapollingcomponent.MediaListener;
 import montoya.mediapollingcomponent.apiclient.Media;
 
 /**
- * Class principal
+ * Clase MedaiBox proporciona la funcionalidad para gestionar la interfaz gráfica del programa {@code MediaBox}.
+ * La clase extiende {@code javax.swing.JFrame}, permite que esta clase sea un diálogo modal.
+ * Utiliza un {@link CardLayout} para el intercambio de vista entre paneles
  *
  * @author Nerea
  */
 public class MainFrame extends JFrame {
-
-    private static final Logger logger = Logger.getLogger(MainFrame.class.getName());
     
+    /** {@link Downloads} Gestiona la lista y el estado de las descargas activas. */
     public Downloads pnlDownload;
+    
+    /** {@link Preferences} Configura los ajustes de la aplicación. */
     private Preferences pnlPreferences;
+    
+    /** {@link Login} Gestiona la autenticación de usuario. */
     private Login pnlLogin;
+    
+    /** {@link DownloadManager} Contiene los parámetros necesarios para realizar descargas. */
     private DownloadManager downloadManager;
+    
+    /** {@link CardManager} Gestionar el intercambio de paneles. */
     private CardManager cardManager;
+    
+    /** Layout usado para los distintos paneles(vistas) como si fueran cartas. */
     private CardLayout layout;
+    
+    /** Contiene los paneles mostrados en la aplicación. */
     private JPanel container;
+    
+    /** Etiqueta para mostrar mensajes informativos al usuario. */
     public JLabel lblMessage = new JLabel();
+    
+    /** Colección de rutas de carpetas seleccionadas por el usuario. */
     private final Set<String> folderPaths = new HashSet<>();
-    private boolean isLoggedIn = false;
 
+    /**
+     * Inicializa el frame principal llamando a los métodos necesários para su utilización.
+     * <p>
+     * Orden de los métodos:
+     * <ol>
+     * <li> Configuración visual de la ventana.
+     * <li> Inicialización de componentes swing.
+     * <li> Configuración de ventana e icono.
+     * <li> Gestión de la navegacion de las distintas vistas.
+     * </ol>
+     * </p>
+     */
     public MainFrame() {
+        initLookAndFeelMenu(); //Colores de MenuBar
+        initComponents(); //Inicializa los componentes
+        initFrameConfig(); //Título, tamaño e icono del JFrame
+        initMenuAndItems(); //Estilos aplicados a JMenuBar y JMenuItem
+        setMenuVisible(false); //Visibilidad del Menú
+        initContainer(); //Inicialización del contenedor de los JPanel
+        initPanels(); //Instáncias de los distintos JPanel
+        initNavigation(); //Organiza las vistas
+    }
+    
+    /**
+     * Configuración de los colores del menú.
+     * {@link UIManager}.
+     */
+    private void initLookAndFeelMenu(){
         UIManager.put("MenuItem.selectionBackground", UIStyles.LIGHT_PURPLE);
         UIManager.put("Menu.selectionBackground", UIStyles.MEDIUM_GREY_COLOR);
         UIManager.put("MenuItem.selectionForeground", UIStyles.BLACK_COLOR);
-        initComponents();
-        
-        configurationFrame();
-        configIconMenu();
-        configIconMenuItems();
-        setMenuVisible(false);
-        
-        Image icon = new ImageIcon(getClass().getResource("/images/icon.png")).getImage();
-        this.setIconImage(icon);
-        
-        layout = new CardLayout();
-        container = new JPanel(layout);
-        cardManager = new CardManager(container, layout);
-        
-        downloadManager = new DownloadManager(new FileProperties());
-        pnlLogin = new Login(this, cardManager, mediaPollingComponent);
-        pnlDownload = new Downloads(this, folderPaths, downloadManager, mediaPollingComponent);
-        pnlPreferences = new Preferences(this, downloadManager, cardManager);
-
-        cardManager.initCards(pnlLogin, pnlDownload, pnlPreferences);
-        cardManager.showCard("login");
-        pnlLogin.autoLogin();
-
-        this.setContentPane(container);
-        this.setResizable(true);
-        this.setVisible(true);
-    }
-
-    //Configuración del frame
-    private void configurationFrame() {
-        this.setTitle("MediaBox");
-        this.setSize(940, 1200);
-        this.setLocationRelativeTo(this);
     }
     
-    //Iconos de los botones
-    private void configIconMenu(){
+    /**
+     * Propiedades de la ventana principal como el título, tamaño, posición e icono. 
+     */
+    private void initFrameConfig() {
+        this.setTitle("MediaBox");
+        this.setSize(940, 1200);
+        this.setLocationRelativeTo(null);
+        Image icon = new ImageIcon(getClass().getResource("/images/icon.png")).getImage();
+        this.setIconImage(icon);
+    }
+    
+    /**
+     * Aplica estilos, iconos y textos de ayuda(tooltips) al menú y a sus ítems.
+     * {@link UIStyles}.
+     */
+    private void initMenuAndItems(){
         UIStyles.styleMenuItems(mnuEdit, "/images/edit.png",null, "Settings");
         UIStyles.styleMenuItems(mnuFile, "/images/logout_exit.png",null, "Logout or Exit");
         UIStyles.styleMenuItems(mnuHelp, "/images/help.png",null, "Information MediaBox");
-    }
-    
-    //Iconos de los botones
-    private void configIconMenuItems(){
         
         UIStyles.styleMenuItems(itemExit, "/images/exit.png", "Exit", "Close App");
         UIStyles.styleMenuItems(itemLogout, "/images/logout.png", "Logout", "Return to login");
@@ -91,37 +110,81 @@ public class MainFrame extends JFrame {
         UIStyles.styleMenuItems(itemAbout, "/images/information.png", "About", "Information MediaBox");
     }
     
-    //Visibilidad del JMenu
+    /**
+     * Controla la visibilidad del menú y el texto mostrado en éste (nombre de usuario logeado).
+     * {@link UIStyles}.
+     */
     public void setMenuVisible(boolean visible) {
         menuBar.setBackground(UIStyles.DARK_GREY_COLOR);
-        menuBar.setVisible(visible);
         menuBar.add(Box.createHorizontalGlue());
+        
         lblMessage.setForeground(UIStyles.DARK_GREY_COLOR);
-        lblMessage.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15)); 
+        lblMessage.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15));
         menuBar.add(lblMessage);
         
+        menuBar.setVisible(visible);
         this.revalidate();
         this.repaint();
     }
+    
+    /**
+     * Inicializa el contenedor permitiendo el intercambio entre las distintas vistas.
+     */
+    private void initContainer(){
+        layout = new CardLayout();
+        container = new JPanel(layout);
+        cardManager = new CardManager(container, layout);
+        this.setContentPane(container);
+        this.setResizable(true);
+    }
+    
+    /**
+     * Inicializa los JPanel mostrados en la apliación.
+     */
+    private void initPanels(){
+        downloadManager = new DownloadManager(new FileProperties());
+        pnlLogin = new Login(this, cardManager, mediaPollingComponent);
+        pnlDownload = new Downloads(this, folderPaths, downloadManager, mediaPollingComponent);
+        pnlPreferences = new Preferences(this, downloadManager, cardManager);
+        cardManager.initCards(pnlLogin, pnlDownload, pnlPreferences);
+    }
+    
+    /**
+     * Establece la navegación principal mostrando la pantalla de login si el usuario no esta autentificado.
+     */
+    private void initNavigation() {
+        cardManager.showCard("login");
+        pnlLogin.autoLogin();
+    }
 
-    //Método que inicializa el componente
+    /**
+     * Configuración del componente que escucha medios de la API.
+     * <p>
+     * Inicializa el componente listener con el token de seguridad.
+     * Escucha de nuevos medios añadidos a la API.
+     * </p>
+     * @param token de acceso para la API.
+     * @see MediaListener
+     */
     public void initializePolling(String token) {
 
-        mediaPollingComponent.setToken(token);
-        mediaPollingComponent.addMediaListener(new MediaListener() {
-            private boolean isFirstRun = true;
+        mediaPollingComponent.setToken(token); //Token autenticación
+        mediaPollingComponent.addMediaListener(new MediaListener() { //Listener
+            private boolean isFirstRun = true; //Evita la primera escucha
 
             @Override
             public void newMediaFound(MediaEvent me) {
-                List<Media> listaMedios = me.getMediaList();
+                List<Media> listaMedios = me.getMediaList(); //Obtiene medios
+                
                 if (listaMedios != null && !listaMedios.isEmpty()) {
-                    if (isFirstRun) {
+                    
+                    if (isFirstRun) { //Ignora la primera ejecución (datos iniciales)
                         isFirstRun = false;
                         return;
                     }
 
-                    Media ultimoMedia = listaMedios.get(listaMedios.size() - 1);
-                    System.out.println("New media: " + ultimoMedia.mediaFileName);
+                    Media ultimoMedia = listaMedios.get(listaMedios.size() - 1); //Obtiene último archivo subido
+                    System.out.println("New media: " + ultimoMedia.mediaFileName); //Muestra información del último archivo
                 }
             }
         });
@@ -229,29 +292,45 @@ public class MainFrame extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    //Preferences
+    /**
+     * Cambia la vista actual al panel de configuración Preferences.
+     * 
+     * @param evt Evento de acción generado al hacer clic en el ítem
+     */
     private void itemPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemPreferencesActionPerformed
         cardManager.showCard("preferences");
     }//GEN-LAST:event_itemPreferencesActionPerformed
 
-    //About
+    /**
+     * Abre el diálogo de información "About" de la aplicación.
+     * 
+     * @param evt Evento de acción generado al hacer clic en el ítem
+     */
     private void itemAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAboutActionPerformed
         DialogAbout dialogAbout = new DialogAbout(this, true);
         dialogAbout.setVisible(true);
     }//GEN-LAST:event_itemAboutActionPerformed
 
-    //Exit
+    /**
+     * Solicita confirmación por parte del usuario y cierra la aplicación en caso de ser afirmativa.
+     * 
+     * @param evt Evento de acción generado al hacer clic en el ítem
+     */
     private void itemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemExitActionPerformed
         if (JOptionPane.showConfirmDialog(null, "Do you want to exit the application?", "Exit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
     }//GEN-LAST:event_itemExitActionPerformed
 
+    /**
+     * Cierra la sessión del usuario, oculta el menú y muetra el panel de login.
+     * 
+     * @param evt Evento de acción generado al hacer clic en el ítem
+     */
     private void itemLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemLogoutActionPerformed
         setMenuVisible(false);
-        this.isLoggedIn = false;
         cardManager.showCard("login");
-        UIStyles.showMessageInfo(pnlLogin.lblMessage, "Closed sesion.");
+        UIStyles.showMessageInfo(pnlLogin.lblMessage, "Session closed.");
     }//GEN-LAST:event_itemLogoutActionPerformed
 
     public static void main(String args[]) {
@@ -268,7 +347,7 @@ public class MainFrame extends JFrame {
                 }
             }
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
+            
         }
         //</editor-fold>
 
