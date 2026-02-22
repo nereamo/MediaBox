@@ -49,7 +49,7 @@ public class Preferences extends javax.swing.JPanel {
         pnlPref.add(chkCreate, "cell 1 1, alignx left, gaptop 15");
 
         pnlPref.add(lblSpeed, "cell 0 2, alignx right, aligny center, gaptop 15");
-        pnlPref.add(spnSpeed, "cell 1 2, split 2, alignx left, gaptop 15, w 70!, h 35!");
+        pnlPref.add(spnSpeed, "cell 1 2, split 2, alignx left, gaptop 15, w 100!, h 35!");
         pnlPref.add(lblSpeedValue, "gapleft 20, alignx left, gaptop 15");
         
         pnlPref.add(lblYtDlp, "cell 0 3, alignx right, gaptop 15"); 

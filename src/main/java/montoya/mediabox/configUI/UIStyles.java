@@ -136,7 +136,6 @@ public class UIStyles {
         
         
         btn.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_ROUND_RECT);
-        btn.putClientProperty("JButton.arc", 5);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
@@ -173,7 +172,7 @@ public class UIStyles {
      * Si es una JTable, aplica el estilo para el encabezado.
      * 
      * @param component JComponent a configurar
-     * @param scroll JScrollPane JScrollPane que contiene el JComponent
+     * @param scroll JScrollPane que contiene el JComponent
      */
     public static void styleScrollComponent(JComponent component, JScrollPane scroll) {
         component.setBackground(LIGHT_GREY_COLOR);
@@ -232,26 +231,27 @@ public class UIStyles {
     }
 
     /**
-     * Configura una JScrollPane personalizado. Aplica color de seleccion, color de texto en la selección, color de fondo, fuente, si es editable y cursor de mano.
+     * Configura una JTextField personalizado. 
+     * Aplica borde,color de resalte del borde, color de fondo, color de texto, fuente. 
      * 
-     * @param field
-     * @param leftIconPath
-     * @param placeholder
-     * @param rightIconPath
-     * @param leftAction 
+     * @param field JTextField a configurar
+     * @param leftIconPath Icono izquierdo
+     * @param placeholder Texto informativo
+     * @param rightIconPath Icono derecho
+     * @param leftAction Acción del icono
      */
     public static void styleField(JTextField field, String leftIconPath, String placeholder, String rightIconPath, Runnable leftAction) {
         field.setOpaque(false);
         field.setBorder(UIManager.getBorder("TextField.border"));
+        field.setCaretColor(LIGHT_PURPLE);
         field.setBackground(MEDIUM_GREY_COLOR);
         field.setForeground(WHITE_COLOR);
-        field.setCaretColor(LIGHT_PURPLE);
         field.setFont(FONT_PLAIN);
         
         setupLeadingIcon(field, leftIconPath, leftAction); //Icono izquierdo
 
         if (field instanceof JPasswordField) { //Icono derecho
-            setupPasswordVisibilityButton((JPasswordField) field, rightIconPath);
+            setupPasswordVisibility((JPasswordField) field, rightIconPath);
         } else {
             setupClearButton(field, rightIconPath);
         }
@@ -259,6 +259,15 @@ public class UIStyles {
         field.putClientProperty("JTextField.arc", 30); //Redondez
     }
 
+    /**
+     * Configura el icono izquierdo del JTextField personalizado. 
+     * Si el icono es {@code null} es solamente decorativo.
+     * Si el icono  no es {@code null}, el icono es clicable y ejecuta una acción.
+     * 
+     * @param field JTextField con icono a la izquierda
+     * @param path Ruta del icono
+     * @param action La acción al hacer clic en el icono. Si es {@code null}, el icono es decorativo.
+     */
     private static void setupLeadingIcon(final JTextField field, String path, final Runnable action) {
         ImageIcon icon = createIcon(path);
         if (icon == null) {
@@ -273,7 +282,7 @@ public class UIStyles {
         JLabel lbl = createClickableIcon(icon); //Icono con acción
         field.putClientProperty("JTextField.leadingComponent", lbl);
 
-        lbl.addMouseListener(new MouseAdapter() {
+        lbl.addMouseListener(new MouseAdapter() { //Listener para el icono izquierdo no decorativo
             @Override
             public void mouseClicked(MouseEvent e) {
                 action.run();
@@ -283,7 +292,14 @@ public class UIStyles {
         lbl.setToolTipText("Paste from clipboard");
     }
 
-    private static void setupPasswordVisibilityButton(final JPasswordField pf, String path) {
+    /**
+     * Configura el icono de visibilidad del JTextField personalizado. 
+     * Permite mostrar la contraseña y ocultarla de nuevo.
+     * 
+     * @param pf JPasswordField con icono de visibilidad
+     * @param path Ruta del icono
+     */
+    private static void setupPasswordVisibility(final JPasswordField pf, String path) {
         ImageIcon icon = createIcon(path);
         if (icon == null) {
             return;
@@ -292,16 +308,25 @@ public class UIStyles {
         JLabel lbl = createClickableIcon(icon);
         pf.putClientProperty("JTextField.trailingComponent", lbl);
 
-        lbl.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            pf.setEchoChar(pf.getEchoChar() == 0 ? '•' : 0);
-            pf.requestFocus();
-        }
-    });
+        lbl.addMouseListener(new MouseAdapter() { //Listener para hacer visible la contraseña
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                pf.setEchoChar(pf.getEchoChar() == 0 
+                        ? '•' //Oculta los caracteres
+                        : 0); 
+                pf.requestFocus();
+            }
+        });
         lbl.setToolTipText("Show Password");
     }
 
+    /**
+     * Configura el icono de limpieza del JTextField personalizado. 
+     * Permite eliminar el contenido del JTextField.
+     * 
+     * @param field JPasswordField con icono de limpieza
+     * @param path Ruta del icono
+     */
     private static void setupClearButton(final JTextField field, String path) {
         ImageIcon icon = createIcon(path);
         if (icon == null) {
@@ -312,26 +337,37 @@ public class UIStyles {
         field.putClientProperty("JTextField.trailingComponent", lbl);
 
         lbl.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            field.setText("");
-            field.requestFocus();
-        }
-    });
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                field.setText(""); //Limpia el campo del field
+                field.requestFocus();
+            }
+        });
 
         lbl.setToolTipText("Clear field");
     }
     
+    /**
+     * Configura el icono del JTextFieldpersonalizado.
+     * 
+     * @param icon Icono mostrado en el JLabel
+     * @return Un JLabel como icono clicable
+     */
     private static JLabel createClickableIcon(ImageIcon icon) {
-    JLabel lbl = new JLabel(icon);
-    lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-    return lbl;
-}
+        JLabel lbl = new JLabel(icon);
+        lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        return lbl;
+    }
 
-    //================== SPINNER ==================
+    /**
+     * Configura un JSpinner personalizado.
+     * Aplica fuente, color de fondo, color de selección y color de fuente en selección, un borde y cursor de mano.
+     * 
+     * @param spinner JSpinner a configurar
+     */
     public static void styleSpinner(JSpinner spinner) {
-        spinner.setFont(FONT_PLAIN);
         spinner.setOpaque(false);
+        spinner.setFont(FONT_PLAIN);
 
         JComponent editor = spinner.getEditor();
         if (editor instanceof JSpinner.DefaultEditor) {
@@ -346,31 +382,38 @@ public class UIStyles {
         spinner.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
-    //================== PROGRESSBAR ==================
+    /**
+     * Configura un JProgressBar personalizado.
+     * Aplica color de fondo, color de relleno, fuente, visibilidad del texto y un borde.
+     * 
+     * @param bar JProgressBar a configurar
+     */
     public static void styleProgressBar(JProgressBar bar) {
         
-        UIManager.put("ProgressBar.selectionBackground", BLACK_COLOR);
-        UIManager.put("ProgressBar.selectionForeground", BLACK_COLOR);
+        bar.putClientProperty("ProgressBar.selectionForeground", BLACK_COLOR);
+    bar.putClientProperty("ProgressBar.selectionBackground", BLACK_COLOR);
         bar.setBackground(MEDIUM_GREY_COLOR);
-        bar.setForeground(LIGHT_PURPLE);
+        bar.setForeground(LIGHT_PURPLE); //Color carga
         bar.setFont(FONT_BOLD);
         bar.setStringPainted(true);
+        bar.putClientProperty(FlatClientProperties.STYLE, "arc: 999");
 
         bar.setOpaque(false);
         bar.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
     }
 
 
-    // ================== UTILIDADES PRIVADAS==================
+    /**
+     * Configura un ImageIcon personalizado.
+     * Aplica icono si no es {@code null}.
+     * 
+     * @param path Ruta del icono
+     * @return El icono en el componente
+     */
     private static ImageIcon createIcon(String path) {
         if (path == null || path.isEmpty()) {
             return null;
         }
         return new ImageIcon(UIStyles.class.getResource(path));
     }
-
-
-
-    
-    
 }
