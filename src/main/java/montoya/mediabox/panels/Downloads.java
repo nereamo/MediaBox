@@ -1,10 +1,7 @@
 package montoya.mediabox.panels;
 
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.*; 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -100,13 +97,13 @@ public class Downloads extends javax.swing.JPanel {
     private void applyStylesComponent() {
         setBackground(UIStyles.BLACK_COLOR); //Color del panel
         UIStyles.panelsBorders(downloadFilePnl, UIStyles.DARK_GREY_COLOR, 30);
-        UIStyles.styleButtons(btnFolder, "/images/folder.png","", "Select destination folder", UIStyles.LIGHT_PURPLE, new Color(0, 0, 0, 0), true);
+        UIStyles.styleButtons(btnFolder, "", "/images/folder.png", UIStyles.LIGHT_PURPLE, new Color(0, 0, 0, 0), true, "Select destination folder");
         UIStyles.panelsBorders(pnlVideo, UIStyles.MEDIUM_GREY_COLOR, 15);
         UIStyles.panelsBorders(pnlAudio, UIStyles.MEDIUM_GREY_COLOR, 15);
         UIStyles.styleButtonGroup("Select format", radioM4a, radioMkv, radioMp3, radioMp4, radioWav, radioWebm);
-        UIStyles.selectionColorComboBox(cbbxQualityFilter);
-        UIStyles.styleButtons(btnDownload,"/images/download2.png", "DOWNLOAD", "Download file", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true);
-        UIStyles.styleButtons(btnOpenLast,"/images/play2.png", "OPEN LAST","Reproduce last file",UIStyles.MEDIUM_GREY_COLOR,UIStyles.LIGHT_GREY_COLOR, false);
+        UIStyles.styleComboBox(cbbxQualityFilter);
+        UIStyles.styleButtons(btnDownload, "DOWNLOAD", "/images/download2.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Download file");
+        UIStyles.styleButtons(btnOpenLast, "OPEN LAST", "/images/play2.png",UIStyles.MEDIUM_GREY_COLOR,UIStyles.LIGHT_GREY_COLOR, false, "Reproduce last file");
         UIStyles.styleProgressBar(progressBar);
     }
     
@@ -136,50 +133,17 @@ public class Downloads extends javax.swing.JPanel {
     
     //Configura de JTextField de URL
     private void styleTxtUrl() {
-        UIStyles.addIconsTextField(txtUrl, "/images/url.png", "/images/delete_url.png", "Paste the URL of the file to download");
-
-        txtUrl.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int width = txtUrl.getWidth();
-
-                if (e.getX() <= 30) {
-                    pasteUrl();
-                }else if (e.getX() >= width -30){
-                    txtUrl.setText("");
-                }
-            }
-        });
-
-        txtUrl.addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                int width = txtUrl.getWidth();
-
-                if (e.getX() <= 30 || e.getX() >= width -30) {
-                    txtUrl.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                } else {
-                    txtUrl.setCursor(new Cursor(Cursor.TEXT_CURSOR));
-                }
-            }
-        });
+        UIStyles.styleField(txtUrl, "/images/url.png", "Paste the URL of the file to download", "/images/delete_url.png", this::pasteUrl);
     }
     
     //Configuración de pegar URL a JTextField    
     private void pasteUrl() {
-        Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
-        DataFlavor df = DataFlavor.stringFlavor;
-
-        if (cb.isDataFlavorAvailable(df)) {
-            try {
-                String clipboardContent = (String) cb.getData(df);
-                txtUrl.setText(clipboardContent);
-            } catch (UnsupportedFlavorException | IOException ex) {
-
-                System.getLogger(MainFrame.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-            }
+        try {
+            String data = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+            txtUrl.setText(data);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        btnOpenLast.setEnabled(false);
     }
 
     @SuppressWarnings("unchecked")

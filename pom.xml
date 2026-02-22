@@ -24,6 +24,11 @@
             <version>11.0</version>
         </dependency>
         <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.5.4</version> 
+        </dependency>
+        <dependency>
             <groupId>unknown.binary</groupId>
             <artifactId>MediaPollingComponent-1.0-SNAPSHOT</artifactId>
             <version>SNAPSHOT</version>

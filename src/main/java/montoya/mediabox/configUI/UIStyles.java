@@ -1,21 +1,28 @@
 package montoya.mediabox.configUI;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicPasswordFieldUI;
 import javax.swing.table.JTableHeader;
 
 /**
- *
+ * Gestiona los distintos estilos de los componentes.
+ * 
  * @author Nerea
  */
 public class UIStyles {
 
-    //Fonts
+    /**
+     * Fuentes utilizadas en los componentes
+     */
     public static final Font FONT_BOLD = new Font("Arial", Font.BOLD, 16);
     public static final Font FONT_PLAIN = new Font("Arial", Font.PLAIN, 16);
 
-    //Colors
+    /**
+     * Colores utilizados en los componentes
+     */
     public static final Color WHITE_COLOR = new Color(255, 255, 255);
     public static final Color LIGHT_PURPLE = new Color(126, 134, 204);
     public static final Color LIGHT_GREY_COLOR = new Color(220, 220, 222);
@@ -23,155 +30,189 @@ public class UIStyles {
     public static final Color DARK_GREY_COLOR = new Color(37, 37, 38);
     public static final Color BLACK_COLOR = new Color(15, 15, 15);
 
-    //================== PANELES ==================
+    /**
+     * Configuración de los bordes en los paneles con esquinas redondeadas.
+     * Aplica color de fondo, radio en esquinas y hace panel no opaco.
+     * 
+     * @param panel JPanel al que se aplica el borde y apariencia
+     * @param color Color de fondo del panel
+     * @param radius Radio de las esquinas
+     * @see paintRounded
+     */
     public static void panelsBorders(JPanel panel, Color color, int radius) {
         panel.setOpaque(false);
+        panel.putClientProperty(FlatClientProperties.STYLE, "arc: " + radius);
         panel.setBackground(color);
         panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-        panel.setUI(new javax.swing.plaf.basic.BasicPanelUI() {
-            @Override
-            public void paint(Graphics g, JComponent c) {
-                paintRounded(g, c, radius);
-                super.paint(g, c);
-            }
-        });
     }
 
-    //================== LABELS ==================
-    //Label que muestra información
+    /**
+     * Configura un JLabel que contiene texto informativo para las acciones realizadas por le usuario.
+     * Aplica color de texto, fuente y texto.
+     * 
+     * @param lbl JLabel a configurar
+     * @param text Texto que se mostrará en el JLabel
+     */
     public static void showMessageInfo(JLabel lbl, String text) {
         lbl.setForeground(LIGHT_PURPLE);
         lbl.setFont(FONT_BOLD);
         lbl.setText(text);
     }
 
-    //Label estático
-    public static void styleFixLabel(JLabel label, String text, String logoPath) {
+    /**
+     * Configura un JLabel que contiene un texto fijo como títulos o etiuqetas de controles.
+     * Aplica opacidad, color de fondo, color de texto, fuente, texto y un posible icono.
+     * 
+     * @param label JLabel a configurar
+     * @param text Texto que se mostrará en el JLabel
+     * @param iconPath Ruta del icono a mostrar; puede ser null si no debe tener icono
+     */
+    public static void styleFixLabel(JLabel label, String text, String iconPath) {
+        
         label.setOpaque(true);
-        label.setText(text);
-        label.setForeground(LIGHT_GREY_COLOR);
         label.setBackground(DARK_GREY_COLOR);
+        label.setForeground(LIGHT_GREY_COLOR);
         label.setFont(FONT_PLAIN);
-        label.setIcon(createIcon(logoPath));
+        label.setText(text);
+        label.setIcon(createIcon(iconPath));
     }
 
-    //================== CHECKBOX ==================
+    /**
+     * Configura un JCheckBox.
+     * Aplica color de texto, fuente, texto y un mensaje de ayuda.
+     * 
+     * @param check JCheckBox a configurar
+     * @param text Texto que se mostrará en el JCheckBox
+     * @param toolTip Texto de ayuda para el usuario
+     */
     public static void styleCheckBox(JCheckBox check, String text, String toolTip) {
         check.setOpaque(false);
+        check.setFocusPainted(false);
         check.setForeground(LIGHT_GREY_COLOR);
         check.setFont(FONT_PLAIN);
-        check.setFocusPainted(false);
         check.setText(text);
         check.setToolTipText(toolTip);
     }
 
-    //================== BUTTON GROUP ==================
-    public static void styleButtonGroup(String toolTip, JRadioButton... radio) {
-        for (JRadioButton rb : radio) {
+    /**
+     * Configura un ButtonGroup.
+     * Aplica opacidad, color de fondo, color de texto, fuente, y un mensaje de ayuda.
+     * 
+     * @param toolTip Texto de ayuda para el usuario
+     * @param radioButton JRadioButtons a configurar
+     */
+    public static void styleButtonGroup(String toolTip, JRadioButton... radioButton) {
+        for (JRadioButton rb : radioButton) {
             rb.setOpaque(true);
             rb.setFocusPainted(false);
-            rb.setForeground(LIGHT_GREY_COLOR);
             rb.setBackground(MEDIUM_GREY_COLOR);
+            rb.setForeground(LIGHT_GREY_COLOR);
             rb.setFont(FONT_PLAIN);
             rb.setToolTipText(toolTip);
         }
     }
 
-    //================== BUTTONS ==================
-    public static void styleButtons(JButton btn, String iconPath, String Text, String tootlTip, Color fondo, Color letras, boolean enabled) {
+    /**
+     * Configura un JButton personalizado.
+     * Aplica color de fondo, color de texto, icono, color de fondo, color de texto, si está habilitado y un mensaje de ayuda.
+     * 
+     * @param btn JButton a configurar
+     * @param text Texto que se mostrará en el JButton
+     * @param iconPath Ruta del icono a mostrar; puede ser null si no debe tener icono
+     * @param backGround Color de fondo del JButton
+     * @param foreGround Color del texto del JButton
+     * @param enabled Si el botón estará habilitado 
+     * @param tootlTip Texto de ayuda para el usuario
+     */
+    public static void styleButtons(JButton btn, String text, String iconPath, Color backGround, Color foreGround, boolean enabled, String tootlTip) {
 
-        btn.setText(Text);
-        btn.setFont(FONT_BOLD);
-
-        ImageIcon normalIcon = createIcon(iconPath);
-        btn.setIcon(normalIcon);
-        btn.setDisabledIcon(normalIcon);
-
-        btn.setBackground(fondo);
-        btn.setForeground(letras);
-        btn.setToolTipText(tootlTip);
+        btn.setText(text);
+        btn.setBackground(backGround);
+        btn.setForeground(foreGround);
         btn.setEnabled(enabled);
-
-        btn.setOpaque(false);
-        btn.setFocusPainted(false);
-        btn.setContentAreaFilled(false);
-        btn.setBorderPainted(false);
-
-        btn.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent e) {
-                if (btn.isEnabled()) {
-                    btn.setBorderPainted(true);
-                    btn.setBorder(BorderFactory.createBevelBorder(1));
-                }
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent e) {
-                btn.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
-            }
-        });
-
-        btn.setUI(new javax.swing.plaf.basic.BasicButtonUI() {
-            @Override
-            public void paint(Graphics g, JComponent c) {
-
-                Graphics2D g2 = (Graphics2D) g.create();
-
-                if (!c.isEnabled()) {
-                    g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.20f));
-                }
-
-                paintRounded(g2, c, 20);
-                super.paint(g2, c);
-                g2.dispose();
-            }
-        });
-        handCursor(btn);
+        btn.setToolTipText(tootlTip);
+        btn.setFont(FONT_BOLD);
+        btn.setIcon(createIcon(iconPath));
+        
+        
+        btn.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_ROUND_RECT);
+        btn.putClientProperty("JButton.arc", 5);
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
-    //================== MENU ITEMS ==================
-    public static void styleMenuItems(JMenuItem item, String iconPath, String text, String toolTip) {
-        item.setText(text == null ? "" : text);
+    /**
+     * Configura un JMenuItem personalizado.
+     * Aplica tamaño, texto, icono, un mensaje de ayuda y cambia el icono (color) al seleccionar un ítem.
+     * 
+     * @param item JMenuItem a configurar
+     * @param text Texto que se mostrará en el JButton
+     * @param iconPath Ruta del icono a mostrar
+     * @param toolTip Texto de ayuda para el usuario
+     */
+    public static void styleMenuAndItems(JMenuItem item, String text, String iconPath, String toolTip, String replaceIcon) {
         item.setOpaque(false);
         item.setContentAreaFilled(false);
         item.setBorderPainted(false);
         item.setPreferredSize(new Dimension(90, 50));
-        item.setIcon(createIcon(iconPath));
-        item.setToolTipText(toolTip);
+
+        item.setText(text == null
+                ? ""
+                : text);
+
+        Icon normalIcon = createIcon(iconPath);
+        item.setIcon(normalIcon);
+
+        String blackIconPath = iconPath.replace(iconPath, replaceIcon); //Remplaza el icono al ser seleccionado el item
+        item.setSelectedIcon(createIcon(blackIconPath));
+        item.setRolloverIcon(createIcon(blackIconPath));
     }
 
-    //================== LISTAS, TABLAS Y COMBOBOX ==================
-    public static void selectionColorTable(JTable table, JScrollPane scroll) {
-        table.setSelectionBackground(LIGHT_PURPLE);
-        table.setSelectionForeground(WHITE_COLOR);
-        table.setBackground(WHITE_COLOR);
+    /**
+     * Configura un JComponent personalizado y un JScroll.
+     * Aplica color de seleccion, color de texto en la selección, color de fondo, JScroll al que pertenece y cursor de mano.
+     * Si es una JTable, aplica el estilo para el encabezado.
+     * 
+     * @param component JComponent a configurar
+     * @param scroll JScrollPane JScrollPane que contiene el JComponent
+     */
+    public static void styleScrollComponent(JComponent component, JScrollPane scroll) {
+        component.setBackground(LIGHT_GREY_COLOR);
+        component.setForeground(MEDIUM_GREY_COLOR);
+        component.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        
+        if (component instanceof JTable) { //Configuración para la tabla
+            JTable table = (JTable) component;
+            table.setSelectionBackground(LIGHT_PURPLE);
+            table.setSelectionForeground(WHITE_COLOR);
 
-        JTableHeader header = table.getTableHeader();
-        header.setPreferredSize(new Dimension(header.getWidth(), 30));
-        header.setFont(UIStyles.FONT_BOLD);
-        header.setBackground(UIStyles.LIGHT_GREY_COLOR);
+            JTableHeader header = table.getTableHeader();
+            header.setPreferredSize(new Dimension(header.getWidth(), 30));
+            header.setFont(FONT_BOLD);
+            header.setBackground(LIGHT_GREY_COLOR);
+            header.setForeground(MEDIUM_GREY_COLOR);
 
-        styleViewScroll(scroll);
-        handCursor(table);
+        } else if (component instanceof JList) { //Configuración para la lista
+            JList<?> list = (JList<?>) component;
+            list.setSelectionBackground(LIGHT_PURPLE);
+            list.setSelectionForeground(WHITE_COLOR);
+            list.setFont(FONT_PLAIN);
+        }
+        
+        //Redondez del borde
+        scroll.putClientProperty( FlatClientProperties.STYLE, "arc: 20; borderColor: #a6a6a6; borderWidth: 0" ); 
     }
 
-    public static void selectionColorList(JList<?> list, JScrollPane scroll) {
-        list.setBackground(LIGHT_GREY_COLOR);
-        list.setSelectionBackground(LIGHT_PURPLE);
-        list.setSelectionForeground(WHITE_COLOR);
-        list.setFont(FONT_PLAIN);
-        styleViewScroll(scroll);
-        handCursor(list);
-    }
+    /**
+     * Configura una JComboBox personalizado.
+     * Aplica esquinas redondeadas y elimina el borde por defecto.
+     * 
+     * @param combo JComboBox a configurar
+     */
+    public static void styleComboBox(JComboBox combo) {
 
-    public static void selectionColorComboBox(JComboBox combo) {
-        combo.setRenderer(new DefaultListCellRenderer() {
+        combo.setRenderer(new DefaultListCellRenderer() { //Cambia el color de fondo y de texto cuando un ítem está seleccionado
             @Override
-            public Component getListCellRendererComponent(
-                    JList<?> list, Object value, int index,
-                    boolean isSelected, boolean cellHasFocus) {
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index,boolean isSelected, boolean cellHasFocus) {
 
                 super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
@@ -183,70 +224,109 @@ public class UIStyles {
             }
         });
 
+        combo.setForeground(DARK_GREY_COLOR);
         combo.setBackground(LIGHT_GREY_COLOR);
         combo.setFont(FONT_PLAIN);
         combo.setEditable(false);
-        handCursor(combo);
+        combo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
-    //================== JSCROLL ==================
-    public static void styleRoundedScroll(JScrollPane scroll, int radius, Color backgroundColor) {
-        scroll.setOpaque(false);
-        scroll.getViewport().setOpaque(false);
-        scroll.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+    /**
+     * Configura una JScrollPane personalizado. Aplica color de seleccion, color de texto en la selección, color de fondo, fuente, si es editable y cursor de mano.
+     * 
+     * @param field
+     * @param leftIconPath
+     * @param placeholder
+     * @param rightIconPath
+     * @param leftAction 
+     */
+    public static void styleField(JTextField field, String leftIconPath, String placeholder, String rightIconPath, Runnable leftAction) {
+        field.setOpaque(false);
+        field.setBorder(UIManager.getBorder("TextField.border"));
+        field.setBackground(MEDIUM_GREY_COLOR);
+        field.setForeground(WHITE_COLOR);
+        field.setCaretColor(LIGHT_PURPLE);
+        field.setFont(FONT_PLAIN);
+        
+        setupLeadingIcon(field, leftIconPath, leftAction); //Icono izquierdo
 
-        scroll.setUI(new javax.swing.plaf.basic.BasicScrollPaneUI() {
+        if (field instanceof JPasswordField) { //Icono derecho
+            setupPasswordVisibilityButton((JPasswordField) field, rightIconPath);
+        } else {
+            setupClearButton(field, rightIconPath);
+        }
+        field.putClientProperty("JTextField.placeholderText", placeholder); //Texto de ayuda
+        field.putClientProperty("JTextField.arc", 30); //Redondez
+    }
+
+    private static void setupLeadingIcon(final JTextField field, String path, final Runnable action) {
+        ImageIcon icon = createIcon(path);
+        if (icon == null) {
+            return;
+        }
+
+        if (action == null) { //Icono decorativo
+            field.putClientProperty("JTextField.leadingIcon", icon);
+            return;
+        }
+
+        JLabel lbl = createClickableIcon(icon); //Icono con acción
+        field.putClientProperty("JTextField.leadingComponent", lbl);
+
+        lbl.addMouseListener(new MouseAdapter() {
             @Override
-            public void paint(Graphics g, JComponent c) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-                g2.setColor(backgroundColor);
-                g2.fillRoundRect(0, 0, c.getWidth(), c.getHeight(), radius, radius);
-
-                g2.dispose();
-                super.paint(g, c);
+            public void mouseClicked(MouseEvent e) {
+                action.run();
+                field.requestFocus();
             }
         });
+        lbl.setToolTipText("Paste from clipboard");
     }
 
-    //================== TEXT Y PASSWORD ==================
-    public static void addIconsTextField(JTextField txtField, String leftIconPath, String rightIconPath, String text) {
-        ImageIcon leftIcon = new ImageIcon(UIStyles.class.getResource(leftIconPath));
-        ImageIcon rightIcon = new ImageIcon(UIStyles.class.getResource(rightIconPath));
-        configureCommonTextFieldProps(txtField, text);
-
-        if (txtField instanceof JPasswordField) {
-            txtField.setUI(new BasicPasswordFieldUI() {
-                @Override
-                public void update(Graphics g, JComponent c) {
-                    paintRounded(g, c, 15);
-                    paintSafely(g);
-                }
-
-                @Override
-                protected void paintSafely(Graphics g) {
-                    paintFieldIcons(g, txtField, leftIcon, rightIcon);
-                    super.paintSafely(g);
-                }
-            });
-        } else {
-            txtField.setUI(new javax.swing.plaf.basic.BasicTextFieldUI() {
-                @Override
-                public void update(Graphics g, JComponent c) {
-                    paintRounded(g, c, 15);
-                    paintSafely(g);
-                }
-
-                @Override
-                protected void paintSafely(Graphics g) {
-                    paintFieldIcons(g, txtField, leftIcon, rightIcon);
-                    super.paintSafely(g);
-                }
-            });
+    private static void setupPasswordVisibilityButton(final JPasswordField pf, String path) {
+        ImageIcon icon = createIcon(path);
+        if (icon == null) {
+            return;
         }
-        addPlaceholder(txtField, text);
+
+        JLabel lbl = createClickableIcon(icon);
+        pf.putClientProperty("JTextField.trailingComponent", lbl);
+
+        lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            pf.setEchoChar(pf.getEchoChar() == 0 ? '•' : 0);
+            pf.requestFocus();
+        }
+    });
+        lbl.setToolTipText("Show Password");
     }
+
+    private static void setupClearButton(final JTextField field, String path) {
+        ImageIcon icon = createIcon(path);
+        if (icon == null) {
+            return;
+        }
+
+        JLabel lbl = createClickableIcon(icon);
+        field.putClientProperty("JTextField.trailingComponent", lbl);
+
+        lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            field.setText("");
+            field.requestFocus();
+        }
+    });
+
+        lbl.setToolTipText("Clear field");
+    }
+    
+    private static JLabel createClickableIcon(ImageIcon icon) {
+    JLabel lbl = new JLabel(icon);
+    lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    return lbl;
+}
 
     //================== SPINNER ==================
     public static void styleSpinner(JSpinner spinner) {
@@ -263,7 +343,7 @@ public class UIStyles {
             textField.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
         }
         spinner.setBorder(BorderFactory.createLineBorder(DARK_GREY_COLOR, 1));
-        handCursor(spinner);
+        spinner.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
     //================== PROGRESSBAR ==================
@@ -278,39 +358,8 @@ public class UIStyles {
 
         bar.setOpaque(false);
         bar.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
-
-        bar.setUI(new javax.swing.plaf.basic.BasicProgressBarUI() {
-            @Override
-            protected void paintDeterminate(Graphics g, JComponent c) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-                int width = c.getWidth();
-                int height = c.getHeight();
-                int arc = height;
-
-                double percent = bar.getPercentComplete();
-                if (percent > 0) {
-                    int progressWidth = (int) (width * percent);
-                    g2.setColor(LIGHT_PURPLE);
-                    g2.fillRoundRect(0, 0, progressWidth, height, arc, arc);
-                }
-
-                if (bar.isStringPainted()) {
-                    g2.setColor(BLACK_COLOR);
-                    paintString(g, 0, 0, width, height, 0, c.getInsets());
-                }
-                g2.dispose();
-            }
-        });
     }
 
-    //================== CURSOR ==================
-    public static void handCursor(JComponent... components) {
-        for (JComponent component : components) {
-            component.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        }
-    }
 
     // ================== UTILIDADES PRIVADAS==================
     private static ImageIcon createIcon(String path) {
@@ -320,78 +369,8 @@ public class UIStyles {
         return new ImageIcon(UIStyles.class.getResource(path));
     }
 
-    private static void styleViewScroll(JScrollPane scroll) {
-        scroll.setBorder(BorderFactory.createLineBorder(LIGHT_GREY_COLOR, 1));
-        scroll.getViewport().setBackground(DARK_GREY_COLOR);
-    }
 
-    //Propiedades de los fields
-    private static void configureCommonTextFieldProps(JTextField field, String text) {
-        field.setOpaque(false);
-        field.setBorder(BorderFactory.createEmptyBorder(0, 40, 0, 40));
-        field.setBackground(MEDIUM_GREY_COLOR);
-        field.setForeground(WHITE_COLOR);
-        field.setCaretColor(WHITE_COLOR);
-        field.setFont(FONT_PLAIN);
-        field.setToolTipText(text);
-    }
 
-    //Texto mostrado en txtFiels y PasswordFields
-    private static void addPlaceholder(JTextField field, String placeholder) {
-        field.setText(placeholder);
-        field.setForeground(Color.GRAY);
-
-        field.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusGained(java.awt.event.FocusEvent e) {
-                if (field.getText().equals(placeholder)) {
-                    field.setFont(FONT_PLAIN);
-                    field.setText("");
-                    field.setForeground(WHITE_COLOR);
-                }
-            }
-
-            @Override
-            public void focusLost(java.awt.event.FocusEvent e) {
-                if (field.getText().isEmpty()) {
-                    field.setText(placeholder);
-                    field.setForeground(Color.GRAY);
-                } else {
-                    field.setForeground(WHITE_COLOR); // Si hay una URL, se queda BLANCO
-                }
-            }
-        });
-    }
     
-    public static void resetPlaceholder(JTextField field, String placeholder) {
-        field.setText(placeholder);
-        field.setForeground(java.awt.Color.GRAY);
-        field.getParent().requestFocusInWindow();
-    }
-
-    // Método centralizado para pintar los iconos
-    private static void paintFieldIcons(Graphics g, JComponent c, ImageIcon leftIcon, ImageIcon rightIcon) {
-        Graphics2D g2 = (Graphics2D) g.create();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        // Icono Izquierdo
-        int yLeft = (c.getHeight() - leftIcon.getIconHeight()) / 2;
-        leftIcon.paintIcon(c, g2, 10, yLeft);
-
-        // Icono Derecho
-        int yRight = (c.getHeight() - rightIcon.getIconHeight()) / 2;
-        int xRight = c.getWidth() - rightIcon.getIconWidth() - 10;
-        rightIcon.paintIcon(c, g2, xRight, yRight);
-
-        g2.dispose();
-    }
-
-    //Bordes redondeados
-    private static void paintRounded(Graphics g, JComponent c, int arc) {
-        Graphics2D g2 = (Graphics2D) g.create();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(c.getBackground());
-        g2.fillRoundRect(0, 0, c.getWidth(), c.getHeight(), arc, arc);
-        g2.dispose();
-    }
+    
 }

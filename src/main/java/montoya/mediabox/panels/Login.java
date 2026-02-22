@@ -1,7 +1,6 @@
 package montoya.mediabox.panels;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.event.*;
 import javax.swing.*;
 import montoya.mediabox.MainFrame;
@@ -66,7 +65,7 @@ public class Login extends JPanel{
         UIStyles.styleCheckBox(remember, "Remember me", "Remember credentials");
         this.add(remember, "align center, gaptop 10");
 
-        UIStyles.styleButtons(btnLogin, "/images/login.png","", "Login user", UIStyles.LIGHT_PURPLE, new Color(0, 0, 0, 0), true);
+        UIStyles.styleButtons(btnLogin, null, "/images/login.png", UIStyles.LIGHT_PURPLE, new Color(0, 0, 0, 0), true, "Login user");
         this.add(btnLogin, "align center, w 70!, h 70!, gaptop 20");
 
         lblMessage.setHorizontalAlignment(SwingConstants.CENTER);
@@ -75,71 +74,14 @@ public class Login extends JPanel{
 
     //Estilo del JTextField email
     private void configemailField() {
-        UIStyles.addIconsTextField(txtEmail, "/images/email2.png", "/images/delete_url.png", "Enter email");
-
-        txtEmail.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int width = txtEmail.getWidth();
-
-                if (e.getX() >= width -30){
-                    txtEmail.setText("");
-                }
-            }
-        });
-
-        txtEmail.addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                int width = txtEmail.getWidth();
-
-                if (e.getX() >= width -30) {
-                    UIStyles.handCursor(txtEmail);
-                } else {
-                    txtEmail.setCursor(new Cursor(Cursor.TEXT_CURSOR));
-                }
-            }
-        });
+        UIStyles.styleField(txtEmail, "/images/email2.png", "Enter email", "/images/delete_url.png", null);
     }
     
     //Estilo del JPasswordField password
     private void configPasswordField() {
-        UIStyles.addIconsTextField(txtPassword, "/images/pss.png", "/images/show.png", "Enter password");
+        UIStyles.styleField(txtPassword, "/images/pss.png", "Enter password", "/images/show.png", null);
         
         txtPassword.setEchoChar('•');
-        isPasswordVisible = false;
-
-        txtPassword.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int width = txtPassword.getWidth();
-                
-
-                if (e.getX() >= width -30){
-                    
-                    isPasswordVisible = !isPasswordVisible;
-                    
-                    if(isPasswordVisible){
-                        txtPassword.setEchoChar((char) 0);
-                    } else {
-                    txtPassword.setEchoChar('•');
-                }
-                }
-            }
-        });
-
-        txtPassword.addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                int width = txtPassword.getWidth();
-
-                if (e.getX() >= width -30) {
-                    UIStyles.handCursor(txtPassword);
-                } else {
-                    txtPassword.setCursor(new Cursor(Cursor.TEXT_CURSOR));
-                }
-            }
-        }); 
     }
     
     //Al pulsar ENTER hace login

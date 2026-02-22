@@ -2,8 +2,8 @@
 package montoya.mediabox.fileInformation;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.AbstractCellEditor;
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
@@ -19,134 +19,136 @@ import montoya.mediabox.panels.InfoMedia;
 public class TableActions extends AbstractCellEditor implements TableCellRenderer, TableCellEditor {
 
     private final JPanel panel;
-    private final JButton btnPlay, btnDelete, btnDownload;
+    private final JLabel lblPlay, lblDelete, lblDownload;
     private final JTable table;
-    private final FileTableModel model;
     private final InfoMedia infoMedia;
 
-    public TableActions(JTable table, int column, FileTableModel model, InfoMedia infoMedia) {
+    public TableActions(JTable table, int column, InfoMedia infoMedia) {
         this.table = table;
-        this.model = model;
         this.infoMedia = infoMedia;
 
-        this.panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 2, 0)); //Panel que contiene los botones de la columna
-        this.panel.setOpaque(false);
+        panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 4));
+        panel.setOpaque(true);
 
-        this.btnPlay = createButton("/images/play.png", "Reproduce");
-        this.btnDelete = createButton("/images/delete.png", "Delete file");
-        this.btnDownload = createButton("/images/download.png", "Download");
+        lblPlay = createLabel("/images/play.png");
+        lblDelete = createLabel("/images/delete.png");
+        lblDownload = createLabel("/images/download.png");
 
-        actionPlay(btnPlay);
-        actionDelete(btnDelete);
-        actionDownload(btnDownload);
+        lblPlay.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                onPlay();
+            }
+        });
 
-        panel.add(btnPlay);
-        panel.add(btnDelete);
-        panel.add(btnDownload);
+        lblDelete.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                onDelete();
+            }
+        });
+
+        lblDownload.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                onDownload();
+            }
+        });
+
+        panel.add(lblPlay);
+        panel.add(lblDelete);
+        panel.add(lblDownload);
 
         TableColumn tableColumn = table.getColumnModel().getColumn(column);
         tableColumn.setCellRenderer(this);
         tableColumn.setCellEditor(this);
     }
-    
-    //Establecer acción al botón play de la columna
-    private void actionPlay(JButton btn){
-        
-        btn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                infoMedia.playSelectedFile();
-                fireEditingStopped();
-            }
-        });
+
+    // ---------------- Actions ----------------
+    private void onPlay() {
+        stopEditing();
+        infoMedia.playSelectedFile();
     }
-    
-    //Establecer acción al botón delete de la columna
-    private void actionDelete(JButton btn) {
 
-        btn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                fireEditingStopped();
-                infoMedia.deleteSelectedFile();
-            }
-        });
+    private void onDelete() {
+        stopEditing();
+        infoMedia.deleteSelectedFile();
     }
-    
-    //Establecer acción al botón download de la columna
-    private void actionDownload(JButton btn) {
 
-        btn.addActionListener(new ActionListener() {
+    private void onDownload() {
+        stopEditing();
+        infoMedia.downloadFile();
+    }
+
+    // Método auxiliar para cerrar el editor suavemente
+    private void stopEditing() {
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                int row = table.getEditingRow();
-
-                if (row == -1) {
-                    row = table.rowAtPoint(panel.getLocation());
-                }
-
-                if (row != -1) {
+            public void run() {
+                if (table.isEditing()) {
                     fireEditingStopped();
-                    table.setRowSelectionInterval(row, row);
-                    infoMedia.downloadFile();
                 }
             }
         });
     }
 
-    //Controla que botones mostrar dependiendo de la carpeta seleccionada
-    private void updateActionVisibility() {
-        boolean isNetwork = infoMedia.isNetworkFileSelected();
-        btnDownload.setVisible(isNetwork);
-        btnPlay.setVisible(!isNetwork);
-        btnDelete.setVisible(!isNetwork);
-    }
-
-    //Método auxiliar para crear botones con icono (limpia tu constructor)
-    private JButton createButton(String iconPath, String toolTip) {
-        JButton btn = new JButton();
+    // ---------------- Helpers ----------------
+    private JLabel createLabel(String iconPath) {
+        JLabel label = new JLabel();
         try {
             ImageIcon icon = new ImageIcon(getClass().getResource(iconPath));
             Image img = icon.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH);
-            btn.setIcon(new ImageIcon(img));
-        } catch (Exception e) {
-            btn.setText("?");
+            label.setIcon(new ImageIcon(img));
+        } catch (Exception ex) {
+            label.setText("?");
         }
-        btn.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        btn.setFocusPainted(false);
-        btn.setBorderPainted(false);
-        btn.setContentAreaFilled(false);
-        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btn.setToolTipText(toolTip);
-        return btn;
+        label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        label.setOpaque(false);
+        return label;
     }
 
-    //Dibuja celda mostrando los botones dependiendo de la carpeta seleccionada
+    private void updateActionVisibility() {
+        boolean isNetwork = infoMedia.isNetworkFileSelected();
+        lblDownload.setVisible(isNetwork);
+        lblPlay.setVisible(!isNetwork);
+        lblDelete.setVisible(!isNetwork);
+    }
+
+    // ---------------- Renderer ----------------
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         updateActionVisibility();
-        if (isSelected) {
-            panel.setBackground(table.getSelectionBackground());
-            panel.setOpaque(true);
-        } else {
-            panel.setBackground(table.getBackground());
-            panel.setOpaque(false);
-        }
-
+        panel.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
         panel.setToolTipText(infoMedia.isNetworkFileSelected() ? "Download file" : "Play / Delete");
         return panel;
     }
 
-    //Botones interactivos
+    // ---------------- Editor ----------------
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         updateActionVisibility();
+        panel.setBackground(table.getSelectionBackground());
         return panel;
     }
 
-    //Deveulve valor de la celda
     @Override
     public Object getCellEditorValue() {
-        return "";
+        return null;
     }
+    
+public String getToolTipText() {
+    // Si el panel no es nulo, buscamos qué hay bajo el ratón
+    if (panel != null) {
+        PointerInfo pi = MouseInfo.getPointerInfo();
+        Point p = pi.getLocation();
+        SwingUtilities.convertPointFromScreen(p, panel);
+        
+        Component c = panel.getComponentAt(p);
+        if (c instanceof JLabel) {
+            return ((JLabel) c).getToolTipText();
+        }
+    }
+    return null;
+}
+
 }

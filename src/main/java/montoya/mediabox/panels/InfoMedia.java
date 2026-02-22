@@ -45,7 +45,7 @@ public class InfoMedia extends javax.swing.JPanel {
         tblMedia.setRowHeight(25);
         ToolTipManager.sharedInstance().registerComponent(tblMedia);
 
-        new TableActions(tblMedia, 4, tblModel, this); //Botones de acción
+        new TableActions(tblMedia, 4, this); //Botones de acción
         
         setupLayout();
         applyStylesComponent();
@@ -75,13 +75,11 @@ public class InfoMedia extends javax.swing.JPanel {
     //Aplica estilos a los componentes
     private void applyStylesComponent() {
         UIStyles.panelsBorders(this, UIStyles.DARK_GREY_COLOR, 30);
-        UIStyles.selectionColorList(folderList, scrFolderList);
-        UIStyles.selectionColorTable(tblMedia, scrTableMedia);
-        UIStyles.selectionColorComboBox(cbbxTypeFilter);
-        UIStyles.styleRoundedScroll(scrFolderList, 20, UIStyles.LIGHT_GREY_COLOR);
-        UIStyles.styleRoundedScroll(scrTableMedia, 20, UIStyles.LIGHT_GREY_COLOR);
+        UIStyles.styleScrollComponent(folderList, scrFolderList);
+        UIStyles.styleScrollComponent(tblMedia, scrTableMedia);
+        UIStyles.styleComboBox(cbbxTypeFilter);
         cbbxTypeFilter.setEditable(true);
-        UIStyles.styleButtons(btnUpload,"/images/upload.png", "UPLOAD", "Upload file to API", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true);
+        UIStyles.styleButtons(btnUpload, "UPLOAD", "/images/upload.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Upload file to API");
     }
 
     //Añade los filtros a JComboBox

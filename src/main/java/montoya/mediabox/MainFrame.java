@@ -66,10 +66,10 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         initLookAndFeelMenu(); //Colores de MenuBar
         initComponents(); //Inicializa los componentes
+        initContainer(); //Inicialización del contenedor de los JPanel
         initFrameConfig(); //Título, tamaño e icono del JFrame
         initMenuAndItems(); //Estilos aplicados a JMenuBar y JMenuItem
         setMenuVisible(false); //Visibilidad del Menú
-        initContainer(); //Inicialización del contenedor de los JPanel
         initPanels(); //Instáncias de los distintos JPanel
         initNavigation(); //Organiza las vistas
     }
@@ -79,6 +79,7 @@ public class MainFrame extends JFrame {
      * {@link UIManager}.
      */
     private void initLookAndFeelMenu(){
+        UIManager.put("PopupMenu.background", UIStyles.MEDIUM_GREY_COLOR);
         UIManager.put("MenuItem.selectionBackground", UIStyles.LIGHT_PURPLE);
         UIManager.put("Menu.selectionBackground", UIStyles.MEDIUM_GREY_COLOR);
         UIManager.put("MenuItem.selectionForeground", UIStyles.BLACK_COLOR);
@@ -100,14 +101,14 @@ public class MainFrame extends JFrame {
      * {@link UIStyles}.
      */
     private void initMenuAndItems(){
-        UIStyles.styleMenuItems(mnuEdit, "/images/edit.png",null, "Settings");
-        UIStyles.styleMenuItems(mnuFile, "/images/logout_exit.png",null, "Logout or Exit");
-        UIStyles.styleMenuItems(mnuHelp, "/images/help.png",null, "Information MediaBox");
+        UIStyles.styleMenuAndItems(mnuEdit, null, "/images/edit.png", "Settings", "");
+        UIStyles.styleMenuAndItems(mnuFile, null, "/images/logout_exit.png", "Logout or Exit", "");
+        UIStyles.styleMenuAndItems(mnuHelp, null, "/images/help.png", "Information MediaBox", "");
         
-        UIStyles.styleMenuItems(itemExit, "/images/exit.png", "Exit", "Close App");
-        UIStyles.styleMenuItems(itemLogout, "/images/logout.png", "Logout", "Return to login");
-        UIStyles.styleMenuItems(itemPreferences, "/images/settings.png", "Settings", "Edit settings");
-        UIStyles.styleMenuItems(itemAbout, "/images/information.png", "About", "Information MediaBox");
+        UIStyles.styleMenuAndItems(itemExit, "Exit", "/images/exit.png", "Close App", "/images/exit_black.png");
+        UIStyles.styleMenuAndItems(itemLogout, "Logout", "/images/logout.png", "Return to login", "/images/logout_black.png");
+        UIStyles.styleMenuAndItems(itemPreferences, "Settings", "/images/settings.png", "Edit settings", "/images/settings_black.png");
+        UIStyles.styleMenuAndItems(itemAbout, "About", "/images/information.png", "Information MediaBox", "/images/information_black.png");
     }
     
     /**
@@ -130,12 +131,17 @@ public class MainFrame extends JFrame {
     /**
      * Inicializa el contenedor permitiendo el intercambio entre las distintas vistas.
      */
-    private void initContainer(){
+    private void initContainer() {
         layout = new CardLayout();
         container = new JPanel(layout);
         cardManager = new CardManager(container, layout);
-        this.setContentPane(container);
         this.setResizable(true);
+        
+        this.setJMenuBar(null);
+        this.getContentPane().setLayout(new java.awt.BorderLayout());
+        this.getContentPane().add(container, java.awt.BorderLayout.CENTER);
+        this.getContentPane().add(menuBar, java.awt.BorderLayout.NORTH);
+        this.getContentPane().remove(mediaPollingComponent);
     }
     
     /**
@@ -340,14 +346,19 @@ public class MainFrame extends JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Metal".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            
+            // Esto activa el tema oscuro de FlatLaf
+            com.formdev.flatlaf.FlatDarkLaf.setup();
+
+            UIManager.put("Component.arc", 15);
+            UIManager.put("TextComponent.arc", 15);
+
+            //Color de foco de los componentes
+            UIManager.put("Component.focusColor", UIStyles.LIGHT_PURPLE);
+            UIManager.put("Component.focusedBorderColor", UIStyles.LIGHT_PURPLE);
+            UIManager.put("TextComponent.focusedBorderColor", UIStyles.LIGHT_PURPLE);
+
+        } catch (Exception ex) {
+            System.err.println("No se pudo iniciar FlatLaf, usando tema por defecto.");
         }
         //</editor-fold>
 

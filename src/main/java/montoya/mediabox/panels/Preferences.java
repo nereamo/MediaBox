@@ -67,22 +67,22 @@ public class Preferences extends javax.swing.JPanel {
         this.setBackground(UIStyles.BLACK_COLOR);
         UIStyles.panelsBorders(pnlPref, UIStyles.DARK_GREY_COLOR, 30);
         
-        UIStyles.styleFixLabel(lblPath, "Temp Path: ", "");
-        UIStyles.addIconsTextField(txtPathTemp,"","", "Select folder for temporary files...");
-        UIStyles.styleButtons(btnBrowseTemp, "/images/folder.png","", "Select Folder", UIStyles.LIGHT_PURPLE, new Color (0,0,0), true);
+        UIStyles.styleFixLabel(lblPath, "Temp Path: ", null);
+        UIStyles.styleField(txtPathTemp, null, "Select folder for temporary files...", null, null);
+        UIStyles.styleButtons(btnBrowseTemp, "","/images/folder.png", UIStyles.LIGHT_PURPLE, new Color (0,0,0),true, "Select Folder");
         
-        UIStyles.styleFixLabel(lblM3u, "File .m3u: ", "");
+        UIStyles.styleFixLabel(lblM3u, "File .m3u: ", null);
         UIStyles.styleCheckBox(chkCreate,"Create", "Create files .M3U");
         
-        UIStyles.styleFixLabel(lblSpeed, "Speed (MB/s): ", "");
-        UIStyles.styleFixLabel(lblSpeedValue, "" + spnSpeed.getValue() + " MB/s", "");
+        UIStyles.styleFixLabel(lblSpeed, "Speed (MB/s): ", null);
+        UIStyles.styleFixLabel(lblSpeedValue, "" + spnSpeed.getValue() + " MB/s", null);
         UIStyles.styleSpinner(spnSpeed);
         
-        UIStyles.styleFixLabel(lblYtDlp, "Location yt-dlp: ", "");
-        UIStyles.styleButtons(btnYtDlp,"/images/search.png", "Automatic search yt-dlp", "Automatic search yt-dlp", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true);
+        UIStyles.styleFixLabel(lblYtDlp, "Location yt-dlp: ", null);
+        UIStyles.styleButtons(btnYtDlp, "Automatic search yt-dlp", "/images/search.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Automatic search yt-dlp");
         
-        UIStyles.styleButtons(btnSave, "/images/save.png", "Save", "Save changes", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true);
-        UIStyles.styleButtons(btnReturn, "/images/return.png", "Return", "Discard changes", UIStyles.LIGHT_GREY_COLOR, UIStyles.DARK_GREY_COLOR, true);
+        UIStyles.styleButtons(btnSave, "Save", "/images/save.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Save changes");
+        UIStyles.styleButtons(btnReturn, "Return", "/images/return.png", UIStyles.LIGHT_GREY_COLOR, UIStyles.DARK_GREY_COLOR, true, "Discard changes");
     }
     
     //Velocidad de descarga hasta un max de 100MB/s
@@ -124,7 +124,6 @@ public class Preferences extends javax.swing.JPanel {
         lblM3u.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(lblM3u);
 
-        chkCreate.setBackground(new java.awt.Color(61, 61, 64));
         chkCreate.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         chkCreate.setForeground(new java.awt.Color(255, 255, 255));
         chkCreate.setToolTipText("");
@@ -258,7 +257,7 @@ public class Preferences extends javax.swing.JPanel {
     //Cancelar preferencias
     private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
         if (JOptionPane.showConfirmDialog(null, "Changes will not be saved. Do you want to continue?", "Cancel", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            UIStyles.resetPlaceholder(txtPathTemp, "Select folder for temporary files...");
+            txtPathTemp.setText("");
             chkCreate.setSelected(false);
             spnSpeed.setValue(0.0);
             cardManager.showCard(CARD_DOWN);
