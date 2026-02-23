@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * Metodos necesarios para la creación, guardado y recuperación del archivo .json que almacena informacion de las descargas
+ * Guarda y recupera información de las desacargas
  *
  * @author Nerea
  */

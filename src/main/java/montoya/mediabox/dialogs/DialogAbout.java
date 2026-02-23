@@ -2,7 +2,6 @@ package montoya.mediabox.dialogs;
 
 import java.awt.*;
 import javax.swing.*;
-import java.util.logging.Logger;
 import montoya.mediabox.configUI.UIStyles;
 
 /**
@@ -12,8 +11,12 @@ import montoya.mediabox.configUI.UIStyles;
  */
 public class DialogAbout extends JDialog {
     
-    private static final Logger logger = Logger.getLogger(DialogAbout.class.getName());
-
+    /**
+     * Constructor que inicializa un dialogo modal que muestra información de la aplicación.
+     * 
+     * @param parent Ventana padre donde se mostrará el dialogo
+     * @param modal El dialogo puede ser mpdal, bloqueando la ventana hasta cerrarlo
+     */
     public DialogAbout(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();

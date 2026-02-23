@@ -151,7 +151,7 @@ public class InfoMedia extends javax.swing.JPanel {
         }
 
         try {
-            fileManager.playFile(info);
+            fileManager.openLocalFile(info);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error opening file.");
         }
@@ -166,7 +166,7 @@ public class InfoMedia extends javax.swing.JPanel {
 
         int confirm = JOptionPane.showConfirmDialog(this, "¿Borrar " + info.getName() + "?", "Confirmar", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            fileManager.deleteFile(info);
+            fileManager.deleteLocalFile(info);
             refreshFiles();
         }
     }
@@ -221,7 +221,7 @@ public class InfoMedia extends javax.swing.JPanel {
 
         if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
-                fileManager.downloadFile(info, fc.getSelectedFile());
+                fileManager.downloadFileFromApi(info, fc.getSelectedFile());
                 refreshFiles();
                 JOptionPane.showMessageDialog(this, "Download completed!");
             } catch (Exception ex) {
@@ -310,7 +310,7 @@ public class InfoMedia extends javax.swing.JPanel {
         JFileChooser fc = new JFileChooser();
         if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
-                fileManager.uploadFile(fc.getSelectedFile());
+                fileManager.uploadFileToApi(fc.getSelectedFile());
                 refreshFiles();
                 JOptionPane.showMessageDialog(this, "Uplodad completed");
             } catch (Exception ex) {

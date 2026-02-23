@@ -16,17 +16,33 @@ import montoya.mediapollingcomponent.MediaPollingComponent;
 import montoya.mediapollingcomponent.apiclient.Media;
 
 /**
- * Clase encargada de gestionar los archivos mostrados en la tabla.
- * Muestra archivos de API, locales y que esten en ambos sitios a la vez.
+ * Gestiona las operaciones sobre los archivos mostrados en la aplicación.
+ * Permite obtener, filtrar, descargar, subir, eliminar y abrir archivos.
+ * 
  * @author Nerea
  */
 public class FileManager {
     
+    /** {@link DirectoryInformation} Proporciona información del directorio y sus descargas. */
     private DirectoryInformation directoryInfo;
+    
+    /** {@link TypeFilter} Permite aplicar el filtro por tipo de archivo y por directorio. */
     private TypeFilter typeFilter;
+    
+    /** {@link MediaPollingComponent} Listener que notifica nuevos medios en la API. */
     private MediaPollingComponent mediaPollingComponent;
+    
+    /** {@link FileProperties} Gestiona las propiedades de los archivos descargados. */
     private FileProperties fileProperties;
     
+    /**
+     * Constructor que permite crear un objeto
+     * 
+     * @param directoryInfo Proporciona información de los archivos locales
+     * @param typeFilter Aplica filtro por directorio y tipo de archivo
+     * @param mediaPollingComponent Destiona la comunicación entre API y aplicación
+     * @param fileProperties Gestiona las propiedades de los archivos
+     */
     public FileManager(DirectoryInformation directoryInfo,TypeFilter typeFilter, MediaPollingComponent mediaPollingComponent, FileProperties fileProperties){
         
         this.directoryInfo = directoryInfo;
@@ -35,7 +51,13 @@ public class FileManager {
         this.fileProperties = fileProperties;
     }
     
-    //Obtiene los archivos locales dependiendo del directorio seleccionado
+    /**
+     * Obtiene los archivos locales pertenecientes al directorio seleccioando
+     * 
+     * @param folderPath Ruta del directorio seleccionado
+     * @param filter Filtro de tipo de archivo
+     * @return Devuelve la lista de archivos que coincidad con directorio y filtro
+     */
     public List<FileInformation> getLocalFiles(String folderPath, String filter) {
         List<FileInformation> localFiles = typeFilter.filterByDirectory(directoryInfo.getFileList(), folderPath);
 
@@ -43,7 +65,12 @@ public class FileManager {
     }
     
     
-    //Obtiene los archivos de API y local
+    /**
+     * Obtiene los archivos presentes en la API y local.
+     * 
+     * @param filter Filtro de tipo de archivo
+     * @return Devuelve la lista de archivos que están presentes en ambos lados
+     */
     public List<FileInformation> getBothFiles(String filter) {
         List<FileInformation> bothFiles = new ArrayList<>();
 
@@ -65,7 +92,12 @@ public class FileManager {
         return bothFiles;
     }
     
-    //Obtiene los archivos de API
+    /**
+     * Obtiene los archivos presentes en la API
+     * 
+     * @param filter Filtro de tipo de archivo
+     * @return Devuelve la lista de archivos que están presentes en la API
+     */
     public List<FileInformation> getNetworkFiles(String filter) {
         List<FileInformation> networkFiles = new ArrayList<>();
         String token = mediaPollingComponent.getToken();
@@ -80,7 +112,7 @@ public class FileManager {
             //Obtener archivos API
             List<Media> mediaList = mediaPollingComponent.getAllMedia(token);
 
-            //Convertir Medi en FileInformation
+            //Convertir Media en FileInformation
             for (Media m : mediaList) {
                 FileInformation fi = new FileInformation(m.mediaFileName, 0, m.mediaMimeType, null, "API FILES");
                 networkFiles.add(fi);
@@ -97,7 +129,13 @@ public class FileManager {
         return networkFiles;
     }
     
-    public void playFile(FileInformation  file) throws IOException{
+    /**
+     * Permite reproducir el archivo seleccionado en la tabla
+     * 
+     * @param file Archivo que se va a reproducir
+     * @throws IOException Exception si el archivo no existe o no se puede reproducir
+     */
+    public void openLocalFile(FileInformation  file) throws IOException{
         
         File f = new File(file.getFolderPath(), file.getName());
         if(!f.exists()){
@@ -106,29 +144,57 @@ public class FileManager {
         Desktop.getDesktop().open(f);
     }
     
-    public void deleteFile(FileInformation fileInfo) {
+    /**
+     * Elimina fisicamente el archivo seleccionado en la tabla y actualiza la información de las descargas
+     * 
+     * @param fileInfo Información del archivo a eliminar
+     */
+    public void deleteLocalFile(FileInformation fileInfo) {
         fileProperties.deleteDownload(fileInfo, directoryInfo.getFileList(), directoryInfo.getFolderPaths());
     }
     
-    public void downloadFile(FileInformation fileInfo, File folder) throws Exception {
+    /**
+     * Descarga un archivo de la API y lo guarda en la carpeta de distino elegida por el usuario
+     *
+     * @param fileInfo Información del archivo descargado
+     * @param folder Directorio destino de la descarga
+     * @throws Exception si el archivo no existe o no se puede descargar
+     */
+    public void downloadFileFromApi(FileInformation fileInfo, File folder) throws Exception {
         List<Media> mediaList = mediaPollingComponent.getAllMedia(mediaPollingComponent.getToken());
-        Media mediaFile = mediaList.stream()
-                .filter(m -> m.mediaFileName.equals(fileInfo.getName()))
-                .findFirst()
-                .orElseThrow(() -> new Exception("Cannot find media in API"));
 
-        File file = new File(folder, fileInfo.getName());
-        mediaPollingComponent.download(mediaFile.id, file, mediaPollingComponent.getToken());
+        // Buscar archivo por nombre usando bucle normal
+        Media mediaFile = null;
+        for (Media m : mediaList) {
+            if (m.mediaFileName.equals(fileInfo.getName())) {
+                mediaFile = m;
+                break;
+            }
+        }
+        if (mediaFile == null) {
+            throw new Exception("Cannot find media in API");
+        }
 
+        File file = new File(folder, fileInfo.getName()); //Crear objeto File
+
+        mediaPollingComponent.download(mediaFile.id, file, mediaPollingComponent.getToken()); //Descarga archivo de API a local
+
+        //Crea objeto FileInformation para registrar la descarga
         FileInformation newFile = new FileInformation(mediaFile.mediaFileName, file.length(),
                 mediaFile.mediaMimeType, LocalDate.now().toString(), folder.getAbsolutePath());
 
-        fileProperties.addDownload(newFile);
+        fileProperties.addDownload(newFile); //Añade descarga a archivos locales
         
-        this.directoryInfo = fileProperties.loadDownloads();
+        this.directoryInfo = fileProperties.loadDownloads(); //Actualiza información de descargas
     }
 
-    public void uploadFile(File file) throws Exception {
+    /**
+     * Reliza la subida del archivo local a la API
+     * 
+     * @param file Archivo local que se va a subir
+     * @throws Exception si el archivo no existe o no se puede subir
+     */
+    public void uploadFileToApi(File file) throws Exception {
         if (file == null || !file.exists()) {
             throw new Exception("File not found");
         }
@@ -139,7 +205,9 @@ public class FileManager {
     }
     
     
-    //Refresca la lista de archivos
+    /**
+     * Actualiza los archivos descargados almacenados localmente
+     */
     public void refreshFiles(){
         this.directoryInfo = fileProperties.loadDownloads();
     }

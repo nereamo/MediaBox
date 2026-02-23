@@ -13,33 +13,56 @@ import montoya.mediabox.panels.Downloads;
 import montoya.mediabox.panels.InfoMedia;
 
 /**
- * Clase creada con ayuda de Copilot para entender como funciona SwingWorker y que metodos utilizar. SwingWorker ejecuta tareas en segundo plano impidiendo que no se bloquee la GUI. Contiene metodos para descaragar archivos en segundo plano
+ * Clase creada con ayuda de Copilot para entender como funciona SwingWorker y que metodos utilizar. 
+ * SwingWorker ejecuta tareas en segundo plano impidiendo que no se bloquee la GUI. 
  *
  * @author Nerea
  */
 public class DownloadWorker extends SwingWorker<Void, String> {
 
+    /** {@link File} Último archivo descargado */
     private File lastDownloadFile;
+    
+    /** {@link FileTableModel} Modelo de tabla que muetsra los archivos. */
     private final FileTableModel tblModel;
+    
+    /** {@link InfoMedia} Panel que contiene información de los archivos. */
     private InfoMedia infoMedia;
+    
+    /** {@link FileProperties} Gestiona las propiedades de los archivos descargados. */
     private final FileProperties fileProperties;
+    
+    /** {@link Downloads} Panel que permite realizar la descarga. */
     private final Downloads downloadsPanel;
 
+    /** Proceso externo para realizar la descarga */
     private final ProcessBuilder pb;
-    private final String folder;
-    private final JProgressBar barProgress;
-    private final Set<String> folderPaths;
-
-    public DownloadWorker(ProcessBuilder pb, String folder, JProgressBar progressBar, FileTableModel tblModel, FileProperties fileProperties, Set<String> folderPaths, InfoMedia infoMedia, Downloads downloadsPanel) {
+    
+    /** Variables generales */
+    private final String folder; //Directorio
+    private final JProgressBar barProgress; //Componente barra de progreso
+    //private final Set<String> folderPaths; //Colección de directorios
+    
+    public DownloadWorker(ProcessBuilder pb, String folder, JProgressBar progressBar, FileTableModel tblModel, FileProperties fileProperties, InfoMedia infoMedia, Downloads downloadsPanel) {
         this.pb = pb;
         this.folder = folder;
         this.barProgress = progressBar;
         this.tblModel = tblModel;
         this.fileProperties = fileProperties;
-        this.folderPaths = folderPaths;
         this.infoMedia = infoMedia;
         this.downloadsPanel = downloadsPanel;
     }
+
+//    public DownloadWorker(ProcessBuilder pb, String folder, JProgressBar progressBar, FileTableModel tblModel, FileProperties fileProperties, Set<String> folderPaths, InfoMedia infoMedia, Downloads downloadsPanel) {
+//        this.pb = pb;
+//        this.folder = folder;
+//        this.barProgress = progressBar;
+//        this.tblModel = tblModel;
+//        this.fileProperties = fileProperties;
+//        this.folderPaths = folderPaths;
+//        this.infoMedia = infoMedia;
+//        this.downloadsPanel = downloadsPanel;
+//    }
 
     //Devuelve ultimo archivo descargado
     public File getLastDownloadedFile() {
@@ -106,14 +129,6 @@ public class DownloadWorker extends SwingWorker<Void, String> {
         return null;
     }
 
-//    //Recibe el texto enviado de publish y lo muestra en JTextArea
-//    @Override
-//    protected void process(List<String> chunks) {
-//        for (String line : chunks) {
-//            outputArea.append(line + "\n");
-//        }
-//    }
-
     //Se ejecuta cuando doInBackground ha terminado, muestra mensaje de finalización
     @Override
     protected void done() {
@@ -130,7 +145,6 @@ public class DownloadWorker extends SwingWorker<Void, String> {
                     downloadsPanel.showOpenLastButton();
                 }
             });
-        
         
         } catch (Exception e) {
             barProgress.setIndeterminate(false);

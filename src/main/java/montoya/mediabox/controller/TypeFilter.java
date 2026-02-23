@@ -6,11 +6,18 @@ import montoya.mediabox.fileInformation.FileInformation;
 
 /**
  * Clase que aplica el filtrado por directorio y tipo de archivo
+ * 
  * @author Nerea
  */
 public class TypeFilter {
     
-    //Filtramos por directorio seleccionado en la lista
+    /**
+     * Filtra una lista de archivos y muestra los que corresponden al directorio especificado.
+     * 
+     * @param allFiles Lista de los archivos
+     * @param folderPath Ruta del directorio por la que se filtra
+     * @return Lista de archivos pertenecientes al directorio
+     */
     public List<FileInformation> filterByDirectory(List<FileInformation> allFiles, String folderPath) {
         
         List<FileInformation> filter = new ArrayList<>();
@@ -25,7 +32,13 @@ public class TypeFilter {
         return filter;
     }
     
-    //Filtramos por tipo de archivo en el combobox
+    /**
+     * Filtra una lista de archivos y muestra los que corresponden según el tipo de archivo especificado.
+     * 
+     * @param allFiles Lista de los archivos
+     * @param filter Filtro por tipo de archivo
+     * @return Lista de archivos con el mismo tipo de archivo
+     */
     public List<FileInformation> filterByType(List<FileInformation> allFiles, String filter) {
 
         List<FileInformation> applyFilter = new ArrayList<>();
