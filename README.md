@@ -84,12 +84,22 @@ Creación de JSON con libreria Jackson.
 ✔️ Solución
 
     - Cambiar el Layout(null) a CardLayout, añadiendo todos los JPanels a CardLayout y alternar entre ellos.
+
+ ## 🐞 Parpadeo visual en celdas de acción (Flash Blanco):
+
+❌ Problema
+
+    - Al pulsar alguno de los botones de la columna "Actions" la celda sufría un parpadeo blanco momentáneo .
+
+✔️ Solución
+
+    - Sustitución de los botones por JLabels, permitiendo mantener el Look&Feel establecido.
         
 # 🎨 Usabilidad y Experiencia de Usuario
 
 Feedback Visual e Interactividad:
         
-        Los botones han sido resaltados con un borde y el cursor "Hand Cursor".
+    Los botones, campos de texto, y combobox han sido resaltados con un borde y el cursor "Hand Cursor".
 
 Placeholders: 
 
