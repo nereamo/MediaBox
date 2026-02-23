@@ -97,35 +97,35 @@ Creación de JSON con libreria Jackson.
         
 # 🎨 Usabilidad y Experiencia de Usuario
 
-Feedback Visual e Interactividad:
+🖱️ Feedback Visual e Interactividad:
         
     Los botones, campos de texto, y combobox han sido resaltados con un borde y el cursor "Hand Cursor".
 
-Placeholders: 
+✍️ Placeholders: 
 
     Los campos de texto utilizan "sugerencias" para guiar al usuario.
 
-Color y Consistencia: 
+🌈 Color y Consistencia: 
 
     Uso de colores (Púrpuras y Grises oscuros) para diferenciar acciones principales de información secundaria con bordes redondeados asi como seleccionar un elemento del JComboBox, JList, JTable y elementos de la barra de menú.
     
-Mensajes de Ayuda:
+💡 Mensajes de Ayuda:
 
     Uso de *Tooltips* en botones y componentes para proporcionar más información.
 
-Notificación de acciones:
+🔔 Notificación de acciones:
 
     Uso de mensajes emergentes al realizar una acción como guardar las preferencias o volver sin guardar los cambios o cerrar la aplicación o acciones previas que deba realizar antes de una descarga.
     
-Tamaño de ventana: 
+📐 Adaptabilidad: 
 
     Los Paneles y componentes se adaptan a la maximización y minimación de la ventana.
     
-Iconos: 
+🖼️ Iconografía: 
 
     Uso de iconos en campos de texto para realizar acciones, en botones para facilitar la visibilidad y en la tabla para realizar acciones.
 
-Información de progreso:
+⏳ Información del progreso de descarga:
 
     Uso de JProgressBar para informar al usuario del estado de la descarga.
 
