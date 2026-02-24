@@ -68,35 +68,41 @@ public class DownloadWorker extends SwingWorker<Void, String> {
     }
 
     /**
-     * Ejecuta la descarga en segundo plano.
-     * Inicia barra de progreso, detecta el último archivo, registra la descarga en FileProperties y actualiza el panel de información
-     * 
-     * 
+     * Ejecuta la descarga en segundo plano. Inicia barra de progreso, detecta el último archivo, registra la descarga en FileProperties y actualiza el panel de información
+     *
+     *
      * @return {@code null}, ya que el resultado no se utiliza
      * @throws Exception Si ocurre un error durante la ejecución del proceso
      */
     @Override
     protected Void doInBackground() throws Exception {
 
+        boolean errorDetected = false;
+
         SwingUtilities.invokeLater(new Runnable() { //Hilo secundario para progressBar
             @Override
             public void run() {
                 barProgress.setValue(0); //Reinicio del valor
                 barProgress.setString(null); //Elimina el texto mostrado
-                barProgress.setIndeterminate(true); 
+                barProgress.setIndeterminate(true);
             }
         });
 
+        pb.redirectErrorStream(true);
         Process p = pb.start(); //Ejecuta yt-dlp
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream(), "UTF-8"))) {
-            
+
             String line;
-            
+
             while ((line = br.readLine()) != null) { //Lee línea a línea la salida del proceso
                 System.out.println(line);
 
-                //Detecta lineas de progreso
+                if (line.contains("ERROR")) { //Detecta errores de yt-dlp
+                    errorDetected = true;
+                }
+
+                //Detecta el progreso
                 if (line.contains("[download]") && line.contains("%")) {
                     int percent = extractPercentage(line); //Extrae el porcentaje
                     if (percent >= 0 && percent <= 100) {
@@ -106,15 +112,15 @@ public class DownloadWorker extends SwingWorker<Void, String> {
             }
         }
 
-        //Espera a la finalización del proceso
-        if (p.waitFor() == 0) {
-            
+        int exitCode = p.waitFor();
+        if (exitCode == 0 && !errorDetected) { //Verifica el resultado de la descarga
+
             File dir = new File(folder); //Directorio de la descarga
             File[] files = dir.listFiles(); //Lista de archivos del directorio
 
             if (files != null && files.length > 0) {
                 File latest = files[0];
-                
+
                 for (File f : files) { //Busca el archivo más reciente
                     if (f.lastModified() > latest.lastModified()) {
                         latest = f;
@@ -133,6 +139,8 @@ public class DownloadWorker extends SwingWorker<Void, String> {
                     }
                 });
             }
+        } else {
+            throw new Exception("Download failed"); //Si falló la descarag lanza excepción
         }
 
         p.destroy(); //Libera recursos
