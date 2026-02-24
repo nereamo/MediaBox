@@ -126,15 +126,21 @@ public class InfoMedia extends javax.swing.JPanel {
         });
     }
 
-    //Retorna el archivo seleccionado en la tabla
     public FileInformation getSelectedFile() {
-        int row = tblMedia.getSelectedRow();
-        if (row < 0) {
-            return null;
-        }
-        int modelRow = tblMedia.convertRowIndexToModel(row);
-        return tblModel.getFileAt(modelRow);
+    int row = tblMedia.getSelectedRow();
+    if (row < 0 || row >= tblMedia.getRowCount()) {
+        return null; // protección contra índices inválidos
     }
+    try {
+        int modelRow = tblMedia.convertRowIndexToModel(row);
+        if (modelRow < 0 || modelRow >= tblModel.getRowCount()) {
+            return null; // protección adicional
+        }
+        return tblModel.getFileAt(modelRow);
+    } catch (IndexOutOfBoundsException ex) {
+        return null; // protección extra si algo falla
+    }
+}
 
     //Indica si el directorio seleccionado es de la API
     public boolean isNetworkFileSelected() {
@@ -170,23 +176,24 @@ public class InfoMedia extends javax.swing.JPanel {
             refreshFiles();
         }
     }
-
+    
     //Refresca la tabla de archivos después de descargar/subir
     public void refreshFiles() {
 
+        // Guardar carpeta seleccionada (si existe)
         FolderItem selectedFolder = folderList.getSelectedValue();
         String selectedFolderPath = (selectedFolder != null) ? selectedFolder.getFullPath() : null;
 
-        FileInformation selectedFile = getSelectedFile();
-        String selectedFileName = (selectedFile != null) ? selectedFile.getName() : null;
-
+        // Actualizar lista de archivos
         fileManager.refreshFiles();
         allFiles = fileProperties.loadDownloads().getFileList();
         tblModel.setFileList(allFiles);
         tblModel.fireTableDataChanged();
 
+        // Re-inicializar directorios
         initDirectoryList();
 
+        // Restaurar carpeta seleccionada (si todavía existe)
         if (selectedFolderPath != null) {
             ListModel<FolderItem> model = folderList.getModel();
             for (int i = 0; i < model.getSize(); i++) {
@@ -198,15 +205,9 @@ public class InfoMedia extends javax.swing.JPanel {
             }
         }
 
-        if (selectedFileName != null) {
-            for (int i = 0; i < tblModel.getRowCount(); i++) {
-                if (tblModel.getFileAt(i).getName().equals(selectedFileName)) {
-                    int viewRow = tblMedia.convertRowIndexToView(i);
-                    tblMedia.setRowSelectionInterval(viewRow, viewRow);
-                    break;
-                }
-            }
-        }
+        // NO restauramos selección de archivos automáticamente
+        // La tabla quedará sin filas seleccionadas hasta que el usuario haga clic
+        tblMedia.clearSelection();
     }
 
     //Gestiona donde se guarad el archivo ha descargar

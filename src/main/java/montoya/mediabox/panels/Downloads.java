@@ -90,7 +90,6 @@ public class Downloads extends javax.swing.JPanel {
 
         downloadFilePnl.add(btnDownload, "split 2, w 180!, h 50!, gaptop 40, align center");
         downloadFilePnl.add(btnOpenLast, "w 180!, h 50!, gaptop 30, gapleft 20");
-
         downloadFilePnl.add(progressBar, "growx, h 25!, gaptop 50, gapbottom 10, pushy, aligny bottom");
     }
 
@@ -127,10 +126,9 @@ public class Downloads extends javax.swing.JPanel {
     
     //Configuración de ButtonGroup
     private void configRadioButtons(ButtonGroup bg, JRadioButton... buttons) {
-        String[] options = {"mp4", "mkv", "webm", "mp3", "wav", "m4a"};
-        for (int i = 0; i < buttons.length; i++) {
-            bg.add(buttons[i]);
-            buttons[i].setActionCommand(options[i]);
+        for (JRadioButton btn : buttons) {
+            bg.add(btn);
+            btn.setActionCommand(btn.getText().toLowerCase());
         }
         buttons[0].setSelected(true);
     }
@@ -139,7 +137,7 @@ public class Downloads extends javax.swing.JPanel {
     private void styleTxtUrl() {
         UIStyles.styleField(txtUrl, "/images/url.png", "Paste the URL of the file to download", "/images/delete_url.png", this::pasteUrl);
     }
-
+    
     //Configuración de pegar URL a JTextField    
     private void pasteUrl() {
         try {
