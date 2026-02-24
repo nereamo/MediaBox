@@ -3,7 +3,6 @@ package montoya.mediabox.download;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import javax.swing.*;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
@@ -54,74 +53,47 @@ public class DownloadManager {
         this.fileProperties = fileProperties;
     }
 
-    /**
-     * Obtiene ruta de archivos temporales
-     * @return Ruta temporal
-     */
+    /** @return Ruta temporal */
     public String getTempPath() {
         return tempPath;
     }
 
-    /**
-     * Establece ruta de archivos temporales
-     * @param tempPath Ruta temporal
-     */
+    /** @param tempPath Ruta temporal */
     public void setTempPath(String tempPath) {
         this.tempPath = tempPath;
     }
 
-    /**
-     * Obtiene la ubicación del archivo yt-dlp.exe
-     * @return Ruta archivo yt-dlp.exe
-     */
+    /** @return Ruta archivo yt-dlp.exe */
     public String getYtDlpLocation() {
         return ytDlpLocation;
     }
 
-    /**
-     * Establece la ubicación del archivo yt-dlp.exe
-     * @param ytDlpLocation Ruta archivo yt-dlp.exe
-     */
+    /** @param ytDlpLocation Ruta archivo yt-dlp.exe */
     public void setYtDlpLocation(String ytDlpLocation) {
         this.ytDlpLocation = ytDlpLocation;
     }
 
-    /**
-     * Indica si debe crearse la archivo .m3u
-     * @return True para crear y False para no crear
-     */
+    /** @return True para crear y False para no crear */
     public boolean isCreateM3u() {
         return createM3u;
     }
 
-    /**
-     * Configura se debe generar archivo .m3u
-     * @param createM3u True para crear y False para no crear
-     */
+    /** @param createM3u True para crear y False para no crear */
     public void setCreateM3u(boolean createM3u) {
         this.createM3u = createM3u;
     }
 
-    /**
-     * Obtiene la velocidad de descarga
-     * @return Velocidad de descarga
-     */
+    /** @return Velocidad de descarga */
     public double getMaxSpeed() {
         return maxSpeed;
     }
 
-    /**
-     * Establece velocidad de descarga
-     * @param maxSpeed Velocidad descarga
-     */
+    /** @param maxSpeed Velocidad descarga */
     public void setMaxSpeed(double maxSpeed) {
         this.maxSpeed = maxSpeed;
     }
 
-    /**
-     * Obtener el último archivo descargado
-     * @return Último archivo descargado si no es {@code null}
-     */
+    /** @return Último archivo descargado si no es {@code null} */
     public File getLastDownloadedFile() {
         if (downloadWorker != null) {
             return downloadWorker.getLastDownloadedFile();
@@ -137,10 +109,9 @@ public class DownloadManager {
      * @param quality Calidad de video
      * @param progressBar Barra de progresso de la descarga
      * @param tblModel Tabla que contiene los archivos descargados
-     * @param folderPaths Colección de directorios
      * @param downloadsPanel Panel donde se realizan las descargas
      */
-    public void download(String url, String folder, String type, String quality, JProgressBar progressBar, FileTableModel tblModel, Set<String> folderPaths, Downloads downloadsPanel) {
+    public void download(String url, String folder, String type, String quality, JProgressBar progressBar, FileTableModel tblModel, Downloads downloadsPanel) {
         
         if (url.isEmpty() || folder.isEmpty()) { //Verificación de URL y directorio seleccionado
             JOptionPane.showMessageDialog(null, "Please enter a URL and select a folder.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -160,10 +131,6 @@ public class DownloadManager {
         //Objeto DowloadWorker para ejecutar la descarga en segundo plano
         downloadWorker = new DownloadWorker(pb, folder, progressBar, tblModel, fileProperties, infoMedia, downloadsPanel);
         DownloadWorker task = downloadWorker;
-
-//        //Objeto DowloadWorker para ejecutar la descarga en segundo plano
-//        downloadWorker = new DownloadWorker(pb, folder, progressBar, tblModel, fileProperties, folderPaths, infoMedia, downloadsPanel);
-//        DownloadWorker task = downloadWorker;
 
         //Actualiza barra de progreso con el porcentaje
         task.addPropertyChangeListener(evt -> {

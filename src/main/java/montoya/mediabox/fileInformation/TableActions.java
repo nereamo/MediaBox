@@ -1,4 +1,3 @@
-
 package montoya.mediabox.fileInformation;
 
 import java.awt.*;
@@ -135,20 +134,19 @@ public class TableActions extends AbstractCellEditor implements TableCellRendere
     public Object getCellEditorValue() {
         return null;
     }
-    
-public String getToolTipText() {
-    // Si el panel no es nulo, buscamos qué hay bajo el ratón
-    if (panel != null) {
-        PointerInfo pi = MouseInfo.getPointerInfo();
-        Point p = pi.getLocation();
-        SwingUtilities.convertPointFromScreen(p, panel);
-        
-        Component c = panel.getComponentAt(p);
-        if (c instanceof JLabel) {
-            return ((JLabel) c).getToolTipText();
-        }
-    }
-    return null;
-}
 
+    public String getToolTipText() {
+        // Si el panel no es nulo, buscamos qué hay bajo el ratón
+        if (panel != null) {
+            PointerInfo pi = MouseInfo.getPointerInfo();
+            Point p = pi.getLocation();
+            SwingUtilities.convertPointFromScreen(p, panel);
+
+            Component c = panel.getComponentAt(p);
+            if (c instanceof JLabel) {
+                return ((JLabel) c).getToolTipText();
+            }
+        }
+        return null;
+    }
 }

@@ -59,8 +59,6 @@ public class FileTableModel extends AbstractTableModel {
                 return null;
         }
     }
-    
-    
 
     //Devuelve fila seleccionada
     public FileInformation getFileAt(int rowIndex) {

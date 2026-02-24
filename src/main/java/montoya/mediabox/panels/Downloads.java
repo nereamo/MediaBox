@@ -5,6 +5,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import javax.swing.*;
@@ -63,7 +64,7 @@ public class Downloads extends javax.swing.JPanel {
         this.requestFocusInWindow();
     }
 
-    //Posición d elos componentes del panel
+    //Posición de los componentes del panel
     private void setupLayout() {
         this.setLayout(new MigLayout("fill, insets 30, wrap 1", "[grow, center]", "push[grow]50![grow]push"));
         this.add(downloadFilePnl, "grow, center, w 200:840:n, h 150:500:n, gaptop 40");
@@ -96,14 +97,17 @@ public class Downloads extends javax.swing.JPanel {
     //Aplica estilos a los componentes
     private void applyStylesComponent() {
         setBackground(UIStyles.BLACK_COLOR); //Color del panel
+        
         UIStyles.panelsBorders(downloadFilePnl, UIStyles.DARK_GREY_COLOR, 30);
-        UIStyles.styleButtons(btnFolder, "", "/images/folder.png", UIStyles.LIGHT_PURPLE, new Color(0, 0, 0, 0), true, "Select destination folder");
         UIStyles.panelsBorders(pnlVideo, UIStyles.MEDIUM_GREY_COLOR, 15);
         UIStyles.panelsBorders(pnlAudio, UIStyles.MEDIUM_GREY_COLOR, 15);
-        UIStyles.styleButtonGroup("Select format", radioM4a, radioMkv, radioMp3, radioMp4, radioWav, radioWebm);
-        UIStyles.styleComboBox(cbbxQualityFilter);
+        
+        UIStyles.styleButtons(btnFolder, "", "/images/folder.png", UIStyles.LIGHT_PURPLE, new Color(0, 0, 0, 0), true, "Select destination folder");
         UIStyles.styleButtons(btnDownload, "DOWNLOAD", "/images/download2.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Download file");
         UIStyles.styleButtons(btnOpenLast, "OPEN LAST", "/images/play2.png",UIStyles.MEDIUM_GREY_COLOR,UIStyles.LIGHT_GREY_COLOR, false, "Reproduce last file");
+        
+        UIStyles.styleButtonGroup("Select format", radioM4a, radioMkv, radioMp3, radioMp4, radioWav, radioWebm);
+        UIStyles.styleComboBox(cbbxQualityFilter);
         UIStyles.styleProgressBar(progressBar);
     }
     
@@ -123,12 +127,17 @@ public class Downloads extends javax.swing.JPanel {
     
     //Configuración de ButtonGroup
     private void configRadioButtons(ButtonGroup bg, JRadioButton... buttons) {
-        String[] options = {"mp4", "mkv", "webm", "mp3", "wav", "m4a"};
-        for (int i = 0; i < buttons.length; i++) {
-            bg.add(buttons[i]);
-            buttons[i].setActionCommand(options[i]);
-        }
-        buttons[0].setSelected(true);
+        for (JRadioButton btn : buttons) {
+        bg.add(btn);
+        btn.setActionCommand(btn.getText().toLowerCase());
+    }
+    buttons[0].setSelected(true);
+//        String[] options = {"mp4", "mkv", "webm", "mp3", "wav", "m4a"};
+//        for (int i = 0; i < buttons.length; i++) {
+//            bg.add(buttons[i]);
+//            buttons[i].setActionCommand(options[i]);
+//        }
+//        buttons[0].setSelected(true);
     }
     
     //Configura de JTextField de URL
@@ -139,11 +148,19 @@ public class Downloads extends javax.swing.JPanel {
     //Configuración de pegar URL a JTextField    
     private void pasteUrl() {
         try {
-            String data = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-            txtUrl.setText(data);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        Object clipboard = Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+        if (clipboard instanceof String str) {
+            txtUrl.setText(str);
         }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    }
+//        try {
+//            String data = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+//            txtUrl.setText(data);
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
     }
 
     @SuppressWarnings("unchecked")
@@ -274,12 +291,19 @@ public class Downloads extends javax.swing.JPanel {
                 DefaultListModel<FolderItem> listModel = (DefaultListModel<FolderItem>) infoMedia.getListDirectories().getModel();
 
                 boolean exists = false;
-                for (int i = 0; i < listModel.size(); i++) {
-                    if (listModel.getElementAt(i).getFullPath().equals(folderPath)) {
-                        exists = true;
-                        break;
-                    }
-                }
+for (FolderItem item : Collections.list(listModel.elements())) {
+    if (item.getFullPath().equals(folderPath)) {
+        exists = true;
+        break;
+    }
+}
+//                boolean exists = false;
+//                for (int i = 0; i < listModel.size(); i++) {
+//                    if (listModel.getElementAt(i).getFullPath().equals(folderPath)) {
+//                        exists = true;
+//                        break;
+//                    }
+//                }
 
                 // Si no existe, añadirlo
                 if (!exists) {
@@ -307,7 +331,7 @@ public class Downloads extends javax.swing.JPanel {
         Thread th = new Thread() {
             @Override
             public void run() {
-                downloadManager.download(url, folder, format, quality, progressBar, tblModel, folderPaths, Downloads.this);
+                downloadManager.download(url, folder, format, quality, progressBar, tblModel, Downloads.this);
             }
         };
         th.start();

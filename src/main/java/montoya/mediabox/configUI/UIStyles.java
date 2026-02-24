@@ -9,6 +9,8 @@ import javax.swing.table.JTableHeader;
 
 /**
  * Gestiona los distintos estilos de los componentes.
+ * <p>
+ * Aplica color, fuente, bordes redondeados, resalte en componente usado.
  * 
  * @author Nerea
  */

@@ -2,7 +2,6 @@ package montoya.mediabox.download;
 
 import java.io.*;
 import javax.swing.*;
-import java.util.Set;
 import java.util.Date;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
@@ -23,7 +22,7 @@ public class DownloadWorker extends SwingWorker<Void, String> {
     /** {@link File} Último archivo descargado */
     private File lastDownloadFile;
     
-    /** {@link FileTableModel} Modelo de tabla que muetsra los archivos. */
+    /** {@link FileTableModel} Modelo de tabla que muestra los archivos. */
     private final FileTableModel tblModel;
     
     /** {@link InfoMedia} Panel que contiene información de los archivos. */
@@ -41,8 +40,18 @@ public class DownloadWorker extends SwingWorker<Void, String> {
     /** Variables generales */
     private final String folder; //Directorio
     private final JProgressBar barProgress; //Componente barra de progreso
-    //private final Set<String> folderPaths; //Colección de directorios
     
+    /**
+     * Ejecuta un proceso externo (descarga) en segundo plano sin bloquear la interfaz gráfica.
+     * 
+     * @param pb Proceso configurado para ejecutar la descarga
+     * @param folder Directorio donde gusrdar la descarga
+     * @param progressBar Muestra el progreso de descarga
+     * @param tblModel Modelo de tabla d elos archivos
+     * @param fileProperties Objeto que gestiona las propiedades y de archivos descargados
+     * @param infoMedia Panel (vista) que muestra la información d elas descargas
+     * @param downloadsPanel Panel (vista) que permite realizar una descarga
+     */
     public DownloadWorker(ProcessBuilder pb, String folder, JProgressBar progressBar, FileTableModel tblModel, FileProperties fileProperties, InfoMedia infoMedia, Downloads downloadsPanel) {
         this.pb = pb;
         this.folder = folder;
@@ -53,114 +62,124 @@ public class DownloadWorker extends SwingWorker<Void, String> {
         this.downloadsPanel = downloadsPanel;
     }
 
-//    public DownloadWorker(ProcessBuilder pb, String folder, JProgressBar progressBar, FileTableModel tblModel, FileProperties fileProperties, Set<String> folderPaths, InfoMedia infoMedia, Downloads downloadsPanel) {
-//        this.pb = pb;
-//        this.folder = folder;
-//        this.barProgress = progressBar;
-//        this.tblModel = tblModel;
-//        this.fileProperties = fileProperties;
-//        this.folderPaths = folderPaths;
-//        this.infoMedia = infoMedia;
-//        this.downloadsPanel = downloadsPanel;
-//    }
-
-    //Devuelve ultimo archivo descargado
+    /** @return Última descarga */
     public File getLastDownloadedFile() {
         return lastDownloadFile;
     }
 
-    //Metodo principal para ejecucion en segundo plano
+    /**
+     * Ejecuta la descarga en segundo plano.
+     * Inicia barra de progreso, detecta el último archivo, registra la descarga en FileProperties y actualiza el panel de información
+     * 
+     * 
+     * @return {@code null}, ya que el resultado no se utiliza
+     * @throws Exception Si ocurre un error durante la ejecución del proceso
+     */
     @Override
     protected Void doInBackground() throws Exception {
 
         SwingUtilities.invokeLater(new Runnable() { //Hilo secundario para progressBar
             @Override
             public void run() {
-                barProgress.setValue(0);
-                barProgress.setString(null);
-                barProgress.setIndeterminate(true);
+                barProgress.setValue(0); //Reinicio del valor
+                barProgress.setString(null); //Elimina el texto mostrado
+                barProgress.setIndeterminate(true); 
             }
         });
 
-        Process p = pb.start();
+        Process p = pb.start(); //Ejecuta yt-dlp
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream(), "UTF-8"))) {
+            
             String line;
-            while ((line = br.readLine()) != null) {
+            
+            while ((line = br.readLine()) != null) { //Lee línea a línea la salida del proceso
                 System.out.println(line);
-                publish(line); //Lineas mostradas en JTextArea con info de descarga
 
-                if (line.contains("[download]") && line.contains("%")) { //Si la linea contiene % actualiza JProgressBar
-                    int percent = extractPercentage(line);
+                //Detecta lineas de progreso
+                if (line.contains("[download]") && line.contains("%")) {
+                    int percent = extractPercentage(line); //Extrae el porcentaje
                     if (percent >= 0 && percent <= 100) {
-                        setProgress(percent);
+                        setProgress(percent); //Notifica progreso al SwingWorker
                     }
                 }
             }
         }
 
+        //Espera a la finalización del proceso
         if (p.waitFor() == 0) {
-            File dir = new File(folder);
-            File[] files = dir.listFiles();
+            
+            File dir = new File(folder); //Directorio de la descarga
+            File[] files = dir.listFiles(); //Lista de archivos del directorio
 
             if (files != null && files.length > 0) {
                 File latest = files[0];
-                for (File f : files) {
+                
+                for (File f : files) { //Busca el archivo más reciente
                     if (f.lastModified() > latest.lastModified()) {
                         latest = f;
                     }
                 }
 
-                lastDownloadFile = latest;
-                FileInformation info = fileInfo(latest);
+                lastDownloadFile = latest; //Guarda la referencia del último archivo
+                FileInformation info = fileInfo(latest); //Crea objeto con metadatos
 
-                fileProperties.addDownload(info);
+                fileProperties.addDownload(info); //Registra la descarga
 
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        infoMedia.refreshFiles();// Refrescar archivos
+                        infoMedia.refreshFiles();// Refrescar panel de información
                     }
                 });
             }
         }
 
-        p.destroy();
+        p.destroy(); //Libera recursos
         return null;
     }
 
-    //Se ejecuta cuando doInBackground ha terminado, muestra mensaje de finalización
+    /**
+     * Se ejecuta automáticamente cuando la descarga en segundo plano ha finalizado.
+     */
     @Override
     protected void done() {
 
         try {
+            //Si la descarga es correcta, muestra mensaje de confirmación, y barra de progresso al 100%
             get();
             barProgress.setIndeterminate(false);
             barProgress.setValue(100);
-            barProgress.setString("Download completed!"); //Mensage si se completó la descarga correctamente
+            barProgress.setString("Download completed!");
 
             SwingUtilities.invokeLater(new Runnable() { //Hilo secundario para progressBar
                 @Override
                 public void run() {
-                    downloadsPanel.showOpenLastButton();
+                    downloadsPanel.showOpenLastButton(); //Botón activado despues de la descarga
                 }
             });
-        
-        } catch (Exception e) {
+
+        } catch (Exception e) { //Si ocurre una excepción, devuelve mensaje informativo
             barProgress.setIndeterminate(false);
             barProgress.setValue(0);
-            barProgress.setString("Error in download"); //Mensage de error si hubo algún problema durante la descarga
+            barProgress.setString("Error in download");
         }
     }
 
-    //Extrae el % de cada linea de la descarga
+    /**
+     * Extrae el porcentaje de la descarga permitiendo actualizar la barra de progreso.
+     * 
+     * @param line Texto mostrado con el progreso de descarga
+     * @return Porcentaje del progreso de la descarga
+     */
     private int extractPercentage(String line) {
         try {
-            int start = line.indexOf("[download]") + 10;
-            int end = line.indexOf("%", start);
+            int start = line.indexOf("[download]") + 10; //Posición después de "[download]"
+            int end = line.indexOf("%", start); //Posición del símbolo %
             if (end > start) {
+                //Extrae el número, eliminando caracteres no numéricos
                 String percent = line.substring(start, end).replaceAll("[^0-9.]", "").trim();
-                return (int) Float.parseFloat(percent);
+                return (int) Float.parseFloat(percent); //Confierte float a int
             }
         } catch (Exception e) {
             System.err.println("Error extracting percentage: " + e.getMessage());
@@ -168,19 +187,26 @@ public class DownloadWorker extends SwingWorker<Void, String> {
         return -1;
     }
 
-    //Crea un objeto FileInformation con los datos de la descarga
+    /**
+     * Crea objeto FileInformation con sus propiedades (nombre, tamaño, tipo, fecha y directorio).
+     * 
+     * @param file Archivo del cual se obtienen los datos
+     * @return Objeto FileInformation con la información del archivo
+     */
     private FileInformation fileInfo(File file) {
-        String name = file.getName();
-        long size = file.length();
-        String type = "unknown";
+        String name = file.getName(); //Nombre del archivo
+        long size = file.length(); //Tamaño en bytes
+        String type = "unknown"; //Tipo MIME por defecto
+        
         try {
-            type = Files.probeContentType(file.toPath());
+            type = Files.probeContentType(file.toPath()); //Detecta el tipo MIME
         } catch (IOException e) {
             System.err.println("Error extracting MIME type: " + e.getMessage());
         }
 
-        String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(file.lastModified()));
-        String folderPath = file.getParent();
+        String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(file.lastModified())); //Fecha de descarga
+        String folderPath = file.getParent(); //Ruta del directorio
+        
         return new FileInformation(name, size, type, date, folderPath);
     }
 }

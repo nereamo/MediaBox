@@ -5,36 +5,45 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Permite guardar el directorio donde se ha realizado la descarga.
- * Se usa junto con {@link FileInformation}.
+ * Representa un directorio cons sus archivos descargados.
+ * Contiene una lista de {@link FileInformation} y permite obtener las rutas de los directorios.
  * 
  * @author Nerea
  */
 public class DirectoryInformation implements Serializable{
     
-    private List<FileInformation> fileList;
-    private Set<String> folderPaths;
+    /** Variables generales */
+    private List<FileInformation> fileList; //Lista de archivos descargados en el directorio
+    private Set<String> folderPaths; //Rutas de los directorios que almacenan descargas
     
+    /**
+     * Constructor que inicializa la lista de archivos y la colección de directorios.
+     * 
+     * @param fileList Lista de archivos descargados
+     * @param folderPaths Colección de rutas de los directorios
+     */
     public DirectoryInformation(List<FileInformation> fileList, Set<String> folderPaths) {
         this.fileList = fileList;
         this.folderPaths = folderPaths;
     }  
 
+    /** @return Lista de archivos */
     public List<FileInformation> getFileList() {
         return fileList;
     }
 
+    /** @param fileList Almacena una lista de archivos */
     public void setFileList(List<FileInformation> fileList) {
         this.fileList = fileList;
     }
 
+    /** @return Colección de directorios */
     public Set<String> getFolderPaths() {
         return folderPaths;
     }
 
+    /** @param folderPaths Almacena una colección de directorios */
     public void setFolderPaths(Set<String> folderPaths) {
         this.folderPaths = folderPaths;
     }
-    
-    
 }

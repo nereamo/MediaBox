@@ -151,6 +151,7 @@ public class FileManager {
      */
     public void deleteLocalFile(FileInformation fileInfo) {
         fileProperties.deleteDownload(fileInfo, directoryInfo.getFileList(), directoryInfo.getFolderPaths());
+        refreshFiles();
     }
     
     /**
