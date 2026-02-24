@@ -95,37 +95,62 @@ Creación de JSON con libreria Jackson.
 
     - Sustitución de los botones por JLabels, permitiendo mantener el Look&Feel establecido.
         
+---
+
 # 🎨 Usabilidad y Experiencia de Usuario
 
-🖱️ Feedback Visual e Interactividad:
-        
-    Los botones, campos de texto, y combobox han sido resaltados con un borde y el cursor "Hand Cursor".
+## 🎨 Visual appearance, color, and interface:
 
-✍️ Placeholders: 
-
-    Los campos de texto utilizan "sugerencias" para guiar al usuario.
-
-🌈 Color y Consistencia: 
-
-    Uso de colores (Púrpuras y Grises oscuros) para diferenciar acciones principales de información secundaria con bordes redondeados asi como seleccionar un elemento del JComboBox, JList, JTable y elementos de la barra de menú.
+Se ha aplicado una interfaz oscura con tonos grises y púrpuras reduciendo la fatiga visual durante su uso.
     
-💡 Mensajes de Ayuda:
+    - Los botones principales utilizan el color púrpura para destacar acciones principales de secundárias, como el botón de descarga, el botón pra selecconar el directorio, el botón de búsqueda del archivo yt-dlp.exe, el botón de subida de archivo a la API o el botón para loguearse.
+    - Utilización de distintos tonos grises para diferenciar los distintos paneles.
+    - Bordes redondeados para una comodidad visual.
+    - Incorporación de iconos en botones y en campos de texto para realizar las acciones más rapido.
+    - Realte en color púrpura en campos de texto, listas deplegables, y botones para una mejor indicación de que componente está utilizando.
+    - La interfaz sigue un flujo vertical permitiendo facilitar su uso (URL -> Selección de directorio -> Formato -> Botón descarga -> Barra de progreso -> Lista con los directorios utilizados -> Tabla informativa de las descargas)
+    - Utilización de MigLayout para ordenar los componentes y la librería FlatLaf para aplicar un aspecto mas moderno.
 
-    Uso de *Tooltips* en botones y componentes para proporcionar más información.
+## 🧩 Affordance, Feedback y Restricciones:
 
-🔔 Notificación de acciones:
+### Affordance
 
-    Uso de mensajes emergentes al realizar una acción como guardar las preferencias o volver sin guardar los cambios o cerrar la aplicación o acciones previas que deba realizar antes de una descarga.
+    - Los componentes muestran el cursor de mano (HANDO_CURSOR) al pasar el ratón por encima.
+    - Los campos de texto contienen placeholder indicando la información que se debe introducir.
+    - Los iconos ayudan a reforzar en entendimiento en las acciones
+
+### Feedback
+
+La aplicación informa constantemente al usuario de que acciones debe realizar.
+
+    - Mensajes emergentes para confirmar acciones por parte del usuario como cerrar la aplicación, eliminar un archivo o si se desea retroceder sin guardar las preferencias.
+    - Notificación emergentes al realizar una acción como guardar las preferencias, seleccionar un directorio antes de poder descargar el archivo, seleccionar un elemento de la tabla antes de poder realizar alguna acción o configurar las preferencias antes de cualquier descarga.
+    - Notificaciones en la interfaz del cierre de sesión, que se ha encontrado el archivo yt-dlp.exe o mostrar el nombre del usuario logeado en la parte superior derecha de la interfaz.
+    - Uso de la barra de progreso para informar del estado de la descarga.
+    - Actualización automática de la lista de directorios y la tabla con el último archivo descargado.
+
+### 🚫 Restricciones
+    - No es posible realizar una descarga si no se han establecido las preferéncias, pegado una URL, seleccionado un directorio y establecido un formato.
+    - El botón para reproducir el útlimo archivo descargado no se habilita hasta que no se haya completado la descarga y así mismo de vuelve a deshabilitar al tener una descarga en proceso.
     
-📐 Adaptabilidad: 
+## 🧩 Other usability improvements:
+    - Icono en campos de texto que permiten borrar el texto introducido, ver la contraseña introducida o poder pegar la URL desde el portapapeles.
+    - Uso de Tooltips para iformar de cada componente.
+    - Desde la columna Acciones de la tabla, es posible descargar un archivo de la API, reproducir un archivo local o eliminar el archivo local fisicamente.
+    - Uso de polling para notiifcar nuevos archivos de la API.
+    - Paneles intercambiables mediante el uso de CardLayout.
+    - Redimensionamiento de la ventana asi como sus componentes.
 
-    Los Paneles y componentes se adaptan a la maximización y minimación de la ventana.
+## 📝 Gestión de errores y logs
+
+### Validación de entradas
+    - Comprobación de datos introducidos correctamente en campos de texto.
+
+### Excepciones
+    - Uso de bloques try-catch en operaciones críticas.
     
-🖼️ Iconografía: 
+### Feedback del usuario
+    - Uso de mensajes explicativos para informar al usuario de que acción debe realizar.
 
-    Uso de iconos en campos de texto para realizar acciones, en botones para facilitar la visibilidad y en la tabla para realizar acciones.
-
-⏳ Información del progreso de descarga:
-
-    Uso de JProgressBar para informar al usuario del estado de la descarga.
-
+### Logs de error
+    - La alicación registra información de los fallos ocurridos durante la ejecución sin bloquear la interfaz.
