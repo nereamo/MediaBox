@@ -127,40 +127,29 @@ public class Downloads extends javax.swing.JPanel {
     
     //Configuración de ButtonGroup
     private void configRadioButtons(ButtonGroup bg, JRadioButton... buttons) {
-        for (JRadioButton btn : buttons) {
-        bg.add(btn);
-        btn.setActionCommand(btn.getText().toLowerCase());
-    }
-    buttons[0].setSelected(true);
-//        String[] options = {"mp4", "mkv", "webm", "mp3", "wav", "m4a"};
-//        for (int i = 0; i < buttons.length; i++) {
-//            bg.add(buttons[i]);
-//            buttons[i].setActionCommand(options[i]);
-//        }
-//        buttons[0].setSelected(true);
+        String[] options = {"mp4", "mkv", "webm", "mp3", "wav", "m4a"};
+        for (int i = 0; i < buttons.length; i++) {
+            bg.add(buttons[i]);
+            buttons[i].setActionCommand(options[i]);
+        }
+        buttons[0].setSelected(true);
     }
     
     //Configura de JTextField de URL
     private void styleTxtUrl() {
         UIStyles.styleField(txtUrl, "/images/url.png", "Paste the URL of the file to download", "/images/delete_url.png", this::pasteUrl);
     }
-    
+
     //Configuración de pegar URL a JTextField    
     private void pasteUrl() {
         try {
-        Object clipboard = Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-        if (clipboard instanceof String str) {
-            txtUrl.setText(str);
+            Object clipboard = Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+            if (clipboard instanceof String str) {
+                txtUrl.setText(str);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-    } catch (Exception ex) {
-        ex.printStackTrace();
-    }
-//        try {
-//            String data = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-//            txtUrl.setText(data);
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
     }
 
     @SuppressWarnings("unchecked")
@@ -291,19 +280,12 @@ public class Downloads extends javax.swing.JPanel {
                 DefaultListModel<FolderItem> listModel = (DefaultListModel<FolderItem>) infoMedia.getListDirectories().getModel();
 
                 boolean exists = false;
-for (FolderItem item : Collections.list(listModel.elements())) {
-    if (item.getFullPath().equals(folderPath)) {
-        exists = true;
-        break;
-    }
-}
-//                boolean exists = false;
-//                for (int i = 0; i < listModel.size(); i++) {
-//                    if (listModel.getElementAt(i).getFullPath().equals(folderPath)) {
-//                        exists = true;
-//                        break;
-//                    }
-//                }
+                for (FolderItem item : Collections.list(listModel.elements())) {
+                    if (item.getFullPath().equals(folderPath)) {
+                        exists = true;
+                        break;
+                    }
+                }
 
                 // Si no existe, añadirlo
                 if (!exists) {

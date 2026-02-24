@@ -391,14 +391,24 @@ public class UIStyles {
      * @param bar JProgressBar a configurar
      */
     public static void styleProgressBar(JProgressBar bar) {
-        
-        bar.putClientProperty("ProgressBar.selectionForeground", BLACK_COLOR);
-    bar.putClientProperty("ProgressBar.selectionBackground", BLACK_COLOR);
         bar.setBackground(MEDIUM_GREY_COLOR);
         bar.setForeground(LIGHT_PURPLE); //Color carga
         bar.setFont(FONT_BOLD);
         bar.setStringPainted(true);
         bar.putClientProperty(FlatClientProperties.STYLE, "arc: 999");
+
+    // 2. FORZADO MANUAL: Esto ataca directamente al renderizador de Swing
+    // Cambiamos el color de "selección" que es el que usa para el texto
+    bar.setUI(new com.formdev.flatlaf.ui.FlatProgressBarUI() {
+        @Override
+        protected Color getSelectionBackground() {
+            return Color.BLACK; // Texto cuando está sobre el fondo (gris)
+        }
+        @Override
+        protected Color getSelectionForeground() {
+            return Color.BLACK; // Texto cuando está sobre la carga (púrpura)
+        }
+    });
 
         bar.setOpaque(false);
         bar.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));

@@ -84,7 +84,7 @@ public class DownloadWorker extends SwingWorker<Void, String> {
             public void run() {
                 barProgress.setValue(0); //Reinicio del valor
                 barProgress.setString(null); //Elimina el texto mostrado
-                barProgress.setIndeterminate(true);
+                barProgress.setIndeterminate(false);
             }
         });
 
@@ -158,7 +158,7 @@ public class DownloadWorker extends SwingWorker<Void, String> {
             get();
             barProgress.setIndeterminate(false);
             barProgress.setValue(100);
-            barProgress.setString("Download completed!");
+            barProgress.setString("DOWNLOAD COMPLETED!");
 
             SwingUtilities.invokeLater(new Runnable() { //Hilo secundario para progressBar
                 @Override
@@ -170,7 +170,7 @@ public class DownloadWorker extends SwingWorker<Void, String> {
         } catch (Exception e) { //Si ocurre una excepción, devuelve mensaje informativo
             barProgress.setIndeterminate(false);
             barProgress.setValue(0);
-            barProgress.setString("Error in download");
+            barProgress.setString("ERROR IN DOWNLOAD");
         }
     }
 

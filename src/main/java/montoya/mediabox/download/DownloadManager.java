@@ -189,22 +189,18 @@ public class DownloadManager {
 
         //Ajustar descarga según formato
         switch (type) {
+            
             //Audio
             case "mp3":
-                cmd.add("-x");
-                cmd.add("--audio-format");
-                cmd.add("mp3");
-                break;
             case "wav":
-                cmd.add("-x");
-                cmd.add("--audio-format");
-                cmd.add("wav");
-                break;
             case "m4a":
+                cmd.add("-f");
+                cmd.add("bestaudio");
                 cmd.add("-x");
                 cmd.add("--audio-format");
-                cmd.add("m4a");
+                cmd.add(type);
                 break;
+                
             //Video
             case "mp4":
                 cmd.add("-f");
