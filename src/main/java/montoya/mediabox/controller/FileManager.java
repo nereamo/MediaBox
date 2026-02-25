@@ -17,7 +17,15 @@ import montoya.mediapollingcomponent.apiclient.Media;
 
 /**
  * Gestiona las operaciones sobre los archivos mostrados en la aplicación.
- * Permite obtener, filtrar, descargar, subir, eliminar y abrir archivos.
+ * <p>
+ * Permite:
+ * <ul> 
+ * <li> Obtener archivos locales, remotos y mixtos.</li>
+ * <li> Filtrar por directorio y tipo de archivo.</li>
+ * <li> Descarga y subida de archivos.</li>
+ * <li> Eliminar archivos locales.</li>
+ * <li> Reproducir archivos locales.</li>
+ * </ul> 
  * 
  * @author Nerea
  */
@@ -36,7 +44,7 @@ public class FileManager {
     private FileProperties fileProperties;
     
     /**
-     * Constructor que permite crear un objeto
+     * Constructor que inicializa un objeto {@link FileManager}
      * 
      * @param directoryInfo Proporciona información de los archivos locales
      * @param typeFilter Aplica filtro por directorio y tipo de archivo
@@ -52,7 +60,7 @@ public class FileManager {
     }
     
     /**
-     * Obtiene los archivos locales pertenecientes al directorio seleccioando
+     * Obtiene los archivos locales pertenecientes al directorio seleccionado
      * 
      * @param folderPath Ruta del directorio seleccionado
      * @param filter Filtro de tipo de archivo

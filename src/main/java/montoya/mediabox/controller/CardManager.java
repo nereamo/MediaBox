@@ -4,8 +4,15 @@ import java.awt.CardLayout;
 import javax.swing.JPanel;
 
 /**
- * Clase que gestiona los distintos paneles
- * Permite intercambiar las vistas
+ * Clase que gestiona los distintos paneles (vistas) mostrados en la interfaz.
+ * <p>
+ * Vistas:
+ * <ul> 
+ * <li> Panel Login.</li>
+ * <li> Panel Downloads.</li>
+ * <li> Panel Preferences.</li>
+ * </ul> 
+ * 
  * @author Nerea
  */
 public class CardManager {

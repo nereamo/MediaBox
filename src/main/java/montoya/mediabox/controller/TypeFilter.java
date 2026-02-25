@@ -5,14 +5,20 @@ import java.util.List;
 import montoya.mediabox.fileInformation.FileInformation;
 
 /**
- * Clase que aplica el filtrado por directorio y tipo de archivo
+ * Permite aplicar filtros para mostrar los archivos deseados.
+ * <p>
+ * Filtros:
+ * <ul>
+ * <li> El directorio al que pertenecen </li>
+ * <li> Tipo de archivo (formato) </li>
+ * </ul>
  * 
  * @author Nerea
  */
 public class TypeFilter {
     
     /**
-     * Filtra una lista de archivos y muestra los que corresponden al directorio especificado.
+     * Muestra los archivos pertenecientes al directorio seleccionado en la lista.
      * 
      * @param allFiles Lista de los archivos
      * @param folderPath Ruta del directorio por la que se filtra
@@ -33,7 +39,7 @@ public class TypeFilter {
     }
     
     /**
-     * Filtra una lista de archivos y muestra los que corresponden según el tipo de archivo especificado.
+     * Muestra los archivos que contengas ese formato.
      * 
      * @param allFiles Lista de los archivos
      * @param filter Filtro por tipo de archivo

@@ -7,17 +7,26 @@ import java.nio.file.Paths;
 import tools.jackson.databind.ObjectMapper;
 
 /**
- *
+ * Permite guardar el token del usuario al loguearse, leerlo para el autologin y eliminarlo.
+ * 
  * @author Nerea
  */
 public class TokenController {
     
+    /** Ruta del archiv JSON */
     private static final Path FOLDER_PATH = Paths.get(System.getProperty("user.home"), "AppData", "Local", "MediaBox");
     private static final Path JSON_PATH = FOLDER_PATH.resolve("token.json");
     
+     /** Objeto utilizado para serializar y deserializar JSON */
     private static final ObjectMapper mapper = new ObjectMapper();
     
-    //Guarar el TOKEN en archivo token.json
+    /**
+     * Guarada el token (llave de autenticación) en un archivo JSON
+     * 
+     * @param token Identificador único de autenticación del usuario
+     * @param email Email con el que se registra el usuario
+     * @throws IOException Si ocurre un error al crear la carpeta o escribir el archivo
+     */
     public static void saveToken(String token, String email) throws IOException {
         
         Files.createDirectories(FOLDER_PATH);
@@ -26,7 +35,12 @@ public class TokenController {
         System.out.println("Saved token in: " + JSON_PATH.toAbsolutePath());
     }
     
-    //Leer archivo token.json
+    /**
+     * Lee el token (llave de autenticación) almacenado en JSON.
+     * 
+     * @return Objeto {@link TokenUser} en el token y email almacenado o {@code null} si el JSON no existe
+     * @throws IOException Si ocurre un error al leer el archivo
+     */
     public static TokenUser readToken() throws IOException  {
         
         if(!Files.exists(JSON_PATH)){
@@ -37,6 +51,9 @@ public class TokenController {
         return mapper.readValue(JSON_PATH.toFile(), TokenUser.class);
     }
     
+    /**
+     * Elimina el archivo JSON que contiene el token (llave de autenticación).
+     */
     public static void deleteToken(){
         
         try {

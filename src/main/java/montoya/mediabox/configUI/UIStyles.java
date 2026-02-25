@@ -8,23 +8,29 @@ import javax.swing.*;
 import javax.swing.table.JTableHeader;
 
 /**
- * Gestiona los distintos estilos de los componentes.
+ * Gestiona los distintos estilos visuales de los componentes.
+ * No es necesário instanciar esta clase.
  * <p>
- * Aplica color, fuente, bordes redondeados, resalte en componente usado.
+ * Personalización de componentes:
+ * <ul> 
+ * <li> Paneles.</li>
+ * <li> Botones y menús.</li>
+ * <li> Campos de texto.</li>
+ * <li> Listas y tablas.</li>
+ * <li> Control de selección.</li>
+ * <li> Barras de progreso.</li>
+ * </ul> 
+ * 
  * 
  * @author Nerea
  */
 public class UIStyles {
 
-    /**
-     * Fuentes utilizadas en los componentes
-     */
+    /** Fuentes utilizadas en los componentes */
     public static final Font FONT_BOLD = new Font("Arial", Font.BOLD, 16);
     public static final Font FONT_PLAIN = new Font("Arial", Font.PLAIN, 16);
 
-    /**
-     * Colores utilizados en los componentes
-     */
+    /** Colores utilizados en los componentes */
     public static final Color WHITE_COLOR = new Color(255, 255, 255);
     public static final Color LIGHT_PURPLE = new Color(126, 134, 204);
     public static final Color LIGHT_GREY_COLOR = new Color(220, 220, 222);
@@ -136,7 +142,6 @@ public class UIStyles {
         btn.setFont(FONT_BOLD);
         btn.setIcon(createIcon(iconPath));
         
-        
         btn.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_ROUND_RECT);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
@@ -210,26 +215,25 @@ public class UIStyles {
      * @param combo JComboBox a configurar
      */
     public static void styleComboBox(JComboBox combo) {
-
-        combo.setRenderer(new DefaultListCellRenderer() { //Cambia el color de fondo y de texto cuando un ítem está seleccionado
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index,boolean isSelected, boolean cellHasFocus) {
-
-                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
-                if (isSelected) {
-                    setBackground(LIGHT_PURPLE);
-                    setForeground(WHITE_COLOR);
-                }
-                return this;
-            }
-        });
-
+        
+        UIManager.put("ComboBox.selectionBackground", UIStyles.LIGHT_PURPLE);
+    UIManager.put("ComboBox.selectionForeground", Color.WHITE);
+    UIManager.put("List.selectionBackground", UIStyles.LIGHT_PURPLE);
+    UIManager.put("List.selectionForeground", Color.WHITE);
         combo.setForeground(DARK_GREY_COLOR);
         combo.setBackground(LIGHT_GREY_COLOR);
         combo.setFont(FONT_PLAIN);
         combo.setEditable(false);
         combo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }
+    
+    public static void itemsInCombobox(JComboBox<String> combo, String items) {
+        combo.removeAllItems();
+        String[] elementos = items.split(","); //Separar por coma
+        for (String item : elementos) {
+            combo.addItem(item.trim()); //Quita espacios
+        }
+        combo.setFont(FONT_PLAIN);
     }
 
     /**
@@ -397,23 +401,21 @@ public class UIStyles {
         bar.setStringPainted(true);
         bar.putClientProperty(FlatClientProperties.STYLE, "arc: 999");
 
-    // 2. FORZADO MANUAL: Esto ataca directamente al renderizador de Swing
-    // Cambiamos el color de "selección" que es el que usa para el texto
-    bar.setUI(new com.formdev.flatlaf.ui.FlatProgressBarUI() {
-        @Override
-        protected Color getSelectionBackground() {
-            return Color.BLACK; // Texto cuando está sobre el fondo (gris)
-        }
-        @Override
-        protected Color getSelectionForeground() {
-            return Color.BLACK; // Texto cuando está sobre la carga (púrpura)
-        }
-    });
+        bar.setUI(new com.formdev.flatlaf.ui.FlatProgressBarUI() {
+            @Override
+            protected Color getSelectionBackground() {
+                return Color.BLACK; // Texto cuando está sobre el fondo (gris)
+            }
+
+            @Override
+            protected Color getSelectionForeground() {
+                return Color.BLACK; // Texto cuando está sobre la carga (púrpura)
+            }
+        });
 
         bar.setOpaque(false);
         bar.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
     }
-
 
     /**
      * Configura un ImageIcon personalizado.

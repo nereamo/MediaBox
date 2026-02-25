@@ -4,6 +4,7 @@ import java.util.*;
 import javax.swing.*;
 import java.awt.EventQueue;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Image;
 import montoya.mediabox.panels.*;
 import montoya.mediabox.controller.*;
@@ -16,10 +17,20 @@ import montoya.mediapollingcomponent.MediaListener;
 import montoya.mediapollingcomponent.apiclient.Media;
 
 /**
- * Clase MedaiBox proporciona la funcionalidad para gestionar la interfaz gráfica del programa {@code MediaBox}.
+ * Ventana principal de la aplicación {@code MediaBox}.
+ * <p>
  * La clase extiende {@code javax.swing.JFrame}, permite que esta clase sea un diálogo modal.
- * Utiliza un {@link CardLayout} para el intercambio de vista entre paneles
- *
+ * Utiliza un {@link CardLayout} para el intercambio de paneles (vistas) de la interfaz.
+ * </p>
+ * <p>
+ * Controla:
+ * <ul>
+ * <li> Barra de menú y sus acciones.</li>
+ * <li> Autenticación del usuario.</li>
+ * <li> Inicialización de componetntes y estilos visuales (LookAndFeel).</li>
+ * <li> Comunicación con el componente de escucha {@link MediaPolling}.</li>
+ * </ul>
+ * 
  * @author Nerea
  */
 public class MainFrame extends JFrame {
@@ -52,16 +63,8 @@ public class MainFrame extends JFrame {
     private final Set<String> folderPaths = new HashSet<>();
 
     /**
-     * Inicializa el frame principal llamando a los métodos necesários para su utilización.
-     * <p>
-     * Orden de los métodos:
-     * <ol>
-     * <li> Configuración visual de la ventana.
-     * <li> Inicialización de componentes swing.
-     * <li> Configuración de ventana e icono.
-     * <li> Gestión de la navegacion de las distintas vistas.
-     * </ol>
-     * </p>
+     * Constructor que inicializa la ventana principal.
+     * Contiene los métodos necesarios para construir la interfaz y la navegación entre las vistas.
      */
     public MainFrame() {
         initLookAndFeelMenu(); //Colores de MenuBar
@@ -74,10 +77,7 @@ public class MainFrame extends JFrame {
         initNavigation(); //Organiza las vistas
     }
     
-    /**
-     * Configuración de los colores del menú.
-     * {@link UIManager}.
-     */
+    /** Configuración de los colores del menú y sus ítems {@link UIManager} */
     private void initLookAndFeelMenu(){
         UIManager.put("PopupMenu.background", UIStyles.MEDIUM_GREY_COLOR);
         UIManager.put("MenuItem.selectionBackground", UIStyles.LIGHT_PURPLE);
@@ -85,9 +85,7 @@ public class MainFrame extends JFrame {
         UIManager.put("MenuItem.selectionForeground", UIStyles.BLACK_COLOR);
     }
     
-    /**
-     * Propiedades de la ventana principal como el título, tamaño, posición e icono. 
-     */
+    /** Propiedades principales de la ventana */
     private void initFrameConfig() {
         this.setTitle("MediaBox");
         this.setSize(940, 1200);
@@ -96,10 +94,7 @@ public class MainFrame extends JFrame {
         this.setIconImage(icon);
     }
     
-    /**
-     * Aplica estilos, iconos y textos de ayuda(tooltips) al menú y a sus ítems.
-     * {@link UIStyles}.
-     */
+    /** Aplica tamaño, texto, icono, tooltip y cambia el icono (color) al seleccionar un ítem {@link UIStyles} */
     private void initMenuAndItems(){
         UIStyles.styleMenuAndItems(mnuEdit, null, "/images/edit.png", "Settings", "");
         UIStyles.styleMenuAndItems(mnuFile, null, "/images/logout_exit.png", "Logout or Exit", "");
@@ -111,10 +106,7 @@ public class MainFrame extends JFrame {
         UIStyles.styleMenuAndItems(itemAbout, "About", "/images/information.png", "Information MediaBox", "/images/information_black.png");
     }
     
-    /**
-     * Controla la visibilidad del menú y el texto mostrado en éste (nombre de usuario logeado).
-     * {@link UIStyles}.
-     */
+    /** Controla la visibilidad del menú y el nombre de usuario logeado {@link UIStyles} */
     public void setMenuVisible(boolean visible) {
         menuBar.setBackground(UIStyles.DARK_GREY_COLOR);
         menuBar.add(Box.createHorizontalGlue());
@@ -128,9 +120,7 @@ public class MainFrame extends JFrame {
         this.repaint();
     }
     
-    /**
-     * Inicializa el contenedor permitiendo el intercambio entre las distintas vistas.
-     */
+    /** Inicializa el contenedor permitiendo el intercambio entre los distintos paneles (vistas) */
     private void initContainer() {
         layout = new CardLayout();
         container = new JPanel(layout);
@@ -144,9 +134,7 @@ public class MainFrame extends JFrame {
         this.getContentPane().remove(mediaPollingComponent);
     }
     
-    /**
-     * Inicializa los JPanel mostrados en la apliación.
-     */
+    /** Inicializa los JPanel mostrados en la apliación */
     private void initPanels(){
         downloadManager = new DownloadManager(new FileProperties());
         pnlLogin = new Login(this, cardManager, mediaPollingComponent);
@@ -155,9 +143,7 @@ public class MainFrame extends JFrame {
         cardManager.initCards(pnlLogin, pnlDownload, pnlPreferences);
     }
     
-    /**
-     * Establece la navegación principal mostrando la pantalla de login si el usuario no esta autentificado.
-     */
+    /** Establece la navegación principal mostrando la pantalla de login si el usuario no esta autentificado */
     private void initNavigation() {
         cardManager.showCard("login");
         pnlLogin.autoLogin();
@@ -165,10 +151,8 @@ public class MainFrame extends JFrame {
 
     /**
      * Configuración del componente que escucha medios de la API.
-     * <p>
      * Inicializa el componente listener con el token de seguridad.
-     * Escucha de nuevos medios añadidos a la API.
-     * </p>
+     * 
      * @param token de acceso para la API.
      * @see MediaListener
      */
@@ -348,6 +332,14 @@ public class MainFrame extends JFrame {
         try {
             // Esto activa el tema oscuro de FlatLaf
             com.formdev.flatlaf.FlatDarkLaf.setup();
+
+            UIManager.put("ComboBox.selectionBackground", UIStyles.LIGHT_PURPLE);
+            UIManager.put("ComboBox.selectionForeground", Color.WHITE);
+            UIManager.put("List.selectionBackground", UIStyles.LIGHT_PURPLE);
+            UIManager.put("List.selectionForeground", Color.WHITE);
+            
+            UIManager.put("List.selectionInactiveBackground", UIStyles.LIGHT_PURPLE);
+            UIManager.put("ComboBox.selectionInactiveBackground", UIStyles.LIGHT_PURPLE);
 
             UIManager.put("Component.arc", 15);
             UIManager.put("TextComponent.arc", 15);

@@ -55,7 +55,7 @@ public class Downloads extends javax.swing.JPanel {
         tblModel = infoMedia.getTableModel();
 
         setupLayout();
-        qualityOptions(cbbxQualityFilter);
+        //qualityOptions(cbbxQualityFilter);
         applyStylesComponent();
         styleTxtUrl();
         configRadioButtons(btnGroup, radioMp4, radioMkv, radioWebm, radioMp3, radioWav, radioM4a);
@@ -79,7 +79,7 @@ public class Downloads extends javax.swing.JPanel {
         pnlVideo.add(radioMp4);
         pnlVideo.add(radioMkv);
         pnlVideo.add(radioWebm);
-        pnlVideo.add(cbbxQualityFilter, "w 120!");
+        pnlVideo.add(cbbxQualityFilter, "w 120!, h 30!");
         downloadFilePnl.add(pnlVideo, "growx, h 70!, gaptop 30");
 
         pnlAudio.setLayout(new MigLayout("fillx, insets 17", "[]15[]15[]", "[]"));
@@ -106,7 +106,8 @@ public class Downloads extends javax.swing.JPanel {
         UIStyles.styleButtons(btnOpenLast, "OPEN LAST", "/images/play2.png",UIStyles.MEDIUM_GREY_COLOR,UIStyles.LIGHT_GREY_COLOR, false, "Reproduce last file");
         
         UIStyles.styleButtonGroup("Select format", radioM4a, radioMkv, radioMp3, radioMp4, radioWav, radioWebm);
-        UIStyles.styleComboBox(cbbxQualityFilter);
+        UIStyles.itemsInCombobox(cbbxQualityFilter, "1080,720,480");
+        
         UIStyles.styleProgressBar(progressBar);
     }
     
@@ -116,13 +117,13 @@ public class Downloads extends javax.swing.JPanel {
         this.repaint();
     }
     
-    //Aplicar la calidad de video
-    private void qualityOptions(JComboBox cbbxQuality){
-        cbbxQuality.removeAllItems();
-        cbbxQuality.addItem("1080");
-        cbbxQuality.addItem("720");
-        cbbxQuality.addItem("480");
-    }
+//    //Aplicar la calidad de video
+//    private void qualityOptions(JComboBox cbbxQuality){
+//        cbbxQuality.removeAllItems();
+//        cbbxQuality.addItem("1080");
+//        cbbxQuality.addItem("720");
+//        cbbxQuality.addItem("480");
+//    }
     
     //Configuración de ButtonGroup
     private void configRadioButtons(ButtonGroup bg, JRadioButton... buttons) {
