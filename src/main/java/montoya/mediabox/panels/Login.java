@@ -49,6 +49,9 @@ public class Login extends JPanel{
     /** Label para mostrar mensajes de error o información */
     public JLabel lblMessage = new JLabel();
     
+    /** Label para mostrar el logo de la aplicación */
+    private JLabel iconLabel = new JLabel(new ImageIcon(getClass().getResource("/images/logo_login.png")));
+    
     /** Email del usuario loggeado actualmente */
     private String loggedEmail;
     
@@ -72,6 +75,7 @@ public class Login extends JPanel{
         this.mediaPollingComponent = mediaPollingComponent;
  
         setupLayout(); 
+        setUpStyles();
         configKeyActions();
         initialLoginUser();
     } 
@@ -81,30 +85,32 @@ public class Login extends JPanel{
         return loggedEmail;
     }
 
-    /** Configura posición y estilo de los componentes */
+    /** Configura posición de los componentes */
     private void setupLayout() {
         
-        this.setLayout(new MigLayout("fill, wrap, center", "[grow]", "push[]20[]10[]10[]20[]10[]push"));
-        this.setBackground(UIStyles.DARK_GREY_COLOR);
+        this.setLayout(new MigLayout("fill, wrap, center", "[grow]", "push[]20[]10[]10[]20[]10[]push")); //Layout principal
         
-        ImageIcon icon = new ImageIcon(getClass().getResource("/images/logo_login.png"));
-        JLabel lblIcon = new JLabel(icon);
-        this.add(lblIcon, "align center, gapbottom 20");
+        this.add(iconLabel, "align center, gapbottom 20"); //Logo
         
-        UIStyles.styleField(txtEmail, "/images/email2.png", " Enter email", "/images/delete_url.png", null);
-        this.add(txtEmail, "align center, w 400!, h 35!");
+        this.add(txtEmail, "align center, w 400!, h 35!"); //Campo de texto email
+        this.add(txtPassword, "align center, w 400!, h 35!, gaptop 10"); //Campo de texto password
         
-        UIStyles.styleField(txtPassword, "/images/pss.png", " Enter password", "/images/show.png", null);
-        this.add(txtPassword, "align center, w 400!, h 35!, gaptop 10");
+        this.add(remember, "align center, gaptop 10");  //Checkbox remember
+        this.add(btnLogin, "align center, w 70!, h 70!, gaptop 20"); //Botón login
         
-        UIStyles.styleCheckBox(remember, "Remember me", "Remember credentials");
-        this.add(remember, "align center, gaptop 10");
-
-        UIStyles.styleButtons(btnLogin, null, "/images/login.png", UIStyles.LIGHT_PURPLE, new Color(0, 0, 0, 0), true, "Login user", null);
-        this.add(btnLogin, "align center, w 70!, h 70!, gaptop 20");
-
         lblMessage.setHorizontalAlignment(SwingConstants.CENTER);
-        this.add(lblMessage, "align center, gaptop 100, growx");
+        this.add(lblMessage, "align center, gaptop 100, growx"); //Mensages informativos
+    }
+    
+    /** Configura el estilo de los componentes */
+    private void setUpStyles() {
+        this.setBackground(UIStyles.DARK_GREY_COLOR);
+
+        UIStyles.styleField(txtEmail, "/images/email2.png", " Enter email", "/images/delete_url.png", null); //Campo de texto email
+        UIStyles.styleField(txtPassword, "/images/pss.png", " Enter password", "/images/show.png", null); //Campo de texto password
+        
+        UIStyles.styleCheckBox(remember, "Remember me", "Remember credentials"); //Checkbox remember
+        UIStyles.styleButtons(btnLogin, null, "/images/login.png", UIStyles.LIGHT_PURPLE, new Color(0, 0, 0, 0), true, "Login user", null); //Botón login 
     }
 
     
