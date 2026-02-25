@@ -329,29 +329,10 @@ public class MainFrame extends JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            // Esto activa el tema oscuro de FlatLaf
-            com.formdev.flatlaf.FlatDarkLaf.setup();
-
-            UIManager.put("ComboBox.selectionBackground", UIStyles.LIGHT_PURPLE);
-            UIManager.put("ComboBox.selectionForeground", Color.WHITE);
-            UIManager.put("List.selectionBackground", UIStyles.LIGHT_PURPLE);
-            UIManager.put("List.selectionForeground", Color.WHITE);
+        
+        // Configura el look and feel
+        UIStyles.setupLookAndFeel();
             
-            UIManager.put("List.selectionInactiveBackground", UIStyles.LIGHT_PURPLE);
-            UIManager.put("ComboBox.selectionInactiveBackground", UIStyles.LIGHT_PURPLE);
-
-            UIManager.put("Component.arc", 15);
-            UIManager.put("TextComponent.arc", 15);
-
-            //Color de foco de los componentes
-            UIManager.put("Component.focusColor", UIStyles.LIGHT_PURPLE);
-            UIManager.put("Component.focusedBorderColor", UIStyles.LIGHT_PURPLE);
-            UIManager.put("TextComponent.focusedBorderColor", UIStyles.LIGHT_PURPLE);
-
-        } catch (Exception ex) {
-            System.err.println("No se pudo iniciar FlatLaf, usando tema por defecto.");
-        }
         //</editor-fold>
 
         /* Create and display the form */

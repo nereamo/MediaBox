@@ -1,6 +1,7 @@
 package montoya.mediabox.configUI;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -37,6 +38,36 @@ public class UIStyles {
     public static final Color MEDIUM_GREY_COLOR = new Color(72, 72, 74);
     public static final Color DARK_GREY_COLOR = new Color(37, 37, 38);
     public static final Color BLACK_COLOR = new Color(15, 15, 15);
+    
+    /**
+     * Inicializa FlatLaf y configura los colores globales de los componentes.
+     * Debe llamarse al inicio del main antes de crear cualquier JFrame.
+     */
+    public static void setupLookAndFeel() {
+        try {
+            //Activa FlatDarkLaf
+            FlatDarkLaf.setup();
+
+            //Configuración global de selección de JComboBox y JList
+            UIManager.put("ComboBox.selectionBackground", LIGHT_PURPLE);
+            UIManager.put("ComboBox.selectionForeground", Color.WHITE);
+            UIManager.put("List.selectionBackground", LIGHT_PURPLE);
+            UIManager.put("List.selectionForeground", Color.WHITE);
+            UIManager.put("List.selectionInactiveBackground", LIGHT_PURPLE);
+
+            //Redondez de componentes
+            UIManager.put("Component.arc", 15);
+            UIManager.put("TextComponent.arc", 15);
+
+            //Color de foco
+            UIManager.put("Component.focusColor", LIGHT_PURPLE);
+            UIManager.put("Component.focusedBorderColor", LIGHT_PURPLE);
+            UIManager.put("TextComponent.focusedBorderColor", LIGHT_PURPLE);
+
+        } catch (Exception ex) {
+            System.err.println("No se pudo iniciar FlatLaf, usando tema por defecto.");
+        }
+    }
 
     /**
      * Configuración de los bordes en los paneles con esquinas redondeadas.
@@ -215,11 +246,6 @@ public class UIStyles {
      * @param combo JComboBox a configurar
      */
     public static void styleComboBox(JComboBox combo) {
-        
-        UIManager.put("ComboBox.selectionBackground", UIStyles.LIGHT_PURPLE);
-    UIManager.put("ComboBox.selectionForeground", Color.WHITE);
-    UIManager.put("List.selectionBackground", UIStyles.LIGHT_PURPLE);
-    UIManager.put("List.selectionForeground", Color.WHITE);
         combo.setForeground(DARK_GREY_COLOR);
         combo.setBackground(LIGHT_GREY_COLOR);
         combo.setFont(FONT_PLAIN);
