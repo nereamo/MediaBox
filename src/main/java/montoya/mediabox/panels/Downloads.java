@@ -55,7 +55,6 @@ public class Downloads extends javax.swing.JPanel {
         tblModel = infoMedia.getTableModel();
 
         setupLayout();
-        //qualityOptions(cbbxQualityFilter);
         applyStylesComponent();
         styleTxtUrl();
         configRadioButtons(btnGroup, radioMp4, radioMkv, radioWebm, radioMp3, radioWav, radioM4a);
@@ -79,7 +78,7 @@ public class Downloads extends javax.swing.JPanel {
         pnlVideo.add(radioMp4);
         pnlVideo.add(radioMkv);
         pnlVideo.add(radioWebm);
-        pnlVideo.add(cbbxQualityFilter, "w 120!, h 30!");
+        pnlVideo.add(cbbxQualityFilter, "w 130!, h 30!");
         downloadFilePnl.add(pnlVideo, "growx, h 70!, gaptop 30");
 
         pnlAudio.setLayout(new MigLayout("fillx, insets 17", "[]15[]15[]", "[]"));
@@ -101,9 +100,9 @@ public class Downloads extends javax.swing.JPanel {
         UIStyles.panelsBorders(pnlVideo, UIStyles.MEDIUM_GREY_COLOR, 15);
         UIStyles.panelsBorders(pnlAudio, UIStyles.MEDIUM_GREY_COLOR, 15);
         
-        UIStyles.styleButtons(btnFolder, "", "/images/folder.png", UIStyles.LIGHT_PURPLE, new Color(0, 0, 0, 0), true, "Select destination folder");
-        UIStyles.styleButtons(btnDownload, "DOWNLOAD", "/images/download2.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Download file");
-        UIStyles.styleButtons(btnOpenLast, "OPEN LAST", "/images/play2.png",UIStyles.MEDIUM_GREY_COLOR,UIStyles.LIGHT_GREY_COLOR, false, "Reproduce last file");
+        UIStyles.styleButtons(btnFolder, "", "/images/folder.png", UIStyles.LIGHT_PURPLE, new Color(0, 0, 0, 0), true, "Select destination folder", null);
+        UIStyles.styleButtons(btnDownload, "DOWNLOAD", "/images/download2.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Download file", null);
+        UIStyles.styleButtons(btnOpenLast, "OPEN LAST", "/images/play2.png",UIStyles.MEDIUM_GREY_COLOR,UIStyles.LIGHT_GREY_COLOR, false, "Reproduce last file", "/images/play2_black.png");
         
         UIStyles.styleButtonGroup("Select format", radioM4a, radioMkv, radioMp3, radioMp4, radioWav, radioWebm);
         UIStyles.itemsInCombobox(cbbxQualityFilter, "1080,720,480");
@@ -117,14 +116,6 @@ public class Downloads extends javax.swing.JPanel {
         this.repaint();
     }
     
-//    //Aplicar la calidad de video
-//    private void qualityOptions(JComboBox cbbxQuality){
-//        cbbxQuality.removeAllItems();
-//        cbbxQuality.addItem("1080");
-//        cbbxQuality.addItem("720");
-//        cbbxQuality.addItem("480");
-//    }
-    
     //Configuración de ButtonGroup
     private void configRadioButtons(ButtonGroup bg, JRadioButton... buttons) {
         for (JRadioButton btn : buttons) {
@@ -136,7 +127,7 @@ public class Downloads extends javax.swing.JPanel {
     
     //Configura de JTextField de URL
     private void styleTxtUrl() {
-        UIStyles.styleField(txtUrl, "/images/url.png", "Paste the URL of the file to download", "/images/delete_url.png", this::pasteUrl);
+        UIStyles.styleField(txtUrl, "/images/url.png", " Paste the URL of the file to download", "/images/delete_url.png", this::pasteUrl);
     }
     
     //Configuración de pegar URL a JTextField    

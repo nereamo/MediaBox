@@ -13,7 +13,7 @@ import montoya.mediabox.panels.InfoMedia;
 
 /**
  * Clase creada con ayuda de Copilot para entender como funciona SwingWorker y que metodos utilizar. 
- * SwingWorker ejecuta tareas en segundo plano impidiendo que no se bloquee la GUI. 
+ * <p> SwingWorker ejecuta tareas en segundo plano impidiendo que no se bloquee la GUI. 
  *
  * @author Nerea
  */
@@ -37,9 +37,11 @@ public class DownloadWorker extends SwingWorker<Void, String> {
     /** Proceso externo para realizar la descarga */
     private final ProcessBuilder pb;
     
-    /** Variables generales */
-    private final String folder; //Directorio
-    private final JProgressBar barProgress; //Componente barra de progreso
+    /** Directorio de la descarga */
+    private final String folder;
+    
+    /** Barra de progreso asociada a la descarga. */
+    private final JProgressBar barProgress;
     
     /**
      * Ejecuta un proceso externo (descarga) en segundo plano sin bloquear la interfaz gráfica.
@@ -147,9 +149,7 @@ public class DownloadWorker extends SwingWorker<Void, String> {
         return null;
     }
 
-    /**
-     * Se ejecuta automáticamente cuando la descarga en segundo plano ha finalizado.
-     */
+    /** Se ejecuta automáticamente cuando la descarga en segundo plano ha finalizado */
     @Override
     protected void done() {
 

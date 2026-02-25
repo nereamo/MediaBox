@@ -5,7 +5,13 @@ import javax.swing.*;
 import montoya.mediabox.configUI.UIStyles;
 
 /**
- * Dialog que contiene la información de alumno, curso y los recursos para la tarea
+ * Dialog que contiene la información sobre la aplicación.
+ * <p> Información mostrada:
+ * <ul>
+ * <li> Nombre del alumno, curso y módulo </li>
+ * <li> Descripción de la aplicación </li>
+ * <li> Recursos utilizados </li>
+ * </ul>
  * 
  * @author Nerea
  */

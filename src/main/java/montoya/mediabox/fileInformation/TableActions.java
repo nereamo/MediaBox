@@ -12,9 +12,12 @@ import montoya.mediabox.panels.InfoMedia;
 
 /**
  * Clase encargada de la interacción con los botones de la columna "Actions" de la tabla.
- * <p>
- * Muestra iconos de reproducir, eliminar o descargar un archivo dependiendo del directorio seleccionado.
- * </p>
+ * <p>Iconos de panel de la columna "Actions":
+ * <ul>
+ * <li> Reproducir </li>
+ * <li> Eliminar </li>
+ * <li> Descargar </li>
+ * </ul>
  * 
  * @author Nerea
  */
@@ -33,7 +36,7 @@ public class TableActions extends AbstractCellEditor implements TableCellRendere
     private final InfoMedia infoMedia;
 
     /**
-     * Constructor que inicializalos botones y los añade a la columna "Actions"
+     * Constructor que inicializa los botones y los añade a la columna "Actions"
      * 
      * @param table Tabla donde se muestran los botones
      * @param columnIndex Índice de la columna

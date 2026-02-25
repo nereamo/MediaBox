@@ -3,9 +3,8 @@ package montoya.mediabox.fileInformation;
 import java.io.Serializable;
 
 /**
- * Implementa serializable para permitir almacenar los datos en archivo .json 
- * <p>
- * Propiedades del archivo:
+ * Implementa {@link serializable} para permitir almacenar la información del archivo descargado en un JSON.
+ * <p> Propiedades del archivo:
  * <ul>
  * <li> Nombre </li>
  * <li> Tamaño </li>
@@ -17,21 +16,29 @@ import java.io.Serializable;
  */
 public class FileInformation implements Serializable {
 
-    /** Variables genéricas */
+    /** Nombre del archivo. */
     private String name;
+    
+    /** Tamaño del archivo en bytes. */
     private long size;
+    
+    /** Tipo MIME del archivo. */
     private String type;
+    
+    /** Fecha de descarga. */
     private String date;
+    
+    /** Ruta del directorio donde se encuentra el archivo. */
     private String folderPath;
 
     /**
      * Constructor que inicializa un objeto FileInformation
      * 
      * @param name Nombre del archivo
-     * @param size Tamaño en MB/s
-     * @param type MymeTipe
+     * @param size Tamaño del archivo en bytes
+     * @param type Tipo MIME del archivo
      * @param date Fecha de descarga
-     * @param folderPath Directorio de ubicación de la descarga
+     * @param folderPath Directorio donde se encuentra el archivo
      */
     public FileInformation(String name, long size, String type, String date, String folderPath) {
         this.name = name;

@@ -1,20 +1,24 @@
 package montoya.mediabox.tokenuser;
 
 /**
- * Almacena una llave de acceso utilizada por el usuario al autenticarse en la aplicación
+ * Almacena una llave de autenticación del usuario.
+ * <p> Contiene la llave de acceso (token) y el email del usuario asociado
  * 
  * @author Nerea
  */
 public class TokenUser {
     
+    /** Llave de acceso del usuario */
     private String token;
+    
+    /** Email del usuario */
     private String email;
     
     /** Constructor por defecto*/
     public TokenUser(){}
     
     /**
-     * Crea objeto TokenUser con el token y el email del usuario
+     * Crea objeto {@code TokenUser} con el token y el email del usuario.
      * 
      * @param token Llave de acceso
      * @param email Email del usuario

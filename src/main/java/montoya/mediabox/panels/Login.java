@@ -12,25 +12,59 @@ import montoya.mediapollingcomponent.MediaPollingComponent;
 import net.miginfocom.swing.MigLayout;
 
 /**
- * Panel que gestiona el login del usuario
+ * Panel que gestiona el login del usuario.
+ * <p> Encargado de:
+ * <ul>
+ * <li> Mostra campos de texto para email y contraseña </li>
+ * <li> Recordar credenciales si se ha seleccionado la opción "Remember me" </li>
+ * <li> Autologin si el token es válido </li>
+ * <li> Acción del botón login </li>
+ * </ul>
+ * 
  * @author Nerea
  */
 public class Login extends JPanel{
     
+    /** Ventana principal donde se muestra el panel */
     private MainFrame frame;
-    private CardManager cardManager;
-    private MediaPollingComponent mediaPollingComponent;
-    private JTextField txtEmail = new JTextField();
-    private JPasswordField txtPassword = new JPasswordField();
-    private JButton btnLogin = new JButton();
-    private JCheckBox remember = new JCheckBox();
-    public JLabel lblMessage = new JLabel();
-    private String loggedEmail;
-    private static final String API_BASE_URL = "https://difreenet9.azurewebsites.net";
-    private static String token;
-    private static final String FOLDER_NAME = System.getProperty("user.home") + "/AppData/Local/MediaBox";
-    private boolean isPasswordVisible = false;
     
+    /** Gestor de tarjetas para cambiar entre paneles */
+    private CardManager cardManager;
+    
+    /** Componente encargado de las llamadas a la API y el polling de medios */
+    private MediaPollingComponent mediaPollingComponent;
+    
+    /** Campo de texto para el email del usuario */
+    private JTextField txtEmail = new JTextField();
+    
+    /** Campo de texto para la contraseña del usuario */
+    private JPasswordField txtPassword = new JPasswordField();
+    
+    /** Botón para iniciar sesión */
+    private JButton btnLogin = new JButton();
+    
+    /** Checkbox para recordar las credenciales del usuario */
+    private JCheckBox remember = new JCheckBox();
+    
+    /** Label para mostrar mensajes de error o información */
+    public JLabel lblMessage = new JLabel();
+    
+    /** Email del usuario loggeado actualmente */
+    private String loggedEmail;
+    
+    /** Token de acceso del usuario loggeado */
+    private static String token;
+    
+    /** Base URL de la API */
+    private static final String API_BASE_URL = "https://difreenet9.azurewebsites.net";
+
+    /**
+     * Constructor que nicializa el panel Login
+     * 
+     * @param frame {@link MainFrame} Ventana principal donde se añade el panel 
+     * @param cardManager {@link CardManager} Gestiona el intercambio de paneles.
+     * @param mediaPollingComponent {@link MediaPollingComponent} Listener que notifica nuevos medios en la API
+     */
     public Login(MainFrame frame, CardManager cardManager, MediaPollingComponent mediaPollingComponent){
         
         this.frame = frame;
@@ -42,11 +76,12 @@ public class Login extends JPanel{
         initialLoginUser();
     } 
     
-    public String getLoggedEmail(){ //Devuelve el email loggeado
+    /** @return El email del usuario que inició sesión */
+    public String getLoggedEmail(){
         return loggedEmail;
     }
 
-    //Configuracion de la posición de los componentes
+    /** Configura posición y estilo de los componentes */
     private void setupLayout() {
         
         this.setLayout(new MigLayout("fill, wrap, center", "[grow]", "push[]20[]10[]10[]20[]10[]push"));
@@ -56,44 +91,33 @@ public class Login extends JPanel{
         JLabel lblIcon = new JLabel(icon);
         this.add(lblIcon, "align center, gapbottom 20");
         
-        configemailField();
+        UIStyles.styleField(txtEmail, "/images/email2.png", " Enter email", "/images/delete_url.png", null);
         this.add(txtEmail, "align center, w 400!, h 35!");
         
-        configPasswordField();
+        UIStyles.styleField(txtPassword, "/images/pss.png", " Enter password", "/images/show.png", null);
         this.add(txtPassword, "align center, w 400!, h 35!, gaptop 10");
         
         UIStyles.styleCheckBox(remember, "Remember me", "Remember credentials");
         this.add(remember, "align center, gaptop 10");
 
-        UIStyles.styleButtons(btnLogin, null, "/images/login.png", UIStyles.LIGHT_PURPLE, new Color(0, 0, 0, 0), true, "Login user");
+        UIStyles.styleButtons(btnLogin, null, "/images/login.png", UIStyles.LIGHT_PURPLE, new Color(0, 0, 0, 0), true, "Login user", null);
         this.add(btnLogin, "align center, w 70!, h 70!, gaptop 20");
 
         lblMessage.setHorizontalAlignment(SwingConstants.CENTER);
         this.add(lblMessage, "align center, gaptop 100, growx");
     }
 
-    //Estilo del JTextField email
-    private void configemailField() {
-        UIStyles.styleField(txtEmail, "/images/email2.png", "Enter email", "/images/delete_url.png", null);
-    }
     
-    //Estilo del JPasswordField password
-    private void configPasswordField() {
-        UIStyles.styleField(txtPassword, "/images/pss.png", "Enter password", "/images/show.png", null);
-        
-        txtPassword.setEchoChar('•');
-    }
-    
-    //Al pulsar ENTER hace login
+    /** Configura la tecla ENTER para mover el foco o ejecutar login. */
     private void configKeyActions(){
-        txtEmail.addActionListener(new ActionListener (){
+        txtEmail.addActionListener(new ActionListener (){ //pulsar ENTER envía foco a Password
             @Override
             public void actionPerformed(ActionEvent e){
                 txtPassword.requestFocusInWindow();
             }
         });
         
-        txtPassword.addActionListener(new ActionListener (){
+        txtPassword.addActionListener(new ActionListener (){ //pulsar ENTER envía foco a botón para hacer login
             @Override
             public void actionPerformed(ActionEvent e){
                 btnLogin.doClick();
@@ -101,92 +125,101 @@ public class Login extends JPanel{
         }); 
     }
 
-    //Loguea usuario al pulsar boton Login y guarda token
+    /** Configura la accioón del botón login y autentifica al usuario. */
     private void initialLoginUser() {
         btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
                 String email = txtEmail.getText();
-                loggedEmail = email;
+                loggedEmail = email; //Guarda email del usuario loggeado
                 String password = String.valueOf(txtPassword.getPassword());
 
-                if (email == null || email.trim().equals("")
-                        || password == null || password.trim().equals("")) {
+                if (email == null || email.trim().equals("") || password == null || password.trim().equals("")) {
                     UIStyles.showMessageInfo(lblMessage, "Please, enter an Email and Password");
                     return;
                 }
 
                 try {
+                    //Configura la URL de la API y realiza login
                     mediaPollingComponent.setApiUrl(API_BASE_URL);
                     String newToken = mediaPollingComponent.login(email, password);
 
                     if (newToken != null) {
 
                         try {
-                            mediaPollingComponent.getAllMedia(newToken);
+                            mediaPollingComponent.getAllMedia(newToken); //Obtener medios con el token recibido
                         } catch (Exception ex) {
                             UIStyles.showMessageInfo(lblMessage, "User logged out. Please login again.");
                             return;
                         }
-                        token = newToken;
+                        token = newToken; //Guarda token y configura el poling
                         mediaPollingComponent.setToken(token);
-                        //TokenController.saveToken(token, email);
                         
-                        frame.setMenuVisible(true); 
-                        frame.initializePolling(token);
+                        //JMenuBar visible y polling inicializado
+                        frame.setMenuVisible(true);
+                        frame.initializePolling(token); 
                         
-                        frame.lblMessage.setText(email);
-                        frame.lblMessage.setFont(UIStyles.FONT_BOLD);
-                        frame.lblMessage.setForeground(UIStyles.LIGHT_PURPLE); //Usuario loggeado en label menuBar
+                        //Mostrar email del usuario loggeado en JMenuBar
+                        UIStyles.styleLabelUserName(frame.lblMessage, email); 
+                        
+                        //Muestra el panel Downloads y refresca la tabla
                         cardManager.showCard("downloads");
-                        frame.pnlDownload.infoMedia.refreshFiles(); //Refresca la tabla al hacer login
+                        frame.pnlDownload.infoMedia.refreshFiles();
 
-                        if (remember.isSelected()) {
+                        if (remember.isSelected()) { //guarda el token si el usuario marcó "Remember me"
                             TokenController.saveToken(token, email);
                         }
                     }
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(Login.this, "Login failed: Incorrect credentials or expired token.", "Error", JOptionPane.ERROR_MESSAGE);
+                    UIStyles.showMessageInfo(lblMessage, "Login failed: Incorrect credentials or expired token.");
                 }
             }
         });
     }
 
-    //Lee token y si es correcto, accede a Frame directamente
-    public void autoLogin(){
-        try{
-            TokenUser save = TokenController.readToken();
-            String emailUser = save.getEmail();
-            
-            if(save != null){
-                String savedToken = save.getToken();
-                mediaPollingComponent.setApiUrl(API_BASE_URL);
-                
-                try{
-                    mediaPollingComponent.getAllMedia(savedToken); //Llamada a api para comprobar si el token es correcto
-                    
-                }catch(Exception e){
-                    UIStyles.showMessageInfo(lblMessage, "User logged out. Please log in again.");
-                    token = null; 
-                    cardManager.showCard("login"); 
-                    return;
-                }
-                token = savedToken;
-                mediaPollingComponent.setToken(token);
-                frame.initializePolling(token);
-                frame.setMenuVisible(true);
-                frame.lblMessage.setText(emailUser); //Usuario loggeado en label menuBar
-                frame.lblMessage.setFont(UIStyles.FONT_BOLD);
-                frame.lblMessage.setForeground(UIStyles.LIGHT_PURPLE);
-                cardManager.showCard("downloads");
-                System.out.println("Login successful.");
+    /**
+     * Realiza autologin si el usuario indico que se recordaran sus credenciales y si el token es vállido.
+     */
+    public void autoLogin() {
+        try {
+            TokenUser save = TokenController.readToken(); //Lee token guardado
+
+            if (save == null) {
+                cardManager.showCard("login");
                 return;
             }
+
+            //Email usuario guardado y Token guardado
+            String emailUser = save.getEmail();
+            String savedToken = save.getToken(); 
+
+            mediaPollingComponent.setApiUrl(API_BASE_URL); //Configura polling
+
+            try {
+                mediaPollingComponent.getAllMedia(savedToken); //Llamada a api para comprobar si el token es correcto
+            } catch (Exception e) {
+                UIStyles.showMessageInfo(lblMessage, "User logged out. Please log in again.");
+                token = null;
+                cardManager.showCard("login");
+                return;
+            }
+            
+            //Token válido, configura token y muestra panel Downloads
+            token = savedToken;
+            mediaPollingComponent.setToken(token);
+            frame.initializePolling(token);
+            frame.setMenuVisible(true);
+            
+            //Mostrar email del usuario loggeado en JMenuBar
+            UIStyles.styleLabelUserName(frame.lblMessage, emailUser);
+            
+            //Muestra el panel Downloads y refresca la tabla
+            cardManager.showCard("downloads");
+            return;
+
         } catch (Exception ex) {
             System.getLogger(Login.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
-        token = null;
-        cardManager.showCard("login");
     }
 }

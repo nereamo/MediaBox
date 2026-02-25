@@ -4,7 +4,6 @@ import java.util.*;
 import javax.swing.*;
 import java.awt.EventQueue;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Image;
 import montoya.mediabox.panels.*;
 import montoya.mediabox.controller.*;
@@ -18,12 +17,10 @@ import montoya.mediapollingcomponent.apiclient.Media;
 
 /**
  * Ventana principal de la aplicación {@code MediaBox}.
- * <p>
- * La clase extiende {@code javax.swing.JFrame}, permite que esta clase sea un diálogo modal.
- * Utiliza un {@link CardLayout} para el intercambio de paneles (vistas) de la interfaz.
- * </p>
- * <p>
- * Controla:
+ * <p>La clase extiende {@code javax.swing.JFrame}, permite que esta clase sea un diálogo modal.
+ * Utiliza un {@link CardLayout} para el intercambio de paneles (vistas) de la interfaz. </p>
+ * 
+ * <p>Controla:
  * <ul>
  * <li> Barra de menú y sus acciones.</li>
  * <li> Autenticación del usuario.</li>

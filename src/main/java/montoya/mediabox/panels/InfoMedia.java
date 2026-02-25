@@ -79,7 +79,7 @@ public class InfoMedia extends javax.swing.JPanel {
         UIStyles.styleScrollComponent(tblMedia, scrTableMedia);
         UIStyles.styleComboBox(cbbxTypeFilter);
         cbbxTypeFilter.setEditable(true);
-        UIStyles.styleButtons(btnUpload, "UPLOAD", "/images/upload.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Upload file to API");
+        UIStyles.styleButtons(btnUpload, "UPLOAD", "/images/upload.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Upload file to API", null);
     }
 
     //Añade los filtros a JComboBox

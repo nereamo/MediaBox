@@ -5,8 +5,7 @@ import javax.swing.JPanel;
 
 /**
  * Clase que gestiona los distintos paneles (vistas) mostrados en la interfaz.
- * <p>
- * Vistas:
+ * <p> Vistas:
  * <ul> 
  * <li> Panel Login.</li>
  * <li> Panel Downloads.</li>

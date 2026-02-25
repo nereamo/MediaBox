@@ -68,8 +68,8 @@ public class Preferences extends javax.swing.JPanel {
         UIStyles.panelsBorders(pnlPref, UIStyles.DARK_GREY_COLOR, 30);
         
         UIStyles.styleFixLabel(lblPath, "Temp Path: ", null);
-        UIStyles.styleField(txtPathTemp, null, "Select folder for temporary files...", null, null);
-        UIStyles.styleButtons(btnBrowseTemp, "","/images/folder.png", UIStyles.LIGHT_PURPLE, new Color (0,0,0),true, "Select Folder");
+        UIStyles.styleField(txtPathTemp, null, " Select folder for temporary files...", null, null);
+        UIStyles.styleButtons(btnBrowseTemp, "","/images/folder.png", UIStyles.LIGHT_PURPLE, new Color (0,0,0),true, "Select Folder", null);
         
         UIStyles.styleFixLabel(lblM3u, "File .m3u: ", null);
         UIStyles.styleCheckBox(chkCreate,"Create", "Create files .M3U");
@@ -79,10 +79,10 @@ public class Preferences extends javax.swing.JPanel {
         UIStyles.styleSpinner(spnSpeed);
         
         UIStyles.styleFixLabel(lblYtDlp, "Location yt-dlp: ", null);
-        UIStyles.styleButtons(btnYtDlp, "Automatic search yt-dlp", "/images/search.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Automatic search yt-dlp");
+        UIStyles.styleButtons(btnYtDlp, "Automatic search yt-dlp", "/images/search.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Automatic search yt-dlp", null);
         
-        UIStyles.styleButtons(btnSave, "Save", "/images/save.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Save changes");
-        UIStyles.styleButtons(btnReturn, "Return", "/images/return.png", UIStyles.LIGHT_GREY_COLOR, UIStyles.DARK_GREY_COLOR, true, "Discard changes");
+        UIStyles.styleButtons(btnSave, "Save", "/images/save.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Save changes", null);
+        UIStyles.styleButtons(btnReturn, "Return", "/images/return.png", UIStyles.LIGHT_GREY_COLOR, UIStyles.DARK_GREY_COLOR, true, "Discard changes", null);
     }
     
     //Velocidad de descarga hasta un max de 100MB/s

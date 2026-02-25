@@ -17,8 +17,7 @@ import montoya.mediapollingcomponent.apiclient.Media;
 
 /**
  * Gestiona las operaciones sobre los archivos mostrados en la aplicación.
- * <p>
- * Permite:
+ * <p> Permite:
  * <ul> 
  * <li> Obtener archivos locales, remotos y mixtos.</li>
  * <li> Filtrar por directorio y tipo de archivo.</li>

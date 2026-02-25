@@ -3,20 +3,24 @@ package montoya.mediabox.fileInformation;
 import java.io.File;
 
 /**
- * Permite diferenciar entre los directorios de red, locales y misxtos.
- * Muestra solo el nombre no la ruta completa.
+ * Permite diferenciar entre los directorios de red, locales y mixtos.
+ * <p>Muestra solo el nombre no la ruta completa.
  * 
  * @author Nerea
  */
 public class FolderItem {
 
-    /** Variables generales */
+    /** Ruta completa del directorio */
     private String fullPath;
+    
+    /** Indica si es directorio de red */
     private boolean isNetwork;
+    
+    /** Indica si el directorio es mixto (local y red) */
     private boolean isBoth;
 
     /**
-     * Constructor que inicializa los distintos directorios
+     * Constructor que crea un nuevo directorio dependiendo su hubicacion.
      * 
      * @param fullPath Ruta completa del directorio
      * @param isNetwork True si es el directorio de red

@@ -11,8 +11,7 @@ import javax.swing.table.JTableHeader;
 /**
  * Gestiona los distintos estilos visuales de los componentes.
  * No es necesário instanciar esta clase.
- * <p>
- * Personalización de componentes:
+ * <p> Personalización de componentes:
  * <ul> 
  * <li> Paneles.</li>
  * <li> Botones y menús.</li>
@@ -54,6 +53,7 @@ public class UIStyles {
             UIManager.put("List.selectionBackground", LIGHT_PURPLE);
             UIManager.put("List.selectionForeground", Color.WHITE);
             UIManager.put("List.selectionInactiveBackground", LIGHT_PURPLE);
+            UIManager.put("Button.hoverBorderColor", Color.WHITE);
 
             //Redondez de componentes
             UIManager.put("Component.arc", 15);
@@ -115,6 +115,20 @@ public class UIStyles {
         label.setText(text);
         label.setIcon(createIcon(iconPath));
     }
+    
+    /**
+     * Configura un JLabel que contiene el email del usuario loggeado.
+     * Aplica color de texto, fuente, texto.
+     * 
+     * @param label JLabel a configurar
+     * @param text Texto que se mostrará en el JLabel
+     */
+    public static void styleLabelUserName(JLabel label, String text) {
+        
+        label.setForeground(LIGHT_PURPLE);
+        label.setFont(FONT_BOLD);
+        label.setText(text);
+    }
 
     /**
      * Configura un JCheckBox.
@@ -162,8 +176,9 @@ public class UIStyles {
      * @param foreGround Color del texto del JButton
      * @param enabled Si el botón estará habilitado 
      * @param tootlTip Texto de ayuda para el usuario
+     * @param replaceIcon Ruta del icono para un boton deshabilitado; puede ser null si no debe tener icono
      */
-    public static void styleButtons(JButton btn, String text, String iconPath, Color backGround, Color foreGround, boolean enabled, String tootlTip) {
+    public static void styleButtons(JButton btn, String text, String iconPath, Color backGround, Color foreGround, boolean enabled, String tootlTip, String replaceIcon) {
 
         btn.setText(text);
         btn.setBackground(backGround);
@@ -172,7 +187,20 @@ public class UIStyles {
         btn.setToolTipText(tootlTip);
         btn.setFont(FONT_BOLD);
         btn.setIcon(createIcon(iconPath));
-        
+
+        //Icono normal
+        if (iconPath != null) {
+            btn.setIcon(createIcon(iconPath));
+
+            //Icono del botón deshabilitado
+            if (replaceIcon != null) {
+                btn.setDisabledIcon(createIcon(replaceIcon));
+            }
+        }
+
+        //Texto color negro en botón deshabilitado
+        btn.putClientProperty("FlatLaf.style", "disabledText: #0F0F0F; " + "disabledBackground: #48484A");
+
         btn.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_ROUND_RECT);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
@@ -241,7 +269,7 @@ public class UIStyles {
 
     /**
      * Configura una JComboBox personalizado.
-     * Aplica esquinas redondeadas y elimina el borde por defecto.
+     * Aplica color de texto, color de fondo, fuente y cursor de mano
      * 
      * @param combo JComboBox a configurar
      */
@@ -253,6 +281,13 @@ public class UIStyles {
         combo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
     
+    /**
+     * Llena el JComboBox con elementos de tipo String.
+     * Aplica tipo de fuente.
+     * 
+     * @param combo JComboBox de tipo String a llenar
+     * @param items Elementos que se mostraran en el JComboBox
+     */
     public static void itemsInCombobox(JComboBox<String> combo, String items) {
         combo.removeAllItems();
         String[] elementos = items.split(","); //Separar por coma
@@ -430,12 +465,12 @@ public class UIStyles {
         bar.setUI(new com.formdev.flatlaf.ui.FlatProgressBarUI() {
             @Override
             protected Color getSelectionBackground() {
-                return Color.BLACK; // Texto cuando está sobre el fondo (gris)
+                return BLACK_COLOR; //Texto cuando está sobre el fondo (gris)
             }
 
             @Override
             protected Color getSelectionForeground() {
-                return Color.BLACK; // Texto cuando está sobre la carga (púrpura)
+                return BLACK_COLOR; // Texto cuando está sobre la carga (púrpura)
             }
         });
 

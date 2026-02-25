@@ -7,7 +7,14 @@ import java.nio.file.Paths;
 import tools.jackson.databind.ObjectMapper;
 
 /**
- * Permite guardar el token del usuario al loguearse, leerlo para el autologin y eliminarlo.
+ * Gestiona el almacenamiento del token.
+ * 
+ * <p>Permite:
+ * <ul>
+ * <li> Guardar el token del usuario al loguearse por primera vez </li>
+ * <li> Leer el token para abrir la aplicación automaticamente </li>
+ * <li> Eliminar el token del archivo donde se almacenan </li>
+ * </ul>
  * 
  * @author Nerea
  */
@@ -21,7 +28,7 @@ public class TokenController {
     private static final ObjectMapper mapper = new ObjectMapper();
     
     /**
-     * Guarada el token (llave de autenticación) en un archivo JSON
+     * Guarda el token (llave de autenticación) en un archivo JSON
      * 
      * @param token Identificador único de autenticación del usuario
      * @param email Email con el que se registra el usuario

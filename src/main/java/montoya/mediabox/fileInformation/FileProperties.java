@@ -7,7 +7,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * Guarda, recupera, añade y elima descargas de un archivo JSON.
+ * Gestiona la información de las descargas almacenada en el JSON.
+ * 
+ * <p>Permite:
+ * <ul>
+ * <li> Cargar la información alamacenada en JSON </li>
+ * <li> Añadir una nueva descarga en JSON </li>
+ * <li> Eliminar una descarga en JSON </li>
+ * </ul>
  *
  * @author Nerea
  */
@@ -20,7 +27,7 @@ public class FileProperties {
     private static final Path JSON_PATH = Paths.get(FOLDER_NAME, "downloads.json");
     
     /**
-     * Carga la información d ela sdescargas
+     * Carga la información de las descargas
      * 
      * @return {@link DirectoryInformation} con la lista de archivos y directorios
      */

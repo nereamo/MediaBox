@@ -6,8 +6,7 @@ import montoya.mediabox.fileInformation.FileInformation;
 
 /**
  * Permite aplicar filtros para mostrar los archivos deseados.
- * <p>
- * Filtros:
+ * <p> Filtros:
  * <ul>
  * <li> El directorio al que pertenecen </li>
  * <li> Tipo de archivo (formato) </li>

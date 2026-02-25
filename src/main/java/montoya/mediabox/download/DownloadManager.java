@@ -12,14 +12,14 @@ import montoya.mediabox.panels.InfoMedia;
 /**
  * Gestiona la configuración y ejecución de descargas mediante la URL proporcionado por el usuario.
  * Uso de yt-dlp.
- * <p>
- * Define la siguiente información:
+ * <p> Define la siguiente información:
  * <ul>
  * <li> Ruta de archivos temporales </li>
  * <li> Ubicación del archivo yt-dlp.exe </li>
  * <li> Creación de listas .m3u </li>
  * <li> Definir la velocidad de descarga </li>
  * </ul>
+ * 
  * Se usa junto con {@link DownloadWorker} para realizar la descarga y poder actualizar la interfaz.
  *
  * @author Nerea
@@ -35,17 +35,23 @@ public class DownloadManager {
     /** {@link FileProperties} Panel (vista) que muestra la información d elas descargas. */
     private InfoMedia infoMedia;
 
-    /** Variables generales */
-    private String tempPath; //Ruta descarga
-    private String ytDlpLocation; //Ubicación archivo yt-dlp
-    private boolean createM3u; //Crear archivo .m3u
-    private double maxSpeed; //Velocidad de descarga
+    /** Ruta descarga */
+    private String tempPath;
+    
+    /** Ubicación archivo yt-dlp */
+    private String ytDlpLocation;
+    
+    /** Crear archivo .m3u */
+    private boolean createM3u;
+    
+    /** Velocidad de descarga */
+    private double maxSpeed;
 
     /** Constructor por defecto*/
     public DownloadManager() {}
 
     /**
-     * Constructor que inicializa FileProperties
+     * Constructor que inicializa {@link FileProperties}
      * 
      * @param fileProperties Objeto que gestiona las propiedades y de archivos descargados
      */

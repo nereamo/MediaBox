@@ -5,22 +5,25 @@ import javax.swing.table.AbstractTableModel;
 
 /**
  * Define que datos mostrar en la tabla de JFrame
+ * <p>Implementa un modelo de tabla basado en {@link FileInformation} gestionar y mostrar las descargas.
  *
  * @author Nerea
  */
 public class FileTableModel extends AbstractTableModel {
 
-    //Nombre de las columnas
-    private final String[] column = {"Name", "Size (MB)", "Type", "Date", "Actions"};
+    /** Nombres de las columnas */
+    private final String[] columnNames = {"Name", "Size (MB)", "Type", "Date", "Actions"};
+    
+    /** Lista de descargas */
     private List<FileInformation> fileList;
 
     /**
      * Constructor que recibe la lista de archivos
      * 
-     * @param allFiles Lista de archivos cargados desde JSON
+     * @param fileList Lista de archivos cargados desde JSON
      */
-    public FileTableModel(List<FileInformation> allFiles) {
-        this.fileList = allFiles;
+    public FileTableModel(List<FileInformation> fileList) {
+        this.fileList = fileList;
     }
 
     /** @return Número de filas de la tabla */
@@ -32,17 +35,17 @@ public class FileTableModel extends AbstractTableModel {
     /** @return Número de columnas de la tabla */
     @Override
     public int getColumnCount() {
-        return column.length;
+        return columnNames.length;
     }
 
     /** @return Nombre de las columnas de la tabla */
     @Override
-    public String getColumnName(int columns) {
-        return column[columns];
+    public String getColumnName(int column) {
+        return this.columnNames[column];
     }
     
     /**
-     * Indica que solo la columna nº4 es editable.
+     * Indica que solo la columna (índice 4) es editable.
      * 
      * @param rowIndex Índice de la fila
      * @param columnIndex Índice de la columna

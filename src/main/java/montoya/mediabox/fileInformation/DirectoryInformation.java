@@ -6,15 +6,17 @@ import java.util.Set;
 
 /**
  * Representa un directorio cons sus archivos descargados.
- * Contiene una lista de {@link FileInformation} y permite obtener las rutas de los directorios.
+ * <p> Contiene una lista de {@link FileInformation} y permite obtener las rutas de los directorios.
  * 
  * @author Nerea
  */
 public class DirectoryInformation implements Serializable{
     
-    /** Variables generales */
-    private List<FileInformation> fileList; //Lista de archivos descargados en el directorio
-    private Set<String> folderPaths; //Rutas de los directorios que almacenan descargas
+    /** Lista de archivos descargados en un directorio */
+    private List<FileInformation> fileList;
+    
+    /** Rutas de los directorios que almacenan descargas */
+    private Set<String> folderPaths;
     
     /**
      * Constructor que inicializa la lista de archivos y la colección de directorios.
