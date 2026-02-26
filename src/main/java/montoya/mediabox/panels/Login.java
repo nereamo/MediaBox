@@ -171,7 +171,7 @@ public class Login extends JPanel{
                         
                         //Muestra el panel Downloads y refresca la tabla
                         cardManager.showCard("downloads");
-                        frame.pnlDownload.infoMedia.refreshFiles();
+                        frame.pnlDownload.infoMedia.reloadMediaData();
 
                         if (remember.isSelected()) { //guarda el token si el usuario marcó "Remember me"
                             TokenController.saveToken(token, email);

@@ -138,7 +138,7 @@ public class DownloadWorker extends SwingWorker<Void, String> {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        infoMedia.refreshFiles();// Refrescar panel de información
+                        infoMedia.reloadMediaData();// Refrescar panel de información
                     }
                 });
             }
@@ -200,7 +200,7 @@ public class DownloadWorker extends SwingWorker<Void, String> {
      * Crea objeto FileInformation con sus propiedades (nombre, tamaño, tipo, fecha y directorio).
      * 
      * @param file Archivo del cual se obtienen los datos
-     * @return Objeto FileInformation con la información del archivo
+     * @return Objeto {@link FileInformation} con la información del archivo
      */
     private FileInformation fileInfo(File file) {
         String name = file.getName(); //Nombre del archivo

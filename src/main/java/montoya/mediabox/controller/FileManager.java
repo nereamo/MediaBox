@@ -158,7 +158,7 @@ public class FileManager {
      */
     public void deleteLocalFile(FileInformation fileInfo) {
         fileProperties.deleteDownload(fileInfo, directoryInfo.getFileList(), directoryInfo.getFolderPaths());
-        refreshFiles();
+        reloadDirectoryInfo();
     }
     
     /**
@@ -209,14 +209,14 @@ public class FileManager {
         String mimeType = Files.probeContentType(file.toPath());
         mediaPollingComponent.uploadFileMultipart(file, mimeType, mediaPollingComponent.getToken());
         mediaPollingComponent.setLastChecked(OffsetDateTime.now().minusMinutes(1).toString());
-        refreshFiles(); // Actualizamos los datos internos
+        reloadDirectoryInfo(); // Actualizamos los datos internos
     }
     
     
     /**
      * Actualiza los archivos descargados almacenados localmente
      */
-    public void refreshFiles(){
+    public void reloadDirectoryInfo(){
         this.directoryInfo = fileProperties.loadDownloads();
     }
 }

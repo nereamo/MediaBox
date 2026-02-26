@@ -19,7 +19,7 @@ import net.miginfocom.swing.MigLayout;
  * <li> Filtrar archivos por directorio y tipo (formato) </li>
  * <li> Reproducir archivos locales </li>
  * <li> Eliminar archivos locales </li>
- * <li> Descargar archivos de red </li>
+ * <li> Descargar archivos de la API </li>
  * <li> Subir archivos locales a la API </li>
  * </ul>
  *
@@ -27,15 +27,39 @@ import net.miginfocom.swing.MigLayout;
  */
 public class InfoMedia extends javax.swing.JPanel {
 
+    /** {@link FileTableModel} Modelo de la tabla que mustra las descargas. */
     private FileTableModel tblModel;
+    
+    /** {@link FileManager} Gestiona operaciones sobre los archivos mostrados en la aplicación. */
     private FileManager fileManager;
+    
+    /** {@link TypeFilter} Permite aplicar el filtro por tipo de archivo y por directorio. */
     private final TypeFilter typeFilter;
+    
+    /** {@link MediaPollingComponent} Listener que notifica nuevos medios en la API. */
     private final MediaPollingComponent mediaPollingComponent;
+    
+    /** {@link FileProperties} Gestiona las propiedades de los archivos descargados. */
     private final FileProperties fileProperties;
+    
+    /** {@link DirectoryInformation} Proporciona información del directorio y sus descargas. */
     private DirectoryInformation allData;
+    
+    /** Lista {@link FileInformation} que contiene todas las descargas.*/
     private List<FileInformation> allFiles;
+    
+    /** Colección que contiene todas las rutas de los directorios.*/
     private Set<String> folderPaths = new HashSet<>();
 
+    /**
+     * Constructor que inicializa el panel InfoMedia
+     * 
+     * @param fileProperties {@link FileProperties} Gestiona las propiedades de los archivos descargados
+     * @param typeFilter {@link TypeFilter} Aplicar el filtro por tipo de archivo y por directorio
+     * @param allFiles Todos los archivos alamcenados en JSON
+     * @param folderPaths Todas la rutas donde se realizan las descargas
+     * @param mediaPollingComponent {@link MediaPollingComponent} Listener que notifica nuevos medios en la API
+     */
     public InfoMedia(FileProperties fileProperties, TypeFilter typeFilter, List<FileInformation> allFiles, Set<String> folderPaths, MediaPollingComponent mediaPollingComponent) {
         initComponents();
         
@@ -43,18 +67,18 @@ public class InfoMedia extends javax.swing.JPanel {
         this.fileProperties = fileProperties;
         this.mediaPollingComponent = mediaPollingComponent;
         
-        this.allData = fileProperties.loadDownloads();
-        this.fileManager = new FileManager(allData, typeFilter, mediaPollingComponent, fileProperties);
+        this.allData = fileProperties.loadDownloads(); //Carga la información guradada en JSON
+        this.fileManager = new FileManager(allData, typeFilter, mediaPollingComponent, fileProperties); //Inicializa el gestor de archivos
 
         this.allFiles = allData.getFileList(); //Archivos locales
-        folderPaths.addAll(allData.getFolderPaths());
+        folderPaths.addAll(allData.getFolderPaths()); //Añade las rutas de los directorios
 
         tblModel = new FileTableModel(allFiles); //Modelo de tabla
         tblMedia.setModel(tblModel);
         tblMedia.setRowHeight(25);
-        ToolTipManager.sharedInstance().registerComponent(tblMedia);
+        ToolTipManager.sharedInstance().registerComponent(tblMedia); //Tooltips
 
-        new TableActions(tblMedia, 4, this); //Botones de acción
+        new TableActions(tblMedia, 4, this); //Botones de la columna "Actions"
         
         setupLayout();
         setupStyle();
@@ -63,6 +87,7 @@ public class InfoMedia extends javax.swing.JPanel {
         initDirectoryList();
         configDownloadList(folderList);
         
+        //Selecciona el primer directorio por defecto
         SwingUtilities.invokeLater(new Runnable() { //Mostrar archivos al iniciar la app
             @Override
             public void run() {
@@ -73,25 +98,33 @@ public class InfoMedia extends javax.swing.JPanel {
         });
     }
     
+     /** Configura posición de los componentes */
     private void setupLayout() {
-        this.setLayout(new MigLayout("fill, insets 20", "[50:150:200]10[grow]", "[][grow]"));
-        this.add(cbbxTypeFilter, "cell 1 0, split 2, right, width 200!");
-        this.add(btnUpload, "width 140!, height 35!");
-        this.add(scrFolderList, "cell 0 1, grow");
-        this.add(scrTableMedia, "cell 1 1, grow");
+        this.setLayout(new MigLayout("fill, insets 20", "[50:150:200]10[grow]", "[][grow]")); //Panel principal
+        
+        this.add(cbbxTypeFilter, "cell 1 0, split 2, right, width 200!"); //JComboBox para filtrar por tipo
+        
+        this.add(btnUpload, "width 140!, height 35!"); //Botón Upload
+        
+        this.add(scrFolderList, "cell 0 1, grow"); //JScroll de la lista
+        
+        this.add(scrTableMedia, "cell 1 1, grow"); //JScroll de la tabla
     }
 
-    //Aplica estilos a los componentes
+    /** Configura el estilo de los componentes */
     private void setupStyle() {
-        UIStyles.panelsBorders(this, UIStyles.DARK_GREY_COLOR, 30);
-        UIStyles.styleScrollComponent(folderList, scrFolderList);
-        UIStyles.styleScrollComponent(tblMedia, scrTableMedia);
-        UIStyles.styleComboBox(cbbxTypeFilter);
-        cbbxTypeFilter.setEditable(true);
-        UIStyles.styleButtons(btnUpload, "UPLOAD", "/images/upload.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Upload file to API", null);
+        UIStyles.panelsBorders(this, UIStyles.DARK_GREY_COLOR, 30); //Panel principal
+        
+        UIStyles.styleScrollComponent(folderList, scrFolderList); //JScroll de la lista
+        UIStyles.styleScrollComponent(tblMedia, scrTableMedia); //JScroll de la tabla
+        
+        UIStyles.styleComboBox(cbbxTypeFilter); //JComboBox para filtrar por tipo
+        cbbxTypeFilter.setEditable(true); //Permite escribir en comboBox
+        
+        UIStyles.styleButtons(btnUpload, "UPLOAD", "/images/upload.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Upload file to API", null); //Botón Upload
     }
 
-    //Añade los filtros a JComboBox
+    /** Configura los items (filtros) mostrados en el JComboBox */
     private void configFilterOptions(JComboBox cbbxFilter) {
         cbbxFilter.removeAllItems();
         cbbxFilter.addItem("ALL");
@@ -104,25 +137,25 @@ public class InfoMedia extends javax.swing.JPanel {
         cbbxFilter.setSelectedIndex(0); //Seleccion por defecto "ALL"
     }
 
-    //Inicia los directorios
+    /** Inicializa la lista de directorios alamcenados en JSON. */
     private void initDirectoryList() {
 
         DefaultListModel<FolderItem> listModel = new DefaultListModel();
         listModel.addElement(new FolderItem("API FILES", true, false)); //directorio Api files (muestra archivos de api)
         listModel.addElement(new FolderItem("BOTH", false, true)); //directorio Both (muestra archivos que esten en ambos lados)
 
-        folderPaths.clear();
+        folderPaths.clear(); //Reconstruye rutas locales
         for (FileInformation fi : allFiles) {
             folderPaths.add(fi.getFolderPath());
         }
 
-        for (String folder : folderPaths) {
+        for (String folder : folderPaths) { //Añade los directorios
             listModel.addElement(new FolderItem(folder, false, false));
         }
         folderList.setModel(listModel);
     }
 
-    //Configuración de JList, al seleccionar un directorio muestra las descargas.
+    /** Configura el listener para mostrar las descargas pertenecientes a un directorio. */
     private void configDownloadList(JList<FolderItem> folderList) {
 
         folderList.addListSelectionListener(new ListSelectionListener() {
@@ -135,7 +168,7 @@ public class InfoMedia extends javax.swing.JPanel {
         });
     }
     
-    //Actualizar tabla según carpeta y filtro aplicado
+    /** Actualizar tabla según directorio y filtro seleccionado. */
     private void updateTableData() {
         FolderItem folder = folderList.getSelectedValue();
         if (folder == null) {
@@ -158,23 +191,23 @@ public class InfoMedia extends javax.swing.JPanel {
         tblModel.fireTableDataChanged();
     }
     
-    //Refresca la tabla de archivos después de descargar/subir
-    public void refreshFiles() {
+    /** Actualiza la tabla después de descargar, subir o eliminar archivos. */
+    public void reloadMediaData() {
 
-        // Guardar carpeta seleccionada (si existe)
+        //Guarda directorio seleccionado
         FolderItem selectedFolder = folderList.getSelectedValue();
         String selectedFolderPath = (selectedFolder != null) ? selectedFolder.getFullPath() : null;
 
-        // Actualizar lista de archivos
-        fileManager.refreshFiles();
+        //Actualiza lista de archivos
+        fileManager.reloadDirectoryInfo();
         allFiles = fileProperties.loadDownloads().getFileList();
         tblModel.setFileList(allFiles);
         tblModel.fireTableDataChanged();
 
-        // Re-inicializar directorios
+        //Re-inicializar directorios
         initDirectoryList();
 
-        // Restaurar carpeta seleccionada (si todavía existe)
+        //Restaurar directorio seleccionado
         if (selectedFolderPath != null) {
             ListModel<FolderItem> model = folderList.getModel();
             for (int i = 0; i < model.getSize(); i++) {
@@ -189,7 +222,7 @@ public class InfoMedia extends javax.swing.JPanel {
         tblMedia.clearSelection();
     }
     
-    //Reproduce el archivo cuando se pulsa el boton play
+    /** Reproduce el archivo al pulsar el boton "Play" de la columna "Actions. */
     public void playSelectedFile() {
         FileInformation info = getSelectedFile();
         if (info == null) {
@@ -204,7 +237,7 @@ public class InfoMedia extends javax.swing.JPanel {
         }
     }
     
-    //Borra archivo seleccionado
+    /** Borra el archivo al pulsar el boton "Delete" de la columna "Actions. */
     public void deleteSelectedFile() {
         FileInformation info = getSelectedFile();
         if (info == null) {
@@ -214,26 +247,24 @@ public class InfoMedia extends javax.swing.JPanel {
         int confirm = JOptionPane.showConfirmDialog(this, "¿Borrar " + info.getName() + "?", "Confirmar", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             fileManager.deleteLocalFile(info);
-            refreshFiles();
+            reloadMediaData(); //Recarga los datos (directorios y archivos)
         }
     }
-    
-    
 
-    //Gestiona donde se guarad el archivo ha descargar
+    /** Descarga el archivo seleccionado desde la API. */
     public void downloadFile() {
         FileInformation info = getSelectedFile();
         if (info == null) {
             return;
         }
 
-        JFileChooser fc = new JFileChooser();
+        JFileChooser fc = new JFileChooser(); //Elegir directorio
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
                 fileManager.downloadFileFromApi(info, fc.getSelectedFile());
-                refreshFiles();
+                reloadMediaData(); //Actualiza archivos
                 JOptionPane.showMessageDialog(this, "Download completed!");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
@@ -241,41 +272,45 @@ public class InfoMedia extends javax.swing.JPanel {
         }
     }
 
+    /** Obtiene archivo seleccionado en la tabla. */
     public FileInformation getSelectedFile() {
-    int row = tblMedia.getSelectedRow();
-    if (row < 0 || row >= tblMedia.getRowCount()) {
-        return null; // protección contra índices inválidos
-    }
-    try {
-        int modelRow = tblMedia.convertRowIndexToModel(row);
-        if (modelRow < 0 || modelRow >= tblModel.getRowCount()) {
-            return null; // protección adicional
+        int row = tblMedia.getSelectedRow();
+        if (row < 0 || row >= tblMedia.getRowCount()) {
+            return null; //Protección índices inválidos
         }
-        return tblModel.getFileAt(modelRow);
-    } catch (IndexOutOfBoundsException ex) {
-        return null; // protección extra si algo falla
+        try {
+            int modelRow = tblMedia.convertRowIndexToModel(row);
+            if (modelRow < 0 || modelRow >= tblModel.getRowCount()) {
+                return null;
+            }
+            return tblModel.getFileAt(modelRow);
+        } catch (IndexOutOfBoundsException ex) {
+            return null;
+        }
     }
-}
 
-    //Indica si el directorio seleccionado es de la API
+    /** Indica si el directorio seleccionado es de la API. */
     public boolean isNetworkFileSelected() {
         FolderItem folder = folderList.getSelectedValue();
         return folder != null && folder.isIsNetwork();
     }
 
-    //Getters
+    /** @return Lista de directorios */
     public JList<FolderItem> getListDirectories() {
         return folderList;
     }
 
+    /** @return Tabla de archivos */
     public JTable getTable() {
         return tblMedia;
     }
 
+    /** @return Modelo de tabla */
     public FileTableModel getTableModel() {
         return tblModel;
     }
 
+    /** @return Filtro aplicado en JComboBox */
     public JComboBox<String> getTypeFilter() {
         return cbbxTypeFilter;
     }
@@ -351,17 +386,26 @@ public class InfoMedia extends javax.swing.JPanel {
         add(btnUpload, java.awt.BorderLayout.LINE_END);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Actualiza la tabla con el filtro aplicado en el JComboBox
+     * 
+     * @param evt Evento de acción del JComboBox
+     */
     private void cbbxTypeFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbxTypeFilterActionPerformed
         updateTableData();
     }//GEN-LAST:event_cbbxTypeFilterActionPerformed
 
-    //Botón que inicia la descarga
+    /**
+     * Gestiona la subida de un archivo local a la API.
+     * 
+     * @param evt Evento de acción del JButon Upload
+     */
     private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed
         JFileChooser fc = new JFileChooser();
         if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
-                fileManager.uploadFileToApi(fc.getSelectedFile());
-                refreshFiles();
+                fileManager.uploadFileToApi(fc.getSelectedFile()); //Subir archivo seleccionado
+                reloadMediaData(); //Recarga los datos (directorios y archivos)
                 JOptionPane.showMessageDialog(this, "Uplodad completed");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
