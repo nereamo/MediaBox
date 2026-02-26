@@ -54,11 +54,11 @@ public class InfoMedia extends javax.swing.JPanel {
     /**
      * Constructor que inicializa el panel InfoMedia
      * 
-     * @param fileProperties {@link FileProperties} Gestiona las propiedades de los archivos descargados
-     * @param typeFilter {@link TypeFilter} Aplicar el filtro por tipo de archivo y por directorio
+     * @param fileProperties Gestiona las propiedades de los archivos descargados
+     * @param typeFilter Aplicar el filtro por tipo de archivo y por directorio
      * @param allFiles Todos los archivos alamcenados en JSON
      * @param folderPaths Todas la rutas donde se realizan las descargas
-     * @param mediaPollingComponent {@link MediaPollingComponent} Listener que notifica nuevos medios en la API
+     * @param mediaPollingComponent Listener que notifica nuevos medios en la API
      */
     public InfoMedia(FileProperties fileProperties, TypeFilter typeFilter, List<FileInformation> allFiles, Set<String> folderPaths, MediaPollingComponent mediaPollingComponent) {
         initComponents();
@@ -98,7 +98,7 @@ public class InfoMedia extends javax.swing.JPanel {
         });
     }
     
-     /** Configura posición de los componentes */
+    /** Configura posición de los componentes */
     private void setupLayout() {
         this.setLayout(new MigLayout("fill, insets 20", "[50:150:200]10[grow]", "[][grow]")); //Panel principal
         

@@ -51,7 +51,7 @@ public class DownloadManager {
     public DownloadManager() {}
 
     /**
-     * Constructor que inicializa {@link FileProperties}
+     * Constructor que inicializa FileProperties
      * 
      * @param fileProperties Objeto que gestiona las propiedades y de archivos descargados
      */

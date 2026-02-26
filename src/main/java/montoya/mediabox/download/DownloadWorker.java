@@ -3,7 +3,6 @@ package montoya.mediabox.download;
 import java.io.*;
 import javax.swing.*;
 import java.util.Date;
-import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Set;
 import montoya.mediabox.fileInformation.FileInformation;

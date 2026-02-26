@@ -3,6 +3,7 @@ package montoya.mediabox.configUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
@@ -306,8 +307,9 @@ public class UIStyles {
      * @param placeholder Texto informativo
      * @param rightIconPath Icono derecho
      * @param leftAction Acción del icono
+     * @param pasteFromClipboard True si pega desde portapapeles
      */
-    public static void styleField(JTextField field, String leftIconPath, String placeholder, String rightIconPath, Runnable leftAction) {
+    public static void styleField(JTextField field, String leftIconPath, String placeholder, String rightIconPath, Runnable leftAction, boolean pasteFromClipboard) {
         field.setOpaque(false);
         field.setBorder(UIManager.getBorder("TextField.border"));
         field.setCaretColor(LIGHT_PURPLE);
@@ -315,45 +317,69 @@ public class UIStyles {
         field.setForeground(WHITE_COLOR);
         field.setFont(FONT_PLAIN);
         
-        setupLeadingIcon(field, leftIconPath, leftAction); //Icono izquierdo
-
-        if (field instanceof JPasswordField) { //Icono derecho
-            setupPasswordVisibility((JPasswordField) field, rightIconPath);
+        //Icono izquierdo
+        if (pasteFromClipboard) {
+            setupPasteFromClipboard(field, leftIconPath); //Icono izquierdo pegar URL
         } else {
-            setupClearButton(field, rightIconPath);
+            setupLeadingIcon(field, leftIconPath); //Icono decorativo
+        }
+
+        //Icono derecho
+        if (field instanceof JPasswordField) { 
+            setupPasswordVisibility((JPasswordField) field, rightIconPath); //Mostrar contraseña
+        } else {
+            setupClearButton(field, rightIconPath); //Limpiar campos
         }
         field.putClientProperty("JTextField.placeholderText", placeholder); //Texto de ayuda
         field.putClientProperty("JTextField.arc", 30); //Redondez
     }
 
     /**
-     * Configura el icono izquierdo del JTextField personalizado. 
+     * Configura el icono izquierdo decorativo del JTextField personalizado. 
      * Si el icono es {@code null} es solamente decorativo.
-     * Si el icono  no es {@code null}, el icono es clicable y ejecuta una acción.
      * 
      * @param field JTextField con icono a la izquierda
      * @param path Ruta del icono
-     * @param action La acción al hacer clic en el icono. Si es {@code null}, el icono es decorativo.
      */
-    private static void setupLeadingIcon(final JTextField field, String path, final Runnable action) {
+    private static void setupLeadingIcon(JTextField field, String path) {
         ImageIcon icon = createIcon(path);
         if (icon == null) {
             return;
         }
 
-        if (action == null) { //Icono decorativo
-            JLabel lbl = new JLabel(icon); lbl.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 8));
-            field.putClientProperty("JTextField.leadingComponent", lbl);
+        //Icono decorativo (sin acción)
+        JLabel lbl = new JLabel(icon);
+        lbl.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 8));
+        field.putClientProperty("JTextField.leadingComponent", lbl);
+    }
+
+    /**
+     * Configura el icono izquierdo del JTextField donde se añade la URL. 
+     * Permite pegar desde portapapeles.
+     * 
+     * @param field JTextField con icono para pegar URL
+     * @param path Ruta del icono
+     */
+    private static void setupPasteFromClipboard(JTextField field, String path) {
+        ImageIcon icon = createIcon(path);
+        if (icon == null) {
             return;
         }
 
-        JLabel lbl = createClickableIcon(icon); //Icono con acción
+        JLabel lbl = createClickableIcon(icon);
         field.putClientProperty("JTextField.leadingComponent", lbl);
 
-        lbl.addMouseListener(new MouseAdapter() { //Listener para el icono izquierdo no decorativo
+        lbl.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                action.run();
+                try {
+                    Object clipboard = Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+                    if (clipboard instanceof String str) {
+                        field.setText(str);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
                 field.requestFocus();
             }
         });
@@ -367,7 +393,7 @@ public class UIStyles {
      * @param pf JPasswordField con icono de visibilidad
      * @param path Ruta del icono
      */
-    private static void setupPasswordVisibility(final JPasswordField pf, String path) {
+    private static void setupPasswordVisibility(JPasswordField pf, String path) {
         ImageIcon icon = createIcon(path);
         if (icon == null) {
             return;
@@ -395,7 +421,7 @@ public class UIStyles {
      * @param field JPasswordField con icono de limpieza
      * @param path Ruta del icono
      */
-    private static void setupClearButton(final JTextField field, String path) {
+    private static void setupClearButton(JTextField field, String path) {
         ImageIcon icon = createIcon(path);
         if (icon == null) {
             return;

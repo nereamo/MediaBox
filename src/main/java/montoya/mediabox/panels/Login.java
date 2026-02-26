@@ -13,6 +13,7 @@ import net.miginfocom.swing.MigLayout;
 
 /**
  * Panel que gestiona el login del usuario.
+ * 
  * <p> Encargado de:
  * <ul>
  * <li> Mostra campos de texto para email y contraseña </li>
@@ -25,13 +26,13 @@ import net.miginfocom.swing.MigLayout;
  */
 public class Login extends JPanel{
     
-    /** Ventana principal donde se muestra el panel */
+    /** {@link MainFrame} Ventana principal donde se muestra el panel */
     private MainFrame frame;
     
-    /** Gestor de tarjetas para cambiar entre paneles */
+    /** {@link CardManager} Gestionar el intercambio de paneles. */
     private CardManager cardManager;
     
-    /** Componente encargado de las llamadas a la API y el polling de medios */
+    /** {@link MediaPollingComponent} Listener que notifica nuevos medios en la API. */
     private MediaPollingComponent mediaPollingComponent;
     
     /** Campo de texto para el email del usuario */
@@ -64,9 +65,9 @@ public class Login extends JPanel{
     /**
      * Constructor que nicializa el panel Login
      * 
-     * @param frame {@link MainFrame} Ventana principal donde se añade el panel 
-     * @param cardManager {@link CardManager} Gestiona el intercambio de paneles.
-     * @param mediaPollingComponent {@link MediaPollingComponent} Listener que notifica nuevos medios en la API
+     * @param frame Ventana principal donde se añade el panel 
+     * @param cardManager Gestiona el intercambio de paneles.
+     * @param mediaPollingComponent Listener que notifica nuevos medios en la API
      */
     public Login(MainFrame frame, CardManager cardManager, MediaPollingComponent mediaPollingComponent){
         
@@ -106,8 +107,8 @@ public class Login extends JPanel{
     private void setupStyle() {
         this.setBackground(UIStyles.DARK_GREY_COLOR);
 
-        UIStyles.styleField(txtEmail, "/images/email2.png", " Enter email", "/images/delete_url.png", null); //Campo de texto email
-        UIStyles.styleField(txtPassword, "/images/pss.png", " Enter password", "/images/show.png", null); //Campo de texto password
+        UIStyles.styleField(txtEmail, "/images/email2.png", " Enter email", "/images/delete_url.png", null, false); //Campo de texto email
+        UIStyles.styleField(txtPassword, "/images/pss.png", " Enter password", "/images/show.png", null, false); //Campo de texto password
         
         UIStyles.styleCheckBox(remember, "Remember me", "Remember credentials"); //Checkbox remember
         UIStyles.styleButtons(btnLogin, null, "/images/login.png", UIStyles.LIGHT_PURPLE, new Color(0, 0, 0, 0), true, "Login user", null); //Botón login 

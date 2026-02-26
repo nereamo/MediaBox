@@ -24,13 +24,13 @@ import net.miginfocom.swing.MigLayout;
  */
 public class Preferences extends javax.swing.JPanel {
 
-    /** Ventana principal donde se muestra el panel */
+    /** {@link MainFrame} Ventana principal donde se muestra el panel */
     private final MainFrame frame;
     
-    /** Gestor de descarga */
+    /** {@link DownloadManager} Gestor de descarga */
     private final DownloadManager downloadManager;
     
-    /** Gestor de tarjetas para cambiar entre paneles */
+    /** {@link CardManager} Gestionar el intercambio de paneles. */
     private final CardManager cardManager;
     
     /** Ruta detectada del archivo yt-dlp.exe */
@@ -39,9 +39,9 @@ public class Preferences extends javax.swing.JPanel {
     /**
      * Constructor que inicializa el panel Preferences
      * 
-     * @param frame {@link MainFrame} Ventana principal donde se añade el panel
-     * @param downloadManager {@link DownloadManager} Gestor de descargas
-     * @param cardManager {@link CardManager} Gestiona el intercambio de paneles.
+     * @param frame Ventana principal donde se añade el panel
+     * @param downloadManager Gestor de descargas
+     * @param cardManager Gestiona el intercambio de paneles.
      */
     public Preferences(MainFrame frame, DownloadManager downloadManager, CardManager cardManager) {
         initComponents();
@@ -98,7 +98,7 @@ public class Preferences extends javax.swing.JPanel {
         
         //Ruta temporal
         UIStyles.styleFixLabel(lblPath, "Temp Path: ", null);
-        UIStyles.styleField(txtPathTemp, null, " Select folder for temporary files...", null, null);
+        UIStyles.styleField(txtPathTemp, null, " Select folder for temporary files...", null, null, false);
         UIStyles.styleButtons(btnBrowseTemp, "","/images/folder.png", UIStyles.LIGHT_PURPLE, new Color (0,0,0),true, "Select Folder", null);
         
         //Checkbox de creación de M3U

@@ -22,22 +22,62 @@ import net.miginfocom.swing.MigLayout;
 
 /**
  * Panel que gestiona las descargas de medios en la aplicación MediaBox. 
+ * <p> Permite:
+ * <ul>
+ * <li> Pegar la URL del archivo a descargar </li>
+ * <li> Elegir el directorio de destiono </li>
+ * <li> Seleccionar el formato y la calidad </li>
+ * <li> Reproducir el último archivo descargado </li>
+ * <li> Visualizar las descargas </li>
+ * </ul>
+ * 
+ * Se usa junto con {@link InfoMedia} para visualizar los directorios y archivos descargados.
+ * 
  * @author Nerea
  */
 public class Downloads extends javax.swing.JPanel {
     
+    /** {@link MainFrame} Ventana principal donde se muestra el panel */
     private MainFrame frame;
+    
+    /** {@link FileProperties} Panel (vista) que muestra la información d elas descargas. */
     public InfoMedia infoMedia;
+    
+    /** {@link DownloadManager} Gestor de descarga */
     private DownloadManager downloadManager;
+    
+    /** {@link TypeFilter} Permite aplicar el filtro por tipo de archivo y por directorio. */
     private TypeFilter typeFilter;
+    
+    /** {@link FileTableModel} Modelo de tabla que muestra los archivos. */
     private FileTableModel tblModel;
+    
+    /** {@link FileProperties} Gestiona las propiedades de los archivos descargados. */
     private final FileProperties fileProperties;
+    
+    /** {@link MediaPollingComponent} Listener que notifica nuevos medios en la API. */
     private final MediaPollingComponent mediaPollingComponent;
+    
+    /** Grupo de botones para seleccionar formato */
     private final ButtonGroup btnGroup;
+    
+    /** Rutas de los directorios que almacenan descargas */
     private final Set<String> folderPaths;
+    
+    /** Lista de archivos descargados en un directorio */
     private List<FileInformation> allFiles = new ArrayList<>();
+    
+    /** Ruta completa del directorio */
     private String folderPath = "";
 
+    /**
+     * Constructor que inicializa el panel Downloads
+     * 
+     * @param frame Ventana principal donde se añade el panel
+     * @param folderPaths Todas la rutas donde se realizan las descargas
+     * @param downloadManager Gestor de descargas
+     * @param mediaPollingComponent Listener que notifica nuevos medios en la API
+     */
     public Downloads(MainFrame frame, Set<String> folderPaths, DownloadManager downloadManager, MediaPollingComponent mediaPollingComponent) {
        
         initComponents();
@@ -49,31 +89,33 @@ public class Downloads extends javax.swing.JPanel {
         this.fileProperties = new FileProperties();
         this.mediaPollingComponent = mediaPollingComponent;
 
-        btnGroup = new ButtonGroup();
-        infoMedia = new InfoMedia(fileProperties, typeFilter, allFiles, folderPaths, mediaPollingComponent);
+        btnGroup = new ButtonGroup(); //Inicializa el grupo de radio buttons
+        infoMedia = new InfoMedia(fileProperties, typeFilter, allFiles, folderPaths, mediaPollingComponent); //Inicializa el panel InfoMedia
         downloadManager.setInfoMedia(infoMedia);
         tblModel = infoMedia.getTableModel();
 
         setupLayout();
         applyStylesComponent();
-        styleTxtUrl();
         configRadioButtons(btnGroup, radioMp4, radioMkv, radioWebm, radioMp3, radioWav, radioM4a);
         
         this.setFocusable(true);
         this.requestFocusInWindow();
     }
 
-    //Posición de los componentes del panel
+    /** Configura posición de los componentes */
     private void setupLayout() {
+        //Panel principal, panel interno, panel InfoMedia y logo
         this.setLayout(new MigLayout("fill, insets 30, wrap 1", "[grow, center]", "push[grow]50![grow]push"));
         this.add(downloadFilePnl, "grow, center, w 200:840:n, h 150:500:n, gaptop 40");
         this.add(infoMedia, "grow, center, w 200:840:n, h 150:430:n");
         this.add(logoLabel, "align center, gapbottom 40");
 
+        //Panel interno
         downloadFilePnl.setLayout(new MigLayout("fillx, insets 20, wrap 1", "[grow]"));
         downloadFilePnl.add(txtUrl, "split 2, growx, h 35!, gapright 10");
         downloadFilePnl.add(btnFolder, "w 50!, h 50!");
 
+        //Panel video
         pnlVideo.setLayout(new MigLayout("fillx, insets 17", "[]push[]push[]push[]", "[]"));
         pnlVideo.add(radioMp4);
         pnlVideo.add(radioMkv);
@@ -81,65 +123,56 @@ public class Downloads extends javax.swing.JPanel {
         pnlVideo.add(cbbxQualityFilter, "w 130!, h 30!");
         downloadFilePnl.add(pnlVideo, "growx, h 70!, gaptop 30");
 
+        //Panel audio
         pnlAudio.setLayout(new MigLayout("fillx, insets 17", "[]15[]15[]", "[]"));
         pnlAudio.add(radioMp3);
         pnlAudio.add(radioWav);
         pnlAudio.add(radioM4a);
         downloadFilePnl.add(pnlAudio, "growx, h 70!");
 
+        //Botón download, open last y barra de progreso
         downloadFilePnl.add(btnDownload, "split 2, w 180!, h 50!, gaptop 40, align center");
         downloadFilePnl.add(btnOpenLast, "w 180!, h 50!, gaptop 30, gapleft 20");
         downloadFilePnl.add(progressBar, "growx, h 25!, gaptop 50, gapbottom 10, pushy, aligny bottom");
     }
 
-    //Aplica estilos a los componentes
+    /** Configura el estilo de los componentes */
     private void applyStylesComponent() {
-        setBackground(UIStyles.BLACK_COLOR); //Color del panel
-        
+        //Panel principal y panel interno
+        this.setBackground(UIStyles.BLACK_COLOR); //Color del panel
         UIStyles.panelsBorders(downloadFilePnl, UIStyles.DARK_GREY_COLOR, 30);
+        
+        //Campo de texto URL
+        UIStyles.styleField(txtUrl, "/images/url.png", " Paste the URL of the file to download", "/images/delete_url.png", null, true);
+        
+        //Panel video y audio
         UIStyles.panelsBorders(pnlVideo, UIStyles.MEDIUM_GREY_COLOR, 15);
         UIStyles.panelsBorders(pnlAudio, UIStyles.MEDIUM_GREY_COLOR, 15);
-        
-        UIStyles.styleButtons(btnFolder, "", "/images/folder.png", UIStyles.LIGHT_PURPLE, new Color(0, 0, 0, 0), true, "Select destination folder", null);
-        UIStyles.styleButtons(btnDownload, "DOWNLOAD", "/images/download2.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Download file", null);
-        UIStyles.styleButtons(btnOpenLast, "OPEN LAST", "/images/play2.png",UIStyles.MEDIUM_GREY_COLOR,UIStyles.LIGHT_GREY_COLOR, false, "Reproduce last file", "/images/play2_black.png");
-        
         UIStyles.styleButtonGroup("Select format", radioM4a, radioMkv, radioMp3, radioMp4, radioWav, radioWebm);
         UIStyles.itemsInCombobox(cbbxQualityFilter, "1080,720,480");
         
+        //Botón folder, download y open last
+        UIStyles.styleButtons(btnFolder, "", "/images/folder.png", UIStyles.LIGHT_PURPLE, new Color(0, 0, 0, 0), true, "Select destination folder", null);
+        UIStyles.styleButtons(btnDownload, "DOWNLOAD", "/images/download2.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Download file", null);
+        UIStyles.styleButtons(btnOpenLast, "OPEN LAST", "/images/play2.png",UIStyles.MEDIUM_GREY_COLOR,UIStyles.LIGHT_GREY_COLOR, false, "Reproduce last file", "/images/play2_black.png");
+
+        //Barra de progreso
         UIStyles.styleProgressBar(progressBar);
     }
     
-    //Botón visible cuando la descarga ha finalizado
+    /** Visibilidad del botón "Open last". */
     public void showOpenLastButton() {
-        btnOpenLast.setEnabled(true); // Aquí recupera el color sólido automáticamente
+        btnOpenLast.setEnabled(true); //Habilitar botón
         this.repaint();
     }
     
-    //Configuración de ButtonGroup
+    /** Configuración de radio Buttons. */
     private void configRadioButtons(ButtonGroup bg, JRadioButton... buttons) {
         for (JRadioButton btn : buttons) {
             bg.add(btn);
             btn.setActionCommand(btn.getText().toLowerCase());
         }
         buttons[0].setSelected(true);
-    }
-    
-    //Configura de JTextField de URL
-    private void styleTxtUrl() {
-        UIStyles.styleField(txtUrl, "/images/url.png", " Paste the URL of the file to download", "/images/delete_url.png", this::pasteUrl);
-    }
-    
-    //Configuración de pegar URL a JTextField    
-    private void pasteUrl() {
-        try {
-            Object clipboard = Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-            if (clipboard instanceof String str) {
-                txtUrl.setText(str);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -251,6 +284,12 @@ public class Downloads extends javax.swing.JPanel {
         add(downloadFilePnl);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Muestra un dialogo para seleccionar la crpeta de destino de la descarga.
+     * Si el directorios es válido, lo añade a la lista de directorios.
+     * 
+     * @param evt Evento generado al pulsar el botón "Folder"
+     */
     private void btnFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFolderActionPerformed
         JFileChooser directory = new JFileChooser();
         directory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -287,6 +326,12 @@ public class Downloads extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnFolderActionPerformed
 
+    /**
+     * Incia la descarga si todos los datos parametros necesários han sido establecidos. 
+     * La descarga se inicia en un hilo secundario para no bloquear la interfaz.
+     * 
+     * @param evt Evento generado al pulsar el botón "Download"
+     */
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
         String url = txtUrl.getText().trim();
         String folder = folderPath;
@@ -307,6 +352,12 @@ public class Downloads extends javax.swing.JPanel {
         th.start();
     }//GEN-LAST:event_btnDownloadActionPerformed
 
+    /**
+     * Reproduce el último archivo descargado.
+     * Solo está habilitado cuando la descarga finalizó correctamente.
+     * 
+     * @param evt Evento generado al pulsar el botón "Open Last"
+     */
     private void btnOpenLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenLastActionPerformed
         File lastFile = downloadManager.getLastDownloadedFile();
         if (lastFile != null && lastFile.exists()) {
