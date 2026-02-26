@@ -12,7 +12,16 @@ import montoya.mediapollingcomponent.MediaPollingComponent;
 import net.miginfocom.swing.MigLayout;
 
 /**
- * Panel que muestra las descargas realizadas y su información, permitiendo eliminar o reproducir archivos
+ * Panel que muestra las descargas realizadas y su información
+ * <p> Permitie:
+ * <ul>
+ * <li> Visualizar archivos descargados, de red y mixtos </li>
+ * <li> Filtrar archivos por directorio y tipo (formato) </li>
+ * <li> Reproducir archivos locales </li>
+ * <li> Eliminar archivos locales </li>
+ * <li> Descargar archivos de red </li>
+ * <li> Subir archivos locales a la API </li>
+ * </ul>
  *
  * @author Nerea
  */
@@ -48,7 +57,7 @@ public class InfoMedia extends javax.swing.JPanel {
         new TableActions(tblMedia, 4, this); //Botones de acción
         
         setupLayout();
-        applyStylesComponent();
+        setupStyle();
 
         configFilterOptions(cbbxTypeFilter);
         initDirectoryList();
@@ -73,7 +82,7 @@ public class InfoMedia extends javax.swing.JPanel {
     }
 
     //Aplica estilos a los componentes
-    private void applyStylesComponent() {
+    private void setupStyle() {
         UIStyles.panelsBorders(this, UIStyles.DARK_GREY_COLOR, 30);
         UIStyles.styleScrollComponent(folderList, scrFolderList);
         UIStyles.styleScrollComponent(tblMedia, scrTableMedia);
@@ -125,56 +134,28 @@ public class InfoMedia extends javax.swing.JPanel {
             }
         });
     }
-
-    public FileInformation getSelectedFile() {
-    int row = tblMedia.getSelectedRow();
-    if (row < 0 || row >= tblMedia.getRowCount()) {
-        return null; // protección contra índices inválidos
-    }
-    try {
-        int modelRow = tblMedia.convertRowIndexToModel(row);
-        if (modelRow < 0 || modelRow >= tblModel.getRowCount()) {
-            return null; // protección adicional
-        }
-        return tblModel.getFileAt(modelRow);
-    } catch (IndexOutOfBoundsException ex) {
-        return null; // protección extra si algo falla
-    }
-}
-
-    //Indica si el directorio seleccionado es de la API
-    public boolean isNetworkFileSelected() {
-        FolderItem folder = folderList.getSelectedValue();
-        return folder != null && folder.isIsNetwork();
-    }
-
-    //Reproduce el archivo cuando se pulsa el boton play
-    public void playSelectedFile() {
-        FileInformation info = getSelectedFile();
-        if (info == null) {
-            JOptionPane.showMessageDialog(this, "Please select a file.");
-            return;
-        }
-
-        try {
-            fileManager.openLocalFile(info);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error opening file.");
-        }
-    }
     
-    //Borra archivo seleccionado
-    public void deleteSelectedFile() {
-        FileInformation info = getSelectedFile();
-        if (info == null) {
+    //Actualizar tabla según carpeta y filtro aplicado
+    private void updateTableData() {
+        FolderItem folder = folderList.getSelectedValue();
+        if (folder == null) {
             return;
         }
 
-        int confirm = JOptionPane.showConfirmDialog(this, "¿Borrar " + info.getName() + "?", "Confirmar", JOptionPane.YES_NO_OPTION);
-        if (confirm == JOptionPane.YES_OPTION) {
-            fileManager.deleteLocalFile(info);
-            refreshFiles();
+        String selectedFilter = (String) cbbxTypeFilter.getSelectedItem();
+
+        List<FileInformation> resultFiles;
+
+        if (folder.isIsNetwork()) {
+            resultFiles = fileManager.getNetworkFiles(selectedFilter);
+        } else if (folder.isIsBoth()) {
+            resultFiles = fileManager.getBothFiles(selectedFilter);
+        } else {
+            resultFiles = fileManager.getLocalFiles(folder.getFullPath(), selectedFilter);
         }
+
+        tblModel.setFileList(resultFiles);
+        tblModel.fireTableDataChanged();
     }
     
     //Refresca la tabla de archivos después de descargar/subir
@@ -205,10 +186,39 @@ public class InfoMedia extends javax.swing.JPanel {
             }
         }
 
-        // NO restauramos selección de archivos automáticamente
-        // La tabla quedará sin filas seleccionadas hasta que el usuario haga clic
         tblMedia.clearSelection();
     }
+    
+    //Reproduce el archivo cuando se pulsa el boton play
+    public void playSelectedFile() {
+        FileInformation info = getSelectedFile();
+        if (info == null) {
+            JOptionPane.showMessageDialog(this, "Please select a file.");
+            return;
+        }
+
+        try {
+            fileManager.openLocalFile(info);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error opening file.");
+        }
+    }
+    
+    //Borra archivo seleccionado
+    public void deleteSelectedFile() {
+        FileInformation info = getSelectedFile();
+        if (info == null) {
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this, "¿Borrar " + info.getName() + "?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            fileManager.deleteLocalFile(info);
+            refreshFiles();
+        }
+    }
+    
+    
 
     //Gestiona donde se guarad el archivo ha descargar
     public void downloadFile() {
@@ -231,6 +241,45 @@ public class InfoMedia extends javax.swing.JPanel {
         }
     }
 
+    public FileInformation getSelectedFile() {
+    int row = tblMedia.getSelectedRow();
+    if (row < 0 || row >= tblMedia.getRowCount()) {
+        return null; // protección contra índices inválidos
+    }
+    try {
+        int modelRow = tblMedia.convertRowIndexToModel(row);
+        if (modelRow < 0 || modelRow >= tblModel.getRowCount()) {
+            return null; // protección adicional
+        }
+        return tblModel.getFileAt(modelRow);
+    } catch (IndexOutOfBoundsException ex) {
+        return null; // protección extra si algo falla
+    }
+}
+
+    //Indica si el directorio seleccionado es de la API
+    public boolean isNetworkFileSelected() {
+        FolderItem folder = folderList.getSelectedValue();
+        return folder != null && folder.isIsNetwork();
+    }
+
+    //Getters
+    public JList<FolderItem> getListDirectories() {
+        return folderList;
+    }
+
+    public JTable getTable() {
+        return tblMedia;
+    }
+
+    public FileTableModel getTableModel() {
+        return tblModel;
+    }
+
+    public JComboBox<String> getTypeFilter() {
+        return cbbxTypeFilter;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -318,48 +367,8 @@ public class InfoMedia extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
             }
         }
-
     }//GEN-LAST:event_btnUploadActionPerformed
 
-    //Getters
-    public JList<FolderItem> getListDirectories() {
-        return folderList;
-    }
-
-    public JTable getTable() {
-        return tblMedia;
-    }
-
-    public FileTableModel getTableModel() {
-        return tblModel;
-    }
-
-    public JComboBox<String> getTypeFilter() {
-        return cbbxTypeFilter;
-    }
-    
-    //Actualizar tabla según carpeta y filtro aplicado
-    private void updateTableData() {
-        FolderItem folder = folderList.getSelectedValue();
-        if (folder == null) {
-            return;
-        }
-
-        String selectedFilter = (String) cbbxTypeFilter.getSelectedItem();
-
-        List<FileInformation> resultFiles;
-
-        if (folder.isIsNetwork()) {
-            resultFiles = fileManager.getNetworkFiles(selectedFilter);
-        } else if (folder.isIsBoth()) {
-            resultFiles = fileManager.getBothFiles(selectedFilter);
-        } else {
-            resultFiles = fileManager.getLocalFiles(folder.getFullPath(), selectedFilter);
-        }
-
-        tblModel.setFileList(resultFiles);
-        tblModel.fireTableDataChanged();
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnUpload;
     private javax.swing.JComboBox<String> cbbxTypeFilter;

@@ -342,7 +342,8 @@ public class UIStyles {
         }
 
         if (action == null) { //Icono decorativo
-            field.putClientProperty("JTextField.leadingIcon", icon);
+            JLabel lbl = new JLabel(icon); lbl.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 8));
+            field.putClientProperty("JTextField.leadingComponent", lbl);
             return;
         }
 
@@ -423,6 +424,7 @@ public class UIStyles {
     private static JLabel createClickableIcon(ImageIcon icon) {
         JLabel lbl = new JLabel(icon);
         lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        lbl.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 8));
         return lbl;
     }
 

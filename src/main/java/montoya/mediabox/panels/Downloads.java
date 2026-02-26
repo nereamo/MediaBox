@@ -166,9 +166,7 @@ public class Downloads extends javax.swing.JPanel {
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo.png"))); // NOI18N
         add(logoLabel);
 
-        downloadFilePnl.setMaximumSize(null);
         downloadFilePnl.setMinimumSize(new java.awt.Dimension(840, 580));
-        downloadFilePnl.setPreferredSize(null);
         downloadFilePnl.setLayout(new java.awt.BorderLayout());
 
         txtUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N

@@ -51,7 +51,7 @@ public class Preferences extends javax.swing.JPanel {
         this.cardManager = cardManager;
         
         setupLayout();
-        setUpStyles();
+        setupStyle();
         mbSpeedSpinner();
     }
     
@@ -91,7 +91,7 @@ public class Preferences extends javax.swing.JPanel {
     }
     
     /** Configura el estilo de los componentes */
-    private void setUpStyles(){
+    private void setupStyle(){
         //Panel principal y panel interno
         this.setBackground(UIStyles.BLACK_COLOR);
         UIStyles.panelsBorders(pnlPref, UIStyles.DARK_GREY_COLOR, 30);

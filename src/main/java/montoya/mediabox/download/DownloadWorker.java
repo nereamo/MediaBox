@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.util.Date;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
+import java.util.Set;
 import montoya.mediabox.fileInformation.FileInformation;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.fileInformation.FileTableModel;
@@ -204,17 +205,22 @@ public class DownloadWorker extends SwingWorker<Void, String> {
     private FileInformation fileInfo(File file) {
         String name = file.getName(); //Nombre del archivo
         long size = file.length(); //Tamaño en bytes
-        String type = "unknown"; //Tipo MIME por defecto
         
-        try {
-            type = Files.probeContentType(file.toPath()); //Detecta el tipo MIME
-        } catch (IOException e) {
-            System.err.println("Error extracting MIME type: " + e.getMessage());
-        }
+        //Obtiene la extensión del archivo
+        String extension = name.contains(".")
+                ? name.substring(name.lastIndexOf('.') + 1).toLowerCase()
+                : "";
+
+        //Establecer el tipo de archivo
+        String type = Set.of("mp3", "wav", "m4a", "aac").contains(extension)
+                ? "audio/" + extension
+                : Set.of("mp4", "mkv", "webm").contains(extension)
+                ? "video/" + extension
+                : "application/octet-stream";
 
         String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(file.lastModified())); //Fecha de descarga
         String folderPath = file.getParent(); //Ruta del directorio
-        
+
         return new FileInformation(name, size, type, date, folderPath);
     }
 }

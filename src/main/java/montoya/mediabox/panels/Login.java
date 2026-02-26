@@ -75,7 +75,7 @@ public class Login extends JPanel{
         this.mediaPollingComponent = mediaPollingComponent;
  
         setupLayout(); 
-        setUpStyles();
+        setupStyle();
         configKeyActions();
         initialLoginUser();
     } 
@@ -103,7 +103,7 @@ public class Login extends JPanel{
     }
     
     /** Configura el estilo de los componentes */
-    private void setUpStyles() {
+    private void setupStyle() {
         this.setBackground(UIStyles.DARK_GREY_COLOR);
 
         UIStyles.styleField(txtEmail, "/images/email2.png", " Enter email", "/images/delete_url.png", null); //Campo de texto email
