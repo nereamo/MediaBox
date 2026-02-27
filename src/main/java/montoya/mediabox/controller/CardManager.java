@@ -22,12 +22,13 @@ public class CardManager {
     /** Layout usado para los distintos paneles(vistas) como si fueran cartas. */
     private CardLayout layout;
     
-    /** 
-     * Identificadores de los distintos paneles.
-     * Cada constante corresponde a un panel.
-     */
+    /** Identificador del panel Login. */ 
     public static final String CARD_LOGIN = "login";
+    
+    /** Identificador del panel Downloads. */
     public static final String CARD_DOWN = "downloads";
+    
+    /** Identificador del panel Preferences. */
     public static final String CARD_PREF = "preferences";
     
     /**

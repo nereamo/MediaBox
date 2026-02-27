@@ -3,7 +3,7 @@ package montoya.mediabox.fileInformation;
 import java.io.Serializable;
 
 /**
- * Implementa {@link serializable} para permitir almacenar la información del archivo descargado en un JSON.
+ * Implementa {@link Serializable} para permitir almacenar la información del archivo descargado en un JSON.
  * <p> Propiedades del archivo:
  * <ul>
  * <li> Nombre </li>

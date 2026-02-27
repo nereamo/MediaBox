@@ -77,7 +77,6 @@ public class UIStyles {
      * @param panel JPanel al que se aplica el borde y apariencia
      * @param color Color de fondo del panel
      * @param radius Radio de las esquinas
-     * @see paintRounded
      */
     public static void panelsBorders(JPanel panel, Color color, int radius) {
         panel.setOpaque(false);
@@ -214,6 +213,7 @@ public class UIStyles {
      * @param text Texto que se mostrará en el JButton
      * @param iconPath Ruta del icono a mostrar
      * @param toolTip Texto de ayuda para el usuario
+     * @param replaceIcon Icono de reemplazo al cambiar el color de selección
      */
     public static void styleMenuAndItems(JMenuItem item, String text, String iconPath, String toolTip, String replaceIcon) {
         item.setOpaque(false);

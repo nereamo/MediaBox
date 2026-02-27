@@ -53,4 +53,26 @@
         <maven.compiler.release>24</maven.compiler.release>
         <exec.mainClass>nerea.mediabox.MediaBox</exec.mainClass>
     </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.3</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <outputDirectory>${project.basedir}/doc</outputDirectory>
+                    <reportOutputDirectory>${project.basedir}/doc</reportOutputDirectory>
+                    <failOnError>false</failOnError>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

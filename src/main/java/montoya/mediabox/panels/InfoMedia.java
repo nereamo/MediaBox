@@ -272,7 +272,10 @@ public class InfoMedia extends javax.swing.JPanel {
         }
     }
 
-    /** Obtiene archivo seleccionado en la tabla. */
+    /** Obtiene archivo seleccionado en la tabla. 
+     * 
+     * @return Archivo seleccionado o si es {@code null} si no hay selección
+     */
     public FileInformation getSelectedFile() {
         int row = tblMedia.getSelectedRow();
         if (row < 0 || row >= tblMedia.getRowCount()) {
@@ -289,7 +292,10 @@ public class InfoMedia extends javax.swing.JPanel {
         }
     }
 
-    /** Indica si el directorio seleccionado es de la API. */
+    /** Indica si el directorio seleccionado es de la API. 
+     * 
+     * @return True si hay elemento seleccionado y es de API o False si no ha selección
+     */
     public boolean isNetworkFileSelected() {
         FolderItem folder = folderList.getSelectedValue();
         return folder != null && folder.isIsNetwork();

@@ -25,7 +25,7 @@ import montoya.mediapollingcomponent.apiclient.Media;
  * <li> Barra de menú y sus acciones.</li>
  * <li> Autenticación del usuario.</li>
  * <li> Inicialización de componetntes y estilos visuales (LookAndFeel).</li>
- * <li> Comunicación con el componente de escucha {@link MediaPolling}.</li>
+ * <li> Comunicación con el componente de escucha MediaPollingComponent.</li>
  * </ul>
  * 
  * @author Nerea
