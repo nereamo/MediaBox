@@ -107,8 +107,8 @@ public class Downloads extends javax.swing.JPanel {
     private void setupLayout() {
         //Panel principal, panel interno, panel InfoMedia y logo
         this.setLayout(new MigLayout("fill, insets 20, wrap 1", "[grow, center]", "push[grow]10:50:push[grow]push"));
-        this.add(downloadFilePnl, "grow, center, w 200:840:n, h 280:500:n, gaptop 5:40:push");
-        this.add(infoMedia, "grow, center, w 200:840:n, h 150:430:n");
+        this.add(downloadFilePnl, "grow, center, w 50:840:n, h 280:500:n, gaptop 5:40:push");
+        this.add(infoMedia, "grow, center, w 50:840:n, h 50:430:n");
         this.add(logoLabel, "align center, gapbottom 10:40:push");
 
         //Panel interno
@@ -116,33 +116,32 @@ public class Downloads extends javax.swing.JPanel {
                 "[grow][grow][grow][grow][grow][grow][grow][grow]",
                 "10:30:n[]10:50:n[]15![]20:40:push[]20:40:push[]10!"
         ));
+        
+       
         downloadFilePnl.add(txtUrl, "span 8, split 2, growx, w 100:n:n, h 30:35:n, gapright 25, aligny center");
         downloadFilePnl.add(btnFolder, "right, w 50!, h 40:50:n");
 
         //Panel video
-        pnlVideo.setLayout(new MigLayout("fill, insets 5 17 5 17", 
-    "[grow, center][grow, center][grow, center][grow, center]", 
-    "[center]" // Esto centra horizontalmente respecto al alto del panel
-));
-        pnlVideo.add(radioMp4);
-        pnlVideo.add(radioMkv);
-        pnlVideo.add(radioWebm);
-        pnlVideo.add(cbbxQualityFilter, "w 40:70:n, h 20:35:n, growx, pushx");
+        pnlVideo.setLayout(new MigLayout("fill, insets 5", "[grow, center][grow, center][grow, center][grow, center]", "[]"));
+        pnlVideo.add(radioMp4, "w 0:n:n");
+        pnlVideo.add(radioMkv, "w 0:n:n");
+        pnlVideo.add(radioWebm, "w 0:n:n");
+        pnlVideo.add(cbbxQualityFilter, "w 40:70:150, h 20:35:n, growx, pushx");
         downloadFilePnl.add(pnlVideo, "span 8, growx, h 30:60:n");
 
         //Panel audio
-        pnlAudio.setLayout(new MigLayout("fill, insets 5 17 5 17", 
-    "[grow, center][grow, center][grow, center]", 
-    "[center]" // Centrado vertical
-));
-        pnlAudio.add(radioMp3);
-        pnlAudio.add(radioWav);
-        pnlAudio.add(radioM4a);
+        pnlAudio.setLayout(new MigLayout("fill, insets 5 17 5 17",
+                "[grow, center][grow, center][grow, center]",
+                "[center]"
+        ));
+        pnlAudio.add(radioMp3, "w 0:n:n");
+        pnlAudio.add(radioWav, "w 0:n:n");
+        pnlAudio.add(radioM4a, "w 0:n:n");
         downloadFilePnl.add(pnlAudio, "span 8, growx, h 30:60:n");
 
         // Botones centrados
-        downloadFilePnl.add(btnDownload, "span 8, split 2, align center, sg, w 180!, h 25:45:n");
-        downloadFilePnl.add(btnOpenLast, "sg, w 180!, h 25:45:n, gapleft 20");
+        downloadFilePnl.add(btnDownload, "span 8, split 2, align center, sg, w 50:180:n, h 25:45:n");
+        downloadFilePnl.add(btnOpenLast, "sg, w 50:180:n, h 25:45:n, gapleft 10");
 
         // ProgressBar
         downloadFilePnl.add(progressBar, "span 8, growx, h 22!");
@@ -246,14 +245,17 @@ public class Downloads extends javax.swing.JPanel {
 
         cbbxQualityFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         cbbxQualityFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Quality" }));
+        cbbxQualityFilter.setMaximumSize(null);
+        cbbxQualityFilter.setMinimumSize(null);
+        cbbxQualityFilter.setPreferredSize(null);
         pnlVideo.add(cbbxQualityFilter);
 
         downloadFilePnl.add(pnlVideo, java.awt.BorderLayout.PAGE_END);
 
         btnDownload.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnDownload.setMaximumSize(new java.awt.Dimension(150, 70));
-        btnDownload.setMinimumSize(new java.awt.Dimension(150, 70));
-        btnDownload.setPreferredSize(new java.awt.Dimension(150, 70));
+        btnDownload.setMaximumSize(null);
+        btnDownload.setMinimumSize(null);
+        btnDownload.setPreferredSize(null);
         btnDownload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDownloadActionPerformed(evt);
@@ -263,9 +265,9 @@ public class Downloads extends javax.swing.JPanel {
 
         btnOpenLast.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnOpenLast.setText("Open Last");
-        btnOpenLast.setMaximumSize(new java.awt.Dimension(150, 30));
-        btnOpenLast.setMinimumSize(new java.awt.Dimension(150, 30));
-        btnOpenLast.setPreferredSize(new java.awt.Dimension(150, 30));
+        btnOpenLast.setMaximumSize(null);
+        btnOpenLast.setMinimumSize(null);
+        btnOpenLast.setPreferredSize(null);
         btnOpenLast.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOpenLastActionPerformed(evt);

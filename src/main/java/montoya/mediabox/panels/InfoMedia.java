@@ -100,15 +100,14 @@ public class InfoMedia extends javax.swing.JPanel {
     
     /** Configura posición de los componentes */
     private void setupLayout() {
-        this.setLayout(new MigLayout("fill, insets 20", "[50:150:200]10[grow]", "[][grow]")); //Panel principal
-        
-        this.add(cbbxTypeFilter, "cell 1 0, split 2, right, width 200!"); //JComboBox para filtrar por tipo
-        
-        this.add(btnUpload, "width 140!, height 35!"); //Botón Upload
-        
-        this.add(scrFolderList, "cell 0 1, grow"); //JScroll de la lista
-        
-        this.add(scrTableMedia, "cell 1 1, grow"); //JScroll de la tabla
+        this.setLayout(new MigLayout("fill, insets 20", "[40:150:n]10[grow]", "[][grow]")); //Panel principal
+
+        this.add(cbbxTypeFilter, "cell 1 0, split 2, right, width 100:200:200"); //JComboBox para filtrar por tipo
+        this.add(btnUpload, "width 70:140:n, height 35!"); //Botón Upload
+
+        this.add(scrFolderList, "cell 0 1, grow, w 40:150:n"); //JScroll de la lista
+
+        this.add(scrTableMedia, "cell 1 1, grow, w 0:n:n, pushx"); //JScroll de la tabla
     }
 
     /** Configura el estilo de los componentes */
@@ -334,8 +333,6 @@ public class InfoMedia extends javax.swing.JPanel {
 
         setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Downloads", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14))); // NOI18N
         setFocusCycleRoot(true);
-        setMaximumSize(null);
-        setPreferredSize(null);
         setLayout(new java.awt.BorderLayout());
 
         folderList.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -344,6 +341,8 @@ public class InfoMedia extends javax.swing.JPanel {
         scrFolderList.setViewportView(folderList);
 
         add(scrFolderList, java.awt.BorderLayout.CENTER);
+
+        scrTableMedia.setMinimumSize(null);
 
         tblMedia.setAutoCreateRowSorter(true);
         tblMedia.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -366,6 +365,7 @@ public class InfoMedia extends javax.swing.JPanel {
                 return types [columnIndex];
             }
         });
+        tblMedia.setMinimumSize(null);
         tblMedia.setPreferredSize(null);
         tblMedia.setSelectionBackground(new java.awt.Color(255, 204, 153));
         scrTableMedia.setViewportView(tblMedia);
@@ -381,9 +381,9 @@ public class InfoMedia extends javax.swing.JPanel {
         });
         add(cbbxTypeFilter, java.awt.BorderLayout.PAGE_END);
 
-        btnUpload.setMaximumSize(new java.awt.Dimension(120, 25));
-        btnUpload.setMinimumSize(new java.awt.Dimension(120, 25));
-        btnUpload.setPreferredSize(new java.awt.Dimension(120, 25));
+        btnUpload.setMaximumSize(null);
+        btnUpload.setMinimumSize(null);
+        btnUpload.setPreferredSize(null);
         btnUpload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUploadActionPerformed(evt);
