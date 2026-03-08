@@ -55,40 +55,46 @@ public class Preferences extends javax.swing.JPanel {
         mbSpeedSpinner();
     }
     
-    /** Configura posición de los componentes */
-    private void setupLayout(){
-        this.setLayout(new MigLayout("fill, insets 40, wrap 1", "[grow, center]", "[grow, center]")); //Layout principal del panel
-        
+    /**
+     * Configura posición de los componentes
+     */
+    private void setupLayout() {
+        //Layout principal del panel
+        this.setLayout(new MigLayout("fill, insets 20, wrap 1", "[grow, center]", "[grow][]")); 
+
         //Panel interno
-        pnlPref.setLayout(new MigLayout("insets 30 15 30 15, gapy 15, align center center", "[right][left][pref]", "push[][][][][]push"));
-        this.add(pnlPref, "grow, center, w 200:740:n, h 300:880:n");
-        
+        pnlPref.setLayout(new MigLayout("insets 40 30 40 30, gapy 15",
+                "[grow][right, 0:pref:n, shrink 110]15[grow, center, 0:pref:800, shrink 100]15[pref, 0:pref:n][grow]",
+                "push[][][][][]push"));
+        this.add(pnlPref, "center, growx, w 0:700:n, h n:800:n");
+
         //Ruta temporal
-        pnlPref.add(lblPath, "cell 0 0, alignx right");
-        pnlPref.add(txtPathTemp, "cell 1 0, alignx left, growx, w 30:400:800, h 35!");
-        pnlPref.add(btnBrowseTemp, "cell 2 0, w 50!, h 50!");
-        
+        pnlPref.add(lblPath, "cell 1 0, alignx right, w 10:pref:n");
+        pnlPref.add(txtPathTemp, "cell 2 0, growx, w 0:400:800, h 35, shrink 120");
+        pnlPref.add(btnBrowseTemp, "cell 3 0, w 30:50:50, h 30:50:50");
+
         //Checkbox de creación de M3U
-        pnlPref.add(lblM3u, "cell 0 1, alignx right, gaptop 15"); 
-        pnlPref.add(chkCreate, "cell 1 1, alignx left, gaptop 15");
+        pnlPref.add(lblM3u, "cell 1 1, alignx right, gaptop 10, w 10:pref:n");
+        pnlPref.add(chkCreate, "cell 2 1, alignx left, gaptop 10");
 
         //Spinner de velocidad y etiqueta
-        pnlPref.add(lblSpeed, "cell 0 2, alignx right, aligny center, gaptop 15");
-        pnlPref.add(spnSpeed, "cell 1 2, split 2, alignx left, gaptop 15, w 100!, h 35!");
-        pnlPref.add(lblSpeedValue, "gapleft 20, alignx left, gaptop 15");
-        
+        pnlPref.add(lblSpeed, "cell 1 2, alignx right, aligny center, gaptop 10, w 10:pref:n");
+        pnlPref.add(spnSpeed, "cell 2 2, split 2, alignx left, gaptop 10, w 20:100:150, h 30:35:n");
+        pnlPref.add(lblSpeedValue, "gapleft 20, alignx left, gaptop 10");
+
         //Botón para buscar yt-dlp y label de info
-        pnlPref.add(lblYtDlp, "cell 0 3, alignx right, gaptop 15"); 
-        pnlPref.add(btnYtDlp, "cell 1 3, alignx left, gaptop 20, w 50:250:300, h 35!");
-        pnlPref.add(lblInfo, "cell 1 4, span, align left, gaptop 10, hidemode 3");
-        
+        pnlPref.add(lblYtDlp, "cell 1 3, alignx right, gaptop 10, w 10:pref:n");
+        pnlPref.add(btnYtDlp, "cell 2 3, growx, alignx left, gaptop 10, w 20:400:800, h 35!");
+        pnlPref.add(lblInfo, "cell 2 4, alignx center, gaptop 5, hidemode 3");
+
         //Botones de guardar y cancelar
-        pnlPref.add(btnSave, "cell 1 5, split 2, alignx center, gaptop 30, w 100:120:200, h 40!"); 
-        pnlPref.add(btnReturn, "gaptop 30, gapleft 20, w 100:120:200, h 40!");
-        
+        pnlPref.add(btnSave, "cell 2 5, split 2, growx, sizegroup buttons, alignx center, gaptop 20, w 40:120:400, h 40!, gapright 5");
+        pnlPref.add(btnReturn, "growx, sizegroup buttons, gaptop 20, w 40:120:400, h 40!, gapleft 20, gapright 40");
+
         //Logo al final del panel
-        this.add(logoLabel, "align center, shrink"); 
+        this.add(logoLabel, "align center, gaptop 10:40:push, gapbottom 10:40:push");
     }
+
     
     /** Configura el estilo de los componentes */
     private void setupStyle(){
@@ -161,12 +167,21 @@ public class Preferences extends javax.swing.JPanel {
         chkCreate.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         chkCreate.setForeground(new java.awt.Color(255, 255, 255));
         chkCreate.setToolTipText("");
+        chkCreate.setMaximumSize(null);
+        chkCreate.setMinimumSize(null);
+        chkCreate.setPreferredSize(null);
         add(chkCreate);
 
         lblSpeed.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblSpeed.setMaximumSize(null);
+        lblSpeed.setMinimumSize(null);
+        lblSpeed.setPreferredSize(null);
         add(lblSpeed);
 
         lblYtDlp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblYtDlp.setMaximumSize(null);
+        lblYtDlp.setMinimumSize(null);
+        lblYtDlp.setPreferredSize(null);
         add(lblYtDlp);
 
         btnYtDlp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -184,6 +199,7 @@ public class Preferences extends javax.swing.JPanel {
         btnSave.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnSave.setToolTipText("");
         btnSave.setMaximumSize(null);
+        btnSave.setMinimumSize(null);
         btnSave.setPreferredSize(null);
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -195,6 +211,7 @@ public class Preferences extends javax.swing.JPanel {
         btnReturn.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnReturn.setToolTipText("");
         btnReturn.setMaximumSize(null);
+        btnReturn.setMinimumSize(null);
         btnReturn.setPreferredSize(null);
         btnReturn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -204,12 +221,16 @@ public class Preferences extends javax.swing.JPanel {
         add(btnReturn);
 
         txtPathTemp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        txtPathTemp.setMaximumSize(null);
         txtPathTemp.setMinimumSize(null);
         txtPathTemp.setPreferredSize(null);
         add(txtPathTemp);
 
         btnBrowseTemp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnBrowseTemp.setToolTipText("");
+        btnBrowseTemp.setMaximumSize(null);
+        btnBrowseTemp.setMinimumSize(null);
+        btnBrowseTemp.setPreferredSize(null);
         btnBrowseTemp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBrowseTempActionPerformed(evt);
@@ -218,17 +239,32 @@ public class Preferences extends javax.swing.JPanel {
         add(btnBrowseTemp);
 
         lblPath.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblPath.setMaximumSize(null);
+        lblPath.setMinimumSize(null);
+        lblPath.setPreferredSize(null);
         add(lblPath);
 
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo.png"))); // NOI18N
         add(logoLabel);
+
+        spnSpeed.setMaximumSize(null);
+        spnSpeed.setMinimumSize(null);
+        spnSpeed.setPreferredSize(null);
         add(spnSpeed);
+
+        lblSpeedValue.setMaximumSize(null);
+        lblSpeedValue.setMinimumSize(null);
+        lblSpeedValue.setPreferredSize(null);
         add(lblSpeedValue);
 
         pnlPref.setMaximumSize(null);
-        pnlPref.setMinimumSize(new java.awt.Dimension(200, 300));
+        pnlPref.setMinimumSize(null);
         pnlPref.setPreferredSize(null);
         add(pnlPref);
+
+        lblInfo.setMaximumSize(null);
+        lblInfo.setMinimumSize(null);
+        lblInfo.setPreferredSize(null);
         add(lblInfo);
     }// </editor-fold>//GEN-END:initComponents
 
