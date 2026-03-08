@@ -1,7 +1,6 @@
 package montoya.mediabox.panels;
 
 import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -102,38 +101,51 @@ public class Downloads extends javax.swing.JPanel {
         this.requestFocusInWindow();
     }
 
-    /** Configura posición de los componentes */
+    /**
+     * Configura posición de los componentes
+     */
     private void setupLayout() {
         //Panel principal, panel interno, panel InfoMedia y logo
-        this.setLayout(new MigLayout("fill, insets 30, wrap 1", "[grow, center]", "push[grow]50![grow]push"));
-        this.add(downloadFilePnl, "grow, center, w 200:840:n, h 150:500:n, gaptop 40");
+        this.setLayout(new MigLayout("fill, insets 20, wrap 1", "[grow, center]", "push[grow]10:50:push[grow]push"));
+        this.add(downloadFilePnl, "grow, center, w 200:840:n, h 280:500:n, gaptop 5:40:push");
         this.add(infoMedia, "grow, center, w 200:840:n, h 150:430:n");
-        this.add(logoLabel, "align center, gapbottom 40");
+        this.add(logoLabel, "align center, gapbottom 10:40:push");
 
         //Panel interno
-        downloadFilePnl.setLayout(new MigLayout("fillx, insets 20, wrap 1", "[grow]"));
-        downloadFilePnl.add(txtUrl, "split 2, growx, h 35!, gapright 10");
-        downloadFilePnl.add(btnFolder, "w 50!, h 50!");
+        downloadFilePnl.setLayout(new MigLayout("fillx, insets 10 20 10 20, wrap 8",
+                "[grow][grow][grow][grow][grow][grow][grow][grow]",
+                "10:30:n[]10:50:n[]15![]20:40:push[]20:40:push[]10!"
+        ));
+        downloadFilePnl.add(txtUrl, "span 8, split 2, growx, w 100:n:n, h 30:35:n, gapright 25, aligny center");
+        downloadFilePnl.add(btnFolder, "right, w 50!, h 40:50:n");
 
         //Panel video
-        pnlVideo.setLayout(new MigLayout("fillx, insets 17", "[]push[]push[]push[]", "[]"));
+        pnlVideo.setLayout(new MigLayout("fill, insets 5 17 5 17", 
+    "[grow, center][grow, center][grow, center][grow, center]", 
+    "[center]" // Esto centra horizontalmente respecto al alto del panel
+));
         pnlVideo.add(radioMp4);
         pnlVideo.add(radioMkv);
         pnlVideo.add(radioWebm);
-        pnlVideo.add(cbbxQualityFilter, "w 130!, h 30!");
-        downloadFilePnl.add(pnlVideo, "growx, h 70!, gaptop 30");
+        pnlVideo.add(cbbxQualityFilter, "w 40:70:n, h 20:35:n, growx, pushx");
+        downloadFilePnl.add(pnlVideo, "span 8, growx, h 30:60:n");
 
         //Panel audio
-        pnlAudio.setLayout(new MigLayout("fillx, insets 17", "[]15[]15[]", "[]"));
+        pnlAudio.setLayout(new MigLayout("fill, insets 5 17 5 17", 
+    "[grow, center][grow, center][grow, center]", 
+    "[center]" // Centrado vertical
+));
         pnlAudio.add(radioMp3);
         pnlAudio.add(radioWav);
         pnlAudio.add(radioM4a);
-        downloadFilePnl.add(pnlAudio, "growx, h 70!");
+        downloadFilePnl.add(pnlAudio, "span 8, growx, h 30:60:n");
 
-        //Botón download, open last y barra de progreso
-        downloadFilePnl.add(btnDownload, "split 2, w 180!, h 50!, gaptop 40, align center");
-        downloadFilePnl.add(btnOpenLast, "w 180!, h 50!, gaptop 30, gapleft 20");
-        downloadFilePnl.add(progressBar, "growx, h 25!, gaptop 50, gapbottom 10, pushy, aligny bottom");
+        // Botones centrados
+        downloadFilePnl.add(btnDownload, "span 8, split 2, align center, sg, w 180!, h 25:45:n");
+        downloadFilePnl.add(btnOpenLast, "sg, w 180!, h 25:45:n, gapleft 20");
+
+        // ProgressBar
+        downloadFilePnl.add(progressBar, "span 8, growx, h 22!");
     }
 
     /** Configura el estilo de los componentes */
