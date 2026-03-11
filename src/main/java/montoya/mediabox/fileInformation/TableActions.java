@@ -1,5 +1,6 @@
 package montoya.mediabox.fileInformation;
 
+import Utils.Logger;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -133,6 +134,7 @@ public class TableActions extends AbstractCellEditor implements TableCellRendere
             label.setIcon(new ImageIcon(img)); //Establece icono
         } catch (Exception ex) {
             label.setText("?");
+            Logger.logError("Error loading icon: " + iconPath, ex);
         }
         label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); //Establece el cursor
         label.setOpaque(false);

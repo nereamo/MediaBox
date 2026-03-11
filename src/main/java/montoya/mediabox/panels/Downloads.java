@@ -1,5 +1,6 @@
 package montoya.mediabox.panels;
 
+import Utils.Logger;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -378,6 +379,7 @@ public class Downloads extends javax.swing.JPanel {
             try {
                 Desktop.getDesktop().open(lastFile);
             } catch (IOException ex) {
+                Logger.logError("Could not open last downloaded file: " + lastFile.getAbsolutePath(), ex);
                 JOptionPane.showMessageDialog(null, "Could not open file:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {

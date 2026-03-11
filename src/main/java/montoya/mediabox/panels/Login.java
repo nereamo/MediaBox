@@ -1,5 +1,6 @@
 package montoya.mediabox.panels;
 
+import Utils.Logger;
 import java.awt.Color;
 import java.awt.event.*;
 import javax.swing.*;
@@ -157,6 +158,7 @@ public class Login extends JPanel{
                         try {
                             mediaPollingComponent.getAllMedia(newToken); //Obtener medios con el token recibido
                         } catch (Exception ex) {
+                            Logger.logError("User logged in but failed to fetch media for email: " + email, ex);
                             UIStyles.showMessageInfo(lblMessage, "User logged out. Please login again.");
                             return;
                         }
@@ -179,6 +181,7 @@ public class Login extends JPanel{
                         }
                     }
                 } catch (Exception ex) {
+                    Logger.logError("Login failed for email: " + email, ex);
                     UIStyles.showMessageInfo(lblMessage, "Login failed: Incorrect credentials or expired token.");
                 }
             }
@@ -206,6 +209,7 @@ public class Login extends JPanel{
             try {
                 mediaPollingComponent.getAllMedia(savedToken); //Llamada a api para comprobar si el token es correcto
             } catch (Exception e) {
+                Logger.logError("AutoLogin failed for saved email: " + emailUser, e);
                 UIStyles.showMessageInfo(lblMessage, "User logged out. Please log in again.");
                 token = null;
                 cardManager.showCard("login");
@@ -226,7 +230,7 @@ public class Login extends JPanel{
             return;
 
         } catch (Exception ex) {
-            System.getLogger(Login.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            Logger.logError("Unexpected error during autoLogin", ex);
         }
     }
 }

@@ -1,5 +1,6 @@
 package montoya.mediabox.controller;
 
+import Utils.Logger;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
@@ -111,7 +112,14 @@ public class FileManager {
         String apiUrl = mediaPollingComponent.getApiUrl();
 
         if (token == null || token.isBlank() || apiUrl == null || apiUrl.isBlank()) {
-            System.err.println("Cannot fetch network files: token or API URL is missing");
+            
+            //Mensage de error guardado en archivo
+            Logger.logError("Cannot fetch network files: token or API URL is missing",
+                    new IllegalStateException("Token or API URL missing"));
+            
+            JOptionPane.showMessageDialog(null, "Cannot fetch network files: token or API URL is missing",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            
             return networkFiles;
         }
 
@@ -129,7 +137,9 @@ public class FileManager {
             networkFiles = typeFilter.filterByType(networkFiles, filter);
 
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Error retrieving network files:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.logError("Error retrieving network files", ex);
+            JOptionPane.showMessageDialog(null, "Error retrieving network files. Please check logs.",
+                                      "Error", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         }
 

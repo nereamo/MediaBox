@@ -1,5 +1,6 @@
 package montoya.mediabox.panels;
 
+import Utils.Logger;
 import montoya.mediabox.fileInformation.TableActions;
 import java.util.*;
 import javax.swing.*;
@@ -232,6 +233,7 @@ public class InfoMedia extends javax.swing.JPanel {
         try {
             fileManager.openLocalFile(info);
         } catch (Exception ex) {
+            Logger.logError("Error opening local file: " + info.getName(), ex);
             JOptionPane.showMessageDialog(this, "Error opening file.");
         }
     }
@@ -266,6 +268,7 @@ public class InfoMedia extends javax.swing.JPanel {
                 reloadMediaData(); //Actualiza archivos
                 JOptionPane.showMessageDialog(this, "Download completed!");
             } catch (Exception ex) {
+                Logger.logError("Error downloading file: " + info.getName(), ex);
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
             }
         }
@@ -414,7 +417,11 @@ public class InfoMedia extends javax.swing.JPanel {
                 reloadMediaData(); //Recarga los datos (directorios y archivos)
                 JOptionPane.showMessageDialog(this, "Uplodad completed");
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+                Logger.logError("Error uploading file: " + fc.getSelectedFile().getName(), ex);
+                JOptionPane.showMessageDialog(this,
+                        "Error uploading file. Please check error.log for details.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnUploadActionPerformed

@@ -1,5 +1,6 @@
 package montoya.mediabox.fileInformation;
 
+import Utils.Logger;
 import java.io.*;
 import java.util.*;
 import java.nio.file.Files;
@@ -55,7 +56,7 @@ public class FileProperties {
             }
 
         } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Error loading downloads.json: " + e.getMessage());
+            Logger.logError("Error loading downloads.json", e);
             return new DirectoryInformation(new ArrayList<>(), new HashSet<>());
         }
     }
@@ -76,7 +77,7 @@ public class FileProperties {
             }
         
         } catch (IOException e) {
-            System.err.println("Error saving all download data: " + e.getMessage());
+            Logger.logError("Error saving all download data to downloads.json", e);
         }
     }
     
@@ -96,7 +97,7 @@ public class FileProperties {
             saveAllDownloads(data); //Guarda los cambios en JSON
 
         } catch (Exception e) {
-            System.err.println("Error adding download: " + e.getMessage());
+            Logger.logError("Error adding new download to downloads.json", e);
         }
     }
     

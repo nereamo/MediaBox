@@ -1,5 +1,6 @@
 package montoya.mediabox.download;
 
+import Utils.Logger;
 import java.io.*;
 import javax.swing.*;
 import java.util.Date;
@@ -171,6 +172,7 @@ public class DownloadWorker extends SwingWorker<Void, String> {
             barProgress.setIndeterminate(false);
             barProgress.setValue(0);
             barProgress.setString("ERROR IN DOWNLOAD");
+            Logger.logError("Download failed in SwingWorker doInBackground", e);
         }
     }
 
@@ -190,7 +192,7 @@ public class DownloadWorker extends SwingWorker<Void, String> {
                 return (int) Float.parseFloat(percent); //Confierte float a int
             }
         } catch (Exception e) {
-            System.err.println("Error extracting percentage: " + e.getMessage());
+            Logger.logError("Error extracting download percentage from line: " + line, e);
         }
         return -1;
     }

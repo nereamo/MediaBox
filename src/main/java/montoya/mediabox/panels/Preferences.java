@@ -1,5 +1,6 @@
 package montoya.mediabox.panels;
 
+import Utils.Logger;
 import java.awt.Color;
 import java.io.*;
 import javax.swing.*;
@@ -303,10 +304,9 @@ public class Preferences extends javax.swing.JPanel {
                 UIStyles.showMessageInfo(lblInfo, "yt-dlp.exe not found!");
             }
 
-        } catch (IOException ex) {
-            System.getLogger(Preferences.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-        } catch (InterruptedException ex) {
-            System.getLogger(Preferences.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        } catch (IOException | InterruptedException ex) {
+            Logger.logError("Error searching for yt-dlp.exe", ex);
+            UIStyles.showMessageInfo(lblInfo, "An error occurred while searching for yt-dlp.exe.");
         }
     }//GEN-LAST:event_btnYtDlpActionPerformed
 
