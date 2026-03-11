@@ -264,6 +264,18 @@ public class UIStyles {
             list.setFont(FONT_PLAIN);
         }
         
+        //Ancho y color del scroll vertical --> fondo(track), rectangulo(thumb)
+        scroll.getVerticalScrollBar().putClientProperty(
+                FlatClientProperties.STYLE,
+                "width: 14; track: #252526; thumb: #7E86CC"
+        );
+
+        //Ancho y color del scroll horizontal --> fondo(track), rectangulo(thumb)
+        scroll.getHorizontalScrollBar().putClientProperty(
+                FlatClientProperties.STYLE,
+                "width: 14; track: #252526; thumb: #7E86CC"
+        );
+            
         //Redondez del borde
         scroll.putClientProperty( FlatClientProperties.STYLE, "arc: 20; borderColor: #a6a6a6; borderWidth: 0" ); 
     }
