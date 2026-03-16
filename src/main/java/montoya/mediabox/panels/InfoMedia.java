@@ -47,7 +47,7 @@ public class InfoMedia extends javax.swing.JPanel {
     private DirectoryInformation allData;
     
     /** Lista {@link FileInformation} que contiene todas las descargas.*/
-    private List<FileInformation> allFiles;
+    private Set<FileInformation> allFiles;
     
     /** Colección que contiene todas las rutas de los directorios.*/
     private Set<String> folderPaths = new HashSet<>();
@@ -61,7 +61,7 @@ public class InfoMedia extends javax.swing.JPanel {
      * @param folderPaths Todas la rutas donde se realizan las descargas
      * @param mediaPollingComponent Listener que notifica nuevos medios en la API
      */
-    public InfoMedia(FileProperties fileProperties, TypeFilter typeFilter, List<FileInformation> allFiles, Set<String> folderPaths, MediaPollingComponent mediaPollingComponent) {
+    public InfoMedia(FileProperties fileProperties, TypeFilter typeFilter, Set<FileInformation> allFiles, Set<String> folderPaths, MediaPollingComponent mediaPollingComponent) {
         initComponents();
         
         this.typeFilter = typeFilter;
@@ -74,7 +74,7 @@ public class InfoMedia extends javax.swing.JPanel {
         this.allFiles = allData.getFileList(); //Archivos locales
         folderPaths.addAll(allData.getFolderPaths()); //Añade las rutas de los directorios
 
-        tblModel = new FileTableModel(allFiles); //Modelo de tabla
+        tblModel = new FileTableModel(new ArrayList<>(allFiles)); //Modelo de tabla
         tblMedia.setModel(tblModel);
         tblMedia.setRowHeight(25);
         ToolTipManager.sharedInstance().registerComponent(tblMedia); //Tooltips
@@ -177,17 +177,17 @@ public class InfoMedia extends javax.swing.JPanel {
 
         String selectedFilter = (String) cbbxTypeFilter.getSelectedItem();
 
-        List<FileInformation> resultFiles;
+        Set<FileInformation> resultFiles;
 
         if (folder.isIsNetwork()) {
-            resultFiles = fileManager.getNetworkFiles(selectedFilter);
+            resultFiles = new HashSet<>(fileManager.getNetworkFiles(selectedFilter));
         } else if (folder.isIsBoth()) {
             resultFiles = fileManager.getBothFiles(selectedFilter);
         } else {
             resultFiles = fileManager.getLocalFiles(folder.getFullPath(), selectedFilter);
         }
 
-        tblModel.setFileList(resultFiles);
+        tblModel.setFileList(new ArrayList<>(resultFiles));
         tblModel.fireTableDataChanged();
     }
     
@@ -201,7 +201,7 @@ public class InfoMedia extends javax.swing.JPanel {
         //Actualiza lista de archivos
         fileManager.reloadDirectoryInfo();
         allFiles = fileProperties.loadDownloads().getFileList();
-        tblModel.setFileList(allFiles);
+        tblModel.setFileList(new ArrayList<>(allFiles));
         tblModel.fireTableDataChanged();
 
         //Re-inicializar directorios

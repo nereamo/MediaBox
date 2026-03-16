@@ -13,7 +13,7 @@ import java.util.Set;
 public class DirectoryInformation implements Serializable{
     
     /** Lista de archivos descargados en un directorio */
-    private List<FileInformation> fileList;
+    private Set<FileInformation> fileList;
     
     /** Rutas de los directorios que almacenan descargas */
     private Set<String> folderPaths;
@@ -24,18 +24,18 @@ public class DirectoryInformation implements Serializable{
      * @param fileList Lista de archivos descargados
      * @param folderPaths Colección de rutas de los directorios
      */
-    public DirectoryInformation(List<FileInformation> fileList, Set<String> folderPaths) {
+    public DirectoryInformation(Set<FileInformation> fileList, Set<String> folderPaths) {
         this.fileList = fileList;
         this.folderPaths = folderPaths;
     }  
 
     /** @return Lista de archivos */
-    public List<FileInformation> getFileList() {
+    public Set<FileInformation> getFileList() {
         return fileList;
     }
 
     /** @param fileList Almacena una lista de archivos */
-    public void setFileList(List<FileInformation> fileList) {
+    public void setFileList(Set<FileInformation> fileList) {
         this.fileList = fileList;
     }
 

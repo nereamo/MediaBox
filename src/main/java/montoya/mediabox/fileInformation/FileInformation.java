@@ -1,6 +1,7 @@
 package montoya.mediabox.fileInformation;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Implementa {@link Serializable} para permitir almacenar la información del archivo descargado en un JSON.
@@ -96,5 +97,26 @@ public class FileInformation implements Serializable {
     /** @param folderPath Almacena el directorio de ubicación */
     public void setFolderPath(String folderPath) {
         this.folderPath = folderPath;
+    }
+    
+    /**
+     * Compara si dos archivos son iguales basándose en el nombre y la ruta.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FileInformation that = (FileInformation) o;
+        // Consideramos que es el mismo archivo si el nombre y la carpeta coinciden
+        return Objects.equals(name, that.name) && 
+               Objects.equals(folderPath, that.folderPath);
+    }
+
+    /**
+     * Genera un código único basado en el nombre y la ruta para organizar el Set internamente.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, folderPath);
     }
 }

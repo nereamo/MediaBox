@@ -8,7 +8,9 @@ import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.swing.JOptionPane;
 import montoya.mediabox.fileInformation.DirectoryInformation;
 import montoya.mediabox.fileInformation.FileInformation;
@@ -66,8 +68,8 @@ public class FileManager {
      * @param filter Filtro de tipo de archivo
      * @return Devuelve la lista de archivos que coincidad con directorio y filtro
      */
-    public List<FileInformation> getLocalFiles(String folderPath, String filter) {
-        List<FileInformation> localFiles = typeFilter.filterByDirectory(directoryInfo.getFileList(), folderPath);
+    public Set<FileInformation> getLocalFiles(String folderPath, String filter) {
+        Set<FileInformation> localFiles = typeFilter.filterByDirectory(directoryInfo.getFileList(), folderPath);
 
         return typeFilter.filterByType(localFiles, filter);
     }
@@ -79,11 +81,11 @@ public class FileManager {
      * @param filter Filtro de tipo de archivo
      * @return Devuelve la lista de archivos que están presentes en ambos lados
      */
-    public List<FileInformation> getBothFiles(String filter) {
-        List<FileInformation> bothFiles = new ArrayList<>();
+    public Set<FileInformation> getBothFiles(String filter) {
+        Set<FileInformation> bothFiles = new HashSet<>();
 
         //Obtener archivos locales
-        List<FileInformation> localFiles = typeFilter.filterByType(directoryInfo.getFileList(), filter);
+        Set<FileInformation> localFiles = typeFilter.filterByType(directoryInfo.getFileList(), filter);
 
         //Obtener archivos de API
         List<FileInformation> networkFiles = getNetworkFiles(filter);
@@ -107,7 +109,7 @@ public class FileManager {
      * @return Devuelve la lista de archivos que están presentes en la API
      */
     public List<FileInformation> getNetworkFiles(String filter) {
-        List<FileInformation> networkFiles = new ArrayList<>();
+        Set<FileInformation> networkFiles = new HashSet<>();
         String token = mediaPollingComponent.getToken();
         String apiUrl = mediaPollingComponent.getApiUrl();
 
@@ -120,7 +122,7 @@ public class FileManager {
             JOptionPane.showMessageDialog(null, "Cannot fetch network files: token or API URL is missing",
                     "Error", JOptionPane.ERROR_MESSAGE);
             
-            return networkFiles;
+            return new ArrayList<>();
         }
 
         try {
@@ -143,7 +145,7 @@ public class FileManager {
             ex.printStackTrace();
         }
 
-        return networkFiles;
+        return new ArrayList<>(networkFiles);
     }
     
     /**

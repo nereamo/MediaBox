@@ -1,7 +1,9 @@
 package montoya.mediabox.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import montoya.mediabox.fileInformation.FileInformation;
 
 /**
@@ -23,9 +25,9 @@ public class TypeFilter {
      * @param folderPath Ruta del directorio por la que se filtra
      * @return Lista de archivos pertenecientes al directorio
      */
-    public List<FileInformation> filterByDirectory(List<FileInformation> allFiles, String folderPath) {
+    public Set<FileInformation> filterByDirectory(Set<FileInformation> allFiles, String folderPath) {
         
-        List<FileInformation> filter = new ArrayList<>();
+        Set<FileInformation> filter = new HashSet<>();
 
         for (FileInformation fi : allFiles) {
             
@@ -44,9 +46,9 @@ public class TypeFilter {
      * @param filter Filtro por tipo de archivo
      * @return Lista de archivos con el mismo tipo de archivo
      */
-    public List<FileInformation> filterByType(List<FileInformation> allFiles, String filter) {
+    public Set<FileInformation> filterByType(Set<FileInformation> allFiles, String filter) {
 
-        List<FileInformation> applyFilter = new ArrayList<>();
+        Set<FileInformation> applyFilter = new HashSet<>();
         
         for (FileInformation fi : allFiles) {
 

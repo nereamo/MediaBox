@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.swing.*;
@@ -65,7 +66,7 @@ public class Downloads extends javax.swing.JPanel {
     private final Set<String> folderPaths;
     
     /** Lista de archivos descargados en un directorio */
-    private List<FileInformation> allFiles = new ArrayList<>();
+    private Set<FileInformation> allFiles = new HashSet<>();
     
     /** Ruta completa del directorio */
     private String folderPath = "";
@@ -386,7 +387,6 @@ public class Downloads extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "No downloaded file found.", "Info", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnOpenLastActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDownload;

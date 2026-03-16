@@ -38,7 +38,7 @@ public class FileProperties {
             Files.createDirectories(Paths.get(FOLDER_NAME)); //Si le directorio no existe, lo crea
 
             if (!Files.exists(JSON_PATH)){ //Si el JSON no existe, devuelve objeto vacío
-                return new DirectoryInformation(new ArrayList<>(), new HashSet<>());
+                return new DirectoryInformation(new HashSet<>(), new HashSet<>());
             }
 
             try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(JSON_PATH.toFile()))) {
@@ -57,7 +57,7 @@ public class FileProperties {
 
         } catch (IOException | ClassNotFoundException e) {
             Logger.logError("Error loading downloads.json", e);
-            return new DirectoryInformation(new ArrayList<>(), new HashSet<>());
+            return new DirectoryInformation(new HashSet<>(), new HashSet<>());
         }
     }
     
@@ -109,7 +109,7 @@ public class FileProperties {
      * @param allFiles Lista de todos los archivos
      * @param allDirs Colección de las rutas de los directorios
      */
-    public void deleteDownload(FileInformation fileInfo, List<FileInformation> allFiles, Set<String> allDirs) {
+    public void deleteDownload(FileInformation fileInfo, Set<FileInformation> allFiles, Set<String> allDirs) {
 
         //Borra archivo fisico
         File f = new File(fileInfo.getFolderPath(), fileInfo.getName());
@@ -117,24 +117,33 @@ public class FileProperties {
             f.delete();
         }
 
-        //Borra d ela lista de archivos
-        for(int i = 0; i <allFiles.size(); i++){
-            FileInformation fi = allFiles.get(i);
-            if(fi.getName().equals(fileInfo.getName()) && fi.getFolderPath().equals(fileInfo.getFolderPath())){
-                allFiles.remove(i);
-                break;
-            }
-        }
+        
+        allFiles.remove(fileInfo);
+//        //Borra de la lista de archivos
+//        for(int i = 0; i <allFiles.size(); i++){
+//            FileInformation fi = allFiles.get(i);
+//            if(fi.getName().equals(fileInfo.getName()) && fi.getFolderPath().equals(fileInfo.getFolderPath())){
+//                allFiles.remove(i);
+//                break;
+//            }
+//        }
         
         //Elimina el directorio que se quedó vacío
         boolean emptyFolder = true;
-        for(int i = 0; i < allFiles.size(); i++){
-            FileInformation fi = allFiles.get(i);
-            if(fi.getFolderPath().equals(fileInfo.getFolderPath())){
-                emptyFolder = false;
-                break;
-            }
+//        for(int i = 0; i < allFiles.size(); i++){
+//            FileInformation fi = allFiles.get(i);
+//            if(fi.getFolderPath().equals(fileInfo.getFolderPath())){
+//                emptyFolder = false;
+//                break;
+//            }
+//        }
+
+for (FileInformation fi : allFiles) {
+        if (fi.getFolderPath().equals(fileInfo.getFolderPath())) {
+            emptyFolder = false;
+            break;
         }
+    }
         
         if(emptyFolder){
             allDirs.remove(fileInfo.getFolderPath());
