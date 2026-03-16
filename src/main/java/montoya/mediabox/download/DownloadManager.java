@@ -275,4 +275,11 @@ public class DownloadManager {
     public void setInfoMedia(InfoMedia infoMedia) {
         this.infoMedia = infoMedia;
     }
+    
+    /**
+     * @return El panel de información de descargas asociado
+     */
+    public InfoMedia getInfoMedia() {
+        return infoMedia;
+    }
 }

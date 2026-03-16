@@ -1,6 +1,6 @@
 package montoya.mediabox.panels;
 
-import Utils.Logger;
+import montoya.mediaBox.utils.Logger;
 import montoya.mediabox.fileInformation.TableActions;
 import java.util.*;
 import javax.swing.*;

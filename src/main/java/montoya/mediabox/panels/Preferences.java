@@ -1,6 +1,6 @@
 package montoya.mediabox.panels;
 
-import Utils.Logger;
+import montoya.mediaBox.utils.Logger;
 import java.awt.Color;
 import java.io.*;
 import javax.swing.*;
@@ -8,6 +8,7 @@ import montoya.mediabox.MainFrame;
 import montoya.mediabox.controller.CardManager;
 import montoya.mediabox.download.DownloadManager;
 import montoya.mediabox.configUI.UIStyles;
+import montoya.mediabox.fileInformation.FileProperties;
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -66,7 +67,7 @@ public class Preferences extends javax.swing.JPanel {
         //Panel interno
         pnlPref.setLayout(new MigLayout("insets 40 30 40 30, gapy 15",
                 "[grow][right, 0:pref:n, shrink 110]15[grow, center, 0:pref:800, shrink 100]15[pref, 0:pref:n][grow]",
-                "push[][][][][]push"));
+                "push[][][][][25!]push[]push[]"));
         this.add(pnlPref, "center, growx, w 0:700:n, h n:800:n");
 
         //Ruta temporal
@@ -86,12 +87,16 @@ public class Preferences extends javax.swing.JPanel {
         //Botón para buscar yt-dlp y label de info
         pnlPref.add(lblYtDlp, "cell 1 3, alignx right, gaptop 10, w 10:pref:n");
         pnlPref.add(btnYtDlp, "cell 2 3, growx, alignx left, gaptop 10, w 20:400:800, h 35!");
-        pnlPref.add(lblInfo, "cell 2 4, alignx center, gaptop 5, hidemode 3");
-
+        pnlPref.add(lblInfo, "cell 2 4, alignx center, h 25!");
+        
         //Botones de guardar y cancelar
-        pnlPref.add(btnSave, "cell 2 5, split 2, growx, sizegroup buttons, alignx center, gaptop 20, w 40:120:400, h 40!, gapright 5");
-        pnlPref.add(btnReturn, "growx, sizegroup buttons, gaptop 20, w 40:120:400, h 40!, gapleft 20, gapright 40");
+        pnlPref.add(btnSave, "cell 2 5, split 2, growx, sizegroup buttons, alignx center, gaptop 40:push, w 40:120:400, h 40!, gapright 5");
+        pnlPref.add(btnReturn, "growx, sizegroup buttons, gaptop 40:push, w 40:120:400, h 40!, gapleft 20, gapright 40");
+        
+        //Botón para limpiar archivo "Downloads.json"
+        pnlPref.add(btnClearCache, "cell 1 6, span 3, align center, gaptop 20, gapbottom 10, w 150:200:300, h 35!");
 
+        
         //Logo al final del panel
         this.add(logoLabel, "align center, gaptop 10:40:push, gapbottom 10:40:push");
     }
@@ -121,9 +126,13 @@ public class Preferences extends javax.swing.JPanel {
         UIStyles.styleFixLabel(lblYtDlp, "Location yt-dlp: ", null);
         UIStyles.styleButtons(btnYtDlp, "Automatic search yt-dlp", "/images/search.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Automatic search yt-dlp", null);
         
+        //Botón para limpiar archivo "Downloads.json"
+        UIStyles.styleButtons(btnClearCache, "Clear Cache", "/images/clearCache.png",UIStyles.MEDIUM_GREY_COLOR, UIStyles.LIGHT_GREY_COLOR, true,"Delete downloads.json history without deleting files", null);
+        
         //Botones de guardar y cancelar
         UIStyles.styleButtons(btnSave, "Save", "/images/save.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Save changes", null);
         UIStyles.styleButtons(btnReturn, "Return", "/images/return.png", UIStyles.LIGHT_GREY_COLOR, UIStyles.DARK_GREY_COLOR, true, "Discard changes", null);
+        
     }
     
     /** Configura el spinner de velocidad de descarga entre 0 y 100 MB/s y actualiza el label con el valor.*/
@@ -161,6 +170,7 @@ public class Preferences extends javax.swing.JPanel {
         lblSpeedValue = new javax.swing.JLabel();
         pnlPref = new javax.swing.JPanel();
         lblInfo = new javax.swing.JLabel();
+        btnClearCache = new javax.swing.JButton();
 
         lblM3u.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(lblM3u);
@@ -267,6 +277,14 @@ public class Preferences extends javax.swing.JPanel {
         lblInfo.setMinimumSize(null);
         lblInfo.setPreferredSize(null);
         add(lblInfo);
+
+        btnClearCache.setText("jButton1");
+        btnClearCache.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearCacheActionPerformed(evt);
+            }
+        });
+        add(btnClearCache);
     }// </editor-fold>//GEN-END:initComponents
 
     /** Directorio para archivos temporales.*/
@@ -332,8 +350,32 @@ public class Preferences extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnReturnActionPerformed
 
+    /**
+     * Borra el historial de descargas (JSON) tras confirmación del usuario.
+     */
+    private void btnClearCacheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearCacheActionPerformed
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Are you sure? This will clear the history but NOT the downloaded files.",
+                "Clear history", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+        if (confirm == JOptionPane.YES_OPTION) { //Si pulsamos "YES"
+            FileProperties fp = new FileProperties();
+            fp.clearCache(); //Borramos contenido del archivo "download.json"
+
+            JOptionPane.showMessageDialog(null, "History successfully cleared!", "Cache Cleared", JOptionPane.INFORMATION_MESSAGE);
+
+            //Actualizamos tabla
+            if (downloadManager.getInfoMedia() != null) {
+                downloadManager.getInfoMedia().reloadMediaData();
+            }
+        }
+    }//GEN-LAST:event_btnClearCacheActionPerformed
+
+
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowseTemp;
+    private javax.swing.JButton btnClearCache;
     private javax.swing.JButton btnReturn;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnYtDlp;

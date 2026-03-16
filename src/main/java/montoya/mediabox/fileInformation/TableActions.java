@@ -1,6 +1,6 @@
 package montoya.mediabox.fileInformation;
 
-import Utils.Logger;
+import montoya.mediaBox.utils.Logger;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

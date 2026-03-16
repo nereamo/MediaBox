@@ -1,6 +1,6 @@
 package montoya.mediabox.download;
 
-import Utils.Logger;
+import montoya.mediaBox.utils.Logger;
 import java.io.*;
 import javax.swing.*;
 import java.util.Date;

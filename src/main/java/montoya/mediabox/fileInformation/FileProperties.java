@@ -1,6 +1,6 @@
 package montoya.mediabox.fileInformation;
 
-import Utils.Logger;
+import montoya.mediaBox.utils.Logger;
 import java.io.*;
 import java.util.*;
 import java.nio.file.Files;
@@ -117,39 +117,40 @@ public class FileProperties {
             f.delete();
         }
 
-        
         allFiles.remove(fileInfo);
-//        //Borra de la lista de archivos
-//        for(int i = 0; i <allFiles.size(); i++){
-//            FileInformation fi = allFiles.get(i);
-//            if(fi.getName().equals(fileInfo.getName()) && fi.getFolderPath().equals(fileInfo.getFolderPath())){
-//                allFiles.remove(i);
-//                break;
-//            }
-//        }
-        
+
         //Elimina el directorio que se quedó vacío
         boolean emptyFolder = true;
-//        for(int i = 0; i < allFiles.size(); i++){
-//            FileInformation fi = allFiles.get(i);
-//            if(fi.getFolderPath().equals(fileInfo.getFolderPath())){
-//                emptyFolder = false;
-//                break;
-//            }
-//        }
-
-for (FileInformation fi : allFiles) {
-        if (fi.getFolderPath().equals(fileInfo.getFolderPath())) {
-            emptyFolder = false;
-            break;
+        for (FileInformation fi : allFiles) {
+            if (fi.getFolderPath().equals(fileInfo.getFolderPath())) {
+                emptyFolder = false;
+                break;
+            }
         }
-    }
-        
-        if(emptyFolder){
+
+        if (emptyFolder) {
             allDirs.remove(fileInfo.getFolderPath());
         }
-        
+
         //guardar cambien en JSON
         saveAllDownloads(new DirectoryInformation(allFiles, allDirs));
+    }
+
+    /**
+     * Borra el historial completo de descargas del archivo JSON.
+     */
+    public void clearCache() {
+        try {
+            //Creamos un objeto de información vacío
+            DirectoryInformation emptyData = new DirectoryInformation(new HashSet<>(), new HashSet<>());
+
+            //Sobreescribimos el archivo JSON con datos vacíos
+            saveAllDownloads(emptyData);
+
+            System.out.println("Clear history.");
+
+        } catch (Exception e) {
+            Logger.logError("Error clearing downloads.json cache", e);
+        }
     }
 }

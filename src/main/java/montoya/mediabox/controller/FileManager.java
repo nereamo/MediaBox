@@ -1,6 +1,6 @@
 package montoya.mediabox.controller;
 
-import Utils.Logger;
+import montoya.mediaBox.utils.Logger;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;

@@ -1,5 +1,5 @@
 
-package Utils;
+package montoya.mediaBox.utils;
 
 import java.io.FileWriter;
 import java.io.IOException;
