@@ -108,7 +108,7 @@
                             <Class-Path>.</Class-Path>
                         </manifestEntries>
                     </archive>
-                    <finalName>MediaBox</finalName>
+                    <finalName>MediaBox/MediaBox</finalName>
                 </configuration>
             </plugin>
         </plugins>
