@@ -1,0 +1,58 @@
+@options
+@packages
+-classpath
+'C:/Users/Nerea/.m2/repository/org/netbeans/external/AbsoluteLayout/RELEASE270/AbsoluteLayout-RELEASE270.jar;C:/Users/Nerea/.m2/repository/com/miglayout/miglayout-swing/11.0/miglayout-swing-11.0.jar;C:/Users/Nerea/.m2/repository/com/miglayout/miglayout-core/11.0/miglayout-core-11.0.jar;C:/Users/Nerea/.m2/repository/com/formdev/flatlaf/3.5.4/flatlaf-3.5.4.jar;C:/Users/Nerea/.m2/repository/unknown/binary/MediaPollingComponent-1.0-SNAPSHOT/SNAPSHOT/MediaPollingComponent-1.0-SNAPSHOT-SNAPSHOT.jar'
+-encoding
+'UTF-8'
+-protected
+--release
+24
+-sourcepath
+'C:/Users/Nerea/Desktop/DAM02/DI/UD1/MediaBox/src/main/java;C:/Users/Nerea/Desktop/DAM02/DI/UD1/MediaBox/target/generated-sources/annotations'
+-author
+-bottom
+'Copyright &#169; 2026. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/Nerea/Desktop/DAM02/DI/UD1/MediaBox/doc'
+-docencoding
+'UTF-8'
+-doctitle
+'MediaBox 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'MediaBox 1.0-SNAPSHOT API'
+montoya.mediabox.configUI
+montoya.mediabox.controller
+montoya.mediabox.dialogs
+montoya.mediabox.download
+montoya.mediabox.fileInformation
+montoya.mediabox
+montoya.mediabox.panels
+montoya.mediabox.tokenuser
+montoya.mediabox.utils
+C:\Users\Nerea\.m2\repository\org\netbeans\external\AbsoluteLayout\RELEASE270\AbsoluteLayout-RELEASE270.jar = 1762779473708
+C:\Users\Nerea\.m2\repository\com\miglayout\miglayout-swing\11.0\miglayout-swing-11.0.jar = 1763642328315
+C:\Users\Nerea\.m2\repository\com\miglayout\miglayout-core\11.0\miglayout-core-11.0.jar = 1763642328403
+C:\Users\Nerea\.m2\repository\com\formdev\flatlaf\3.5.4\flatlaf-3.5.4.jar = 1771683673908
+C:\Users\Nerea\.m2\repository\unknown\binary\MediaPollingComponent-1.0-SNAPSHOT\SNAPSHOT\MediaPollingComponent-1.0-SNAPSHOT-SNAPSHOT.jar = 1769253873921
+C:\Users\Nerea\Desktop\DAM02\DI\UD1\MediaBox\src\main\java = 1773665153383
+C:\Users\Nerea\Desktop\DAM02\DI\UD1\MediaBox\target\generated-sources\annotations = 1774523314958
+C:\Users\Nerea\Desktop\DAM02\DI\UD1\MediaBox\doc\allclasses-index.html = 1774523318932
+C:\Users\Nerea\Desktop\DAM02\DI\UD1\MediaBox\doc\allpackages-index.html = 1774523318934
+C:\Users\Nerea\Desktop\DAM02\DI\UD1\MediaBox\doc\constant-values.html = 1774523318816
+C:\Users\Nerea\Desktop\DAM02\DI\UD1\MediaBox\doc\element-list = 1774523318768
+C:\Users\Nerea\Desktop\DAM02\DI\UD1\MediaBox\doc\help-doc.html = 1774523318961
+C:\Users\Nerea\Desktop\DAM02\DI\UD1\MediaBox\doc\index-all.html = 1774523318953
+C:\Users\Nerea\Desktop\DAM02\DI\UD1\MediaBox\doc\index.html = 1774523318916
+C:\Users\Nerea\Desktop\DAM02\DI\UD1\MediaBox\doc\member-search-index.js = 1774523318937
+C:\Users\Nerea\Desktop\DAM02\DI\UD1\MediaBox\doc\module-search-index.js = 1774523318935
+C:\Users\Nerea\Desktop\DAM02\DI\UD1\MediaBox\doc\overview-summary.html = 1774523318958
+C:\Users\Nerea\Desktop\DAM02\DI\UD1\MediaBox\doc\overview-tree.html = 1774523318913
+C:\Users\Nerea\Desktop\DAM02\DI\UD1\MediaBox\doc\package-search-index.js = 1774523318935
+C:\Users\Nerea\Desktop\DAM02\DI\UD1\MediaBox\doc\search.html = 1774523318956
+C:\Users\Nerea\Desktop\DAM02\DI\UD1\MediaBox\doc\serialized-form.html = 1774523318851
+C:\Users\Nerea\Desktop\DAM02\DI\UD1\MediaBox\doc\tag-search-index.js = 1774523318938
+C:\Users\Nerea\Desktop\DAM02\DI\UD1\MediaBox\doc\type-search-index.js = 1774523318936
