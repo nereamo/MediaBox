@@ -1,13 +1,11 @@
-package montoya.mediabox.panels;
+ package montoya.mediabox.panels;
 
 import montoya.mediaBox.utils.Logger;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import javax.swing.*;
 import montoya.mediabox.MainFrame;
