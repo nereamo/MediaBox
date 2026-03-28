@@ -1,0 +1,210 @@
+----- ERROR -----
+Date: 2026-03-11T18:30:15.638817600
+Message: Prueba de Logger en autoLogin
+
+----- ERROR -----
+Date: 2026-03-15T20:48:12.576922300
+Message: AutoLogin failed for saved email: nerea@g.c
+java.io.IOException: getAllMedia failed: 401
+	at montoya.mediapollingcomponent.apiclient.ApiClient.getAllMedia(ApiClient.java:118)
+	at montoya.mediapollingcomponent.MediaPollingComponent.getAllMedia(MediaPollingComponent.java:147)
+	at montoya.mediabox.panels.Login.autoLogin(Login.java:210)
+	at montoya.mediabox.MainFrame.initNavigation(MainFrame.java:146)
+	at montoya.mediabox.MainFrame.<init>(MainFrame.java:74)
+	at montoya.mediabox.MainFrame.lambda$main$0(MainFrame.java:336)
+	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:318)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:723)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:702)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
+----- ERROR -----
+Date: 2026-03-15T20:48:12.709526100
+Message: Cannot fetch network files: token or API URL is missing
+java.lang.IllegalStateException: Token or API URL missing
+	at montoya.mediabox.controller.FileManager.getNetworkFiles(FileManager.java:117)
+	at montoya.mediabox.panels.InfoMedia.updateTableData(InfoMedia.java:183)
+	at montoya.mediabox.panels.InfoMedia$2.valueChanged(InfoMedia.java:165)
+	at java.desktop/javax.swing.JList.fireSelectionValueChanged(JList.java:1831)
+	at java.desktop/javax.swing.JList$ListSelectionHandler.valueChanged(JList.java:1845)
+	at java.desktop/javax.swing.DefaultListSelectionModel.fireValueChanged(DefaultListSelectionModel.java:231)
+	at java.desktop/javax.swing.DefaultListSelectionModel.fireValueChanged(DefaultListSelectionModel.java:206)
+	at java.desktop/javax.swing.DefaultListSelectionModel.fireValueChanged(DefaultListSelectionModel.java:258)
+	at java.desktop/javax.swing.DefaultListSelectionModel.changeSelection(DefaultListSelectionModel.java:459)
+	at java.desktop/javax.swing.DefaultListSelectionModel.changeSelection(DefaultListSelectionModel.java:469)
+	at java.desktop/javax.swing.DefaultListSelectionModel.setSelectionInterval(DefaultListSelectionModel.java:513)
+	at java.desktop/javax.swing.JList.setSelectedIndex(JList.java:2232)
+	at montoya.mediabox.panels.InfoMedia$1.run(InfoMedia.java:96)
+	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:318)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:723)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:702)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
+----- ERROR -----
+Date: 2026-03-15T20:48:27.298608900
+Message: Token saved successfully at: C:\Users\Nerea\AppData\Local\MediaBox\token.json
+
+----- ERROR -----
+Date: 2026-03-16T13:30:02.626767600
+Message: Error loading downloads.json
+java.io.InvalidClassException: montoya.mediabox.fileInformation.DirectoryInformation; local class incompatible: stream classdesc serialVersionUID = -3496649512025319194, local class serialVersionUID = 5289789188039347438
+	at java.base/java.io.ObjectStreamClass.initNonProxy(ObjectStreamClass.java:496)
+	at java.base/java.io.ObjectInputStream.readNonProxyDesc(ObjectInputStream.java:1960)
+	at java.base/java.io.ObjectInputStream.readClassDesc(ObjectInputStream.java:1818)
+	at java.base/java.io.ObjectInputStream.readOrdinaryObject(ObjectInputStream.java:2134)
+	at java.base/java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1653)
+	at java.base/java.io.ObjectInputStream.readObject(ObjectInputStream.java:495)
+	at java.base/java.io.ObjectInputStream.readObject(ObjectInputStream.java:453)
+	at montoya.mediabox.fileInformation.FileProperties.loadDownloads(FileProperties.java:45)
+	at montoya.mediabox.panels.InfoMedia.<init>(InfoMedia.java:71)
+	at montoya.mediabox.panels.Downloads.<init>(Downloads.java:94)
+	at montoya.mediabox.MainFrame.initPanels(MainFrame.java:138)
+	at montoya.mediabox.MainFrame.<init>(MainFrame.java:73)
+	at montoya.mediabox.MainFrame.lambda$main$0(MainFrame.java:336)
+	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:318)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:723)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:702)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
+----- ERROR -----
+Date: 2026-03-16T14:11:34.716885400
+Message: Cannot fetch network files: token or API URL is missing
+java.lang.IllegalStateException: Token or API URL missing
+	at montoya.mediabox.controller.FileManager.getNetworkFiles(FileManager.java:119)
+	at montoya.mediabox.panels.InfoMedia.updateTableData(InfoMedia.java:183)
+	at montoya.mediabox.panels.InfoMedia$2.valueChanged(InfoMedia.java:165)
+	at java.desktop/javax.swing.JList.fireSelectionValueChanged(JList.java:1831)
+	at java.desktop/javax.swing.JList$ListSelectionHandler.valueChanged(JList.java:1845)
+	at java.desktop/javax.swing.DefaultListSelectionModel.fireValueChanged(DefaultListSelectionModel.java:231)
+	at java.desktop/javax.swing.DefaultListSelectionModel.fireValueChanged(DefaultListSelectionModel.java:206)
+	at java.desktop/javax.swing.DefaultListSelectionModel.fireValueChanged(DefaultListSelectionModel.java:258)
+	at java.desktop/javax.swing.DefaultListSelectionModel.changeSelection(DefaultListSelectionModel.java:459)
+	at java.desktop/javax.swing.DefaultListSelectionModel.changeSelection(DefaultListSelectionModel.java:469)
+	at java.desktop/javax.swing.DefaultListSelectionModel.setSelectionInterval(DefaultListSelectionModel.java:513)
+	at java.desktop/javax.swing.JList.setSelectedIndex(JList.java:2232)
+	at montoya.mediabox.panels.InfoMedia$1.run(InfoMedia.java:96)
+	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:318)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:723)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:702)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
+----- ERROR -----
+Date: 2026-03-16T14:11:41.031127800
+Message: Cannot fetch network files: token or API URL is missing
+java.lang.IllegalStateException: Token or API URL missing
+	at montoya.mediabox.controller.FileManager.getNetworkFiles(FileManager.java:119)
+	at montoya.mediabox.panels.InfoMedia.updateTableData(InfoMedia.java:183)
+	at montoya.mediabox.panels.InfoMedia$2.valueChanged(InfoMedia.java:165)
+	at java.desktop/javax.swing.JList.fireSelectionValueChanged(JList.java:1831)
+	at java.desktop/javax.swing.JList$ListSelectionHandler.valueChanged(JList.java:1845)
+	at java.desktop/javax.swing.DefaultListSelectionModel.fireValueChanged(DefaultListSelectionModel.java:231)
+	at java.desktop/javax.swing.DefaultListSelectionModel.fireValueChanged(DefaultListSelectionModel.java:206)
+	at java.desktop/javax.swing.DefaultListSelectionModel.fireValueChanged(DefaultListSelectionModel.java:258)
+	at java.desktop/javax.swing.DefaultListSelectionModel.changeSelection(DefaultListSelectionModel.java:459)
+	at java.desktop/javax.swing.DefaultListSelectionModel.changeSelection(DefaultListSelectionModel.java:469)
+	at java.desktop/javax.swing.DefaultListSelectionModel.setSelectionInterval(DefaultListSelectionModel.java:513)
+	at java.desktop/javax.swing.JList.setSelectedIndex(JList.java:2232)
+	at montoya.mediabox.panels.InfoMedia$1.run(InfoMedia.java:96)
+	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:318)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:723)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:702)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
+----- ERROR -----
+Date: 2026-03-16T14:11:59.207326
+Message: Cannot fetch network files: token or API URL is missing
+java.lang.IllegalStateException: Token or API URL missing
+	at montoya.mediabox.controller.FileManager.getNetworkFiles(FileManager.java:119)
+	at montoya.mediabox.panels.InfoMedia.updateTableData(InfoMedia.java:183)
+	at montoya.mediabox.panels.InfoMedia$2.valueChanged(InfoMedia.java:165)
+	at java.desktop/javax.swing.JList.fireSelectionValueChanged(JList.java:1831)
+	at java.desktop/javax.swing.JList$ListSelectionHandler.valueChanged(JList.java:1845)
+	at java.desktop/javax.swing.DefaultListSelectionModel.fireValueChanged(DefaultListSelectionModel.java:231)
+	at java.desktop/javax.swing.DefaultListSelectionModel.fireValueChanged(DefaultListSelectionModel.java:206)
+	at java.desktop/javax.swing.DefaultListSelectionModel.fireValueChanged(DefaultListSelectionModel.java:258)
+	at java.desktop/javax.swing.DefaultListSelectionModel.changeSelection(DefaultListSelectionModel.java:459)
+	at java.desktop/javax.swing.DefaultListSelectionModel.changeSelection(DefaultListSelectionModel.java:469)
+	at java.desktop/javax.swing.DefaultListSelectionModel.setSelectionInterval(DefaultListSelectionModel.java:513)
+	at java.desktop/javax.swing.JList.setSelectedIndex(JList.java:2232)
+	at montoya.mediabox.panels.InfoMedia$1.run(InfoMedia.java:96)
+	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:318)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:723)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:702)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
+----- ERROR -----
+Date: 2026-03-26T14:36:39.403066900
+Message: AutoLogin failed for saved email: nerea@g.c
+java.io.IOException: getAllMedia failed: 401
+	at montoya.mediapollingcomponent.apiclient.ApiClient.getAllMedia(ApiClient.java:118)
+	at montoya.mediapollingcomponent.MediaPollingComponent.getAllMedia(MediaPollingComponent.java:147)
+	at montoya.mediabox.panels.Login.autoLogin(Login.java:210)
+	at montoya.mediabox.MainFrame.initNavigation(MainFrame.java:146)
+	at montoya.mediabox.MainFrame.<init>(MainFrame.java:74)
+	at montoya.mediabox.MainFrame.lambda$main$0(MainFrame.java:336)
+	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:318)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:723)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:702)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
+----- ERROR -----
+Date: 2026-03-26T14:36:39.532219800
+Message: Cannot fetch network files: token or API URL is missing
+java.lang.IllegalStateException: Token or API URL missing
+	at montoya.mediabox.controller.FileManager.getNetworkFiles(FileManager.java:119)
+	at montoya.mediabox.panels.InfoMedia.updateTableData(InfoMedia.java:183)
+	at montoya.mediabox.panels.InfoMedia$2.valueChanged(InfoMedia.java:165)
+	at java.desktop/javax.swing.JList.fireSelectionValueChanged(JList.java:1831)
+	at java.desktop/javax.swing.JList$ListSelectionHandler.valueChanged(JList.java:1845)
+	at java.desktop/javax.swing.DefaultListSelectionModel.fireValueChanged(DefaultListSelectionModel.java:231)
+	at java.desktop/javax.swing.DefaultListSelectionModel.fireValueChanged(DefaultListSelectionModel.java:206)
+	at java.desktop/javax.swing.DefaultListSelectionModel.fireValueChanged(DefaultListSelectionModel.java:258)
+	at java.desktop/javax.swing.DefaultListSelectionModel.changeSelection(DefaultListSelectionModel.java:459)
+	at java.desktop/javax.swing.DefaultListSelectionModel.changeSelection(DefaultListSelectionModel.java:469)
+	at java.desktop/javax.swing.DefaultListSelectionModel.setSelectionInterval(DefaultListSelectionModel.java:513)
+	at java.desktop/javax.swing.JList.setSelectedIndex(JList.java:2232)
+	at montoya.mediabox.panels.InfoMedia$1.run(InfoMedia.java:96)
+	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:318)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:723)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:702)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
