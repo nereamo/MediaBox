@@ -70,7 +70,7 @@ public class TypeFilter {
                         }
                         break;
                     case "MP3":
-                        if (fi.getType().contains("mpeg")) {
+                        if (fi.getType().contains("mpeg") || fi.getType().contains("mp3")) {
                             applyFilter.add(fi);
                         }
                         break;

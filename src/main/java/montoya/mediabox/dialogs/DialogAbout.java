@@ -21,13 +21,13 @@ public class DialogAbout extends JDialog {
      * Constructor que inicializa un dialogo modal que muestra información de la aplicación.
      * 
      * @param parent Ventana padre donde se mostrará el dialogo
-     * @param modal El dialogo puede ser mpdal, bloqueando la ventana hasta cerrarlo
+     * @param modal El dialogo puede ser modal, bloqueando la ventana hasta cerrarlo
      */
     public DialogAbout(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setSize(400,350);
-        setLocationRelativeTo(this);
+        setLocationRelativeTo(parent);
         setTitle("About");
         
         //Texto mostrado en About
