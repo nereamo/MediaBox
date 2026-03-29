@@ -4,7 +4,11 @@ import java.util.*;
 import javax.swing.*;
 import java.awt.EventQueue;
 import java.awt.CardLayout;
+import java.awt.Desktop;
 import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+import montoya.mediaBox.utils.Logger;
 import montoya.mediabox.panels.*;
 import montoya.mediabox.controller.*;
 import montoya.mediabox.dialogs.DialogAbout;
@@ -95,12 +99,15 @@ public class MainFrame extends JFrame {
     private void initMenuAndItems(){
         UIStyles.styleMenuAndItems(mnuEdit, null, "/images/edit.png", "Settings", "");
         UIStyles.styleMenuAndItems(mnuFile, null, "/images/logout_exit.png", "Logout or Exit", "");
-        UIStyles.styleMenuAndItems(mnuHelp, null, "/images/help.png", "Information MediaBox", "");
+        UIStyles.styleMenuAndItems(mnuInfo, null, "/images/info.png", "Information MediaBox", "");
+        UIStyles.styleMenuAndItems(mnuHelp, null, "/images/help.png", "View help documentation", "");
         
         UIStyles.styleMenuAndItems(itemExit, "Exit", "/images/exit.png", "Close App", "/images/exit_black.png");
         UIStyles.styleMenuAndItems(itemLogout, "Logout", "/images/logout.png", "Return to login", "/images/logout_black.png");
         UIStyles.styleMenuAndItems(itemPreferences, "Settings", "/images/settings.png", "Edit settings", "/images/settings_black.png");
         UIStyles.styleMenuAndItems(itemAbout, "About", "/images/information.png", "Information MediaBox", "/images/information_black.png");
+        UIStyles.styleMenuAndItems(itemUserManual, "User Manual", "/images/manual.png", "Information MediaBox", "/images/manual_black.png");
+        UIStyles.styleMenuAndItems(itemJavadoc, "Javadoc", "/images/doc.png", "Information MediaBox", "/images/doc_black.png");
     }
     
     /** Controla la visibilidad del menú y el nombre de usuario logeado {@link UIStyles} */
@@ -186,8 +193,11 @@ public class MainFrame extends JFrame {
         itemExit = new javax.swing.JMenuItem();
         mnuEdit = new javax.swing.JMenu();
         itemPreferences = new javax.swing.JMenuItem();
-        mnuHelp = new javax.swing.JMenu();
+        mnuInfo = new javax.swing.JMenu();
         itemAbout = new javax.swing.JMenuItem();
+        mnuHelp = new javax.swing.JMenu();
+        itemUserManual = new javax.swing.JMenuItem();
+        itemJavadoc = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("mainFrame"); // NOI18N
@@ -254,14 +264,14 @@ public class MainFrame extends JFrame {
 
         menuBar.add(mnuEdit);
 
-        mnuHelp.setBorder(null);
-        mnuHelp.setForeground(new java.awt.Color(255, 255, 255));
-        mnuHelp.setToolTipText("");
-        mnuHelp.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        mnuHelp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        mnuHelp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        mnuHelp.setMinimumSize(new java.awt.Dimension(40, 40));
-        mnuHelp.setPreferredSize(new java.awt.Dimension(40, 40));
+        mnuInfo.setBorder(null);
+        mnuInfo.setForeground(new java.awt.Color(255, 255, 255));
+        mnuInfo.setToolTipText("");
+        mnuInfo.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        mnuInfo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        mnuInfo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        mnuInfo.setMinimumSize(new java.awt.Dimension(40, 40));
+        mnuInfo.setPreferredSize(new java.awt.Dimension(40, 40));
 
         itemAbout.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         itemAbout.setToolTipText("");
@@ -270,7 +280,36 @@ public class MainFrame extends JFrame {
                 itemAboutActionPerformed(evt);
             }
         });
-        mnuHelp.add(itemAbout);
+        mnuInfo.add(itemAbout);
+
+        menuBar.add(mnuInfo);
+
+        mnuHelp.setBorder(null);
+        mnuHelp.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        mnuHelp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        mnuHelp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        mnuHelp.setMargin(null);
+
+        itemUserManual.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        itemUserManual.setMaximumSize(null);
+        itemUserManual.setPreferredSize(null);
+        itemUserManual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemUserManualActionPerformed(evt);
+            }
+        });
+        mnuHelp.add(itemUserManual);
+
+        itemJavadoc.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        itemJavadoc.setMargin(null);
+        itemJavadoc.setMaximumSize(null);
+        itemJavadoc.setPreferredSize(null);
+        itemJavadoc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemJavadocActionPerformed(evt);
+            }
+        });
+        mnuHelp.add(itemJavadoc);
 
         menuBar.add(mnuHelp);
 
@@ -320,6 +359,48 @@ public class MainFrame extends JFrame {
         UIStyles.showMessageInfo(pnlLogin.lblMessage, "Session closed.");
     }//GEN-LAST:event_itemLogoutActionPerformed
 
+    /**
+     * Abre el archivo UserManual.pdf en la aplicación predefinida.
+     * 
+     * @param evt Evento de acción generado al hacer clic en el ítem
+     */
+    private void itemUserManualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemUserManualActionPerformed
+        try {
+            //Ruta al archivo "User Manual"
+            String rutaBase = System.getenv("LOCALAPPDATA") + File.separator + "MediaBox";
+            File manual = new File(rutaBase + File.separator + "User Manual.pdf");
+
+            if (manual.exists()) {
+                Desktop.getDesktop().open(manual); //Si existe, abre manual
+            } else {
+                JOptionPane.showMessageDialog(this, "The manual is not available at: " + manual.getAbsolutePath(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (IOException ex) {
+            Logger.logError("Error opening the user manual", ex);
+        }
+    }//GEN-LAST:event_itemUserManualActionPerformed
+
+    /**
+     * Abre el archivo index.htm en el navegador.
+     * 
+     * @param evt Evento de acción generado al hacer clic en el ítem
+     */
+    private void itemJavadocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemJavadocActionPerformed
+        try {
+            //Ruta al archivo "index.html" del javadoc
+            String rutaBase = System.getenv("LOCALAPPDATA") + File.separator + "MediaBox";
+            File docs = new File(rutaBase + File.separator + "doc" + File.separator + "index.html");
+
+            if (docs.exists()) {
+                Desktop.getDesktop().browse(docs.toURI()); //Si existe, abre el javadoc en el navegador
+            } else {
+                JOptionPane.showMessageDialog(this, "The Javadoc is not available at: " + docs.getAbsolutePath(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (IOException ex) {
+            Logger.logError("Error opening the Javadoc", ex);
+        }
+    }//GEN-LAST:event_itemJavadocActionPerformed
+
     public static void main(String args[]) {
         /* Set the Metal look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -339,12 +420,15 @@ public class MainFrame extends JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem itemAbout;
     private javax.swing.JMenuItem itemExit;
+    private javax.swing.JMenuItem itemJavadoc;
     private javax.swing.JMenuItem itemLogout;
     private javax.swing.JMenuItem itemPreferences;
+    private javax.swing.JMenuItem itemUserManual;
     private montoya.mediapollingcomponent.MediaPollingComponent mediaPollingComponent;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu mnuEdit;
     private javax.swing.JMenu mnuFile;
     private javax.swing.JMenu mnuHelp;
+    private javax.swing.JMenu mnuInfo;
     // End of variables declaration//GEN-END:variables
 }

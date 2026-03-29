@@ -219,7 +219,7 @@ public class UIStyles {
         item.setOpaque(false);
         item.setContentAreaFilled(false);
         item.setBorderPainted(false);
-        item.setPreferredSize(new Dimension(90, 50));
+        item.setPreferredSize(new Dimension(120, 50));
 
         item.setText(text == null
                 ? ""
