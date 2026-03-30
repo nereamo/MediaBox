@@ -8,7 +8,7 @@ import java.awt.Desktop;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
-import montoya.mediaBox.utils.Logger;
+import montoya.mediabox.utils.Logger;
 import montoya.mediabox.panels.*;
 import montoya.mediabox.controller.*;
 import montoya.mediabox.dialogs.DialogAbout;

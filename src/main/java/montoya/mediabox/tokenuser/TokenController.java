@@ -1,6 +1,6 @@
 package montoya.mediabox.tokenuser;
 
-import montoya.mediaBox.utils.Logger;
+import montoya.mediabox.utils.Logger;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

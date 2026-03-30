@@ -1,6 +1,6 @@
 package montoya.mediabox.panels;
 
-import montoya.mediaBox.utils.Logger;
+import montoya.mediabox.utils.Logger;
 import java.awt.Color;
 import java.awt.event.*;
 import javax.swing.*;

@@ -1,6 +1,6 @@
 package montoya.mediabox.fileInformation;
 
-import montoya.mediaBox.utils.Logger;
+import montoya.mediabox.utils.Logger;
 import java.io.*;
 import java.util.*;
 import java.nio.file.Files;
