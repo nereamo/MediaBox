@@ -106,8 +106,8 @@ public class MainFrame extends JFrame {
         UIStyles.styleMenuAndItems(itemLogout, "Logout", "/images/logout.png", "Return to login", "/images/logout_black.png");
         UIStyles.styleMenuAndItems(itemPreferences, "Settings", "/images/settings.png", "Edit settings", "/images/settings_black.png");
         UIStyles.styleMenuAndItems(itemAbout, "About", "/images/information.png", "Information MediaBox", "/images/information_black.png");
-        UIStyles.styleMenuAndItems(itemUserManual, "User Manual", "/images/manual.png", "Information MediaBox", "/images/manual_black.png");
-        UIStyles.styleMenuAndItems(itemJavadoc, "Javadoc", "/images/doc.png", "Information MediaBox", "/images/doc_black.png");
+        UIStyles.styleMenuAndItems(itemUserManual, "User Manual", "/images/manual.png", "User Manual", "/images/manual_black.png");
+        UIStyles.styleMenuAndItems(itemJavadoc, "Javadoc", "/images/doc.png", "Documentation Javadoc", "/images/doc_black.png");
     }
     
     /** Controla la visibilidad del menú y el nombre de usuario logeado {@link UIStyles} */
@@ -389,7 +389,7 @@ public class MainFrame extends JFrame {
         try {
             //Ruta al archivo "index.html" del javadoc
             String rutaBase = System.getenv("LOCALAPPDATA") + File.separator + "MediaBox";
-            File docs = new File(rutaBase + File.separator + "doc" + File.separator + "index.html");
+            File docs = new File(rutaBase + File.separator + "apidocs" + File.separator + "index.html");
 
             if (docs.exists()) {
                 Desktop.getDesktop().browse(docs.toURI()); //Si existe, abre el javadoc en el navegador

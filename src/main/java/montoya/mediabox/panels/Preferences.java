@@ -305,7 +305,7 @@ public class Preferences extends javax.swing.JPanel {
             ProcessBuilder pb = new ProcessBuilder("where", "yt-dlp.exe"); //Buscar la ruta del archivo yt-dlp.exe
             Process p = pb.start();
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream())); //Lee alida del proceso
+            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream())); //Lee salida del proceso
             String line;
             StringBuilder sb = new StringBuilder();
 

@@ -118,10 +118,7 @@ public class FileManager {
             //Mensage de error guardado en archivo
             Logger.logError("Cannot fetch network files: token or API URL is missing",
                     new IllegalStateException("Token or API URL missing"));
-            
-            JOptionPane.showMessageDialog(null, "Cannot fetch network files: token or API URL is missing",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            
+
             return new ArrayList<>();
         }
 

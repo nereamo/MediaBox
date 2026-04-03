@@ -145,6 +145,7 @@ public class UIStyles {
         check.setFont(FONT_PLAIN);
         check.setText(text);
         check.setToolTipText(toolTip);
+        check.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
     /**
@@ -162,6 +163,7 @@ public class UIStyles {
             rb.setForeground(LIGHT_GREY_COLOR);
             rb.setFont(FONT_PLAIN);
             rb.setToolTipText(toolTip);
+            rb.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
     }
 
@@ -220,6 +222,8 @@ public class UIStyles {
         item.setContentAreaFilled(false);
         item.setBorderPainted(false);
         item.setPreferredSize(new Dimension(120, 50));
+        item.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        item.setToolTipText(toolTip);
 
         item.setText(text == null
                 ? ""
