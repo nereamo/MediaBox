@@ -1,0 +1,538 @@
+package montoya.mediabox.configUI;
+
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.FlatDarkLaf;
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.*;
+import javax.swing.table.JTableHeader;
+
+/**
+ * Gestiona los distintos estilos visuales de los componentes.
+ * No es necesário instanciar esta clase.
+ * <p> Personalización de componentes:
+ * <ul> 
+ * <li> Paneles.</li>
+ * <li> Botones y menús.</li>
+ * <li> Campos de texto.</li>
+ * <li> Listas y tablas.</li>
+ * <li> Control de selección.</li>
+ * <li> Barras de progreso.</li>
+ * </ul> 
+ * 
+ * 
+ * @author Nerea
+ */
+public class UIStyles {
+
+    /** Fuentes utilizadas en los componentes */
+    public static final Font FONT_BOLD = new Font("Arial", Font.BOLD, 16);
+    public static final Font FONT_PLAIN = new Font("Arial", Font.PLAIN, 16);
+
+    /** Colores utilizados en los componentes */
+    public static final Color WHITE_COLOR = new Color(255, 255, 255);
+    public static final Color LIGHT_PURPLE = new Color(126, 134, 204);
+    public static final Color LIGHT_GREY_COLOR = new Color(220, 220, 222);
+    public static final Color MEDIUM_GREY_COLOR = new Color(72, 72, 74);
+    public static final Color DARK_GREY_COLOR = new Color(37, 37, 38);
+    public static final Color BLACK_COLOR = new Color(15, 15, 15);
+    
+    /**
+     * Inicializa FlatLaf y configura los colores globales de los componentes.
+     * Debe llamarse al inicio del main antes de crear cualquier JFrame.
+     */
+    public static void setupLookAndFeel() {
+        try {
+            //Activa FlatDarkLaf
+            FlatDarkLaf.setup();
+
+            //Configuración global de selección de JComboBox y JList
+            UIManager.put("ComboBox.selectionBackground", LIGHT_PURPLE);
+            UIManager.put("ComboBox.selectionForeground", Color.WHITE);
+            UIManager.put("List.selectionBackground", LIGHT_PURPLE);
+            UIManager.put("List.selectionForeground", Color.WHITE);
+            UIManager.put("List.selectionInactiveBackground", LIGHT_PURPLE);
+            UIManager.put("Button.hoverBorderColor", Color.WHITE);
+
+            //Redondez de componentes
+            UIManager.put("Component.arc", 15);
+            UIManager.put("TextComponent.arc", 15);
+
+            //Color de foco
+            UIManager.put("Component.focusColor", LIGHT_PURPLE);
+            UIManager.put("Component.focusedBorderColor", LIGHT_PURPLE);
+            UIManager.put("TextComponent.focusedBorderColor", LIGHT_PURPLE);
+
+        } catch (Exception ex) {
+            System.err.println("No se pudo iniciar FlatLaf, usando tema por defecto.");
+        }
+    }
+
+    /**
+     * Configuración de los bordes en los paneles con esquinas redondeadas.
+     * Aplica color de fondo, radio en esquinas y hace panel no opaco.
+     * 
+     * @param panel JPanel al que se aplica el borde y apariencia
+     * @param color Color de fondo del panel
+     * @param radius Radio de las esquinas
+     */
+    public static void panelsBorders(JPanel panel, Color color, int radius) {
+        panel.setOpaque(false);
+        panel.putClientProperty(FlatClientProperties.STYLE, "arc: " + radius);
+        panel.setBackground(color);
+        panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+    }
+
+    /**
+     * Configura un JLabel que contiene texto informativo para las acciones realizadas por le usuario.
+     * Aplica color de texto, fuente y texto.
+     * 
+     * @param lbl JLabel a configurar
+     * @param text Texto que se mostrará en el JLabel
+     */
+    public static void showMessageInfo(JLabel lbl, String text) {
+        lbl.setForeground(LIGHT_PURPLE);
+        lbl.setFont(FONT_BOLD);
+        lbl.setText(text);
+    }
+
+    /**
+     * Configura un JLabel que contiene un texto fijo como títulos o etiuqetas de controles.
+     * Aplica opacidad, color de fondo, color de texto, fuente, texto y un posible icono.
+     * 
+     * @param label JLabel a configurar
+     * @param text Texto que se mostrará en el JLabel
+     * @param iconPath Ruta del icono a mostrar; puede ser null si no debe tener icono
+     */
+    public static void styleFixLabel(JLabel label, String text, String iconPath) {
+        
+        label.setOpaque(true);
+        label.setBackground(DARK_GREY_COLOR);
+        label.setForeground(LIGHT_GREY_COLOR);
+        label.setFont(FONT_PLAIN);
+        label.setText(text);
+        label.setIcon(createIcon(iconPath));
+    }
+    
+    /**
+     * Configura un JLabel que contiene el email del usuario loggeado.
+     * Aplica color de texto, fuente, texto.
+     * 
+     * @param label JLabel a configurar
+     * @param text Texto que se mostrará en el JLabel
+     */
+    public static void styleLabelUserName(JLabel label, String text) {
+        
+        label.setForeground(LIGHT_PURPLE);
+        label.setFont(FONT_BOLD);
+        label.setText(text);
+    }
+
+    /**
+     * Configura un JCheckBox.
+     * Aplica color de texto, fuente, texto y un mensaje de ayuda.
+     * 
+     * @param check JCheckBox a configurar
+     * @param text Texto que se mostrará en el JCheckBox
+     * @param toolTip Texto de ayuda para el usuario
+     */
+    public static void styleCheckBox(JCheckBox check, String text, String toolTip) {
+        check.setOpaque(false);
+        check.setFocusPainted(false);
+        check.setForeground(LIGHT_GREY_COLOR);
+        check.setFont(FONT_PLAIN);
+        check.setText(text);
+        check.setToolTipText(toolTip);
+        check.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }
+
+    /**
+     * Configura un ButtonGroup.
+     * Aplica opacidad, color de fondo, color de texto, fuente, y un mensaje de ayuda.
+     * 
+     * @param toolTip Texto de ayuda para el usuario
+     * @param radioButton JRadioButtons a configurar
+     */
+    public static void styleButtonGroup(String toolTip, JRadioButton... radioButton) {
+        for (JRadioButton rb : radioButton) {
+            rb.setOpaque(true);
+            rb.setFocusPainted(false);
+            rb.setBackground(MEDIUM_GREY_COLOR);
+            rb.setForeground(LIGHT_GREY_COLOR);
+            rb.setFont(FONT_PLAIN);
+            rb.setToolTipText(toolTip);
+            rb.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+    }
+
+    /**
+     * Configura un JButton personalizado.
+     * Aplica color de fondo, color de texto, icono, color de fondo, color de texto, si está habilitado y un mensaje de ayuda.
+     * 
+     * @param btn JButton a configurar
+     * @param text Texto que se mostrará en el JButton
+     * @param iconPath Ruta del icono a mostrar; puede ser null si no debe tener icono
+     * @param backGround Color de fondo del JButton
+     * @param foreGround Color del texto del JButton
+     * @param enabled Si el botón estará habilitado 
+     * @param tootlTip Texto de ayuda para el usuario
+     * @param replaceIcon Ruta del icono para un boton deshabilitado; puede ser null si no debe tener icono
+     */
+    public static void styleButtons(JButton btn, String text, String iconPath, Color backGround, Color foreGround, boolean enabled, String tootlTip, String replaceIcon) {
+
+        btn.setText(text);
+        btn.setBackground(backGround);
+        btn.setForeground(foreGround);
+        btn.setEnabled(enabled);
+        btn.setToolTipText(tootlTip);
+        btn.setFont(FONT_BOLD);
+        btn.setIcon(createIcon(iconPath));
+
+        //Icono normal
+        if (iconPath != null) {
+            btn.setIcon(createIcon(iconPath));
+
+            //Icono del botón deshabilitado
+            if (replaceIcon != null) {
+                btn.setDisabledIcon(createIcon(replaceIcon));
+            }
+        }
+
+        //Texto color negro en botón deshabilitado
+        btn.putClientProperty("FlatLaf.style", "disabledText: #0F0F0F; " + "disabledBackground: #48484A");
+
+        btn.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_ROUND_RECT);
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }
+
+    /**
+     * Configura un JMenuItem personalizado.
+     * Aplica tamaño, texto, icono, un mensaje de ayuda y cambia el icono (color) al seleccionar un ítem.
+     * 
+     * @param item JMenuItem a configurar
+     * @param text Texto que se mostrará en el JButton
+     * @param iconPath Ruta del icono a mostrar
+     * @param toolTip Texto de ayuda para el usuario
+     * @param replaceIcon Icono de reemplazo al cambiar el color de selección
+     */
+    public static void styleMenuAndItems(JMenuItem item, String text, String iconPath, String toolTip, String replaceIcon) {
+        item.setOpaque(false);
+        item.setContentAreaFilled(false);
+        item.setBorderPainted(false);
+        item.setPreferredSize(new Dimension(120, 50));
+        item.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        item.setToolTipText(toolTip);
+
+        item.setText(text == null
+                ? ""
+                : text);
+
+        Icon normalIcon = createIcon(iconPath);
+        item.setIcon(normalIcon);
+
+        String blackIconPath = iconPath.replace(iconPath, replaceIcon); //Remplaza el icono al ser seleccionado el item
+        item.setSelectedIcon(createIcon(blackIconPath));
+        item.setRolloverIcon(createIcon(blackIconPath));
+    }
+
+    /**
+     * Configura un JComponent personalizado y un JScroll.
+     * Aplica color de seleccion, color de texto en la selección, color de fondo, JScroll al que pertenece y cursor de mano.
+     * Si es una JTable, aplica el estilo para el encabezado.
+     * 
+     * @param component JComponent a configurar
+     * @param scroll JScrollPane que contiene el JComponent
+     */
+    public static void styleScrollComponent(JComponent component, JScrollPane scroll) {
+        component.setBackground(LIGHT_GREY_COLOR);
+        component.setForeground(MEDIUM_GREY_COLOR);
+        component.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        
+        if (component instanceof JTable) { //Configuración para la tabla
+            JTable table = (JTable) component;
+            table.setSelectionBackground(LIGHT_PURPLE);
+            table.setSelectionForeground(WHITE_COLOR);
+
+            JTableHeader header = table.getTableHeader();
+            header.setPreferredSize(new Dimension(header.getWidth(), 30));
+            header.setFont(FONT_BOLD);
+            header.setBackground(LIGHT_GREY_COLOR);
+            header.setForeground(MEDIUM_GREY_COLOR);
+
+        } else if (component instanceof JList) { //Configuración para la lista
+            JList<?> list = (JList<?>) component;
+            list.setSelectionBackground(LIGHT_PURPLE);
+            list.setSelectionForeground(WHITE_COLOR);
+            list.setFont(FONT_PLAIN);
+        }
+        
+        //Ancho y color del scroll vertical --> fondo(track), rectangulo(thumb)
+        scroll.getVerticalScrollBar().putClientProperty(
+                FlatClientProperties.STYLE,
+                "width: 14; track: #252526; thumb: #7E86CC"
+        );
+
+        //Ancho y color del scroll horizontal --> fondo(track), rectangulo(thumb)
+        scroll.getHorizontalScrollBar().putClientProperty(
+                FlatClientProperties.STYLE,
+                "width: 14; track: #252526; thumb: #7E86CC"
+        );
+            
+        //Redondez del borde
+        scroll.putClientProperty( FlatClientProperties.STYLE, "arc: 20; borderColor: #a6a6a6; borderWidth: 0" ); 
+    }
+
+    /**
+     * Configura una JComboBox personalizado.
+     * Aplica color de texto, color de fondo, fuente y cursor de mano
+     * 
+     * @param combo JComboBox a configurar
+     */
+    public static void styleComboBox(JComboBox combo) {
+        combo.setForeground(DARK_GREY_COLOR);
+        combo.setBackground(LIGHT_GREY_COLOR);
+        combo.setFont(FONT_PLAIN);
+        combo.setEditable(false);
+        combo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }
+    
+    /**
+     * Llena el JComboBox con elementos de tipo String.
+     * Aplica tipo de fuente.
+     * 
+     * @param combo JComboBox de tipo String a llenar
+     * @param items Elementos que se mostraran en el JComboBox
+     */
+    public static void itemsInCombobox(JComboBox<String> combo, String items) {
+        combo.removeAllItems();
+        String[] elementos = items.split(","); //Separar por coma
+        for (String item : elementos) {
+            combo.addItem(item.trim()); //Quita espacios
+        }
+        combo.setFont(FONT_PLAIN);
+    }
+
+    /**
+     * Configura una JTextField personalizado. 
+     * Aplica borde,color de resalte del borde, color de fondo, color de texto, fuente. 
+     * 
+     * @param field JTextField a configurar
+     * @param leftIconPath Icono izquierdo
+     * @param placeholder Texto informativo
+     * @param rightIconPath Icono derecho
+     * @param leftAction Acción del icono
+     * @param pasteFromClipboard True si pega desde portapapeles
+     */
+    public static void styleField(JTextField field, String leftIconPath, String placeholder, String rightIconPath, Runnable leftAction, boolean pasteFromClipboard) {
+        field.setOpaque(false);
+        field.setBorder(UIManager.getBorder("TextField.border"));
+        field.setCaretColor(LIGHT_PURPLE);
+        field.setBackground(MEDIUM_GREY_COLOR);
+        field.setForeground(WHITE_COLOR);
+        field.setFont(FONT_PLAIN);
+        
+        //Icono izquierdo
+        if (pasteFromClipboard) {
+            setupPasteFromClipboard(field, leftIconPath); //Icono izquierdo pegar URL
+        } else {
+            setupLeadingIcon(field, leftIconPath); //Icono decorativo
+        }
+
+        //Icono derecho
+        if (field instanceof JPasswordField) { 
+            setupPasswordVisibility((JPasswordField) field, rightIconPath); //Mostrar contraseña
+        } else {
+            setupClearButton(field, rightIconPath); //Limpiar campos
+        }
+        field.putClientProperty("JTextField.placeholderText", placeholder); //Texto de ayuda
+        field.putClientProperty("JTextField.arc", 30); //Redondez
+    }
+
+    /**
+     * Configura el icono izquierdo decorativo del JTextField personalizado. 
+     * Si el icono es {@code null} es solamente decorativo.
+     * 
+     * @param field JTextField con icono a la izquierda
+     * @param path Ruta del icono
+     */
+    private static void setupLeadingIcon(JTextField field, String path) {
+        ImageIcon icon = createIcon(path);
+        if (icon == null) {
+            return;
+        }
+
+        //Icono decorativo (sin acción)
+        JLabel lbl = new JLabel(icon);
+        lbl.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 8));
+        field.putClientProperty("JTextField.leadingComponent", lbl);
+    }
+
+    /**
+     * Configura el icono izquierdo del JTextField donde se añade la URL. 
+     * Permite pegar desde portapapeles.
+     * 
+     * @param field JTextField con icono para pegar URL
+     * @param path Ruta del icono
+     */
+    private static void setupPasteFromClipboard(JTextField field, String path) {
+        ImageIcon icon = createIcon(path);
+        if (icon == null) {
+            return;
+        }
+
+        JLabel lbl = createClickableIcon(icon);
+        field.putClientProperty("JTextField.leadingComponent", lbl);
+
+        lbl.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Object clipboard = Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+                    if (clipboard instanceof String str) {
+                        field.setText(str);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                field.requestFocus();
+            }
+        });
+        lbl.setToolTipText("Paste from clipboard");
+    }
+
+    /**
+     * Configura el icono de visibilidad del JTextField personalizado. 
+     * Permite mostrar la contraseña y ocultarla de nuevo.
+     * 
+     * @param pf JPasswordField con icono de visibilidad
+     * @param path Ruta del icono
+     */
+    private static void setupPasswordVisibility(JPasswordField pf, String path) {
+        ImageIcon icon = createIcon(path);
+        if (icon == null) {
+            return;
+        }
+
+        JLabel lbl = createClickableIcon(icon);
+        pf.putClientProperty("JTextField.trailingComponent", lbl);
+
+        lbl.addMouseListener(new MouseAdapter() { //Listener para hacer visible la contraseña
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                pf.setEchoChar(pf.getEchoChar() == 0 
+                        ? '•' //Oculta los caracteres
+                        : 0); 
+                pf.requestFocus();
+            }
+        });
+        lbl.setToolTipText("Show Password");
+    }
+
+    /**
+     * Configura el icono de limpieza del JTextField personalizado. 
+     * Permite eliminar el contenido del JTextField.
+     * 
+     * @param field JPasswordField con icono de limpieza
+     * @param path Ruta del icono
+     */
+    private static void setupClearButton(JTextField field, String path) {
+        ImageIcon icon = createIcon(path);
+        if (icon == null) {
+            return;
+        }
+
+        JLabel lbl = createClickableIcon(icon);
+        field.putClientProperty("JTextField.trailingComponent", lbl);
+
+        lbl.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                field.setText(""); //Limpia el campo del field
+                field.requestFocus();
+            }
+        });
+
+        lbl.setToolTipText("Clear field");
+    }
+    
+    /**
+     * Configura el icono del JTextFieldpersonalizado.
+     * 
+     * @param icon Icono mostrado en el JLabel
+     * @return Un JLabel como icono clicable
+     */
+    private static JLabel createClickableIcon(ImageIcon icon) {
+        JLabel lbl = new JLabel(icon);
+        lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        lbl.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 8));
+        return lbl;
+    }
+
+    /**
+     * Configura un JSpinner personalizado.
+     * Aplica fuente, color de fondo, color de selección y color de fuente en selección, un borde y cursor de mano.
+     * 
+     * @param spinner JSpinner a configurar
+     */
+    public static void styleSpinner(JSpinner spinner) {
+        spinner.setOpaque(false);
+        spinner.setFont(FONT_PLAIN);
+
+        JComponent editor = spinner.getEditor();
+        if (editor instanceof JSpinner.DefaultEditor) {
+            JFormattedTextField textField = ((JSpinner.DefaultEditor) editor).getTextField();
+            textField.setFont(FONT_PLAIN);
+            textField.setBackground(LIGHT_GREY_COLOR);
+            textField.setForeground(DARK_GREY_COLOR);
+            textField.setCaretColor(LIGHT_GREY_COLOR);
+            textField.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+        }
+        spinner.setBorder(BorderFactory.createLineBorder(DARK_GREY_COLOR, 1));
+        spinner.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }
+
+    /**
+     * Configura un JProgressBar personalizado.
+     * Aplica color de fondo, color de relleno, fuente, visibilidad del texto y un borde.
+     * 
+     * @param bar JProgressBar a configurar
+     */
+    public static void styleProgressBar(JProgressBar bar) {
+        bar.setBackground(MEDIUM_GREY_COLOR);
+        bar.setForeground(LIGHT_PURPLE); //Color carga
+        bar.setFont(FONT_BOLD);
+        bar.setStringPainted(true);
+        bar.putClientProperty(FlatClientProperties.STYLE, "arc: 999");
+
+        bar.setUI(new com.formdev.flatlaf.ui.FlatProgressBarUI() {
+            @Override
+            protected Color getSelectionBackground() {
+                return BLACK_COLOR; //Texto cuando está sobre el fondo (gris)
+            }
+
+            @Override
+            protected Color getSelectionForeground() {
+                return BLACK_COLOR; // Texto cuando está sobre la carga (púrpura)
+            }
+        });
+
+        bar.setOpaque(false);
+        bar.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+    }
+
+    /**
+     * Configura un ImageIcon personalizado.
+     * Aplica icono si no es {@code null}.
+     * 
+     * @param path Ruta del icono
+     * @return El icono en el componente
+     */
+    private static ImageIcon createIcon(String path) {
+        if (path == null || path.isEmpty()) {
+            return null;
+        }
+        return new ImageIcon(UIStyles.class.getResource(path));
+    }
+}

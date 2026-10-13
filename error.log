@@ -1,0 +1,37 @@
+----- ERROR -----
+Date: 2026-04-03T13:14:59.817129900
+Message: Token saved successfully at: C:\Users\Nerea\AppData\Local\MediaBox\token.json
+
+----- ERROR -----
+Date: 2026-10-13T14:23:46.889528900
+Message: Download failed in SwingWorker doInBackground
+java.util.concurrent.ExecutionException: java.lang.Exception: Download failed
+	at java.base/java.util.concurrent.FutureTask.report(FutureTask.java:124)
+	at java.base/java.util.concurrent.FutureTask.get(FutureTask.java:193)
+	at java.desktop/javax.swing.SwingWorker.get(SwingWorker.java:610)
+	at montoya.mediabox.download.DownloadWorker.done(DownloadWorker.java:159)
+	at java.desktop/javax.swing.SwingWorker$4.run(SwingWorker.java:747)
+	at java.desktop/javax.swing.SwingWorker$DoSubmitAccumulativeRunnable.run(SwingWorker.java:837)
+	at java.desktop/sun.swing.AccumulativeRunnable.run(AccumulativeRunnable.java:112)
+	at java.desktop/javax.swing.SwingWorker$DoSubmitAccumulativeRunnable.actionPerformed(SwingWorker.java:847)
+	at java.desktop/javax.swing.Timer.fireActionPerformed(Timer.java:289)
+	at java.desktop/javax.swing.Timer$DoPostEvent.run(Timer.java:221)
+	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:318)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:723)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:702)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+Caused by: java.lang.Exception: Download failed
+	at montoya.mediabox.download.DownloadWorker.doInBackground(DownloadWorker.java:146)
+	at montoya.mediabox.download.DownloadWorker.doInBackground(DownloadWorker.java:21)
+	at java.desktop/javax.swing.SwingWorker$1.call(SwingWorker.java:303)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at java.desktop/javax.swing.SwingWorker.run(SwingWorker.java:340)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+	at java.base/java.lang.Thread.run(Thread.java:1447)
+
