@@ -1,3 +1,28 @@
+# --- Credenciales y seguridad ---
+src/main/resources/properties/config.properties
+
+# --- Compilación y construcción ---
 /target/
+/build/
+.gradle/
 *.class
 *.log
+
+# --- IDEs y configuraciones locales ---
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Eclipse
+.settings/
+.classpath
+.project
+
+# Visual Studio Code
+.vscode/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
