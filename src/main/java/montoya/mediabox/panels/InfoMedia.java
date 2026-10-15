@@ -15,12 +15,10 @@ import net.miginfocom.swing.MigLayout;
  * Panel que muestra las descargas realizadas y su información
  * <p> Permitie:
  * <ul>
- * <li> Visualizar archivos descargados, de red y mixtos </li>
+ * <li> Visualizar archivos descargados </li>
  * <li> Filtrar archivos por directorio y tipo (formato) </li>
  * <li> Reproducir archivos locales </li>
  * <li> Eliminar archivos locales </li>
- * <li> Descargar archivos de la API </li>
- * <li> Subir archivos locales a la API </li>
  * </ul>
  *
  * @author Nerea
@@ -35,9 +33,6 @@ public class InfoMedia extends javax.swing.JPanel {
     
     /** {@link TypeFilter} Permite aplicar el filtro por tipo de archivo y por directorio. */
     private final TypeFilter typeFilter;
-    
-    /** {@link MediaPollingComponent} Listener que notifica nuevos medios en la API. */
-//    private final MediaPollingComponent mediaPollingComponent;
     
     /** {@link FileProperties} Gestiona las propiedades de los archivos descargados. */
     private final FileProperties fileProperties;
@@ -59,7 +54,6 @@ public class InfoMedia extends javax.swing.JPanel {
      * @param allFiles Todos los archivos alamcenados en JSON
      * @param folderPaths Todas la rutas donde se realizan las descargas
      */
-//    public InfoMedia(FileProperties fileProperties, TypeFilter typeFilter, Set<FileInformation> allFiles, Set<String> folderPaths, MediaPollingComponent mediaPollingComponent) {
     public InfoMedia(FileProperties fileProperties, TypeFilter typeFilter, Set<FileInformation> allFiles, Set<String> folderPaths) {
         initComponents();
         
@@ -70,7 +64,7 @@ public class InfoMedia extends javax.swing.JPanel {
         this.fileManager = new FileManager(allData, typeFilter, fileProperties); //Inicializa el gestor de archivos
 
         this.allFiles = allData.getFileList(); //Archivos locales
-        folderPaths.addAll(allData.getFolderPaths()); //Añade las rutas de los directorios
+//        folderPaths.addAll(allData.getFolderPaths()); //Añade las rutas de los directorios
 
         tblModel = new FileTableModel(new ArrayList<>(allFiles)); //Modelo de tabla
         tblMedia.setModel(tblModel);
@@ -183,7 +177,7 @@ public class InfoMedia extends javax.swing.JPanel {
         tblModel.fireTableDataChanged();
     }
     
-    /** Actualiza la tabla después de descargar, subir o eliminar archivos. */
+    /** Actualiza la tabla después de descargar archivos. */
     public void reloadMediaData() {
 
         //Guarda directorio seleccionado

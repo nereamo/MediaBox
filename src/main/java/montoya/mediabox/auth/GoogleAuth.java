@@ -19,7 +19,10 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- *
+ * Gestiona la autenticación con Google mediante OAuth 2.0 para la aplicación de escritorio.
+ * Lee las credenciales de forma segura desde el archivo de configuración interno
+ * y maneja el flujo de inicio de sesión interactivo y automático.
+ * 
  * @author Nerea
  */
 public class GoogleAuth {
@@ -52,9 +55,11 @@ public class GoogleAuth {
     /**
      * Login con Google (OAuth 2.0 para aplicaciones de escritorio).
      * <p>
-     * Abre el navegador, el usuario inicia sesión y se obtiene su email. No se guarda ningún token.
-     *
-     * @author Nerea
+     * Abre el navegador, el usuario inicia sesión y se obtiene su email.
+     * Los tokens de acceso se almacenan de forma segura localmente en AppData.
+     * 
+     * @return El correo electrónico verificado de la cuenta de Google del usuario.
+     * @throws Exception Si ocurre algún error de red, si expira el tiempo de espera o si Google no devuelve un email válido.
      */
     public static String signIn() throws Exception {
 
@@ -105,6 +110,7 @@ public class GoogleAuth {
         req.setParser(new JsonObjectParser(json));
         GenericJson info = req.execute().parseAs(GenericJson.class);
 
+        // Valida que el correo electrónico esté verificado por Google
         if (!Boolean.TRUE.equals(info.get("email_verified"))) {
             throw new IllegalStateException("The Google email is not verified");
         }
@@ -118,6 +124,13 @@ public class GoogleAuth {
         return email;
     }
 
+    /**
+     * Intenta autenticar automáticamente al usuario utilizando los tokens guardados localmente
+     * en el almacenamiento de la aplicación, evitando abrir el navegador de nuevo si ya hay sesión.
+     *
+     * @return El correo electrónico del usuario si la sesión es válida o se pudo refrescar; o {@code null} si no existe sesión previa.
+     * @throws Exception Si ocurre un error crítico durante la validación de la sesión o de red.
+     */
     public static String autoSignIn() throws Exception {
 
         NetHttpTransport transport = GoogleNetHttpTransport.newTrustedTransport();
@@ -139,6 +152,7 @@ public class GoogleAuth {
                 .setDataStoreFactory(dataStore)
                 .build();
 
+        // Carga las credenciales guardadas previamente en disco
         Credential cred = flow.loadCredential("user");
 
         if (cred == null) {
@@ -155,9 +169,9 @@ public class GoogleAuth {
             }
         }
 
+        // Realiza la petición a la API de Google para obtener la información del usuario autenticado
         HttpRequest req = transport.createRequestFactory(cred)
-                .buildGetRequest(new GenericUrl(
-                        "https://www.googleapis.com/oauth2/v3/userinfo"));
+                .buildGetRequest(new GenericUrl("https://www.googleapis.com/oauth2/v3/userinfo"));
 
         req.setParser(new JsonObjectParser(json));
 

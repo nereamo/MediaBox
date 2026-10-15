@@ -15,7 +15,6 @@ import montoya.mediabox.dialogs.DialogAbout;
 import montoya.mediabox.download.DownloadManager;
 import montoya.mediabox.fileInformation.FileProperties;
 import montoya.mediabox.configUI.UIStyles;
-import montoya.mediapollingcomponent.MediaListener;
 
 /**
  * Ventana principal de la aplicación {@code MediaBox}.
@@ -26,8 +25,7 @@ import montoya.mediapollingcomponent.MediaListener;
  * <ul>
  * <li> Barra de menú y sus acciones.</li>
  * <li> Autenticación del usuario.</li>
- * <li> Inicialización de componetntes y estilos visuales (LookAndFeel).</li>
- * <li> Comunicación con el componente de escucha MediaPollingComponent.</li>
+ * <li> Inicialización de componentes y estilos visuales (LookAndFeel).</li>
  * </ul>
  * 
  * @author Nerea

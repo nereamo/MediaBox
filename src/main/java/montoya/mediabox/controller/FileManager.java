@@ -12,9 +12,9 @@ import montoya.mediabox.fileInformation.FileProperties;
  * Gestiona las operaciones sobre los archivos mostrados en la aplicación.
  * <p> Permite:
  * <ul> 
- * <li> Obtener archivos locales, remotos y mixtos.</li>
+ * <li> Obtener archivos locales.</li>
  * <li> Filtrar por directorio y tipo de archivo.</li>
- * <li> Descarga y subida de archivos.</li>
+ * <li> Descarga de archivos.</li>
  * <li> Eliminar archivos locales.</li>
  * <li> Reproducir archivos locales.</li>
  * </ul> 
@@ -28,9 +28,6 @@ public class FileManager {
     
     /** {@link TypeFilter} Permite aplicar el filtro por tipo de archivo y por directorio. */
     private TypeFilter typeFilter;
-    
-    /** {@link MediaPollingComponent} Listener que notifica nuevos medios en la API. */
-//    private MediaPollingComponent mediaPollingComponent;
     
     /** {@link FileProperties} Gestiona las propiedades de los archivos descargados. */
     private FileProperties fileProperties;
@@ -83,7 +80,8 @@ public class FileManager {
      * @param fileInfo Información del archivo a eliminar
      */
     public void deleteLocalFile(FileInformation fileInfo) {
-        fileProperties.deleteDownload(fileInfo, directoryInfo.getFileList(), directoryInfo.getFolderPaths());
+//        fileProperties.deleteDownload(fileInfo, directoryInfo.getFileList(), directoryInfo.getFolderPaths());
+        fileProperties.deleteDownload(fileInfo, directoryInfo.getFileList());
         reloadDirectoryInfo();
     }
     

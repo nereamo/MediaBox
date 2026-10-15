@@ -17,7 +17,6 @@ import montoya.mediabox.panels.InfoMedia;
  * <ul>
  * <li> Reproducir </li>
  * <li> Eliminar </li>
- * <li> Descargar </li>
  * </ul>
  * 
  * @author Nerea
@@ -108,8 +107,9 @@ public class TableActions extends AbstractCellEditor implements TableCellRendere
     /**
      * Crea un JLabel con el icono especificado y estilo de cursor
      * 
-     * @param iconPath Ruta del icono
-     * @return JLabel configurado con el icono
+     * @param iconPath Ruta del recurso del icono.
+     * @param tooltipText Texto de ayuda al pasar el cursor.
+     * @return JLabel configurado.
      */
     private JLabel createLabel(String iconPath) {
         JLabel label = new JLabel();
@@ -127,7 +127,7 @@ public class TableActions extends AbstractCellEditor implements TableCellRendere
     }
 
     /**
-     * Muestra los botones de reproducir, eiliminar o descargar según el directorio seleccionado en la lista
+     * Muestra los botones de reproducir o eiliminar
      * 
      * @param table Tabla sonde se muestran los botones
      * @param value Valor de la celda

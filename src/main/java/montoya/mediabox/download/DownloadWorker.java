@@ -52,7 +52,7 @@ public class DownloadWorker extends SwingWorker<Void, String> {
      * @param progressBar Muestra el progreso de descarga
      * @param tblModel Modelo de tabla d elos archivos
      * @param fileProperties Objeto que gestiona las propiedades y de archivos descargados
-     * @param infoMedia Panel (vista) que muestra la información d elas descargas
+     * @param infoMedia Panel (vista) que muestra la información de las descargas
      * @param downloadsPanel Panel (vista) que permite realizar una descarga
      */
     public DownloadWorker(ProcessBuilder pb, String folder, JProgressBar progressBar, FileTableModel tblModel, FileProperties fileProperties, InfoMedia infoMedia, Downloads downloadsPanel) {
@@ -72,7 +72,6 @@ public class DownloadWorker extends SwingWorker<Void, String> {
 
     /**
      * Ejecuta la descarga en segundo plano. Inicia barra de progreso, detecta el último archivo, registra la descarga en FileProperties y actualiza el panel de información
-     *
      *
      * @return {@code null}, ya que el resultado no se utiliza
      * @throws Exception Si ocurre un error durante la ejecución del proceso

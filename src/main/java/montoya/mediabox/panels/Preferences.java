@@ -307,36 +307,33 @@ public class Preferences extends javax.swing.JPanel {
 
         YtDlpUpdater updater = new YtDlpUpdater();
 
-        File ytDlpFile = updater.getYtDlpFile();
-
-        if (ytDlpFile.exists()) {
-            detectedYtDlpPath = ytDlpFile.getAbsolutePath();
-            UIStyles.showMessageInfo(lblInfo, "yt-dlp.exe found!");
+        if (updater.areAllToolsPresent()) {
+            detectedYtDlpPath = updater.getYtDlpFile().getAbsolutePath();
+            UIStyles.showMessageInfo(lblInfo, "All required tools (yt-dlp & FFmpeg) are ready!");
         } else {
             int option = javax.swing.JOptionPane.showConfirmDialog(
                     this,
-                    "yt-dlp.exe was not found. Do you want to download it?",
-                    "Download yt-dlp",
+                    "Some tools are missing. Do you want to initialize and download them?",
+                    "Download Tools",
                     javax.swing.JOptionPane.YES_NO_OPTION
             );
 
             if (option == javax.swing.JOptionPane.YES_OPTION) {
                 try {
-                    updater.downloadYtDlp();
+                    UIStyles.showMessageInfo(lblInfo, "Setting up tools, please wait...");
+                    
+                    updater.ensureAllToolsReady();
 
                     detectedYtDlpPath = updater.getYtDlpFile().getAbsolutePath();
-
-                    UIStyles.showMessageInfo(lblInfo, "yt-dlp.exe downloaded successfully!");
+                    UIStyles.showMessageInfo(lblInfo, "Tools configured successfully! Audio & Video ready.");
                 } catch (IOException ex) {
                     detectedYtDlpPath = "";
-
-                    Logger.logError("Error downloading yt-dlp.exe", ex);
-
-                    UIStyles.showMessageInfo(lblInfo, "Error downloading yt-dlp.exe.");
+                    Logger.logError("Error setting up tools", ex);
+                    UIStyles.showMessageInfo(lblInfo, "Error downloading tools.");
                 }
             } else {
                 detectedYtDlpPath = "";
-                UIStyles.showMessageInfo(lblInfo, "Download cancelled.");
+                UIStyles.showMessageInfo(lblInfo, "Setup cancelled.");
             }
         }
     }//GEN-LAST:event_btnYtDlpActionPerformed
