@@ -1,0 +1,49 @@
+MediaBox — Custom License
+Copyright (c) 2026 Nerea Montoya
+
+All rights reserved.
+
+1. Permission to view
+You may view and inspect the MediaBox source code made publicly available in this
+repository for personal learning, evaluation, and portfolio-review purposes.
+
+2. Restrictions
+Unless you obtain prior written permission from the copyright holder, you may not:
+- use MediaBox or any part of its original code for commercial purposes;
+- copy, modify, adapt, or create derivative works from MediaBox;
+- redistribute, republish, sublicense, sell, rent, or otherwise make available
+  copies of the source code or compiled application;
+- redistribute the MediaBox installer or bundle it with another product;
+- remove or alter copyright, attribution, or license notices.
+
+3. Personal evaluation
+You may download and run an official MediaBox release for personal, non-commercial
+evaluation, provided you comply with applicable laws and the terms that apply to
+all included third-party software.
+
+4. Third-party software
+MediaBox may use, invoke, or distribute third-party components, including yt-dlp,
+FFmpeg, and other libraries or tools. Those components are NOT relicensed by this
+document. They remain subject to their own copyright notices and license terms.
+Where required, their applicable license texts, notices, and corresponding source
+code must be provided. This license does not grant rights to third-party software.
+
+5. No warranty
+MediaBox is provided "AS IS", to the maximum extent permitted by applicable law,
+without warranties of any kind, whether express or implied. This includes, without
+limitation, warranties of merchantability, fitness for a particular purpose, and
+non-infringement.
+
+6. Limitation of liability
+To the maximum extent permitted by applicable law, the copyright holder shall not
+be liable for any claim, damages, or other liability arising from, out of, or in
+connection with the software or its use.
+
+7. Rights reserved
+All rights not expressly granted in this license are reserved by the copyright
+holder. For permissions beyond those stated here, contact the copyright holder
+through the contact details published in the project's repository.
+
+This license is not an open-source license and does not replace or override the
+licenses of third-party components.
+
