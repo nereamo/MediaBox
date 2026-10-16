@@ -125,7 +125,7 @@ public class Preferences extends javax.swing.JPanel {
         
         //Botón para buscar yt-dlp y label de info
         UIStyles.styleFixLabel(lblYtDlp, "Location yt-dlp: ", null);
-        UIStyles.styleButtons(btnYtDlp, "Automatic search yt-dlp", "/images/search.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Automatic search yt-dlp", null);
+        UIStyles.styleButtons(btnYtDlp, "Automatic search yt-dlp", "/images/search.png", UIStyles.LIGHT_PURPLE, UIStyles.DARK_GREY_COLOR, true, "Automatic search yt-dlp", "/images/search.png");
         
         //Botón para limpiar archivo "Downloads.json"
         UIStyles.styleButtons(btnClearCache, "Clear Cache", "/images/clearCache.png",UIStyles.MEDIUM_GREY_COLOR, UIStyles.LIGHT_GREY_COLOR, true,"Delete downloads.json history without deleting files", null);
@@ -319,18 +319,35 @@ public class Preferences extends javax.swing.JPanel {
             );
 
             if (option == javax.swing.JOptionPane.YES_OPTION) {
-                try {
-                    UIStyles.showMessageInfo(lblInfo, "Setting up tools, please wait...");
-                    
-                    updater.ensureAllToolsReady();
+                // Deshabilitamos el botón temporalmente para evitar múltiples clics
+                btnYtDlp.setEnabled(false);
+                UIStyles.showMessageInfo(lblInfo, "Setting up tools, please wait... downloading...");
 
-                    detectedYtDlpPath = updater.getYtDlpFile().getAbsolutePath();
-                    UIStyles.showMessageInfo(lblInfo, "Tools configured successfully! Audio & Video ready.");
-                } catch (IOException ex) {
-                    detectedYtDlpPath = "";
-                    Logger.logError("Error setting up tools", ex);
-                    UIStyles.showMessageInfo(lblInfo, "Error downloading tools.");
-                }
+                // Usamos SwingWorker para que la interfaz no se congele durante la descarga y descompresión
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        // Esto se ejecuta en segundo plano
+                        updater.ensureAllToolsReady();
+                        return null;
+                    }
+
+                    @Override
+                    protected void done() {
+                        // Esto se ejecuta en el hilo principal de Swing al terminar
+                        btnYtDlp.setEnabled(true);
+                        try {
+                            get(); // Lanza excepción si ocurrió algún error en el doInBackground
+                            detectedYtDlpPath = updater.getYtDlpFile().getAbsolutePath();
+                            UIStyles.showMessageInfo(lblInfo, "Tools configured successfully! Audio & Video ready.");
+                        } catch (Exception ex) {
+                            detectedYtDlpPath = "";
+                            Logger.logError("Error setting up tools", ex);
+                            UIStyles.showMessageInfo(lblInfo, "Error downloading tools.");
+                        }
+                    }
+                }.execute();
+
             } else {
                 detectedYtDlpPath = "";
                 UIStyles.showMessageInfo(lblInfo, "Setup cancelled.");

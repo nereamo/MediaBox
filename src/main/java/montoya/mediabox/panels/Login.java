@@ -36,29 +36,14 @@ public class Login extends JPanel {
     private CardManager cardManager;
 
     /**
-     * Campo de texto para el email del usuario
-     */
-    private JTextField txtEmail = new JTextField();
-
-    /**
-     * Campo de texto para la contraseña del usuario
-     */
-    private JPasswordField txtPassword = new JPasswordField();
-
-    /**
-     * Botón para iniciar sesión
-     */
-    private JButton btnLogin = new JButton();
-
-    /**
      * Botón para iniciar sesión con Goolge
      */
     private JButton btnGoogle = new JButton();
-
+    
     /**
-     * Checkbox para recordar las credenciales del usuario
+     * Botón para acceder como invitado (Modo Demo)
      */
-    private JCheckBox remember = new JCheckBox();
+    private JButton btnGuest = new JButton();
 
     /**
      * Label para mostrar mensajes de error o información
@@ -88,8 +73,7 @@ public class Login extends JPanel {
 
         setupLayout();
         setupStyle();
-        configKeyActions();
-        initialLoginUser();
+        initGuestLogin();
         initGoogleLogin();
         autoLogin();
     }
@@ -103,23 +87,18 @@ public class Login extends JPanel {
 
     /**
      * Configura posición de los componentes
-     */
+     */  
     private void setupLayout() {
+        // Layout centrado y limpio, ideal para un diseño moderno
+        this.setLayout(new MigLayout("fill, wrap, center", "[grow]", "push[]30[]20[]20[]30[]push"));
 
-        this.setLayout(new MigLayout("fill, wrap, center", "[grow]", "push[]20[]10[]10[]20[]10[]push")); //Layout principal
+        this.add(iconLabel, "align center, gapbottom 10"); // Logo
 
-        this.add(iconLabel, "align center, gapbottom 20"); //Logo
-
-        this.add(txtEmail, "align center, w 400!, h 35!"); //Campo de texto email
-        this.add(txtPassword, "align center, w 400!, h 35!, gaptop 10"); //Campo de texto password
-
-        this.add(remember, "align center, gaptop 10");  //Checkbox remember
-        this.add(btnLogin, "align center, w 70!, h 70!, gaptop 20"); //Botón login
+        this.add(btnGoogle, "align center, w 260!, h 50!, gaptop 10"); // Botón Google
+        this.add(btnGuest, "align center, w 260!, h 50!, gaptop 10");  // Botón Invitado
 
         lblMessage.setHorizontalAlignment(SwingConstants.CENTER);
-        this.add(lblMessage, "align center, gaptop 100, growx"); //Mensages informativos
-
-        this.add(btnGoogle, "align center, w 240!, h 50!, gaptop 20"); //Boto´n Google
+        this.add(lblMessage, "align center, gaptop 20, growx"); // Mensajes informativos
     }
 
     /**
@@ -128,60 +107,9 @@ public class Login extends JPanel {
     private void setupStyle() {
         this.setBackground(UIStyles.DARK_GREY_COLOR);
 
-        UIStyles.styleField(txtEmail, "/images/email2.png", " Enter email", "/images/delete_url.png", null, false); //Campo de texto email
-        UIStyles.styleField(txtPassword, "/images/pss.png", " Enter password", "/images/show.png", null, false); //Campo de texto password
-
-        UIStyles.styleCheckBox(remember, "Remember me", "Remember credentials"); //Checkbox remember
-        UIStyles.styleButtons(btnLogin, null, "/images/login.png", UIStyles.LIGHT_PURPLE, new Color(0, 0, 0, 0), true, "Login user", null); //Botón login 
+        // Estilos para los botones de acceso
         UIStyles.styleButtons(btnGoogle, "Login with Google", "/images/google.png", UIStyles.LIGHT_PURPLE, Color.DARK_GRAY, true, "Login with Google", null);
-    }
-
-    /**
-     * Configura la tecla ENTER para mover el foco o ejecutar login.
-     */
-    private void configKeyActions() {
-        txtEmail.addActionListener(new ActionListener() { //pulsar ENTER envía foco a Password
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                txtPassword.requestFocusInWindow();
-            }
-        });
-
-        txtPassword.addActionListener(new ActionListener() { //pulsar ENTER envía foco a botón para hacer login
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                btnLogin.doClick();
-            }
-        });
-    }
-
-    /**
-     * Configura la acción del botón login y autentifica al usuario.
-     */
-    private void initialLoginUser() {
-        btnLogin.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                String email = txtEmail.getText();
-                String password = String.valueOf(txtPassword.getPassword());
-
-                if (email == null || email.trim().equals("") || password == null || password.trim().equals("")) {
-                    UIStyles.showMessageInfo(lblMessage, "Please, enter an Email and Password");
-                    return;
-                }
-
-                loggedEmail = email;//Guarda email del usuario loggeado
-
-                frame.setMenuVisible(true);
-
-                UIStyles.styleLabelUserName(frame.lblMessage, email);
-
-                //Muestra el panel Downloads y refresca la tabla
-                cardManager.showCard("downloads");
-                frame.pnlDownload.infoMedia.reloadMediaData();
-            }
-        });
+        UIStyles.styleButtons(btnGuest, "Guest Mode (Demo)", "/images/guest.png", UIStyles.LIGHT_GREY_COLOR, Color.DARK_GRAY, true, "Access as Guest for testing", null);
     }
 
     /**
@@ -211,7 +139,6 @@ public class Login extends JPanel {
             }
 
         }.execute();
-
     }
 
     /**
@@ -228,6 +155,20 @@ public class Login extends JPanel {
         //Muestra el panel Downloads y refresca la tabla
         cardManager.showCard("downloads");
         frame.pnlDownload.infoMedia.reloadMediaData();
+    }
+    
+    /**
+     * Inicia sesión como invitado
+     */
+    private void initGuestLogin(){
+        
+        btnGuest.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                enter("guest.mediaBox@demo.com");
+            }
+        });
+        
     }
 
     /**
