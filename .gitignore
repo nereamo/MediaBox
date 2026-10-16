@@ -4,6 +4,7 @@ src/main/resources/properties/config.properties
 # --- Compilación y construcción ---
 /target/
 /build/
+/Output/
 .gradle/
 *.class
 *.log
@@ -26,3 +27,8 @@ src/main/resources/properties/config.properties
 # Sistema operativo
 .DS_Store
 Thumbs.db
+
+# --- Ejecutables, instaladores y scripts de empaquetado ---
+*.exe
+*.iss
+*.xml

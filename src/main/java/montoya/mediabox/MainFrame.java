@@ -348,7 +348,7 @@ public class MainFrame extends JFrame {
         try {
             //Ruta al archivo "index.html" del javadoc
             String rutaBase = System.getenv("LOCALAPPDATA") + File.separator + "MediaBox";
-            File docs = new File(rutaBase + File.separator + "apidocs" + File.separator + "index.html");
+            File docs = new File(rutaBase + File.separator + "doc" + File.separator + "index.html");
 
             if (docs.exists()) {
                 Desktop.getDesktop().browse(docs.toURI()); //Si existe, abre el javadoc en el navegador
